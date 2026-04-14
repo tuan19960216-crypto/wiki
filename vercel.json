@@ -1,0 +1,14 @@
+{
+  "outputDirectory": "public",
+  "buildCommand": "node scripts/build-index.js",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ]
+}
