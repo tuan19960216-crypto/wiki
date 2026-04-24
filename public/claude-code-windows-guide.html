@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windows 使用 Claude Code 完整攻略（含 VPN 配置）</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-code: #1a1f2b;
+    --border: #242a38;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --info: #60a5fa;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 120px;
+  }
+
+  header.hero {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: var(--text-dim);
+    margin: 0 0 24px;
+  }
+
+  .meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .meta span::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 56px 0 16px;
+    letter-spacing: -0.01em;
+    padding-top: 16px;
+  }
+
+  h2 .num {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 10px;
+    font-size: 18px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    color: var(--text);
+  }
+
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 0 8px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  p { margin: 0 0 16px; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent);
+    transition: opacity 0.15s;
+  }
+  a:hover { opacity: 0.75; }
+
+  ul, ol { padding-left: 24px; margin: 0 0 16px; }
+  li { margin: 6px 0; }
+
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+    background: var(--bg-code);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #fbbf24;
+    border: 1px solid var(--border);
+  }
+
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin: 16px 0;
+    position: relative;
+  }
+
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #e4e7ed;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  pre .comment { color: var(--text-muted); }
+  pre .kw { color: #f472b6; }
+  pre .str { color: #86efac; }
+
+  .callout {
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border-left: 3px solid;
+    background: var(--bg-elevated);
+  }
+  .callout.info { border-color: var(--info); }
+  .callout.warn { border-color: var(--warning); }
+  .callout.danger { border-color: var(--danger); }
+  .callout.success { border-color: var(--success); }
+  .callout .label {
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .callout.info .label { color: var(--info); }
+  .callout.warn .label { color: var(--warning); }
+  .callout.danger .label { color: var(--danger); }
+  .callout.success .label { color: var(--success); }
+  .callout p:last-child { margin-bottom: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14.5px;
+    background: var(--bg-elevated);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--bg-code);
+    font-weight: 600;
+    color: var(--text-dim);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  tr:last-child td { border-bottom: none; }
+  td code { font-size: 13px; }
+
+  .toc {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 32px 0;
+  }
+  .toc h4 { margin: 0 0 12px; color: var(--text); font-size: 14px; }
+  .toc ol { margin: 0; padding-left: 20px; }
+  .toc li { margin: 4px 0; }
+  .toc a { border-bottom: none; color: var(--text-dim); }
+  .toc a:hover { color: var(--accent); }
+
+  .step {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+  .checklist li {
+    padding-left: 28px;
+    position: relative;
+    margin: 8px 0;
+  }
+  .checklist li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--success);
+    font-weight: bold;
+  }
+
+  .nochecklist li::before { content: "✗"; color: var(--danger); }
+
+  kbd {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: var(--bg-code);
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 24px;
+    color: var(--text-muted);
+    border: none;
+    font-size: 14px;
+  }
+  .back-link::before { content: "← "; }
+
+  @media (max-width: 640px) {
+    .container { padding: 32px 16px 80px; }
+    h1 { font-size: 30px; }
+    h2 { font-size: 24px; }
+    header.hero { padding: 32px 0 32px; }
+    pre { font-size: 12.5px; padding: 14px 16px; }
+    table { font-size: 13px; }
+    th, td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="/" class="back-link">返回首页</a>
+
+  <header class="hero">
+    <span class="tag">小白友好 · Step-by-Step</span>
+    <h1>Windows 使用 Claude Code 完整攻略</h1>
+    <p class="subtitle">从"我连 Claude 是啥都没听过"到"我在终端跟 AI 结对编程"，含中国大陆 VPN 配置细节。</p>
+    <div class="meta">
+      <span>约 40–60 分钟完成</span>
+      <span>Windows 10 / 11</span>
+      <span>更新于 2026-04-24</span>
+    </div>
+  </header>
+
+  <div class="toc">
+    <h4>目录</h4>
+    <ol>
+      <li><a href="#intro">写在前面：Claude Code 是什么、需要准备什么</a></li>
+      <li><a href="#step1">第 1 步：搞定 VPN 网络（最关键！）</a></li>
+      <li><a href="#step2">第 2 步：注册 Anthropic 账号</a></li>
+      <li><a href="#step3">第 3 步：安装 Git for Windows（必装）</a></li>
+      <li><a href="#step4">第 4 步：安装 Claude Code</a></li>
+      <li><a href="#step5">第 5 步：首次登录 & 试运行</a></li>
+      <li><a href="#errors">常见报错速查表</a></li>
+      <li><a href="#tips">进阶技巧 & 省钱指南</a></li>
+    </ol>
+  </div>
+
+  <h2 id="intro"><span class="num">0</span>写在前面</h2>
+
+  <h3>Claude Code 是什么？</h3>
+  <p>Claude Code 是 Anthropic 官方出的命令行工具，让你能在终端里直接跟 Claude（一个顶级 AI 模型）协作写代码、改 bug、跑脚本。它不是网页版，是装在你电脑上跑的 CLI。</p>
+
+  <h3>为什么在国内用不了？</h3>
+  <p>Anthropic <strong>不向中国大陆、香港、俄罗斯等地区开放服务</strong>，所以：</p>
+  <ul>
+    <li>直连 <code>api.anthropic.com</code> 会返回 <code>403 Forbidden</code></li>
+    <li>注册账号也会因为 IP 被拒</li>
+    <li><strong>必须全程挂梯子（VPN）</strong>，而且不是随便一个就行，后面会讲</li>
+  </ul>
+
+  <h3>你需要准备</h3>
+  <ul class="checklist">
+    <li>一台 Windows 10 或 11 电脑</li>
+    <li>一个稳定的 VPN（下面会推荐）</li>
+    <li>一个海外手机号（用于注册，可用 Google Voice 或临时号）</li>
+    <li>一张海外信用卡或虚拟卡（如果要付费订阅 Pro/Max）</li>
+    <li>40–60 分钟耐心</li>
+  </ul>
+
+  <div class="callout info">
+    <span class="label">订阅还是按量付费？</span>
+    <p>如果你每天用得多，强烈建议直接订阅 <strong>Claude Pro（$20/月）</strong> 或 <strong>Max（$100/月）</strong>，比按 API token 计费划算 5–10 倍。这份教程按"订阅 Pro"流程来讲。</p>
+  </div>
+
+  <h2 id="step1"><span class="num">1</span>搞定 VPN 网络</h2>
+
+  <div class="callout danger">
+    <span class="label">最重要的一步</span>
+    <p>90% 的新手卡在这里。后面的每一步都依赖这一步配好。不要用免费 VPN、不要用"机场"的共享 IP 节点，Anthropic 的风控非常严，共享 IP 账号分分钟被封。</p>
+  </div>
+
+  <h3>1.1 选什么 VPN？</h3>
+  <table>
+    <thead>
+      <tr><th>推荐度</th><th>方案</th><th>优缺点</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>★★★★★</td><td>独立 IP VPS 自建（V2Ray / Trojan）</td><td>最稳，IP 干净不封号；要懂一点技术</td></tr>
+      <tr><td>★★★★</td><td>商业 VPN（ExpressVPN / NordVPN）</td><td>一键搞定，IP 偶尔被封但通常够用</td></tr>
+      <tr><td>★★★</td><td>付费"机场"（Clash 订阅）</td><td>便宜，但 IP 共享严重，Anthropic 容易风控</td></tr>
+      <tr><td>☆</td><td>免费 VPN</td><td>别用，99% 会被封号</td></tr>
+    </tbody>
+  </table>
+
+  <h4>节点选哪里？</h4>
+  <ul>
+    <li>优先：<strong>美国、日本、新加坡、台湾</strong></li>
+    <li>避免：香港、澳门（Anthropic 不支持）</li>
+    <li>固定节点，不要频繁切换</li>
+  </ul>
+
+  <h3>1.2 客户端安装（以 Clash Verge Rev 为例）</h3>
+  <ol>
+    <li>下载 <strong>Clash Verge Rev</strong>（推荐，替代老的 Clash for Windows）：<br>
+      访问 <a href="https://github.com/clash-verge-rev/clash-verge-rev/releases" target="_blank">GitHub Release 页面</a>，下载 <code>Clash.Verge_x.x.x_x64-setup.exe</code>
+    </li>
+    <li>安装后打开，在"订阅"或"配置"页面导入你的 VPN 订阅链接</li>
+    <li>选择一个美国/日本节点</li>
+    <li><strong>重点：开启 TUN 模式</strong>（设置 → 开启 TUN / 虚拟网卡）—— 这样命令行工具也会走代理，而不只是浏览器</li>
+  </ol>
+
+  <div class="callout warn">
+    <span class="label">关键设置</span>
+    <p>一定要开 <strong>TUN 模式</strong> 或 <strong>系统代理 + 终端代理</strong>，否则 Claude Code 在 PowerShell 里跑的时候不会走你的 VPN，会直连失败。</p>
+  </div>
+
+  <h3>1.3 给命令行（PowerShell）配代理</h3>
+  <p>开了 TUN 后理论上已经够了，但为了保险，建议显式设置环境变量。按 <kbd>Win</kbd>+<kbd>R</kbd>，输入 <code>sysdm.cpl</code>，回车，然后：</p>
+  <ol>
+    <li>切换到"高级"标签 → 点"环境变量"</li>
+    <li>在"用户变量"里点"新建"，添加两条：
+      <ul>
+        <li>变量名 <code>HTTPS_PROXY</code>，值 <code>http://127.0.0.1:7890</code></li>
+        <li>变量名 <code>HTTP_PROXY</code>，值 <code>http://127.0.0.1:7890</code></li>
+      </ul>
+    </li>
+    <li>端口 <code>7890</code> 是 Clash 默认，如果你用别的工具请改成对应端口（v2rayN 默认是 <code>10809</code>）</li>
+    <li>重启所有终端窗口让变量生效</li>
+  </ol>
+
+  <h3>1.4 验证网络是否真的通了</h3>
+  <p>打开 PowerShell，跑：</p>
+  <pre><code>curl -v https://api.anthropic.com</code></pre>
+  <ul>
+    <li>✅ 返回 <code>401 Unauthorized</code> 或一段 JSON —— 通了（401 是因为没带 API Key，正常）</li>
+    <li>❌ <code>timeout</code> / <code>connection refused</code> —— 代理没生效，回头检查 TUN 和环境变量</li>
+    <li>❌ <code>403 Forbidden: unsupported region</code> —— 节点在不支持的地区，换美国节点</li>
+  </ul>
+
+  <h2 id="step2"><span class="num">2</span>注册 Anthropic 账号</h2>
+
+  <div class="callout warn">
+    <span class="label">全程挂美国节点</span>
+    <p>注册过程不要切换节点、不要断开 VPN，否则会触发风控。用浏览器隐身模式注册。</p>
+  </div>
+
+  <h3>2.1 注册步骤</h3>
+  <ol>
+    <li>打开浏览器隐身窗口，访问 <a href="https://claude.ai" target="_blank">https://claude.ai</a></li>
+    <li>用 <strong>Gmail 或 Outlook</strong> 邮箱注册（不要用 QQ、163 等国内邮箱）</li>
+    <li>收到验证邮件 → 点链接验证</li>
+    <li>需要手机号验证：
+      <ul>
+        <li>有海外实卡最好</li>
+        <li>没有就用 <strong>Google Voice</strong>（免费，但需要翻墙 + 一次性美国号）</li>
+        <li>或用 <a href="https://sms-activate.org" target="_blank">SMS-Activate</a> 等一次性接码平台（几块钱）</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3>2.2 订阅 Pro（可选但推荐）</h3>
+  <ol>
+    <li>登录后点左下角头像 → "Upgrade Plan" → 选 Pro ($20/月) 或 Max ($100/月)</li>
+    <li>填信用卡信息：
+      <ul>
+        <li>有海外信用卡最好</li>
+        <li>没有可用虚拟卡：<strong>WildCard</strong>、<strong>NobePay</strong>、<strong>OneKey Card</strong>（国内很多人在用）</li>
+        <li>地址填一个美国地址（虚拟卡平台会给你一个）</li>
+      </ul>
+    </li>
+    <li>付款成功后，Claude Code 就能用订阅额度登录，不需要额外买 API 额度</li>
+  </ol>
+
+  <h2 id="step3"><span class="num">3</span>安装 Git for Windows</h2>
+
+  <div class="callout info">
+    <span class="label">为什么要装 Git？</span>
+    <p>Claude Code 在 Windows 上运行时，底层会调用 Git 自带的 <strong>Bash</strong> 来执行命令（比如读写文件、跑脚本）。没有 Git for Windows，Claude Code 启动就会报错。</p>
+  </div>
+
+  <h3>安装步骤</h3>
+  <ol>
+    <li>访问 <a href="https://git-scm.com/downloads/win" target="_blank">https://git-scm.com/downloads/win</a></li>
+    <li>下载"64-bit Git for Windows Setup"</li>
+    <li>双击运行，<strong>全程点"Next"默认选项就行</strong>，不用改任何设置</li>
+    <li>装完后，按 <kbd>Win</kbd>+<kbd>R</kbd> 输入 <code>cmd</code> 回车，输入：
+      <pre><code>git --version</code></pre>
+      看到类似 <code>git version 2.43.0.windows.1</code> 就说明装好了。
+    </li>
+  </ol>
+
+  <h3>给 Git 配代理（重要）</h3>
+  <p>打开 PowerShell 或 Git Bash，跑：</p>
+  <pre><code>git config --global http.proxy http://127.0.0.1:7890
+git config --global https.proxy http://127.0.0.1:7890</code></pre>
+  <p>以后 <code>git clone</code> 才不会超时。</p>
+
+  <h2 id="step4"><span class="num">4</span>安装 Claude Code</h2>
+
+  <h3>方法 A：官方一键安装脚本（推荐）</h3>
+  <ol>
+    <li>按 <kbd>Win</kbd> 键，搜 <code>PowerShell</code>，<strong>右键点"以管理员身份运行"</strong></li>
+    <li>粘贴并回车：
+      <pre><code>irm https://claude.ai/install.ps1 | iex</code></pre>
+    </li>
+    <li>等待下载（需要 VPN 正常工作），大约 1–3 分钟</li>
+    <li>安装结束后会提示你重启终端</li>
+  </ol>
+
+  <div class="callout warn">
+    <span class="label">如果报错"脚本无法运行"</span>
+    <p>先跑这条命令允许 PowerShell 执行脚本：</p>
+    <pre><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+    <p>输入 <code>Y</code> 确认，然后再跑上面的安装命令。</p>
+  </div>
+
+  <h3>方法 B：npm 安装（备选，需要先装 Node.js ≥ v18）</h3>
+  <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+  <p>注意：<strong>不要加 <code>sudo</code></strong>（Windows 本来也没有 sudo）。</p>
+
+  <h3>验证安装</h3>
+  <p>重启 PowerShell，跑：</p>
+  <pre><code>claude --version</code></pre>
+  <p>看到版本号就算成功。如果提示"不是内部命令"，重启电脑试试（PATH 环境变量没刷新）。</p>
+
+  <h2 id="step5"><span class="num">5</span>首次登录 & 试运行</h2>
+
+  <h3>5.1 创建一个测试项目</h3>
+  <p>打开 PowerShell，新建一个文件夹并进去：</p>
+  <pre><code>mkdir C:\dev\claude-test
+cd C:\dev\claude-test</code></pre>
+
+  <div class="callout warn">
+    <span class="label">路径别用中文</span>
+    <p>不要把项目放在 <code>C:\我的文档\测试</code> 这种带中文的路径下，会乱码报错。用 <code>C:\dev\xxx</code> 这种纯英文路径。</p>
+  </div>
+
+  <h3>5.2 启动 Claude Code</h3>
+  <pre><code>claude</code></pre>
+  <p>第一次启动会让你选登录方式：</p>
+  <ul>
+    <li><strong>Claude Pro/Max subscription</strong> —— 如果你订阅了 Pro/Max，选这个（免费额度额大）</li>
+    <li><strong>Anthropic Console (API key)</strong> —— 按 token 计费，适合重度用户</li>
+  </ul>
+  <p>选完之后会自动打开浏览器让你登录。登录成功后浏览器会显示"You can close this window"。</p>
+
+  <div class="callout danger">
+    <span class="label">登录失败了？</span>
+    <p>浏览器回调要跳回 <code>localhost</code>。如果你用了带代理插件的浏览器（比如 SwitchyOmega），先关掉所有代理插件，用系统默认的 Edge 或 Chrome 打开。</p>
+  </div>
+
+  <h3>5.3 试用</h3>
+  <p>登录成功后，你会看到一个对话界面。试试输入：</p>
+  <pre><code>帮我写一个 Python 脚本，打印 Hello World</code></pre>
+  <p>Claude 会直接生成文件。如果能跑到这里，恭喜你，全部配置完成 🎉</p>
+
+  <h2 id="errors">常见报错速查表</h2>
+
+  <table>
+    <thead>
+      <tr><th>报错</th><th>原因</th><th>解决</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>403 Forbidden</code> / <code>unsupported region</code></td>
+        <td>节点是香港/国内，或 VPN 没生效</td>
+        <td>换美/日节点，确认 TUN 开启，重启终端</td>
+      </tr>
+      <tr>
+        <td><code>ECONNRESET</code> / <code>timeout</code></td>
+        <td>代理不稳定，或端口不对</td>
+        <td>换节点；检查 <code>HTTPS_PROXY</code> 端口和 Clash 实际端口一致</td>
+      </tr>
+      <tr>
+        <td><code>claude</code> 不是内部命令</td>
+        <td>PATH 没刷新</td>
+        <td>重启终端；还不行就重启电脑</td>
+      </tr>
+      <tr>
+        <td><code>Git Bash not found</code></td>
+        <td>没装 Git for Windows</td>
+        <td>回到第 3 步装 Git</td>
+      </tr>
+      <tr>
+        <td>登录回调失败</td>
+        <td>浏览器代理插件冲突</td>
+        <td>用系统默认浏览器，关闭所有代理插件</td>
+      </tr>
+      <tr>
+        <td>中文乱码</td>
+        <td>CMD 默认 GBK 编码</td>
+        <td>换 <strong>Windows Terminal</strong>（微软商店免费下），或跑 <code>chcp 65001</code></td>
+      </tr>
+      <tr>
+        <td>安装脚本"被禁用"</td>
+        <td>PowerShell 执行策略太严</td>
+        <td><code>Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</code></td>
+      </tr>
+      <tr>
+        <td>账号突然被封</td>
+        <td>共享 IP 节点被风控</td>
+        <td>换独立 IP 节点；已封的账号基本救不回来，只能重新注册</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>万能诊断命令</h3>
+  <p>任何报错，先跑这个自检：</p>
+  <pre><code>claude doctor</code></pre>
+  <p>它会一次性检查网络、Git、Node、PATH 等所有项，告诉你具体哪里出问题。</p>
+
+  <h2 id="tips">进阶技巧 & 省钱指南</h2>
+
+  <h3>终端选择</h3>
+  <ul class="checklist">
+    <li>用 <strong>Windows Terminal</strong>（微软商店免费）—— UTF-8 支持好、多标签、颜色漂亮</li>
+    <li>或直接用 <strong>Git Bash</strong> —— Claude Code 内部就是用 Bash 跑命令，行为最一致</li>
+  </ul>
+  <ul class="nochecklist">
+    <li>老的 CMD —— 编码和显示都有问题</li>
+    <li>PowerShell ISE —— 已被微软淘汰</li>
+  </ul>
+
+  <h3>VPN 常驻挂着</h3>
+  <p>Claude Code 是流式输出（一边生成一边显示），VPN 断几秒就会中断当前对话。所以：</p>
+  <ul>
+    <li>Clash 设置"开机自启"</li>
+    <li>选一个稳定的固定节点，不要开"自动切换"</li>
+  </ul>
+
+  <h3>省钱技巧</h3>
+  <ul>
+    <li><strong>Pro 订阅比 API 按量付费便宜 5–10 倍</strong>，每天用就订阅 Pro</li>
+    <li>订阅 Max ($100/月) 送 5x 使用额度，团队用或重度用户直接上 Max</li>
+    <li>不要乱跑大任务，Claude Code 每次发送会带上下文，上下文越长越贵（API 模式下）</li>
+  </ul>
+
+  <h3>安全建议</h3>
+  <ul>
+    <li>API Key 存在 <code>~/.claude/</code> 下，<strong>不要把这个目录同步到 OneDrive/GitHub</strong></li>
+    <li>别在公司电脑上装公司不允许的 VPN，违反合规会被开除</li>
+    <li>别用同一个账号频繁换 IP 登录，会触发风控</li>
+  </ul>
+
+  <h3>想更省心？用 WSL 2</h3>
+  <p>如果你本来就写 Linux 代码，或者被 Windows 路径折磨够了，直接上 <strong>WSL 2（Windows Subsystem for Linux）</strong>：</p>
+  <pre><code class="kw">wsl --install</code></pre>
+  <p>装完 Ubuntu 后进入 WSL 终端，跑：</p>
+  <pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
+  <p>注意 WSL 不会自动继承 Windows 的代理，要在 <code>~/.bashrc</code> 里加：</p>
+  <pre><code>export HTTPS_PROXY=http://$(ip route | grep default | awk '{print $3}'):7890
+export HTTP_PROXY=$HTTPS_PROXY</code></pre>
+  <p>并在 Clash 里勾选<strong>"允许局域网连接"</strong>。</p>
+
+  <div class="callout success">
+    <span class="label">恭喜你坚持到最后</span>
+    <p>如果按这份教程一步步走下来，你的 Claude Code 应该已经能正常工作了。接下来可以问 Claude 帮你改 bug、写脚本、甚至重构整个项目。有问题随时在群里 @ 我。</p>
+  </div>
+
+  <footer>
+    <p>© 2026 upio.ai · <a href="/">首页</a> · 更新于 2026-04-24</p>
+  </footer>
+</div>
+</body>
+</html>
