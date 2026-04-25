@@ -1,3 +1,4 @@
 node_modules/
 .vercel/
 public/index.html
+.vercel

@@ -3,6 +3,12 @@ const path = require('path');
 
 const publicDir = path.join(__dirname, '..', 'public');
 
+const PROJECTS = [
+  { name: 'Vivi', tagline: 'Telegram 上的 AI 梦境社交 mini-app' },
+  { name: 'Softie', tagline: 'AI 图片 / 视频生成工作流' },
+  { name: 'Akke', tagline: '抖音全屋定制智能获客' },
+];
+
 function getHtmlFiles(dir, base = '') {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   let files = [];
@@ -12,7 +18,6 @@ function getHtmlFiles(dir, base = '') {
       files = files.concat(getHtmlFiles(path.join(dir, entry.name), rel));
     } else if (entry.name.endsWith('.html') && entry.name !== 'index.html') {
       const stat = fs.statSync(path.join(dir, entry.name));
-      // Extract title from HTML
       const content = fs.readFileSync(path.join(dir, entry.name), 'utf-8');
       const titleMatch = content.match(/<title>(.*?)<\/title>/i);
       const h1Match = content.match(/<h1[^>]*>(.*?)<\/h1>/i);
@@ -31,7 +36,6 @@ function getHtmlFiles(dir, base = '') {
 const files = getHtmlFiles(publicDir);
 files.sort((a, b) => b.modified - a.modified);
 
-// Group by folder
 const groups = {};
 for (const f of files) {
   if (!groups[f.folder]) groups[f.folder] = [];
@@ -40,50 +44,214 @@ for (const f of files) {
 
 const folderSections = Object.entries(groups)
   .map(([folder, items]) => {
-    const folderName = folder === 'root' ? 'General' : folder.replace(/\//g, ' / ');
+    const folderName = folder === 'root' ? '通用指南' : folder.replace(/\//g, ' / ');
     const links = items
       .map(f => {
         const date = f.modified.toISOString().split('T')[0];
         const href = '/' + f.path.replace(/\.html$/, '');
-        return `        <li><a href="${href}">${f.title}</a> <span class="date">${date}</span></li>`;
+        return `          <li><a href="${href}">${f.title}</a><span class="date">${date}</span></li>`;
       })
       .join('\n');
-    return `      <section>
+    return `      <section class="docs-section">
         <h2>${folderName}</h2>
-        <ul>
+        <ul class="doc-list">
 ${links}
         </ul>
       </section>`;
   })
   .join('\n');
 
+const projectCards = PROJECTS.map(
+  p => `        <article class="project-card">
+          <span class="badge">敬请期待</span>
+          <h3>${p.name}</h3>
+          <p>${p.tagline}</p>
+        </article>`
+).join('\n');
+
 const totalCount = files.length;
 
 const html = `<!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>upio.ai wiki</title>
+  <title>upio.ai · 团队知识库</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 720px; margin: 0 auto; padding: 2rem 1rem; color: #1a1a1a; background: #fafafa; }
-    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
-    .subtitle { color: #666; font-size: 0.875rem; margin-bottom: 2rem; }
-    h2 { font-size: 1.1rem; color: #333; margin-bottom: 0.75rem; padding-bottom: 0.25rem; border-bottom: 1px solid #e5e5e5; }
-    section { margin-bottom: 2rem; }
-    ul { list-style: none; }
-    li { padding: 0.4rem 0; display: flex; justify-content: space-between; align-items: center; }
-    a { color: #0969da; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .date { color: #999; font-size: 0.8rem; white-space: nowrap; margin-left: 1rem; }
-    .empty { color: #999; text-align: center; padding: 4rem 0; }
+    :root {
+      --bg: #0b0d12;
+      --bg-elevated: #141821;
+      --border: #242a38;
+      --text: #e4e7ed;
+      --text-dim: #9ba3b4;
+      --text-muted: #6b7384;
+      --accent: #8b5cf6;
+      --accent-2: #60a5fa;
+      --accent-soft: rgba(139, 92, 246, 0.15);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 64px 24px 120px;
+    }
+    header.hero {
+      padding: 32px 0 56px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+    }
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+    h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0 0 20px;
+    }
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+    .project-card {
+      position: relative;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 22px 22px;
+      transition: border-color 0.2s ease;
+    }
+    .project-card:hover {
+      border-color: #2f3647;
+    }
+    .project-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .project-card p {
+      margin: 0;
+      font-size: 13.5px;
+      color: var(--text-dim);
+      line-height: 1.55;
+    }
+    .badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(155, 163, 180, 0.1);
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .docs-section {
+      margin-bottom: 36px;
+    }
+    .doc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      border-top: 1px solid var(--border);
+    }
+    .doc-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 4px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .doc-list a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: color 0.15s ease;
+    }
+    .doc-list a:hover {
+      color: var(--accent);
+    }
+    .date {
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .empty {
+      color: var(--text-muted);
+      text-align: center;
+      padding: 4rem 0;
+    }
+    footer {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 12.5px;
+      text-align: center;
+    }
+    @media (max-width: 720px) {
+      .container { padding: 40px 20px 80px; }
+      .hero h1 { font-size: 34px; }
+      .projects { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <h1>upio.ai wiki</h1>
-  <p class="subtitle">${totalCount} documents</p>
-${totalCount > 0 ? folderSections : '  <p class="empty">No documents yet. Add HTML files to the public/ directory.</p>'}
+  <div class="container">
+    <header class="hero">
+      <h1>upio.ai</h1>
+      <p>团队知识库 · Team Knowledge Base</p>
+    </header>
+
+    <section>
+      <h2>项目团队</h2>
+      <div class="projects">
+${projectCards}
+      </div>
+    </section>
+
+${totalCount > 0 ? folderSections : '    <p class="empty">暂无文档。把 HTML 文件放到 public/ 目录即可。</p>'}
+
+    <footer>${totalCount} documents · upio.ai</footer>
+  </div>
 </body>
 </html>`;
 
