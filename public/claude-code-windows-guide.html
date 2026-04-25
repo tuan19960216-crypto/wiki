@@ -354,7 +354,7 @@
   <h3>你需要准备</h3>
   <ul class="checklist">
     <li>一台 Windows 10 或 11 电脑</li>
-    <li>一个稳定的 VPN（下面会推荐）</li>
+    <li>团队 VPN 节点的"专属链接"（在 Lark 私聊管理员获取，配置流程见 <a href="/vpn-quick-start" target="_blank">VPN 一键上手指南</a>）</li>
     <li>一个海外手机号（用于注册，可用 Google Voice 或临时号）</li>
     <li>一张海外信用卡或虚拟卡（如果要付费订阅 Pro/Max）</li>
     <li>40–60 分钟耐心</li>
@@ -369,66 +369,61 @@
 
   <div class="callout danger">
     <span class="label">最重要的一步</span>
-    <p>90% 的新手卡在这里。后面的每一步都依赖这一步配好。不要用免费 VPN、不要用"机场"的共享 IP 节点，Anthropic 的风控非常严，共享 IP 账号分分钟被封。</p>
+    <p>90% 的新手卡在这里。后面的每一步都依赖这一步配好。<strong>团队已经搭好了一个稳定的自建 VPN 节点</strong>（美国 LA 独立 IP，Anthropic 不会风控），下面是 Windows 端的最简配置流程。</p>
   </div>
 
-  <h3>1.1 选什么 VPN？</h3>
-  <table>
-    <thead>
-      <tr><th>推荐度</th><th>方案</th><th>优缺点</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>★★★★★</td><td>独立 IP VPS 自建（V2Ray / Trojan）</td><td>最稳，IP 干净不封号；要懂一点技术</td></tr>
-      <tr><td>★★★★</td><td>商业 VPN（ExpressVPN / NordVPN）</td><td>一键搞定，IP 偶尔被封但通常够用</td></tr>
-      <tr><td>★★★</td><td>付费"机场"（Clash 订阅）</td><td>便宜，但 IP 共享严重，Anthropic 容易风控</td></tr>
-      <tr><td>☆</td><td>免费 VPN</td><td>别用，99% 会被封号</td></tr>
-    </tbody>
-  </table>
+  <h3>1.1 用团队自建 VPN 节点（已就绪）</h3>
 
-  <h4>节点选哪里？</h4>
-  <ul>
-    <li>优先：<strong>美国、日本、新加坡、台湾</strong></li>
-    <li>避免：香港、澳门（Anthropic 不支持）</li>
-    <li>固定节点，不要频繁切换</li>
-  </ul>
+  <div class="callout info">
+    <span class="label">关键信息</span>
+    <p>团队 VPN 节点：<strong>美国 LA 独立 IP，VLESS-Reality + Cloudflare 双路径，2TB / 月共享流量</strong>。<br>
+    具体的 vless:// 链接<strong>不公开</strong>（防陌生人薅流量）—— 在 Lark 私聊管理员索取你的"专属链接"。</p>
+  </div>
 
-  <h3>1.2 客户端安装（以 Clash Verge Rev 为例）</h3>
+  <p>👉 <strong>各设备完整安装/导入步骤已单独成文</strong>，跟着做就行：</p>
+
+  <p><a href="/vpn-quick-start" target="_blank" style="display:inline-block; background:var(--accent); color:#fff; padding:12px 24px; border-radius:8px; text-decoration:none; font-weight:500; margin:8px 0;">📖 打开 VPN 一键上手指南 →</a></p>
+
+  <p>下面只列出 <strong>Windows 端 + Claude Code 特有的额外要求</strong>（TUN 模式、命令行环境变量），通用配置请看上面那篇。</p>
+
+  <h3>1.2 Windows 客户端 = Clash Verge Rev</h3>
   <ol>
-    <li>下载 <strong>Clash Verge Rev</strong>（推荐，替代老的 Clash for Windows）：<br>
-      访问 <a href="https://github.com/clash-verge-rev/clash-verge-rev/releases" target="_blank">GitHub Release 页面</a>，下载 <code>Clash.Verge_x.x.x_x64-setup.exe</code>
-    </li>
-    <li>安装后打开，在"订阅"或"配置"页面导入你的 VPN 订阅链接</li>
-    <li>选择一个美国/日本节点</li>
-    <li><strong>重点：开启 TUN 模式</strong>（设置 → 开启 TUN / 虚拟网卡）—— 这样命令行工具也会走代理，而不只是浏览器</li>
+    <li>下载 <a href="https://github.com/clash-verge-rev/clash-verge-rev/releases/latest" target="_blank">Clash Verge Rev 最新版</a>（<code>Clash.Verge_x.x.x_x64-setup.exe</code>）→ 双击安装</li>
+    <li>按"VPN 一键上手指南"的 Windows 章节导入两条 vless:// 链接</li>
+    <li>选中 <strong>🔒Reality-Main</strong> 节点</li>
+    <li>设置页打开 <strong>系统代理 (System Proxy)</strong> 开关</li>
+    <li><strong>必开 TUN 模式</strong>（设置 → 开启 TUN / 虚拟网卡）—— 让 PowerShell / Git / Claude Code 也走代理</li>
   </ol>
 
   <div class="callout warn">
-    <span class="label">关键设置</span>
-    <p>一定要开 <strong>TUN 模式</strong> 或 <strong>系统代理 + 终端代理</strong>，否则 Claude Code 在 PowerShell 里跑的时候不会走你的 VPN，会直连失败。</p>
+    <span class="label">关键设置（常被忽略）</span>
+    <p>不开 <strong>TUN 模式</strong>，Claude Code 在 PowerShell 里跑时<strong>不会走</strong>你的 VPN。表面上浏览器能访问 Google，但 <code>claude</code> 命令会一直 timeout，怀疑人生。</p>
   </div>
 
-  <h3>1.3 给命令行（PowerShell）配代理</h3>
-  <p>开了 TUN 后理论上已经够了，但为了保险，建议显式设置环境变量。按 <kbd>Win</kbd>+<kbd>R</kbd>，输入 <code>sysdm.cpl</code>，回车，然后：</p>
+  <h3>1.3 给 PowerShell 显式配代理（保险措施）</h3>
+  <p>开了 TUN 通常已经够了，但加上环境变量更稳。按 <kbd>Win</kbd>+<kbd>R</kbd>，输入 <code>sysdm.cpl</code>，回车，然后：</p>
   <ol>
     <li>切换到"高级"标签 → 点"环境变量"</li>
     <li>在"用户变量"里点"新建"，添加两条：
       <ul>
-        <li>变量名 <code>HTTPS_PROXY</code>，值 <code>http://127.0.0.1:7890</code></li>
-        <li>变量名 <code>HTTP_PROXY</code>，值 <code>http://127.0.0.1:7890</code></li>
+        <li>变量名 <code>HTTPS_PROXY</code>，值 <code>http://127.0.0.1:7897</code></li>
+        <li>变量名 <code>HTTP_PROXY</code>，值 <code>http://127.0.0.1:7897</code></li>
       </ul>
     </li>
-    <li>端口 <code>7890</code> 是 Clash 默认，如果你用别的工具请改成对应端口（v2rayN 默认是 <code>10809</code>）</li>
+    <li>Clash Verge Rev 默认混合代理端口是 <code>7897</code>（设置页能看到，自定义改了的话填你改的那个）</li>
     <li>重启所有终端窗口让变量生效</li>
   </ol>
 
-  <h3>1.4 验证网络是否真的通了</h3>
+  <h3>1.4 验证网络真的通了</h3>
   <p>打开 PowerShell，跑：</p>
   <pre><code>curl -v https://api.anthropic.com</code></pre>
   <ul>
     <li>✅ 返回 <code>401 Unauthorized</code> 或一段 JSON —— 通了（401 是因为没带 API Key，正常）</li>
     <li>❌ <code>timeout</code> / <code>connection refused</code> —— 代理没生效，回头检查 TUN 和环境变量</li>
-    <li>❌ <code>403 Forbidden: unsupported region</code> —— 节点在不支持的地区，换美国节点</li>
+    <li>❌ <code>403 Forbidden: unsupported region</code> —— 节点不在美国（不应该出现，团队节点就在美国 LA；如果真出现联系管理员）</li>
   </ul>
+
+  <p>多做一步外网验证：浏览器打开 <a href="https://ipinfo.io/ip" target="_blank">https://ipinfo.io/ip</a>，应该看到一个 <strong>104. 开头</strong>的美国 IP。看到中国 IP 说明代理没生效。</p>
 
   <h2 id="step2"><span class="num">2</span>注册 Anthropic 账号</h2>
 
@@ -617,8 +612,9 @@ cd C:\dev\claude-test</code></pre>
   <h3>VPN 常驻挂着</h3>
   <p>Claude Code 是流式输出（一边生成一边显示），VPN 断几秒就会中断当前对话。所以：</p>
   <ul>
-    <li>Clash 设置"开机自启"</li>
-    <li>选一个稳定的固定节点，不要开"自动切换"</li>
+    <li>Clash Verge Rev 设置"开机自启"（设置 → 启动设置 → 开机自启动）</li>
+    <li>始终连 <strong>🔒Reality-Main</strong> 主节点（团队节点延迟最低）；只在它失效时手动切到 <strong>☁️CDN-Backup</strong></li>
+    <li>VPN 状态有问题时，在 Lark 群 @管理员 —— 监控会同步告警，通常我们已经在处理</li>
   </ul>
 
   <h3>省钱技巧</h3>
@@ -641,9 +637,9 @@ cd C:\dev\claude-test</code></pre>
   <p>装完 Ubuntu 后进入 WSL 终端，跑：</p>
   <pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
   <p>注意 WSL 不会自动继承 Windows 的代理，要在 <code>~/.bashrc</code> 里加：</p>
-  <pre><code>export HTTPS_PROXY=http://$(ip route | grep default | awk '{print $3}'):7890
+  <pre><code>export HTTPS_PROXY=http://$(ip route | grep default | awk '{print $3}'):7897
 export HTTP_PROXY=$HTTPS_PROXY</code></pre>
-  <p>并在 Clash 里勾选<strong>"允许局域网连接"</strong>。</p>
+  <p>端口 <code>7897</code> 是 Clash Verge Rev 默认（老版 Clash for Windows 是 7890）。同时要在 Clash 设置里勾选<strong>"允许局域网连接 / Allow LAN"</strong>。</p>
 
   <div class="callout success">
     <span class="label">恭喜你坚持到最后</span>
