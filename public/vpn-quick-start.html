@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPN 一键上手指南（小白零门槛版）</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-code: #1a1f2b;
+    --border: #242a38;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --info: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 48px 24px 120px; }
+  header.hero { padding: 64px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 16px; letter-spacing: -0.02em; line-height: 1.2; }
+  .subtitle { font-size: 18px; color: var(--text-dim); margin: 0 0 24px; }
+  .meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+  .meta span::before { content: ""; display: inline-block; width: 4px; height: 4px; background: var(--text-muted); border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+
+  h2 { font-size: 28px; font-weight: 700; margin: 56px 0 16px; letter-spacing: -0.01em; padding-top: 16px; }
+  h2 .num { display: inline-block; width: 36px; height: 36px; line-height: 36px; text-align: center; background: var(--accent); color: #fff; border-radius: 10px; font-size: 18px; margin-right: 12px; vertical-align: middle; }
+  h3 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; }
+  p { margin: 12px 0; color: var(--text-dim); }
+  p strong, li strong { color: var(--text); }
+
+  ol, ul { padding-left: 24px; color: var(--text-dim); }
+  ol li, ul li { margin: 10px 0; }
+
+  code { background: var(--bg-code); padding: 2px 6px; border-radius: 4px; font-size: 0.92em; color: var(--info); font-family: "SF Mono", "Monaco", Consolas, monospace; }
+  pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 14px; }
+
+  .alert { padding: 16px 20px; border-radius: 10px; margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .alert .icon { flex: 0 0 24px; font-size: 22px; line-height: 1; padding-top: 2px; }
+  .alert.warn { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); color: #fde68a; }
+  .alert.info { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.25); color: #bfdbfe; }
+  .alert.danger { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #fecaca; }
+  .alert.success { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); color: #bbf7d0; }
+
+  .device-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 24px 0; }
+  .device-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 24px 20px; text-decoration: none; color: var(--text); transition: all 0.2s; display: block; }
+  .device-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .device-card .emoji { font-size: 36px; display: block; margin-bottom: 8px; }
+  .device-card .name { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .device-card .desc { font-size: 13px; color: var(--text-muted); }
+
+  .step { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin: 16px 0; position: relative; }
+  .step .step-num { position: absolute; top: -14px; left: 24px; background: var(--accent); color: #fff; font-weight: 700; padding: 4px 12px; border-radius: 6px; font-size: 13px; }
+  .step h3 { margin-top: 8px; }
+  .step ul, .step ol { margin: 8px 0; }
+
+  .placeholder { background: rgba(251,191,36,0.08); border: 1px dashed rgba(251,191,36,0.4); color: #fde68a; padding: 12px 16px; border-radius: 8px; font-family: monospace; font-size: 13px; word-break: break-all; margin: 8px 0; }
+
+  .download-btn { display: inline-block; background: var(--accent); color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; margin: 8px 8px 8px 0; transition: opacity 0.2s; }
+  .download-btn:hover { opacity: 0.85; }
+  .download-btn.secondary { background: var(--bg-code); color: var(--text); border: 1px solid var(--border); }
+
+  .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin: 32px 0; }
+  .toc-title { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .toc a { color: var(--text); text-decoration: none; display: block; padding: 6px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a:last-child { border-bottom: none; }
+
+  .check-list { list-style: none; padding: 0; }
+  .check-list li { padding: 8px 0 8px 32px; position: relative; color: var(--text); }
+  .check-list li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--success); font-weight: 700; font-size: 18px; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  details { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px; margin: 12px 0; }
+  details summary { cursor: pointer; font-weight: 600; padding: 4px 0; color: var(--text); list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: "▶ "; color: var(--text-muted); margin-right: 4px; }
+  details[open] summary::before { content: "▼ "; }
+  details[open] summary { margin-bottom: 12px; }
+
+  .footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 32px; }
+    h2 { font-size: 24px; }
+    .container { padding: 32px 18px 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="hero">
+  <span class="tag">团队内部 · 翻墙速通</span>
+  <h1>VPN 一键上手指南</h1>
+  <p class="subtitle">3 分钟看完，5 分钟上手。无技术背景也能跑通。</p>
+  <div class="meta">
+    <span>更新于 2026-04-25</span>
+    <span>适用 iOS / Android / Windows / macOS</span>
+    <span>团队内部使用，请勿外传</span>
+  </div>
+</header>
+
+<div class="alert info">
+  <span class="icon">📌</span>
+  <div>
+    <strong>这是什么？</strong> 这是公司给你的科学上网工具。能让你的电脑和手机正常访问 Google / ChatGPT / Twitter / YouTube / GitHub 等海外网站。
+    <br><br>
+    <strong>谁能用？</strong> 仅限内部同事，不要把链接发给外人。
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">📖 目录（点击跳转）</div>
+  <a href="#step0">第 0 步：找你的管理员要"专属链接"</a>
+  <a href="#step1">第 1 步：选你的设备类型</a>
+  <a href="#ios">📱 iPhone / iPad（最详细）</a>
+  <a href="#android">🤖 Android 手机</a>
+  <a href="#windows">💻 Windows 电脑</a>
+  <a href="#macos">🍎 Mac 电脑</a>
+  <a href="#verify">第 3 步：验证 VPN 是否生效</a>
+  <a href="#faq">常见问题</a>
+</div>
+
+<h2 id="step0"><span class="num">0</span>找你的管理员要"专属链接"</h2>
+
+<p>在开始之前，你需要 <strong>2 条专属链接</strong>。它们看起来像这样：</p>
+
+<div class="placeholder">
+vless://xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx@ip地址:443?encryption=none&amp;flow=xtls-rprx-vision&amp;security=reality&amp;sni=...&amp;type=tcp#🔒主路径
+</div>
+<div class="placeholder">
+vless://yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy@cdn.xxxx.ai:443?encryption=none&amp;security=tls&amp;type=ws&amp;...#☁️备路径
+</div>
+
+<div class="alert warn">
+  <span class="icon">🔑</span>
+  <div>
+    <strong>怎么拿？</strong> 在 Lark 私聊管理员（Gloom），写一句"<em>给我发一下 VPN 链接</em>"，他会私发给你。
+    <br><br>
+    <strong>为什么要私发？</strong> 这两条链接相当于 VPN 的"密码"，泄露给陌生人会被白嫖流量，所以不能贴在公开页面。
+  </div>
+</div>
+
+<p>拿到链接后，<strong>把它发到你自己的备忘录、Lark 收藏</strong>等地方备用。下面会让你复制粘贴。</p>
+
+<h2 id="step1"><span class="num">1</span>选你的设备类型</h2>
+
+<p>下面四类设备各看自己那一节就行（其他可以不看）：</p>
+
+<div class="device-grid">
+  <a href="#ios" class="device-card">
+    <span class="emoji">📱</span>
+    <div class="name">iPhone / iPad</div>
+    <div class="desc">用 Shadowrocket（需 1 次性买 ¥18）</div>
+  </a>
+  <a href="#android" class="device-card">
+    <span class="emoji">🤖</span>
+    <div class="name">Android 手机</div>
+    <div class="desc">用 V2rayNG（免费）</div>
+  </a>
+  <a href="#windows" class="device-card">
+    <span class="emoji">💻</span>
+    <div class="name">Windows 电脑</div>
+    <div class="desc">用 Clash Verge Rev（免费）</div>
+  </a>
+  <a href="#macos" class="device-card">
+    <span class="emoji">🍎</span>
+    <div class="name">Mac 电脑</div>
+    <div class="desc">用 ClashX Meta（免费）</div>
+  </a>
+</div>
+
+<hr>
+
+<h2 id="ios">📱 iPhone / iPad 配置</h2>
+
+<div class="alert warn">
+  <span class="icon">⚠️</span>
+  <div>
+    <strong>必读</strong>：iOS 没有免费 VPN 客户端能用我们的协议。需要花 <strong>$2.99（约 ¥21）</strong>买一次「Shadowrocket」，<strong>终身使用</strong>。
+    <br><br>
+    重要前提：你的 Apple ID 必须是 <strong>美区 / 港区 / 台区</strong>（中国大陆区 App Store 没有这个 App）。如果你 ID 是大陆区，找管理员要个**借用账号**或自己注册一个美区 ID（注册免费）。
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-num">第 1 步</span>
+  <h3>下载 Shadowrocket</h3>
+  <p>切到美区 Apple ID → App Store → 搜索 <code>Shadowrocket</code> → 购买（$2.99）→ 等下载完成。</p>
+  <a class="download-btn secondary" href="https://apps.apple.com/us/app/shadowrocket/id932747118" target="_blank">App Store 链接 →</a>
+</div>
+
+<div class="step">
+  <span class="step-num">第 2 步</span>
+  <h3>导入第 1 条链接（主路径）</h3>
+  <ol>
+    <li>从你的 Lark / 备忘录里 <strong>复制管理员发给你的第 1 条 vless:// 链接</strong>（带 🔒主路径 字样的那条）</li>
+    <li>打开 Shadowrocket，<strong>主页右上角点"+"</strong></li>
+    <li>它会自动弹窗问"是否添加剪贴板的服务器？" → 点 <strong>添加 / Add</strong></li>
+    <li>主页就出现了一个 <strong>🔒主路径</strong> 节点（带美国国旗图标）</li>
+  </ol>
+</div>
+
+<div class="step">
+  <span class="step-num">第 3 步</span>
+  <h3>导入第 2 条链接（CDN 备路径）</h3>
+  <p>同样的操作 —— 复制第 2 条 → 主页 + → 自动识别添加。</p>
+  <p>完成后主页应该看到 <strong>2 个节点</strong>：🔒主路径 和 ☁️备路径。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 4 步</span>
+  <h3>开启 VPN</h3>
+  <ol>
+    <li>主页**点选**"🔒主路径"（让它变成默认节点，前面有橙色小圆点）</li>
+    <li>主页顶部 <strong>开关打开</strong>（切到右边变蓝色）</li>
+    <li>系统会弹"是否允许添加 VPN 配置" → <strong>允许</strong>（这个只首次会问）</li>
+    <li>开关变蓝 = 已连接</li>
+  </ol>
+</div>
+
+<div class="step">
+  <span class="step-num">第 5 步（关键设置）</span>
+  <h3>必开的隐私保护</h3>
+  <p>主页左上角菜单图标 → <strong>设置 / Settings</strong>：</p>
+  <ul class="check-list">
+    <li>路由：<strong>配置 (Config)</strong> 模式（不要选 Global，不然连国内网站都走 VPN，慢）</li>
+    <li>DNS 模式：<strong>DNS Proxy</strong>，DNS 服务器填 <code>1.1.1.1</code></li>
+    <li><strong>Block QUIC</strong> 打开（防止某些应用绕过 VPN）</li>
+    <li><strong>Bypass LAN</strong> 打开（局域网设备不走 VPN）</li>
+  </ul>
+</div>
+
+<p>完成 → 跳到 <a href="#verify">第 3 步验证</a>。</p>
+
+<hr>
+
+<h2 id="android">🤖 Android 配置</h2>
+
+<div class="step">
+  <span class="step-num">第 1 步</span>
+  <h3>下载 V2rayNG（免费）</h3>
+  <p>从 GitHub 直接下 APK 安装：</p>
+  <a class="download-btn" href="https://github.com/2dust/v2rayNG/releases/latest" target="_blank">下载最新版 V2rayNG →</a>
+  <p>找到 <code>v2rayNG_x_x_x_arm64-v8a.apk</code>（绝大多数手机都是 arm64）下载后安装。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 2 步</span>
+  <h3>导入第 1 条链接</h3>
+  <ol>
+    <li>复制管理员给你的第 1 条 vless:// 链接</li>
+    <li>打开 V2rayNG → 右上角 <strong>+</strong> → <strong>从剪贴板导入批量 URL</strong></li>
+    <li>看到主页出现"🔒主路径"节点</li>
+    <li>同样方式导入第 2 条"☁️备路径"</li>
+  </ol>
+</div>
+
+<div class="step">
+  <span class="step-num">第 3 步</span>
+  <h3>开启 VPN</h3>
+  <ol>
+    <li>选中 🔒主路径（点一下，节点变绿）</li>
+    <li>主页右下角 <strong>大圆形按钮 V</strong> 点击</li>
+    <li>系统弹窗"是否允许 VPN 连接" → <strong>确定</strong></li>
+    <li>按钮变成红色 V = 已连接</li>
+  </ol>
+</div>
+
+<p>完成 → 跳到 <a href="#verify">第 3 步验证</a>。</p>
+
+<hr>
+
+<h2 id="windows">💻 Windows 配置</h2>
+
+<div class="step">
+  <span class="step-num">第 1 步</span>
+  <h3>下载 Clash Verge Rev（免费）</h3>
+  <a class="download-btn" href="https://github.com/clash-verge-rev/clash-verge-rev/releases/latest" target="_blank">下载最新版 →</a>
+  <p>选 <code>Clash.Verge_x_x_x_x64-setup.exe</code>（64位 Windows） → 双击安装 → 一路下一步。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 2 步</span>
+  <h3>导入链接</h3>
+  <ol>
+    <li>复制管理员给你的第 1 条 vless:// 链接</li>
+    <li>打开 Clash Verge → 左侧 <strong>"代理 / Proxies"</strong></li>
+    <li>右上角 <strong>"导入 / Import"</strong> → 选 <strong>从剪贴板导入</strong></li>
+    <li>同样导入第 2 条</li>
+    <li>点选 🔒主路径</li>
+  </ol>
+</div>
+
+<div class="step">
+  <span class="step-num">第 3 步</span>
+  <h3>开启系统代理</h3>
+  <ol>
+    <li>左侧 <strong>"设置 / Settings"</strong></li>
+    <li>打开 <strong>"系统代理 / System Proxy"</strong> 开关</li>
+    <li>打开 <strong>"TUN 模式 / TUN Mode"</strong> 开关（可让浏览器以外的应用也走 VPN）</li>
+  </ol>
+</div>
+
+<p>完成 → 跳到 <a href="#verify">第 3 步验证</a>。</p>
+
+<hr>
+
+<h2 id="macos">🍎 Mac 配置</h2>
+
+<div class="step">
+  <span class="step-num">第 1 步</span>
+  <h3>下载 ClashX Meta（免费）</h3>
+  <a class="download-btn" href="https://github.com/MetaCubeX/ClashX.Meta/releases/latest" target="_blank">下载最新版 →</a>
+  <p>选 <code>ClashX.Meta.dmg</code>（M 系列 Mac 选 arm64，Intel Mac 选 x64）→ 拖到"应用程序"。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 2 步</span>
+  <h3>导入链接</h3>
+  <ol>
+    <li>复制管理员给你的第 1 条 vless:// 链接</li>
+    <li>打开 ClashX Meta（菜单栏会出现一个小猫图标）</li>
+    <li>菜单栏小猫 → <strong>配置 / Configurations</strong> → <strong>从 URL 导入</strong></li>
+    <li>同样导入第 2 条</li>
+  </ol>
+</div>
+
+<div class="step">
+  <span class="step-num">第 3 步</span>
+  <h3>开启系统代理</h3>
+  <ol>
+    <li>菜单栏小猫 → <strong>设置为系统代理 / Set As System Proxy</strong>（打勾）</li>
+    <li>菜单栏小猫 → <strong>出站规则 / Outbound Mode</strong> → 选 <strong>规则 / Rule</strong></li>
+  </ol>
+</div>
+
+<p>完成 → 跳到 <a href="#verify">第 3 步验证</a>。</p>
+
+<hr>
+
+<h2 id="verify"><span class="num">3</span>验证 VPN 是否生效</h2>
+
+<p>VPN 连接好后，做下面 <strong>1 个测试</strong> 确认成功：</p>
+
+<div class="step">
+  <h3>访问下面这个网址</h3>
+  <pre><code>https://ipinfo.io/ip</code></pre>
+  <p>用<strong>已开 VPN 的设备</strong>的浏览器（Safari / Chrome 都行）打开。</p>
+  <ul>
+    <li>✅ 看到一个 <strong>104. 开头</strong> 或者 <strong>美国 IP</strong> = VPN 成功</li>
+    <li>❌ 看到 <strong>中国 IP</strong>（如 116. / 121. / 223. 开头） = VPN 没生效</li>
+  </ul>
+</div>
+
+<div class="alert success">
+  <span class="icon">🎉</span>
+  <div>
+    显示美国 IP 后，立刻测试 <strong>https://www.google.com</strong> 能不能打开。能打开 → 你已经能用全球互联网了！
+  </div>
+</div>
+
+<hr>
+
+<h2 id="faq">常见问题</h2>
+
+<details>
+  <summary>Q: 连上了 VPN，但还是打不开 Google？</summary>
+  <p>检查：</p>
+  <ol>
+    <li>路由模式是否选错了 —— 不要选 Global / 全局，要选 <strong>Rule / 规则 / Config</strong> 模式</li>
+    <li>关闭浏览器再重开（浏览器有 DNS 缓存）</li>
+    <li>切换到 ☁️备路径节点试试，如果备路能用 = 主路径被运营商干扰，正常</li>
+  </ol>
+</details>
+
+<details>
+  <summary>Q: 速度很慢？</summary>
+  <p>正常情况：</p>
+  <ul>
+    <li>主路径延迟 150-250ms（白天/上班时间）</li>
+    <li>晚上 8-11 点 国内出口拥塞，可能 300ms+，<strong>切到 ☁️备路径</strong>会更稳</li>
+    <li>如果常年慢，告诉管理员"我这里 VPN 速度很慢"</li>
+  </ul>
+</details>
+
+<details>
+  <summary>Q: 突然连不上了？</summary>
+  <p>步骤：</p>
+  <ol>
+    <li>切换到 ☁️备路径节点试试 —— 如果它能用 = 主 IP 被封了，<strong>立刻告诉管理员</strong></li>
+    <li>都用不了 —— 重启路由器 / 切到手机 4G 流量再试一次（排除你本地网络问题）</li>
+    <li>都不行 —— 在 Lark 群里 @管理员 "VPN 全部连不上"</li>
+  </ol>
+</details>
+
+<details>
+  <summary>Q: 流量限制？</summary>
+  <p>整个团队共享 <strong>2 TB / 月</strong> 流量，<strong>正常工作 + 看视频</strong>完全够用。</p>
+  <p>请<strong>不要</strong>用 VPN 下载大型游戏 / 4K 高清电影 / 持续挂 YouTube 等高流量行为。</p>
+</details>
+
+<details>
+  <summary>Q: 公司之外的设备能用吗？比如家里的电脑？</summary>
+  <p>能用，没有"绑定公司网络"这种限制。但请仅限本人使用，不要分享给家人或朋友 —— 多一个人用就多一份流量消耗。</p>
+</details>
+
+<details>
+  <summary>Q: 手机切换地点（比如 4G ↔ WiFi），VPN 会断吗？</summary>
+  <p>会自动重连。如果没重连，手动关一下 VPN 开关再开就行。</p>
+</details>
+
+<details>
+  <summary>Q: 我可以同时用多台设备吗？</summary>
+  <p>可以。一份链接可以同时在你的手机+电脑+iPad 上用，不冲突。</p>
+</details>
+
+<details>
+  <summary>Q: 离职后还能用吗？</summary>
+  <p>不能。离职时管理员会吊销你的"专属链接"，从那时起这两条 vless:// 都会失效。</p>
+</details>
+
+<hr>
+
+<div class="alert info">
+  <span class="icon">💬</span>
+  <div>
+    <strong>遇到任何问题</strong>，直接在 Lark @ 管理员（Gloom）即可，附上一张你看到的报错截图，我们 5 分钟帮你解决。
+    <br><br>
+    切忌：<strong>不要把这页链接转给公司外人</strong>，也不要把"专属链接"复制给别人。
+  </div>
+</div>
+
+<div class="footer">
+  <p>upio.ai 团队内部文档 · VPN 一键上手指南 · 版本 1.0 · 最后更新 2026-04-25</p>
+  <p>本节点由 BandwagonHost LA-DC2 提供，VLESS-Reality + Cloudflare 双路径架构。</p>
+</div>
+
+</div>
+</body>
+</html>
