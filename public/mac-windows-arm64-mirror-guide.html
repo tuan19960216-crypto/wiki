@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M 系列 Mac 安装 Win11 ARM64：第三方镜像方案（Plan F）</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-code: #1a1f2b;
+    --border: #242a38;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #d97757;
+    --accent-soft: rgba(217, 119, 87, 0.15);
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 120px;
+  }
+
+  header.hero {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 17px;
+    color: var(--text-dim);
+    margin: 0 0 20px;
+  }
+
+  .meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 56px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    color: var(--text);
+  }
+
+  h3 .badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+  .badge-rec { background: rgba(52, 211, 153, 0.15); color: var(--success); }
+  .badge-warn { background: rgba(251, 191, 36, 0.15); color: var(--warning); }
+  .badge-bad { background: rgba(248, 113, 113, 0.15); color: var(--danger); }
+
+  p { margin: 12px 0; color: var(--text); }
+
+  ul, ol {
+    margin: 12px 0;
+    padding-left: 24px;
+  }
+  li { margin: 6px 0; }
+  li::marker { color: var(--accent); }
+
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 14px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f0a07c;
+  }
+
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--text);
+    font-size: inherit;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 14.5px;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 14px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-code);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 15px;
+    border-left: 3px solid;
+  }
+  .callout-warn {
+    background: rgba(251, 191, 36, 0.08);
+    border-color: var(--warning);
+    color: #f5d77a;
+  }
+  .callout-tip {
+    background: rgba(52, 211, 153, 0.08);
+    border-color: var(--success);
+    color: #8de8c2;
+  }
+  .callout-info {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: #f0a07c;
+  }
+  .callout strong { color: inherit; }
+
+  strong { color: #fff; }
+
+  .footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 28px; }
+    h2 { font-size: 20px; }
+    .container { padding: 32px 18px 80px; }
+    pre { font-size: 12.5px; }
+    table { font-size: 13px; }
+    th, td { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="hero">
+  <span class="tag">指南 · macOS</span>
+  <h1>M 系列 Mac 安装 Win11 ARM64</h1>
+  <p class="subtitle">Plan F：第三方镜像源方案 — 零代理、零订阅的备用路径</p>
+  <div class="meta">
+    <span>📅 2026-04-26</span>
+    <span>🖥️ Apple Silicon · macOS Tahoe+</span>
+    <span>📦 适用：VMware Fusion / UTM</span>
+  </div>
+</header>
+
+<h2>核心思路</h2>
+<p>绕开 Microsoft 官方下载路径（被 Akamai 限速 + Esd2iso 不读 macOS 系统代理），从第三方拿到<strong>等价的安装介质</strong>（ISO 或 VHDX），再喂给 Fusion / UTM。本质是把"下载"和"安装"两步解耦。</p>
+
+<div class="callout callout-info">
+<strong>背景：</strong>VMware Fusion 内置的"从 Microsoft 下载 Windows"向导在中国大陆 IP 下必败，因为 Esd2iso 工具进程不读 macOS 系统级 HTTP 代理设置。Plan F 不依赖 Fusion 的下载向导，因此对网络环境最宽容。
+</div>
+
+<h2>三类来源（按可信度排序）</h2>
+
+<h3>1. UUP dump<span class="badge badge-rec">最推荐</span></h3>
+<ul>
+  <li>站点：<code>uupdump.net</code></li>
+  <li>原理：从 Microsoft Update 服务器拉原始 UUP 包，本地脚本拼装成 ISO；<strong>文件本身来自微软</strong>，只是分发链路不同</li>
+</ul>
+
+<p><strong>步骤：</strong></p>
+<ol>
+  <li>浏览器访问 → 选 "Windows 11" → Architecture 选 <strong>arm64</strong></li>
+  <li>选最新 Build（如 22631.x / 26100.x）→ 选语言（zh-cn 或 en-us）→ Edition（Pro 推荐）</li>
+  <li>下载一个 <code>.zip</code>，里面是 <code>uup_download_macos.sh</code></li>
+  <li>macOS 终端执行：</li>
+</ol>
+
+<pre><code># 先装依赖
+brew install aria2 cabextract wimlib
+
+# 解压 + 跑脚本
+unzip Windows11_ARM64_xxx.zip -d uup-build && cd uup-build
+bash uup_download_macos.sh</code></pre>
+
+<p>等 30–60 分钟，得到 <code>Windows11_ARM64_xxx.iso</code>（约 5 GB）。</p>
+
+<p><strong>优点：</strong>能拿到最新预览/正式版、ISO 而非 VHDX（Fusion 装更标准）、社区背书强<br>
+<strong>缺点：</strong>拼装慢、依赖工具链；UUP 服务器在国内速度看 RP，必要时挂代理</p>
+
+<h3>2. next.itellyou.cn<span class="badge badge-warn">需自行核验</span></h3>
+<ul>
+  <li>老牌国内 MSDN 镜像站，历史上提供过 Win11 ARM64 VHDX/ESD</li>
+  <li>⚠️ <strong>不确定当前是否还有 ARM64 条目</strong>，最近一次大改版后部分版本下架；用前先去站内搜 "Windows 11" 并按架构筛选 ARM64</li>
+  <li>文件分发走国内 CDN（磁力 / ed2k / 直链），下载快</li>
+  <li><strong>必做：</strong>下完后用 <code>shasum -a 256 file.iso</code> 对比站内公布的 SHA256，确认未被篡改</li>
+</ul>
+
+<h3>3. 论坛 / 网盘共享<span class="badge badge-bad">不推荐</span></h3>
+<ul>
+  <li>远景论坛、各类 Telegram 群、百度网盘共享</li>
+  <li>风险：ISO 可能被植入后门 / 修改过 OEM 配置 / 装完弹广告</li>
+  <li>用时<strong>必须</strong>对比官方公布的 SHA256（如果能找到）</li>
+</ul>
+
+<h2>安装流程</h2>
+
+<h3>UUP dump ISO + Fusion</h3>
+<pre><code>1. New VM → "Install from disc or image"
+2. 选刚才生成的 .iso
+3. 操作系统：选 "Windows 11 64-bit ARM"
+4. 自定义硬件：CPU 4 核、内存 8 GB、磁盘 64 GB（动态）
+5. 启动 → 走标准 Windows 安装向导</code></pre>
+
+<h3>VHDX（官方 / itellyou）+ Fusion</h3>
+<pre><code>1. New VM → "Create custom VM"
+2. 选 "Microsoft Windows" → "Windows 11 64-bit ARM"
+3. "Use an existing virtual disk" → 指向 .vhdx
+   选 "Take this disk away from..."（避免共享导致的写冲突）
+4. 启动即进 Windows OOBE</code></pre>
+
+<h2>关键校验步骤（防坑）</h2>
+
+<pre><code># 1. 校验 SHA256（UUP dump 下载完会在终端输出预期 hash）
+shasum -a 256 Windows11_ARM64_xxx.iso
+
+# 2. 如果是从 itellyou 下的 VHDX，挂载检查内部
+hdiutil attach -nomount file.vhdx
+# 或用 7z 查看结构
+7z l file.vhdx
+
+# 3. 装完 Windows 后第一件事：
+#    Settings → System → About
+#    确认 Edition 和 Version 与下载时选择的一致，且无奇怪 OEM 标识</code></pre>
+
+<div class="callout callout-warn">
+<strong>⚠️ 安全提醒：</strong>第三方镜像最大的风险不是装不上，而是装上了之后你不知道里面藏了什么。SHA256 校验是底线，能跳过的只有 UUP dump（因为是你自己从微软服务器现拼的）。
+</div>
+
+<h2>与其他方案的关键差异</h2>
+<table>
+  <thead>
+    <tr>
+      <th>维度</th>
+      <th>Plan F（本方案）</th>
+      <th>Plan A · TUN+Esd2iso</th>
+      <th>Plan E · Parallels</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>代理依赖</td><td>几乎无</td><td>必需 + 全局模式</td><td>无</td></tr>
+    <tr><td>成本</td><td>0</td><td>节点费</td><td>¥498 / 年</td></tr>
+    <tr><td>一次性 vs 长期</td><td>一次下载永久用</td><td>每次重装都要走</td><td>订阅</td></tr>
+    <tr><td>出问题排查</td><td>自己查</td><td>多层（代理 / CDN / Esd2iso）</td><td>Parallels 客服</td></tr>
+    <tr><td>镜像可信度</td><td>UUP 高、其他需校验</td><td>完全官方</td><td>完全官方</td></tr>
+  </tbody>
+</table>
+
+<h2>建议</h2>
+<div class="callout callout-tip">
+如果只装 1–2 次，<strong>走 UUP dump</strong>：拼装慢但最干净、最可控，下来的 ISO 还能存着以后重装。<br>
+itellyou 仅作"UUP 服务器抽风时的备胎"，下完务必校验 SHA256。
+</div>
+
+<div class="footer">
+  M 系列 Mac 装 Windows 备用方案系列 · Plan F · <a href="/">返回 upio.ai</a>
+</div>
+
+</div>
+</body>
+</html>
