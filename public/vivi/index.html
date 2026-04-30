@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivi 项目知识库 · 新人入门</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #a78bfa;
+    --accent-soft: rgba(167, 139, 250, 0.15);
+    --accent-2: #22d3ee;
+    --accent-2-soft: rgba(34, 211, 238, 0.12);
+    --accent-3: #f472b6;
+    --accent-3-soft: rgba(244, 114, 182, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  header.hero { padding: 16px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 {
+    font-size: 48px; font-weight: 700; margin: 0 0 16px;
+    letter-spacing: -0.02em; line-height: 1.15;
+    background: linear-gradient(135deg, #e4e7ed 20%, var(--accent) 80%, var(--accent-2) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { font-size: 19px; color: var(--text-dim); margin: 0 0 24px; max-width: 760px; }
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+  .hero-meta strong { color: var(--text-dim); font-weight: 500; }
+
+  h2 { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin: 56px 0 20px; }
+
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 48px; }
+  .fact { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 16px; }
+  .fact .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .fact .val { font-size: 16px; color: var(--text); font-weight: 600; }
+  .fact .sub { font-size: 12.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+  @media (max-width: 860px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+
+  .doc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .doc-grid { grid-template-columns: 1fr; } }
+  .doc-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 22px 20px;
+    text-decoration: none; color: inherit; display: block;
+    transition: border-color .2s, transform .15s;
+  }
+  .doc-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .doc-card .num { font-size: 11px; color: var(--text-muted); letter-spacing: 0.12em; font-weight: 600; }
+  .doc-card h3 { margin: 6px 0 8px; font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.005em; }
+  .doc-card p { margin: 0; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+  .doc-card .arrow { display: inline-block; margin-top: 14px; font-size: 13px; color: var(--accent); font-weight: 500; }
+
+  .links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .links { grid-template-columns: 1fr; } }
+  .link {
+    display: flex; flex-direction: column; gap: 4px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+    text-decoration: none; transition: border-color .2s;
+  }
+  .link:hover { border-color: var(--border-strong); }
+  .link .name { color: var(--text); font-weight: 600; font-size: 14px; }
+  .link .url { color: var(--text-muted); font-size: 12.5px; font-family: ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
+
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px;
+    border-left: 3px solid var(--accent);
+  }
+  .pillar:nth-child(2) { border-left-color: var(--accent-2); }
+  .pillar:nth-child(3) { border-left-color: var(--accent-3); }
+  .pillar:nth-child(4) { border-left-color: var(--success); }
+  .pillar h4 { margin: 0 0 8px; font-size: 16px; font-weight: 600; color: var(--text); }
+  .pillar p { margin: 0; font-size: 14px; color: var(--text-dim); line-height: 1.65; }
+  .pillar code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><span style="color: var(--text-dim);">Vivi</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">新人入门 · Onboarding</span>
+    <h1>Vivi 项目知识库</h1>
+    <p class="subtitle">
+      Vivi（Vivid Dreams）是一款 Telegram 上的 AI 角色对话 Mini App。这份知识库是新同学加入团队后从零理解产品、监控、运营、商业化所需的全部背景 —— 不管你是 PM、运营，还是工程师都能找到自己的入口。
+    </p>
+    <div class="hero-meta">
+      <span><strong>产品</strong> · Telegram Mini App · AI 角色 RP 对话</span>
+      <span><strong>目标市场</strong> · 全球（含 NSFW 容许地区）</span>
+      <span><strong>入口</strong> · @ViviDreamsBot</span>
+    </div>
+  </header>
+
+  <h2>项目快照</h2>
+  <div class="facts">
+    <div class="fact">
+      <div class="label">技术栈</div>
+      <div class="val">FastAPI · Vanilla JS</div>
+      <div class="sub">Python 3.12 · 无构建步骤前端</div>
+    </div>
+    <div class="fact">
+      <div class="label">部署平台</div>
+      <div class="val">Fly.io · CF Pages</div>
+      <div class="sub">后端 vividreams (ams) · 前端 vivi-app-e7m</div>
+    </div>
+    <div class="fact">
+      <div class="label">数据库</div>
+      <div class="val">Turso (LibSQL)</div>
+      <div class="sub">EU West · 本地 dev fallback SQLite</div>
+    </div>
+    <div class="fact">
+      <div class="label">前端入口</div>
+      <div class="val">@ViviDreamsBot</div>
+      <div class="sub">Telegram WebApp · 无应用商店</div>
+    </div>
+  </div>
+
+  <h2>新人必读 · 四件大事</h2>
+  <div class="pillars">
+    <div class="pillar">
+      <h4>① 入口 = Telegram Bot</h4>
+      <p>用户必须先打开 <code>@ViviDreamsBot</code> 才能进入 Mini App，没有 App Store / Google Play。所有用户增长都依赖 Telegram 链接、群发、Adsgram 等渠道；分享时给链接，不要试图引导下载安装。</p>
+    </div>
+    <div class="pillar">
+      <h4>② 计费走 Telegram Stars</h4>
+      <p>所有付费走 TG <code>openInvoice</code>，钱在 Telegram 平台。退款必须从 Telegram 后台发起，不能直接打回用户银行卡；用户问退款找 PM，PM 走 Bot 后台 <code>refundStarPayment</code>。</p>
+    </div>
+    <div class="pillar">
+      <h4>③ NSFW 不能用 Google/OpenAI</h4>
+      <p>Vivi 含成人内容，<strong>任何环节</strong>用 Google/OpenAI 模型都会触发 TOS 封号（包括"只是提取关键词"这种轻量任务）。聊天/记忆/提取统一走 OpenRouter 上的非审查模型。</p>
+    </div>
+    <div class="pillar">
+      <h4>④ 推完代码 ≠ 已部署</h4>
+      <p>Vivi <strong>没有 PR 级 CI</strong>，merge 到 main 立即自动 deploy。每次推完必须 <code>gh run list</code> 看绿灯，再 <code>curl</code> 验证生产文件包含改动 —— CI 绿不代表 CDN 已刷新。</p>
+    </div>
+  </div>
+
+  <h2>知识库目录</h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="/vivi/architecture">
+      <div class="num">01 · ARCHITECTURE</div>
+      <h3>系统架构总览</h3>
+      <p>Telegram → Cloudflare Pages → Fly.io → OpenRouter / fal.ai / Venice / Mem0 / Turso 是怎么拼起来的；Vivi / Workflow / Softie 三仓库职责边界；聊天、生图、支付三条数据流。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/vivi/product">
+      <div class="num">02 · PRODUCT</div>
+      <h3>产品形态与角色体系</h3>
+      <p>Mini App 用户旅程、45 个角色 + 135 个故事、亲密度 6 级、能量机制、礼物系统、Your Character 虚拟角色、生图 / TTS 玩法。PM 必读。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/vivi/monetization">
+      <div class="num">03 · MONETIZATION</div>
+      <h3>商业化体系</h3>
+      <p>四档订阅（Basic / Plus / Pro / Ultra）⭐ 直购、Gems 钻石经济、能量与签到、Your Character 99 💎、礼物物品、首充翻倍、付费漏斗与转化关键节点。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/vivi/observability">
+      <div class="num">04 · OBSERVABILITY</div>
+      <h3>数据与监控体系</h3>
+      <p>北极星 = 日消息量。DailyLoop 四阶段自动化管线、Bitable 五张表、PostHog / Sentry / Better Stack / Clarity 分工、Lark Bot 矩阵、关键事件埋点速查。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/vivi/operations">
+      <div class="num">05 · OPERATIONS</div>
+      <h3>运营与排障 SOP</h3>
+      <p>Admin 后台用法、加角色 SOP、紧急回滚命令、用户问题排查 checklist、Lark 推送规范、需求模板、Adsgram 充值流程。运营/客服必读。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/vivi/lessons">
+      <div class="num">06 · LESSONS</div>
+      <h3>踩坑经验（必读）</h3>
+      <p>过去半年踩过的所有重要坑按主题分类：Telegram WebApp / CI 与 CDN / Turso 数据 / LLM 选型与封号 / NSFW 合规 / 项目拆分 / Fly.io / SPA 路由。新人省一周。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+  </div>
+
+  <h2>外部资源</h2>
+  <div class="links">
+    <a class="link" href="https://t.me/ViviDreamsBot" target="_blank">
+      <span class="name">Telegram Bot · 用户入口</span>
+      <span class="url">@ViviDreamsBot</span>
+    </a>
+    <a class="link" href="https://vivi-app-e7m.pages.dev" target="_blank">
+      <span class="name">前端生产站点</span>
+      <span class="url">vivi-app-e7m.pages.dev</span>
+    </a>
+    <a class="link" href="https://vividreams.fly.dev" target="_blank">
+      <span class="name">后端 API</span>
+      <span class="url">vividreams.fly.dev</span>
+    </a>
+    <a class="link" href="https://github.com/ViviDreams/Vivi" target="_blank">
+      <span class="name">GitHub 仓库</span>
+      <span class="url">ViviDreams/Vivi (private)</span>
+    </a>
+    <a class="link" href="https://fly.io/apps/vividreams" target="_blank">
+      <span class="name">Fly.io 控制台</span>
+      <span class="url">fly.io/apps/vividreams · ams</span>
+    </a>
+    <a class="link" href="https://us.posthog.com/project/377981" target="_blank">
+      <span class="name">PostHog · Vivi App</span>
+      <span class="url">project 377981</span>
+    </a>
+    <a class="link" href="https://clarity.microsoft.com" target="_blank">
+      <span class="name">Microsoft Clarity</span>
+      <span class="url">录屏 + 热图 + Dashboard API</span>
+    </a>
+    <a class="link" href="https://tsgkcplyz3ky.sg.larksuite.com/base/EHufbo6FqaVBCNsH5tVl31jMgqd" target="_blank">
+      <span class="name">Bitable · Vivi 产品自动化</span>
+      <span class="url">DailyLoop 五张表入口</span>
+    </a>
+    <a class="link" href="https://partner.adsgram.ai" target="_blank">
+      <span class="name">Adsgram</span>
+      <span class="url">Telegram Mini App 广告投放</span>
+    </a>
+  </div>
+
+  <footer>
+    Vivi 知识库 · 最后更新 2026-05-01 · <a href="/">← 返回 upio.ai</a>
+  </footer>
+
+</div>
+</body>
+</html>

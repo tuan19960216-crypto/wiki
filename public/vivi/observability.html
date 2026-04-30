@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据与监控体系 · Vivi</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #a78bfa; --accent-soft: rgba(167, 139, 250, 0.15);
+    --accent-2: #22d3ee; --accent-2-soft: rgba(34, 211, 238, 0.15);
+    --accent-3: #f472b6; --accent-3-soft: rgba(244, 114, 182, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  pre { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.65; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13px; }
+  a { color: var(--accent-2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .layer-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px; border-top: 3px solid var(--accent); }
+  .layer-card:nth-child(2) { border-top-color: var(--accent-2); }
+  .layer-card:nth-child(3) { border-top-color: var(--accent-3); }
+  .layer-card .lvl { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .layer-card h4 { margin: 6px 0 8px; font-size: 16px; color: var(--text); }
+  .layer-card p { font-size: 13px; line-height: 1.6; margin: 0; color: var(--text-dim); }
+  .layer-card .meta { font-size: 11.5px; color: var(--text-muted); margin-top: 8px; font-family: ui-monospace, monospace; }
+  @media (max-width: 720px) { .layers { grid-template-columns: 1fr; } }
+
+  .star-metric { background: linear-gradient(135deg, var(--accent-soft) 0%, var(--accent-2-soft) 100%); border: 1px solid var(--accent); border-radius: 14px; padding: 24px; margin: 20px 0; text-align: center; }
+  .star-metric .lbl { font-size: 12px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .star-metric h3 { font-size: 32px; margin: 8px 0 4px; color: var(--text); background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .star-metric p { font-size: 14px; margin: 0; color: var(--text-dim); }
+
+  .pipeline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 16px 0; }
+  .stage { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px; position: relative; }
+  .stage .step-n { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.08em; }
+  .stage h4 { margin: 4px 0 4px; font-size: 13px; color: var(--text); }
+  .stage p { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin: 0; }
+  @media (max-width: 720px) { .pipeline-grid { grid-template-columns: 1fr; } }
+
+  .bot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0; }
+  .bot { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .bot .nm { font-weight: 600; color: var(--text); font-size: 14px; }
+  .bot .role { font-size: 12px; color: var(--accent); margin-top: 2px; }
+  .bot .desc { font-size: 12.5px; color: var(--text-dim); margin-top: 6px; line-height: 1.5; }
+  @media (max-width: 720px) { .bot-grid { grid-template-columns: 1fr; } }
+
+  .callout { background: var(--accent-soft); border: 1px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text); }
+  .callout.info { background: var(--accent-2-soft); border-color: var(--accent-2); border-left-color: var(--accent-2); }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <span style="color: var(--text-dim);">数据与监控体系</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">04 · Observability</span>
+    <h1>数据与监控体系</h1>
+    <p class="subtitle">
+      Vivi 怎么知道自己活得好不好：北极星 = 日消息量；三层告警（基础设施 / 应用异常 / 业务指标）；DailyLoop 每天自动跑一轮分析推 Lark + 写 Bitable。这一页讲清楚每个工具的分工，PM 看完就能直接用 dashboard。
+    </p>
+  </header>
+
+  <h2>北极星指标</h2>
+  <div class="star-metric">
+    <div class="lbl">North Star Metric</div>
+    <h3>日消息量（message_sent）</h3>
+    <p>消息量直接反映用户真实粘性 · DAU 只说明用户打开了 App，不代表互动 · 已并入 daily_monitor，每日 Lark 卡片同步</p>
+  </div>
+  <div class="callout info">
+    <strong>判断指标价值的口诀：</strong>讨论"加埋点"前先问 <strong>"DB 能不能直接查"</strong>。多数情况答案是可以 —— Telegram Mini App 平台归因链断裂，前端埋点解决不了归因，能从 <code>conversations</code> / <code>transactions</code> 表查的就别加新事件。
+  </div>
+
+  <h2>三层告警架构</h2>
+  <p>不同性质的故障走不同通道，避免单点失效：</p>
+  <div class="layers">
+    <div class="layer-card">
+      <div class="lvl">P0 · 基础设施</div>
+      <h4>Better Stack</h4>
+      <p>HTTP monitor 拨测 <code>/health</code>（间隔 1 min），失败立即推 Lark Vivi-Bot 红色卡片 + @野荞。Heartbeat 监 DailyLoop 是否如期跑完。</p>
+      <div class="meta">webhook: /api/webhooks/betterstack</div>
+    </div>
+    <div class="layer-card">
+      <div class="lvl">P0 · 应用异常</div>
+      <h4>Sentry</h4>
+      <p>SDK 捕获 unhandled exception，issue alert 配 webhook → Lark 红色卡片 + @野荞。SDK 条件初始化（<code>SENTRY_DSN</code> 存在才激活）。</p>
+      <div class="meta">webhook: /api/webhooks/sentry</div>
+    </div>
+    <div class="layer-card">
+      <div class="lvl">P1 · 业务指标</div>
+      <h4>DailyLoop</h4>
+      <p>每天 09:00 + 10:00 自动跑两条 GHA workflow，写 Bitable 五张表，向多个 Lark 群推卡片。这是 PM 最常看的产出。</p>
+      <div class="meta">workflow: .github/workflows/daily_monitor.yml</div>
+    </div>
+  </div>
+  <p>另外还有 <strong>UptimeRobot</strong>（独立冗余）每 5 分钟邮件告警，和 <strong>Microsoft Clarity</strong>（前端录屏 + 热图，无告警，按需查）。</p>
+
+  <h2>/health 深探探针</h2>
+  <p>Better Stack 拉的 <code>/health</code> 不是简单 200，而是依次探四个依赖：</p>
+  <ul>
+    <li><strong>Turso DB</strong> —— 一次轻量 SELECT 1</li>
+    <li><strong>OpenRouter</strong> —— ping 模型列表 endpoint</li>
+    <li><strong>fal.ai</strong> —— 探活 API（不真生图）</li>
+    <li><strong>App 自身</strong> —— 进程 / lifespan / Mem0 client</li>
+  </ul>
+  <p>每探 2s 单超时，5s 总硬上限。任一失败 → 503 + <code>errors[]</code>。Better Stack 只要看到 503 就 fire 告警。</p>
+
+  <h2>DailyLoop 自动化管线</h2>
+  <p>DailyLoop 是 Vivi 的"每日自动化产品 Office"。每天两条 GHA workflow 串行触发：</p>
+  <pre><code>09:00 UTC  clarity_report.yml   → Clarity Dashboard API → Bitable 表二（用户行为）
+10:00 UTC  daily_monitor.yml    → 四阶段分析 → Bitable 五表 + Lark 卡片 + Remote Trigger 开 PR
+</code></pre>
+
+  <h3>四阶段分析（合并优化后）</h3>
+  <div class="pipeline-grid">
+    <div class="stage">
+      <span class="step-n">PHASE 1</span>
+      <h4>数据采集</h4>
+      <p>并行拉 Adsgram + Clarity MCP + PostHog 三个数据源</p>
+    </div>
+    <div class="stage">
+      <span class="step-n">PHASE 2</span>
+      <h4>需求点生成</h4>
+      <p><code>generate_product_requirements()</code> 交叉分析 → 触发 REQ-XX 列表</p>
+    </div>
+    <div class="stage">
+      <span class="step-n">PHASE 3</span>
+      <h4>代码 prompt 生成</h4>
+      <p><code>generate_code_prompts()</code> → 含文件路径的 Claude Code 可执行 prompt</p>
+    </div>
+    <div class="stage">
+      <span class="step-n">PHASE 4</span>
+      <h4>写表 + 推送</h4>
+      <p>Bitable 五表写入 + Lark 卡片 + Remote Trigger 开 PR</p>
+    </div>
+  </div>
+
+  <h3>需求体系 REQ ID 清单（自动触发）</h3>
+  <table>
+    <thead><tr><th>REQ ID</th><th>触发条件</th><th>类型</th><th>含 code prompt</th></tr></thead>
+    <tbody>
+      <tr><td><code>REQ-FUNNEL-01</code></td><td>转化率 &lt; 50%</td><td>前端优化</td><td>✅</td></tr>
+      <tr><td><code>REQ-UX-01</code></td><td>Dead click &gt; 5% 或 Rage click &gt; 2%</td><td>前端优化</td><td>✅</td></tr>
+      <tr><td><code>REQ-PAY-01</code></td><td>付费转化率 &lt; 30%</td><td>前端优化</td><td>✅</td></tr>
+      <tr><td><code>REQ-PAY-02</code></td><td>0 次付费点击 且 用户 &gt; 10</td><td>前端优化</td><td>✅</td></tr>
+      <tr><td><code>REQ-MOBILE-01</code></td><td>Mobile 占比 &lt; 50%</td><td>前端优化</td><td>✅</td></tr>
+      <tr><td><code>REQ-PERF-01</code></td><td>Script Error &gt; 1%</td><td>前端优化</td><td>✅</td></tr>
+      <tr><td><code>REQ-PERF-02</code></td><td>活跃时间比 &lt; 50%</td><td>前端优化</td><td>✅</td></tr>
+      <tr><td><code>REQ-ADS-01</code></td><td>Adsgram 余额 ≤ 0 或 &lt; 5</td><td>运营动作</td><td>—</td></tr>
+      <tr><td><code>REQ-ADS-02</code></td><td>CTR &lt; 0.8%</td><td>运营动作</td><td>—</td></tr>
+      <tr><td><code>REQ-CHAR-01</code></td><td>Top 角色占 &gt; 50% 流量</td><td>运营动作</td><td>—</td></tr>
+      <tr><td><code>REQ-GROWTH-01</code></td><td>日活 &lt; 10</td><td>运营动作</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Bitable 五张表</h2>
+  <p>Base 名"Vivi 产品自动化"，已开放组织内可编辑，bot 可读写。每张表都按日期降序默认视图：</p>
+  <table>
+    <thead><tr><th>序号</th><th>表名</th><th>数据源</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td>一</td><td>广告投放</td><td>Adsgram</td><td>每日投放数据 / CTR / 余额</td></tr>
+      <tr><td>二</td><td>用户行为</td><td>Clarity Dashboard API</td><td>设备 / 国家 / dead click / rage click</td></tr>
+      <tr><td>三</td><td>付费漏斗</td><td>PostHog TrendsQuery</td><td>各档转化率 / 付费用户数</td></tr>
+      <tr><td>四</td><td>产品需求点</td><td>AI 交叉分析</td><td>触发的 REQ-XX 列表 + 数据依据</td></tr>
+      <tr><td>五</td><td>代码提示词</td><td>需求 → Claude Code prompt</td><td>含文件路径的可执行 prompt</td></tr>
+    </tbody>
+  </table>
+  <p>访问入口（Lark 内）：<a href="https://tsgkcplyz3ky.sg.larksuite.com/base/EHufbo6FqaVBCNsH5tVl31jMgqd" target="_blank">Vivi 产品自动化 Base</a>。</p>
+
+  <h2>Lark Bot 矩阵</h2>
+  <p>不同性质的消息推不同 Bot，避免噪音淹没重要告警：</p>
+  <div class="bot-grid">
+    <div class="bot">
+      <div class="nm">Vivi-PM</div>
+      <div class="role">PM / 产品通知</div>
+      <div class="desc">DailyLoop 卡片、需求点更新、产品里程碑</div>
+    </div>
+    <div class="bot">
+      <div class="nm">Vivi-Bot</div>
+      <div class="role">技术推送 · CI/CD</div>
+      <div class="desc">部署成功 / 失败、CI 状态、Better Stack / Sentry 告警</div>
+    </div>
+    <div class="bot">
+      <div class="nm">Vivi-Ads</div>
+      <div class="role">广告监控</div>
+      <div class="desc">Adsgram 余额 / CTR / 投放群专用</div>
+    </div>
+    <div class="bot">
+      <div class="nm">Vivi-Auto</div>
+      <div class="role">自动化 / 架构</div>
+      <div class="desc">DailyLoop 自动化体系本身的状态</div>
+    </div>
+  </div>
+  <div class="callout warn">
+    <strong>推送规范：</strong>所有 Lark 推送必须用 <strong>交互式卡片</strong>（<code>msg_type: "interactive"</code>），不要用纯文本或 post 格式。@提醒只 @野荞（open_id <code>239e82d1</code>），<strong>不要 @all</strong>。表格信息要么用 <code>column_set</code> 多列布局，要么不展示 —— Lark 不渲染 Markdown 表格。
+  </div>
+
+  <h2>PostHog 关键事件埋点</h2>
+  <p>前端埋点事件名 与 监控脚本查询名 必须 100% 对齐，否则永久返回 0：</p>
+  <table>
+    <thead><tr><th>事件名</th><th>触发位置</th><th>关键属性</th></tr></thead>
+    <tbody>
+      <tr><td><code>plan_subscribe</code></td><td>订阅页档位点击</td><td>tier, package_id</td></tr>
+      <tr><td><code>gems_purchase_click</code></td><td>Gems 商店档位点击</td><td>package_id, gems</td></tr>
+      <tr><td><code>invoice_callback</code></td><td>tg.openInvoice 回调</td><td>status (paid / cancelled / failed)</td></tr>
+      <tr><td><code>energy_exhausted</code></td><td>能量耗尽 popup 弹出</td><td>messages_in_session</td></tr>
+      <tr><td><code>image_request</code></td><td>📷 按钮点击</td><td>char_name, story_id</td></tr>
+      <tr><td><code>image_complete</code></td><td>生图完成</td><td>duration_ms, char_name</td></tr>
+      <tr><td><code>image_error</code></td><td>生图失败</td><td>error_type, char_name</td></tr>
+      <tr><td><code>locked_character_click</code></td><td>付费锁角色点击</td><td>char_name</td></tr>
+      <tr><td><code>paywall_shown</code></td><td>付费墙曝光</td><td>messages_in_session</td></tr>
+      <tr><td><code>session_end</code></td><td>会话关闭（含 sendBeacon）</td><td>duration, messages</td></tr>
+    </tbody>
+  </table>
+
+  <h3>埋点合规注意</h3>
+  <ul>
+    <li><strong>禁止</strong>事件里上传 <code>content</code> / 消息正文（NSFW 合规），只传 <code>message_length</code> / <code>message_index</code></li>
+    <li>角色相关事件统一带 <code>char_name</code>，让 PM 能识别哪个角色带来转化</li>
+    <li><code>identify()</code> 调用时携带 <code>subscription_tier</code> / <code>gems_balance</code> / <code>energy</code> / <code>total_messages_sent</code>，解锁分群能力</li>
+  </ul>
+
+  <h2>反广告拦截：三层兜底</h2>
+  <p>用户在 Telegram WebView 里大量装广告拦截器，PostHog 直连容易丢事件。Vivi 做了三层兜底：</p>
+  <ol>
+    <li><strong>反向代理</strong>：前端 <code>api_host = vividreams.fly.dev/phog</code>，后端 <code>app/api/posthog_proxy.py</code> 转发到真实 PostHog。绕过 ISP/DNS 拦截。</li>
+    <li><strong>服务端转发</strong>：前端 <code>Analytics.track()</code> 双发到后端 <code>/api/events</code>，后端用 <code>posthog-python</code> SDK 转发。事件带 <code>$source: "server"</code> 标记。</li>
+    <li><strong>sendBeacon + pagehide</strong>：Telegram WebView 关闭时不丢事件。</li>
+  </ol>
+
+  <h2>LLM 可观测性</h2>
+  <p>没用 Langfuse —— 因为 NSFW 数据流经第三方有合规风险，且 Prompt 架构稳定不需要 trace 调试。当前实现：</p>
+  <ul>
+    <li><code>app/llm/openrouter.py</code> 的 <code>LLMMetrics</code> dataclass 追踪 model / tokens_in / tokens_out / latency_ms / is_fallback</li>
+    <li><code>routes.py</code> 的 <code>_track_llm_metrics()</code> 把每次调用打 <code>llm_request</code> 事件到 PostHog</li>
+    <li>Daily Lark 卡片汇总：每个模型当日总 token / 平均延迟 / fallback 率</li>
+  </ul>
+
+  <h2>Microsoft Clarity</h2>
+  <p>录屏 + 热图 + Dashboard API：</p>
+  <ul>
+    <li><strong>聊天内容已 unmask</strong>（之前 Clarity 默认 mask 文本，看不到对话内容）</li>
+    <li>Dashboard API 是主要查询方式（<strong>无次数限制</strong>），优于 Data Export API（10 次/天）</li>
+    <li>MCP 工具已接入：<code>list-session-recordings</code>、<code>query-analytics-dashboard</code></li>
+    <li>Clarity 不发告警，是按需查问题用的（"用户为啥点不进按钮"）</li>
+  </ul>
+
+  <h2>常用 dashboard 速查</h2>
+  <table>
+    <thead><tr><th>看什么</th><th>去哪</th></tr></thead>
+    <tbody>
+      <tr><td>北极星 / 日消息量</td><td>Daily Lark 卡片 (Vivi-PM 群)</td></tr>
+      <tr><td>付费漏斗 / 转化率</td><td>PostHog Project 377981 → Funnel Insight</td></tr>
+      <tr><td>角色流量 Top N</td><td>PostHog → Trends 按 <code>char_name</code> 分组</td></tr>
+      <tr><td>生图失败率</td><td>PostHog → <code>image_error</code> 事件率</td></tr>
+      <tr><td>用户行为录屏</td><td>Microsoft Clarity Dashboard</td></tr>
+      <tr><td>异常报错</td><td>Sentry → vividreams 项目</td></tr>
+      <tr><td>服务可用性</td><td>Better Stack 拨测页</td></tr>
+      <tr><td>每日营收</td><td>Admin Dashboard / Daily Lark 卡片</td></tr>
+      <tr><td>需求列表 / 代码 prompt</td><td>Bitable 五表（Vivi 产品自动化）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="/vivi/monetization">
+      <div class="dir">← 上一篇</div>
+      <div class="label">03 · 商业化体系</div>
+    </a>
+    <a class="next" href="/vivi/operations">
+      <div class="dir">下一篇 →</div>
+      <div class="label">05 · 运营与排障 SOP</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

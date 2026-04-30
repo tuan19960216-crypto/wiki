@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>系统架构总览 · Vivi</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #a78bfa; --accent-soft: rgba(167, 139, 250, 0.15);
+    --accent-2: #22d3ee; --accent-2-soft: rgba(34, 211, 238, 0.15);
+    --accent-3: #f472b6; --accent-3-soft: rgba(244, 114, 182, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 {
+    font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2;
+    background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  pre { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.65; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13px; }
+  a { color: var(--accent-2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin: 16px 0; }
+  .card h3:first-child { margin-top: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .arch-diagram {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px;
+    padding: 32px 24px; margin: 24px 0;
+  }
+  .layer-row {
+    display: grid; grid-template-columns: 140px 1fr; gap: 20px;
+    padding: 18px 0; border-bottom: 1px dashed var(--border);
+  }
+  .layer-row:last-child { border-bottom: none; }
+  .layer-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; padding-top: 6px; }
+  .layer-boxes { display: flex; flex-wrap: wrap; gap: 10px; }
+  .box { background: var(--bg-deep); border: 1px solid var(--border-strong); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: var(--text); min-width: 120px; }
+  .box .b-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+  .box.front { border-color: var(--accent-2); background: var(--accent-2-soft); }
+  .box.api { border-color: var(--accent); background: var(--accent-soft); }
+  .box.svc { border-color: var(--accent-3); background: var(--accent-3-soft); }
+  .box.data { border-color: var(--success); background: var(--success-soft); }
+  .box.ext { border-color: var(--warning); background: var(--warning-soft); }
+  @media (max-width: 720px) { .layer-row { grid-template-columns: 1fr; } }
+
+  .flow { counter-reset: flow-step; padding-left: 0; list-style: none; }
+  .flow-step {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 18px 14px 50px;
+    margin-bottom: 10px; position: relative;
+  }
+  .flow-step::before {
+    counter-increment: flow-step; content: counter(flow-step);
+    position: absolute; left: 14px; top: 14px;
+    width: 24px; height: 24px; border-radius: 6px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .flow-step strong { color: var(--text); display: block; margin-bottom: 2px; }
+  .flow-step span { color: var(--text-dim); font-size: 14px; }
+
+  .callout {
+    background: var(--accent-soft); border: 1px solid var(--accent);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px; padding: 14px 18px; margin: 16px 0;
+    font-size: 14px; color: var(--text);
+  }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+  .callout.info { background: var(--accent-2-soft); border-color: var(--accent-2); border-left-color: var(--accent-2); }
+  .callout strong { color: var(--text); }
+
+  .repo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+  @media (max-width: 720px) { .repo-grid { grid-template-columns: 1fr; } }
+  .repo-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 16px; }
+  .repo-card h4 { margin: 0 0 6px; font-size: 15px; color: var(--text); }
+  .repo-card .role { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; font-weight: 600; }
+  .repo-card p { margin: 0; font-size: 13px; line-height: 1.6; color: var(--text-dim); }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <span style="color: var(--text-dim);">系统架构总览</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">01 · Architecture</span>
+    <h1>系统架构总览</h1>
+    <p class="subtitle">
+      这一页讲清楚 Vivi 是怎么拼起来的：从用户在 Telegram 里点开 Bot、到 LLM 流式吐字、再到生成一张照片，所有组件都能在同一张图里找到位置。先看分层图，再看三条核心数据流（聊天 / 生图 / 支付）。
+    </p>
+  </header>
+
+  <h2>分层架构</h2>
+  <div class="arch-diagram">
+    <div class="layer-row">
+      <div class="layer-label">客户端</div>
+      <div class="layer-boxes">
+        <div class="box front">Telegram WebApp<br><span class="b-sub">@ViviDreamsBot · iOS / Android / Desktop</span></div>
+        <div class="box front">Vanilla JS SPA<br><span class="b-sub">无构建步骤 · hash 路由</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">边缘 / CDN</div>
+      <div class="layer-boxes">
+        <div class="box ext">Cloudflare Pages<br><span class="b-sub">vivi-app-e7m.pages.dev · 静态资源</span></div>
+        <div class="box ext">media.softie.ai<br><span class="b-sub">R2 · 角色图片 / 视频（与 Softie 共用）</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">应用层</div>
+      <div class="layer-boxes">
+        <div class="box api">FastAPI<br><span class="b-sub">vividreams.fly.dev · ams</span></div>
+        <div class="box api">Telegram Bot<br><span class="b-sub">webhook 模式 · /webhook</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">业务服务</div>
+      <div class="layer-boxes">
+        <div class="box svc">Auth<br><span class="b-sub">initData HMAC-SHA256</span></div>
+        <div class="box svc">Chat<br><span class="b-sub">三层 Sandwich Prompt + SSE</span></div>
+        <div class="box svc">Image<br><span class="b-sub">两阶段 SSE 推流</span></div>
+        <div class="box svc">Memory<br><span class="b-sub">Mem0 + Qdrant 向量检索</span></div>
+        <div class="box svc">Payment<br><span class="b-sub">TG Stars invoice handler</span></div>
+        <div class="box svc">Affinity<br><span class="b-sub">6 级亲密度系统</span></div>
+        <div class="box svc">Items / Gifts<br><span class="b-sub">礼物效果注入</span></div>
+        <div class="box svc">Admin API<br><span class="b-sub">/api/admin/* 后台</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">数据层</div>
+      <div class="layer-boxes">
+        <div class="box data">Turso (LibSQL)<br><span class="b-sub">EU West · users / conv / txn / image_tasks</span></div>
+        <div class="box data">Qdrant<br><span class="b-sub">/app/data/mem0_qdrant · Fly volume</span></div>
+        <div class="box data">JSON 文件<br><span class="b-sub">characters.json / items.json · LRU cache</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">外部依赖</div>
+      <div class="layer-boxes">
+        <div class="box ext">OpenRouter<br><span class="b-sub">Euryale 70B (聊天) · Qwen 2.5 7B (提取)</span></div>
+        <div class="box ext">fal.ai<br><span class="b-sub">FLUX schnell + FLUX Pro · face-swap</span></div>
+        <div class="box ext">Venice.ai<br><span class="b-sub">lustify-v8 NSFW · fallback 路径</span></div>
+        <div class="box ext">Telegram Stars<br><span class="b-sub">付费通道</span></div>
+        <div class="box ext">edge-tts<br><span class="b-sub">语音合成</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">观测</div>
+      <div class="layer-boxes">
+        <div class="box ext">PostHog · 行为 + LLM trace</div>
+        <div class="box ext">Sentry · 异常</div>
+        <div class="box ext">Better Stack · /health 拨测</div>
+        <div class="box ext">Clarity · 录屏 + 热图</div>
+        <div class="box ext">Lark Bot 矩阵 · 告警</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>三个仓库的关系</h2>
+  <p>Vivi 不是孤岛。生图和角色资产在三个仓库之间分工，新人理解这个边界能少走很多弯路：</p>
+  <div class="repo-grid">
+    <div class="repo-card">
+      <div class="role">Vivi · 主战场</div>
+      <h4>ViviDreams/Vivi</h4>
+      <p>Telegram Mini App 全部业务代码：聊天、商业化、亲密度、礼物、虚拟角色、实时生图直调（fal.ai / Venice.ai）。<strong>对话中触发的生图改这里。</strong></p>
+    </div>
+    <div class="repo-card">
+      <div class="role">Workflow · 批量生图</div>
+      <h4>Workflow（n8n）</h4>
+      <p>角色图库预生成走 n8n + ComfyUI + RunPod Serverless。Vivi 的 <code>scripts/submit_new_prompts.py</code> POST 到 n8n webhook。<strong>批量生图节流、模型部署改这里。</strong></p>
+    </div>
+    <div class="repo-card">
+      <div class="role">Softie · 资产源</div>
+      <h4>Softieweb (Neon DB)</h4>
+      <p>角色 prompt / 图片 / 视频的源数据库，Vivi 通过 <code>scripts/</code> 拉取并转换成 <code>characters.json</code>。媒体走共享 CDN <code>media.softie.ai</code>。</p>
+    </div>
+  </div>
+  <div class="callout info">
+    <strong>判断改动归属：</strong>实时生图问题（用户对话中按 📷 那个）→ 改 Vivi <code>app/api/routes.py</code>；批量生图问题（角色图库预生成）→ 改 Workflow 仓库的 n8n 工作流；新增角色 → 拉 Softieweb Neon DB 后改 Vivi 的 JSON。
+  </div>
+
+  <h2>核心目录结构</h2>
+  <p>仓库根 <code>CLAUDE.md</code> 是规范来源；新人入职第一件事就是读完它。源码骨架：</p>
+  <pre><code>Vivi/
+├─ app/
+│  ├─ main.py              # FastAPI 入口、lifespan、/webhook
+│  ├─ config.py            # Pydantic Settings 环境变量
+│  ├─ database.py          # Turso 适配 + 全部 CRUD（routes 不直接写 SQL）
+│  ├─ memory.py            # Mem0 封装：mem0_add / mem0_search
+│  ├─ auth.py              # Telegram initData HMAC 校验
+│  ├─ api/
+│  │  ├─ routes.py         # 所有 /api/* 端点（chat / store / image / admin）
+│  │  └─ posthog_proxy.py  # PostHog 反向代理（绕 ISP 拦截）
+│  ├─ bot/handlers.py      # /start /switch /reset 等 Bot 命令
+│  ├─ llm/openrouter.py    # OpenRouter 异步客户端 + LLMMetrics
+│  └─ characters/
+│     ├─ data/characters.json   # 45 角色定义
+│     ├─ data/items.json        # 礼物物品定义
+│     └─ loader.py              # LRU cache + Your Character 注入
+├─ webapp/                 # 前端（无构建，CF Pages 直接部署）
+│  ├─ index.html           # Mini App 入口（注意 ?v=N 缓存破坏）
+│  └─ js/
+│     ├─ app.js            # SPA hash 路由
+│     ├─ api.js            # HTTP 客户端 + initData header
+│     ├─ bundle.js         # 唯一被加载的 JS（views/* 改完必须同步）
+│     └─ views/            # 各页面模块（IIFE 封装）
+├─ scripts/
+│  ├─ dev.sh               # 本地启动（polling 模式）
+│  ├─ daily_monitor.py     # DailyLoop 主脚本
+│  └─ submit_new_prompts.py # 批量生图：POST n8n webhook
+├─ tests/                  # pytest（asyncio_mode = auto）
+├─ .github/workflows/
+│  ├─ deploy.yml           # main → Fly.io + Cloudflare Pages 并行部署
+│  ├─ daily_monitor.yml    # 每日 10:00 跑分析管线
+│  └─ clarity_report.yml   # 每日 09:00 拉 Clarity 写 Bitable
+├─ fly.toml                # region ams · volume vividreams_data → /app/data
+└─ CLAUDE.md               # 项目规范（必读）
+</code></pre>
+
+  <div class="callout warn">
+    <strong>⚠️ 前端 bundle 陷阱：</strong>页面只加载 <code>webapp/js/bundle.js</code>，<code>views/*.js</code> 是源文件，改完必须手动同步到 bundle.js，否则改动不生效。每次发布前还要 bump <code>index.html</code> 里的 <code>?v=N</code> 破坏 CDN 缓存。
+  </div>
+
+  <h2>核心数据流：聊天消息</h2>
+  <p>一条用户消息从 Telegram 到角色回复，经过这些环节：</p>
+  <ol class="flow">
+    <li class="flow-step"><strong>前端发送</strong><span>用户在 Mini App 聊天页输入；<code>chat.js</code> 调 <code>POST /api/chat/send</code>，header 附 Telegram <code>initData</code>（每次请求懒读，不能在模块顶层捕获）。</span></li>
+    <li class="flow-step"><strong>认证 + 计费</strong><span><code>auth.py</code> 用 HMAC-SHA256 校验 initData；扣 1⚡（订阅用户跳过）；亲密度 +2 XP；触发每日能量重置检查。</span></li>
+    <li class="flow-step"><strong>构建三层 Sandwich Prompt</strong><span>ROLEPLAY_META → 角色人设 + BEHAVIOR_GUIDE + AFFINITY_BEHAVIOR → 历史对话 → ROLEPLAY_REMINDER → 用户消息。常量在 <code>database.py</code>，注入在 <code>routes.py</code>。</span></li>
+    <li class="flow-step"><strong>Mem0 记忆检索</strong><span><code>mem0_search()</code> 从 Qdrant 召回相关长期记忆，拼入 system prompt（语义检索 ≠ keyword）。</span></li>
+    <li class="flow-step"><strong>调 OpenRouter 流式</strong><span>SFW/NSFW 都走 <code>sao10k/l3.3-euryale-70b</code>；temperature 0.85；启用流式 → 后端转 SSE 推前端。LLM 调用失败必须退 1⚡。</span></li>
+    <li class="flow-step"><strong>SSE 流式回写</strong><span>前端 <code>EventSource</code> 接收，逐 token 渲染（打字机效果 + 光标闪烁）。注意：reader.read() 循环 break 前必须 flush buffer，否则最后一条丢失。</span></li>
+    <li class="flow-step"><strong>持久化 + 异步写</strong><span>消息入 <code>conversations</code> 表；<code>mem0_add()</code> 异步抽取记忆写 Qdrant；<code>_track_llm_metrics()</code> 把 model / tokens / latency 推 PostHog。</span></li>
+  </ol>
+
+  <h2>核心数据流：生图（两阶段 SSE）</h2>
+  <p>用户在聊天里点 📷 后看到照片的全过程：</p>
+  <ol class="flow">
+    <li class="flow-step"><strong>触发</strong><span>前端 <code>POST /chat/generate-image</code>，扣 15💎，强制 <code>is_nsfw=True</code>（与聊天 NSFW 行为一致）。</span></li>
+    <li class="flow-step"><strong>后台 asyncio task + DB 持久化</strong><span><code>_run_image_task()</code> 写 <code>image_tasks</code> 表；前端调 <code>GET /chat/image-task/{id}/stream</code> SSE 监听。</span></li>
+    <li class="flow-step"><strong>Phase 1: base 生图</strong><span>fal.ai FLUX Pro v1.1（28 步、<code>safety_checker=False</code>）→ 返回 URL → 下载 + JPEG 压缩 → 推 <code>base_ready</code> SSE → 前端立即显示模糊预览（~6-11s）。</span></li>
+    <li class="flow-step"><strong>Phase 2: face-swap</strong><span>fal.ai face-swap（base URL + 角色 avatar URL）→ 推 <code>done</code> SSE → 前端替换为最终清晰图（~26s 总耗时）。422（无人脸）必须优雅降级返回 base 图，<strong>不能</strong> raise_for_status。</span></li>
+    <li class="flow-step"><strong>角色一致性兜底</strong><span><code>_build_consistency_hint()</code> 从角色姓名推断种族（Rivera→Latina, Khan→South Asian, Rossi→Italian 等 20+ 映射），prompt 末尾追加 "consistent character appearance"。</span></li>
+  </ol>
+  <div class="callout warn">
+    <strong>⚠️ NSFW 路由决策：</strong>Venice.ai 返回 data URI 会让 fal.ai face-swap 超时 111s 后 422，所以 NSFW 现在统一走 fal.ai FLUX Pro。Venice.ai 仅作 fallback 路径，但 <strong>禁止</strong>对 Venice 返回的 JPEG data URI 二次压缩（会双重压缩明显模糊）。
+  </div>
+
+  <h2>核心数据流：支付（Telegram Stars）</h2>
+  <ol class="flow">
+    <li class="flow-step"><strong>前端付费墙</strong><span>能量耗尽或主动充值 → 跳 <code>#/plan</code> 或 <code>#/store</code>；前端打 <code>plan_subscribe</code> / <code>gems_purchase_click</code> 埋点。</span></li>
+    <li class="flow-step"><strong>创建 invoice</strong><span><code>POST /api/store/create-invoice</code> → 后端调 Telegram Bot API <code>createInvoiceLink</code> → 返回 invoice URL。</span></li>
+    <li class="flow-step"><strong>用户支付</strong><span>前端调 <code>tg.openInvoice(url, callback)</code>；用户在 Telegram 内完成 Stars 支付。<strong>必须追踪 callback：</strong>事件名 <code>invoice_callback</code>，状态 paid / cancelled / failed。</span></li>
+    <li class="flow-step"><strong>Bot Webhook（权威）</strong><span>Telegram 推 <code>successful_payment</code> update 到 <code>/webhook</code> → <code>handlers.py</code> 校验签名 → 加💎或激活订阅 + 首充翻倍逻辑 → Bot 发确认消息。</span></li>
+    <li class="flow-step"><strong>幂等 + 去重</strong><span>同一 invoice 多次回调要去重（已修过 #103）；callback 失败不影响实际入账，因为 Bot webhook 才是真相。</span></li>
+  </ol>
+
+  <h2>核心数据模型</h2>
+  <table>
+    <thead><tr><th>表</th><th>用途</th><th>关键字段</th><th>注意</th></tr></thead>
+    <tbody>
+      <tr><td><code>users</code></td><td>用户主表</td><td>tg_user_id, gems, energy, energy_reset_date, subscription_expires</td><td>tg_user_id 是主键，不要用 internal id</td></tr>
+      <tr><td><code>conversations</code></td><td>聊天记录</td><td>user_id, character_id, story_id, role, content</td><td>三层 prompt 不入库，只入用户/AI 消息</td></tr>
+      <tr><td><code>transactions</code></td><td>交易流水</td><td>user_id, type, amount, telegram_payment_charge_id</td><td>支付幂等性靠 charge_id 唯一约束</td></tr>
+      <tr><td><code>user_items</code></td><td>已购礼物</td><td>user_id, character_id, story_id, item_id, used</td><td><code>used=0</code> 时下条 AI 回复触发 prompt 注入</td></tr>
+      <tr><td><code>affinity</code></td><td>亲密度</td><td>user_id, character_id, xp</td><td>每条消息 +2 XP，6 级阈值 0/10/30/60/100/150</td></tr>
+      <tr><td><code>image_tasks</code></td><td>生图任务</td><td>id, status, base_url, final_url</td><td>SSE 推流靠这张表持久化进度</td></tr>
+      <tr><td>characters.json</td><td>角色定义</td><td>id, name, voice, premium, stories[3]</td><td>不在 DB，LRU 缓存加载</td></tr>
+      <tr><td>items.json</td><td>礼物定义</td><td>id, name, cost, prompt_effect</td><td>cost 单位是 💎</td></tr>
+    </tbody>
+  </table>
+
+  <h2>关键 API 一览</h2>
+  <table>
+    <thead><tr><th>路由</th><th>职责</th></tr></thead>
+    <tbody>
+      <tr><td><code>POST /webhook</code></td><td>Telegram Bot Webhook（命令、付费回调、群成员事件）</td></tr>
+      <tr><td><code>POST /api/chat/send</code></td><td>聊天主入口；扣⚡；构建三层 prompt；调 LLM；SSE 流式返回</td></tr>
+      <tr><td><code>POST /chat/generate-image</code></td><td>生图触发；扣 15💎；后台 task</td></tr>
+      <tr><td><code>GET /chat/image-task/{id}/stream</code></td><td>SSE 推送生图进度（base_ready → done）</td></tr>
+      <tr><td><code>POST /api/store/create-invoice</code></td><td>创建 Telegram Stars invoice</td></tr>
+      <tr><td><code>GET /api/affinity/{charId}</code> · <code>/api/affinities</code></td><td>亲密度查询</td></tr>
+      <tr><td><code>POST /api/checkin</code></td><td>每日签到 +5⚡</td></tr>
+      <tr><td><code>POST /api/settings/verify-age</code> · <code>/nsfw</code></td><td>年龄认证 + NSFW 开关</td></tr>
+      <tr><td><code>POST /api/events</code></td><td>前端埋点服务端转发（绕广告拦截）</td></tr>
+      <tr><td><code>GET /health</code></td><td>深探 Turso / OpenRouter / fal.ai；2s 单探超时；503 + errors[]</td></tr>
+      <tr><td><code>POST /api/webhooks/betterstack</code> · <code>/sentry</code></td><td>第三方监控告警 → Lark P0 卡片</td></tr>
+      <tr><td><code>/api/admin/*</code></td><td>Admin 后台（Bearer ADMIN_SECRET），见 Operations 篇</td></tr>
+      <tr><td><code>/phog/*</code></td><td>PostHog 反向代理（绕 ISP/DNS 拦截）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>认证机制（Telegram initData）</h2>
+  <p>所有 <code>/api/*</code> 请求都靠 Telegram WebApp 的 <code>initData</code> 鉴权：</p>
+  <ul>
+    <li>前端每次请求时 <strong>懒读</strong> <code>Telegram.WebApp.initData</code>，放进 <code>X-Telegram-Init-Data</code> header（不能在模块顶层捕获）</li>
+    <li>后端 <code>auth.py</code> 用 HMAC-SHA256 + bot token 计算签名校验</li>
+    <li>Telegram 8.0+ 把 <code>signature</code> 字段也纳入 HMAC，<strong>不能 pop</strong>，否则老版客户端校验失败</li>
+    <li>polling 模式（本地开发）跳过认证，认证逻辑在 <code>MODE=webhook</code> 下激活</li>
+  </ul>
+
+  <div class="pager">
+    <a href="/vivi/">
+      <div class="dir">← 上一级</div>
+      <div class="label">Vivi 知识库首页</div>
+    </a>
+    <a class="next" href="/vivi/product">
+      <div class="dir">下一篇 →</div>
+      <div class="label">02 · 产品形态与角色体系</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

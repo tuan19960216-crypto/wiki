@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商业化体系 · Vivi</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #a78bfa; --accent-soft: rgba(167, 139, 250, 0.15);
+    --accent-2: #22d3ee; --accent-2-soft: rgba(34, 211, 238, 0.15);
+    --accent-3: #f472b6; --accent-3-soft: rgba(244, 114, 182, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  a { color: var(--accent-2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .sub-tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0 24px; }
+  .tier { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px; position: relative; }
+  .tier.popular { border-color: var(--accent); }
+  .tier .badge-top { position: absolute; top: -10px; right: 12px; background: var(--accent); color: #0b0d12; font-size: 10px; padding: 3px 8px; border-radius: 999px; font-weight: 700; letter-spacing: 0.05em; }
+  .tier .nm { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .tier .pr { font-size: 22px; color: var(--text); font-weight: 700; margin: 6px 0 4px; }
+  .tier .du { font-size: 12.5px; color: var(--text-dim); }
+  .tier .bn { font-size: 12.5px; color: var(--accent-2); margin-top: 8px; }
+  @media (max-width: 720px) { .sub-tiers { grid-template-columns: repeat(2, 1fr); } }
+
+  .gems { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 16px 0; }
+  .gem-pkg { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; position: relative; }
+  .gem-pkg.best { border-color: var(--accent); }
+  .gem-pkg .badge-tag { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #0b0d12; font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 700; }
+  .gem-pkg .v { font-size: 16px; color: var(--text); font-weight: 700; }
+  .gem-pkg .s { font-size: 12px; color: var(--accent); margin-top: 2px; font-family: ui-monospace, monospace; }
+  .gem-pkg .ratio { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+  @media (max-width: 720px) { .gems { grid-template-columns: repeat(3, 1fr); } }
+
+  .flow { padding-left: 0; list-style: none; counter-reset: f; }
+  .flow li { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px 14px 50px; margin-bottom: 10px; position: relative; counter-increment: f; }
+  .flow li::before { content: counter(f); position: absolute; left: 14px; top: 14px; width: 24px; height: 24px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+  .flow li strong { color: var(--text); display: block; margin-bottom: 2px; }
+  .flow li span { color: var(--text-dim); font-size: 14px; }
+
+  .funnel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin: 16px 0; }
+  .funnel-row { display: grid; grid-template-columns: 28px 1fr 100px; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+  .funnel-row:last-child { border-bottom: none; }
+  .funnel-row .icon { width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+  .funnel-row .label { color: var(--text); }
+  .funnel-row .label small { display: block; color: var(--text-muted); font-size: 12.5px; margin-top: 2px; }
+  .funnel-row .ev { color: var(--accent); font-family: ui-monospace, monospace; font-size: 12px; text-align: right; }
+
+  .callout { background: var(--accent-soft); border: 1px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text); }
+  .callout.info { background: var(--accent-2-soft); border-color: var(--accent-2); border-left-color: var(--accent-2); }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+  .callout.danger { background: var(--danger-soft); border-color: var(--danger); border-left-color: var(--danger); }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <span style="color: var(--text-dim);">商业化体系</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">03 · Monetization</span>
+    <h1>商业化体系</h1>
+    <p class="subtitle">
+      Vivi 的钱从哪来：四档订阅 + Gems 商店 + 礼物 + Your Character。所有付款走 Telegram Stars，钱在 Telegram 平台，不经过我们的银行账户。这一页讲清楚定价、机制、付费漏斗的关键节点，PM/运营/客服都该读完。
+    </p>
+  </header>
+
+  <h2>商业化逻辑总览</h2>
+  <p>计费 v2（2026-04-01 上线）将原本"买💎→买订阅"的两步路径改为"⭐直购会员"一步。当前主要营收渠道：</p>
+  <ul>
+    <li><strong>会员订阅（主营收）</strong> — 4 档⭐ 直购，会员无限⚡，赠💎</li>
+    <li><strong>Gems 商店（次营收）</strong> — 6 档💎包，用于买礼物和解锁虚拟角色</li>
+    <li><strong>礼物</strong> — 6 种 15-25💎，绑角色 + story</li>
+    <li><strong>Your Character</strong> — 99💎/次，差异化的虚拟角色玩法</li>
+  </ul>
+
+  <h2>会员订阅（4 档）</h2>
+  <p>所有订阅在前端 <code>#/plan</code> 页展示，⭐ 直接付款激活，会员期内不消耗能量：</p>
+  <div class="sub-tiers">
+    <div class="tier">
+      <div class="nm">Basic</div>
+      <div class="pr">99 ⭐</div>
+      <div class="du">2 天</div>
+      <div class="bn">+20 💎 赠</div>
+    </div>
+    <div class="tier">
+      <div class="nm">Plus</div>
+      <div class="pr">229 ⭐</div>
+      <div class="du">1 个月</div>
+      <div class="bn">+30 💎 赠</div>
+    </div>
+    <div class="tier popular">
+      <span class="badge-top">默认 · 推荐</span>
+      <div class="nm">Pro</div>
+      <div class="pr">499 ⭐</div>
+      <div class="du">3 个月</div>
+      <div class="bn">+70 💎 赠</div>
+    </div>
+    <div class="tier">
+      <div class="nm">Ultra</div>
+      <div class="pr">1659 ⭐</div>
+      <div class="du">1 年</div>
+      <div class="bn">+210 💎 赠</div>
+    </div>
+  </div>
+  <p>定价对标 Lucid 等 Telegram 头部竞品。Pro 三月档默认选中、UI 上标 popular。订阅信息存 <code>users.subscription_expires</code>，过期后回退到能量模式。</p>
+
+  <h2>Gems 钻石商店（6 档）</h2>
+  <p>从 <code>#/store</code> 进入或聊天页内点💎图标。最低门槛 29⭐ 入门档（2026-04 新增）：</p>
+  <div class="gems">
+    <div class="gem-pkg">
+      <div class="v">20 💎</div>
+      <div class="s">29 ⭐</div>
+      <div class="ratio">入门</div>
+    </div>
+    <div class="gem-pkg">
+      <div class="v">80 💎</div>
+      <div class="s">119 ⭐</div>
+      <div class="ratio">小</div>
+    </div>
+    <div class="gem-pkg best">
+      <span class="badge-tag">BEST OFFER</span>
+      <div class="v">210 💎</div>
+      <div class="s">319 ⭐</div>
+      <div class="ratio">推荐</div>
+    </div>
+    <div class="gem-pkg">
+      <div class="v">540 💎</div>
+      <div class="s">779 ⭐</div>
+      <div class="ratio">中</div>
+    </div>
+    <div class="gem-pkg">
+      <div class="v">1360 💎</div>
+      <div class="s">1949 ⭐</div>
+      <div class="ratio">大</div>
+    </div>
+    <div class="gem-pkg">
+      <div class="v">3000 💎</div>
+      <div class="s">4129 ⭐</div>
+      <div class="ratio">超大</div>
+    </div>
+  </div>
+  <p>定义在 <code>app/api/routes.py</code> 的 <code>GEM_PACKAGES</code> 常量。改价格直接改这里 → 推 main → 自动部署。</p>
+
+  <h2>首充翻倍</h2>
+  <p>用户首次购买任意 Telegram Stars 商品（订阅 / Gems）会自动双倍发放💎，Bot 主动发消息告知。机制：</p>
+  <ul>
+    <li><code>users.first_purchase_done</code> 字段标记，0 = 还没首充</li>
+    <li>付费 webhook 处理时检查该字段，未首充则发💎数量 × 2，并置为 1</li>
+    <li>商店页面对未首充用户显示 "2× First Purchase" 标识</li>
+  </ul>
+
+  <h2>能量与签到（免费用户漏斗节流）</h2>
+  <p>详细机制见 Product 篇，简短回顾：</p>
+  <ul>
+    <li>免费用户每日 10⚡（UTC 0 点重置）</li>
+    <li>每日签到 +5⚡（不送💎），Settings 页顶部</li>
+    <li>能量耗尽 → popup → 跳订阅页</li>
+    <li>新用户前 10 条免费体验</li>
+    <li>会员（4 档任意）= 无限</li>
+  </ul>
+  <div class="callout warn">
+    <strong>⚠️ 历史变更：</strong>"前 20 条免费"已在 #76 移除（2026-04），现在统一是"前 10 条免费 + 每日 10⚡"。改测试断言时注意。
+  </div>
+
+  <h2>Telegram Stars 支付完整流程</h2>
+  <p>钱不经过我们的银行账户 —— 全部走 Telegram Stars，钱在 Telegram 平台。提现需通过 Telegram 后台。</p>
+  <ol class="flow">
+    <li>
+      <strong>用户点击订阅档位</strong>
+      <span>前端 <code>plan_subscribe</code> 或 <code>gems_purchase_click</code> 埋点 → <code>POST /api/store/create-invoice</code> 带 <code>package_id</code>。</span>
+    </li>
+    <li>
+      <strong>后端创建 invoice</strong>
+      <span>调 Telegram Bot API <code>createInvoiceLink</code>（带 currency=XTR、amount=stars、payload=user_id|package_id）→ 返回 invoice URL。</span>
+    </li>
+    <li>
+      <strong>前端 openInvoice</strong>
+      <span><code>tg.openInvoice(url, callback)</code> 唤起 Telegram 内置支付 UI。<strong>callback 必须埋 <code>invoice_callback</code> 事件</strong>，状态 paid / cancelled / failed，让 PostHog 能看到取消率。</span>
+    </li>
+    <li>
+      <strong>Telegram 推 successful_payment</strong>
+      <span>支付成功后 Telegram 推 update 到 <code>/webhook</code>，<code>handlers.py</code> 收到 <code>successful_payment</code>。</span>
+    </li>
+    <li>
+      <strong>幂等入账</strong>
+      <span>用 <code>telegram_payment_charge_id</code> 唯一约束防重复入账；加💎或激活订阅 + 首充翻倍逻辑；写 <code>transactions</code> 表。</span>
+    </li>
+    <li>
+      <strong>Bot 发确认消息</strong>
+      <span>用户在 Telegram 收到"购买成功，你已获得 XX 💎 / Pro 已激活"消息。</span>
+    </li>
+  </ol>
+
+  <div class="callout danger">
+    <strong>⚠️ invoice_callback 去重：</strong>同一笔支付 Telegram 会在 client 多次回调（重连、重试），<strong>必须去重</strong>，否则 PostHog 上付费转化漏斗会虚高。已修过（#103）。
+  </div>
+
+  <h2>退款流程（必看）</h2>
+  <p>用户找客服要退款时，<strong>不能直接打回银行卡 / 微信</strong>，因为钱从未经过我们这。流程：</p>
+  <ol>
+    <li>客服记录用户 TG ID + 订单时间 + 退款理由</li>
+    <li>PM 在 Bot 后台用 Telegram Bot API <code>refundStarPayment</code> 发起退款（需要 charge_id）</li>
+    <li>Telegram 在用户 Stars 余额里加回；如果该 Stars 是用户充值买来的，可由用户自己再去申请提现</li>
+    <li>退款后必须手动从 <code>users</code> 扣回赠送的💎 / 取消订阅状态</li>
+    <li>记录到运营日志（Lark 群通报）</li>
+  </ol>
+
+  <h2>付费漏斗（PostHog 可查）</h2>
+  <p>PM 关注的核心漏斗，每个节点都有埋点：</p>
+  <div class="funnel">
+    <div class="funnel-row">
+      <div class="icon">1</div>
+      <div class="label">用户激活 Mini App<small>app_open / onboarding_complete</small></div>
+      <div class="ev">app_open</div>
+    </div>
+    <div class="funnel-row">
+      <div class="icon">2</div>
+      <div class="label">触达付费墙<small>能量耗尽 popup 弹出</small></div>
+      <div class="ev">paywall_shown</div>
+    </div>
+    <div class="funnel-row">
+      <div class="icon">3</div>
+      <div class="label">点击订阅 / Gems 档位<small>选档行为</small></div>
+      <div class="ev">plan_subscribe / gems_purchase_click</div>
+    </div>
+    <div class="funnel-row">
+      <div class="icon">4</div>
+      <div class="label">完成支付<small>Telegram successful_payment webhook</small></div>
+      <div class="ev">invoice_callback (paid)</div>
+    </div>
+    <div class="funnel-row">
+      <div class="icon">5</div>
+      <div class="label">回流二次付费<small>同一用户多次成功付费</small></div>
+      <div class="ev">repeat_purchase</div>
+    </div>
+  </div>
+  <p>PostHog Project ID <code>377981</code>。每个事件都有 <code>char_name</code>（识别哪个角色带来转化）。<strong>禁止</strong>事件里上传消息内容字段（NSFW 合规），只传 <code>message_length</code> / <code>message_index</code> 等元数据。</p>
+
+  <h2>Your Character（差异化付费）</h2>
+  <p>角色列表第 3 位的"自定义角色"卡片，点击扣 99💎 → 用户输入想见的角色名 → LLM 现编人设 → 进入聊天。</p>
+  <ul>
+    <li>定价：99💎/次（约相当于一次 ~140⭐ 充值）</li>
+    <li>卖点：100% 个性化 RP，对标用户主动想象的"想跟 X 聊天"需求</li>
+    <li>未来：考虑解锁"永久自定义角色"档位（待排期）</li>
+  </ul>
+
+  <h2>Premium 锁定角色（已下线）</h2>
+  <p>历史上锁过 9 个奇幻类角色（Seraphina / Kiera Thorne / Lysandra Velaris 等），仅订阅用户可访问。当前 <code>characters.json</code> 里没有任何 <code>premium: true</code>，相当于全部解锁。这是产品策略变化（先给体验、后做付费转化）。</p>
+
+  <h2>NSFW 与定价的关系</h2>
+  <div class="callout info">
+    <strong>NSFW 是核心付费驱动力。</strong>用户为体验"非审查 RP + 露骨生图"付费的意愿显著高于普通陪伴。但 NSFW 内容在埋点 / 模型选型 / 数据流转都有合规约束 —— 详见 <strong>06 · Lessons</strong>。
+  </div>
+
+  <h2>每日营收速查</h2>
+  <p>Admin Dashboard 查 7 日营收：</p>
+  <ul>
+    <li><code>GET /api/admin/dashboard</code> 返回 <code>revenue_7d_stars</code>（最近 7 天⭐ 总额）</li>
+    <li>SQL：<code>SELECT SUM(stars_paid) FROM transactions WHERE stars_paid&gt;0 AND created_at&gt;=date('now','-7 days')</code></li>
+    <li>每日 Lark 卡片在 DailyLoop 自动推送（详见 Observability 篇）</li>
+  </ul>
+
+  <div class="pager">
+    <a href="/vivi/product">
+      <div class="dir">← 上一篇</div>
+      <div class="label">02 · 产品形态与角色体系</div>
+    </a>
+    <a class="next" href="/vivi/observability">
+      <div class="dir">下一篇 →</div>
+      <div class="label">04 · 数据与监控体系</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

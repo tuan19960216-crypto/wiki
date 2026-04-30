@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产品形态与角色体系 · Vivi</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #a78bfa; --accent-soft: rgba(167, 139, 250, 0.15);
+    --accent-2: #22d3ee; --accent-2-soft: rgba(34, 211, 238, 0.15);
+    --accent-3: #f472b6; --accent-3-soft: rgba(244, 114, 182, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  a { color: var(--accent-2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; }
+  .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+  .stat .num { font-size: 28px; font-weight: 700; color: var(--accent); }
+  .stat .label { font-size: 12px; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+  .journey { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 24px 0; }
+  .step-box { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px; position: relative; }
+  .step-box .n { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.08em; }
+  .step-box h4 { margin: 6px 0 4px; font-size: 14px; color: var(--text); }
+  .step-box p { font-size: 12.5px; line-height: 1.5; color: var(--text-dim); margin: 0; }
+  @media (max-width: 720px) { .journey { grid-template-columns: 1fr; } }
+
+  .feature-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin: 16px 0; }
+  .feature-card h3 { margin-top: 0; }
+  .feature-card .meta { font-size: 12.5px; color: var(--text-muted); margin-top: 8px; }
+  .feature-card .meta code { font-size: 12px; }
+
+  .affinity-bar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 16px 0; }
+  .aff-cell { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 12px 10px; text-align: center; }
+  .aff-cell .lvl { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; }
+  .aff-cell .nm { font-size: 13px; color: var(--text); font-weight: 600; margin: 4px 0 2px; }
+  .aff-cell .xp { font-size: 12px; color: var(--accent); font-family: ui-monospace, monospace; }
+  @media (max-width: 720px) { .affinity-bar { grid-template-columns: repeat(3, 1fr); } }
+
+  .gift-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .gift { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .gift .ico { font-size: 24px; }
+  .gift .nm { font-weight: 600; color: var(--text); margin: 4px 0; font-size: 14px; }
+  .gift .ef { font-size: 12.5px; color: var(--text-dim); }
+  .gift .pr { font-size: 12px; color: var(--accent); margin-top: 6px; font-family: ui-monospace, monospace; }
+  @media (max-width: 720px) { .gift-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .callout { background: var(--accent-soft); border: 1px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text); }
+  .callout.info { background: var(--accent-2-soft); border-color: var(--accent-2); border-left-color: var(--accent-2); }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <span style="color: var(--text-dim);">产品形态与角色体系</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">02 · Product</span>
+    <h1>产品形态与角色体系</h1>
+    <p class="subtitle">
+      Vivi 是一个 Telegram 内的 AI 角色 RP 对话产品 —— 用户从 Bot 进入，挑一个角色和故事，开始沉浸式聊天。这一页讲清楚产品到底是什么、用户在做什么、各个机制（亲密度 / 能量 / 礼物 / 生图 / 虚拟角色）怎么咬合在一起。PM、运营、客服必读。
+    </p>
+  </header>
+
+  <h2>关键数字</h2>
+  <div class="stats">
+    <div class="stat"><div class="num">45</div><div class="label">公开角色</div></div>
+    <div class="stat"><div class="num">135</div><div class="label">故事剧情</div></div>
+    <div class="stat"><div class="num">6</div><div class="label">亲密度等级</div></div>
+    <div class="stat"><div class="num">6</div><div class="label">礼物种类</div></div>
+  </div>
+
+  <h2>用户旅程：从 Bot 到第一次付费</h2>
+  <p>新用户从 Telegram 链接点进来，五步内能完成一次完整的体验闭环：</p>
+  <div class="journey">
+    <div class="step-box">
+      <span class="n">STEP 1</span>
+      <h4>启动 Bot</h4>
+      <p>用户在 Telegram 里搜 <code>@ViviDreamsBot</code> 或点分享链接，Bot 发欢迎语 + Mini App 按钮。</p>
+    </div>
+    <div class="step-box">
+      <span class="n">STEP 2</span>
+      <h4>Onboarding</h4>
+      <p>首次打开展示 4 屏功能介绍 + 免费宝石说明 + CTA。完成后写入 localStorage。</p>
+    </div>
+    <div class="step-box">
+      <span class="n">STEP 3</span>
+      <h4>挑角色 + 故事</h4>
+      <p>角色卡片网格（3 列），点开看 3 个故事剧情。新用户前 10 条消息免费。</p>
+    </div>
+    <div class="step-box">
+      <span class="n">STEP 4</span>
+      <h4>沉浸聊天</h4>
+      <p>SSE 打字机流式输出，TTS 一键播放，📷 生图，🎁 送礼，左上心形显示亲密度。</p>
+    </div>
+    <div class="step-box">
+      <span class="n">STEP 5</span>
+      <h4>能量耗尽 → 付费</h4>
+      <p>10⚡ 用完弹 popup → 跳订阅页（4 档⭐直购）或 Gems 商店（充💎买礼物 / 解锁虚拟角色）。</p>
+    </div>
+  </div>
+
+  <h2>角色体系</h2>
+  <p>角色定义在 <code>app/characters/data/characters.json</code>，从 Softieweb Neon DB 同步过来。每个角色 3 个故事 = 总共 135 个 system_prompt 变体。</p>
+
+  <h3>角色卡片字段</h3>
+  <table>
+    <thead><tr><th>字段</th><th>含义</th><th>示例</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>唯一 slug</td><td><code>isabella</code> / <code>victoria_starlight</code></td></tr>
+      <tr><td><code>name</code></td><td>角色全名</td><td>Isabella Rivera</td></tr>
+      <tr><td><code>tagline</code></td><td>一句话定位</td><td>"Bold Latina photographer..."</td></tr>
+      <tr><td><code>avatar / video</code></td><td>头像 + 主页视频</td><td><code>media.softie.ai</code> CDN 直链</td></tr>
+      <tr><td><code>voice</code></td><td>edge-tts 语音</td><td><code>en-US-AvaNeural</code></td></tr>
+      <tr><td><code>premium</code></td><td>是否订阅锁定</td><td>布尔（当前 0 个；曾锁过 9 个奇幻类）</td></tr>
+      <tr><td><code>stories[3]</code></td><td>3 个故事</td><td>id / title / description / image / system_prompt / greeting</td></tr>
+      <tr><td><code>appearance</code></td><td>外貌锚（生图一致性用）</td><td>"long black hair, hazel eyes, olive skin"</td></tr>
+      <tr><td><code>default_outfit</code></td><td>首图默认服饰（生图用）</td><td>"red silk dress" 等</td></tr>
+    </tbody>
+  </table>
+
+  <h3>三个 Story = 一个角色三种打开方式</h3>
+  <p>每个角色都有 3 个 story，主题各异（日常 / 亲密 / 戏剧冲突），各自独立的 system_prompt + greeting + 场景图。用户在角色卡里挑一个故事入口，开始的对话就是该剧情的延续。这是 Vivi 提高复玩率的核心设计。</p>
+
+  <div class="callout info">
+    <strong>新增角色 SOP：</strong>从 Softieweb Neon DB（<code>postgresql://...</code> 在 Softieweb 的 <code>.env.local</code>）查 active + 非 private 角色，转格式追加到 <code>characters.json</code>。完整流程见 <strong>05 · Operations</strong> 篇。
+  </div>
+
+  <h2>亲密度系统（Affinity）</h2>
+  <p>用户和每个角色独立维护亲密度 XP。每条成功对话 +2 XP，等级影响角色 prompt 注入的态度（让模型有"人设内拒绝"的依据，避免 fallback 到 AI 免责声明）。</p>
+  <div class="affinity-bar">
+    <div class="aff-cell"><div class="lvl">L0</div><div class="nm">Stranger</div><div class="xp">0 XP</div></div>
+    <div class="aff-cell"><div class="lvl">L1</div><div class="nm">Acquaintance</div><div class="xp">10 XP</div></div>
+    <div class="aff-cell"><div class="lvl">L2</div><div class="nm">Friend</div><div class="xp">30 XP</div></div>
+    <div class="aff-cell"><div class="lvl">L3</div><div class="nm">Close Friend</div><div class="xp">60 XP</div></div>
+    <div class="aff-cell"><div class="lvl">L4</div><div class="nm">Confidant</div><div class="xp">100 XP</div></div>
+    <div class="aff-cell"><div class="lvl">L5</div><div class="nm">Partner</div><div class="xp">150 XP</div></div>
+  </div>
+  <ul>
+    <li>聊天页头部显示心形图标 + 等级名（仅 Friend 及以上）</li>
+    <li>角色列表在 Friend 及以上显示亲密度徽章</li>
+    <li>API：<code>GET /api/affinity/{charId}</code>（单查）、<code>GET /api/affinities</code>（列表），chat 响应里也带 <code>affinity</code> 字段</li>
+    <li>核心价值：让用户感受到关系成长，<strong>不是数值游戏</strong>，是为了让 LLM 拒绝得更自然（"我们才认识没多久..."）</li>
+  </ul>
+
+  <h2>能量与签到</h2>
+  <p>免费用户的内容门槛靠 ⚡ 能量控制：</p>
+  <ul>
+    <li><strong>每日 10⚡：</strong>UTC 0 点自动重置（每次调 <code>/api/user/me</code> 或 <code>/api/chat/send</code> 时检查 <code>energy_reset_date</code>）</li>
+    <li><strong>签到 +5⚡：</strong>Settings 页顶部签到卡片，每天首次点击 +5⚡（不送💎），同日再点显示"已签到"</li>
+    <li><strong>会员无限：</strong>4 档订阅都不消耗⚡</li>
+    <li><strong>新用户福利：</strong>注册即送，前几条消息扣⚡ 但低门槛体验</li>
+    <li><strong>耗尽时机：</strong>能量 = 0 弹 popup → 跳 <code>#/plan</code> 订阅页（不是 Gems 商店）</li>
+  </ul>
+  <div class="callout warn">
+    <strong>付费墙时机优化（待办）：</strong>当前耗尽才弹付费，对标竞品（Lucid 等）应该在<strong>对话高潮处</strong>触发引导而非能量耗尽后。这是产品 backlog 高优先项。
+  </div>
+
+  <h2>礼物系统（Items / Gifts）</h2>
+  <p>聊天页 🎁 按钮 → 底部弹窗选礼物 → 用💎购买 → <strong>下一条 AI 回复自动注入礼物反应 prompt</strong> → 用完标记 <code>used=1</code>。</p>
+  <div class="gift-grid">
+    <div class="gift"><div class="ico">🌹</div><div class="nm">Rose Bouquet</div><div class="ef">浪漫表达</div><div class="pr">15 💎</div></div>
+    <div class="gift"><div class="ico">💌</div><div class="nm">Love Letter</div><div class="ef">深化情感</div><div class="pr">20 💎</div></div>
+    <div class="gift"><div class="ico">🍾</div><div class="nm">Champagne</div><div class="ef">庆祝氛围</div><div class="pr">25 💎</div></div>
+    <div class="gift"><div class="ico">🪄</div><div class="nm">Silk Blindfold</div><div class="ef">信任游戏</div><div class="pr">25 💎</div></div>
+    <div class="gift"><div class="ico">🎁</div><div class="nm">Mystery Box</div><div class="ef">惊喜</div><div class="pr">20 💎</div></div>
+    <div class="gift"><div class="ico">💍</div><div class="nm">Diamond Ring</div><div class="ef">极致浪漫</div><div class="pr">25 💎</div></div>
+  </div>
+  <p>礼物绑定到具体的 <code>character_id + story_id</code>，不会跨角色生效。<code>GIFT_EFFECTS</code> 常量在 <code>app/database.py</code>，每个礼物对应一段 prompt 注入文案。</p>
+
+  <h2>Your Character（虚拟角色 · 99💎/次）</h2>
+  <p>Vivi 的差异化产品：用户输入"想见的角色名"，LLM 现编人设。位置在角色列表第 3 位（深色星空卡），点击扣 99💎 进入动态聊天。</p>
+  <ul>
+    <li><strong>实现模式：</strong>不污染 <code>characters.json</code>，在 <code>loader.py</code> 定义 <code>YOUR_CHARACTER</code> dict 和 <code>DYNAMIC_ROLEPLAY_SYSTEM_PROMPT</code>，<code>get_all_characters()</code> 在指定位置 <code>insert(2, YOUR_CHARACTER)</code></li>
+    <li><strong>API 标记：</strong><code>/api/characters</code> 返回 <code>custom: true</code> + <code>custom_cost: 99</code></li>
+    <li><strong>路由分支：</strong><code>/chat/send</code> 通过 <code>is_custom_char</code> 切换 prompt 构建路径，前端通过 <code>data-custom="true"</code> 走独立点击逻辑（扣💎→直接跳聊天，跳过 story 选择）</li>
+    <li><strong>未来扩展：</strong>同样模式可加更多虚拟/特殊角色，不需要改 JSON</li>
+  </ul>
+
+  <h2>生图玩法（聊天里的 📷 按钮）</h2>
+  <div class="feature-card">
+    <h3>触发方式</h3>
+    <p>聊天输入框旁边的 📷 按钮，点击 → 扣 15💎 → 后端基于当前对话上下文生成场景图。三档露度：mild → suggestive → explicit（按点击次数递增）。</p>
+    <div class="meta">技术：fal.ai FLUX Pro v1.1 (NSFW) + face-swap，6-26s 两阶段 SSE 推流。详见 <strong>01 · Architecture</strong> 篇。</div>
+  </div>
+  <div class="feature-card">
+    <h3>角色一致性</h3>
+    <p>从角色姓名推断种族外貌（Rivera→Latina，Khan→South Asian，Rossi→Italian 等 20+ 姓名映射），prompt 末尾追加 "consistent character appearance, same person throughout"。+ <code>appearance</code> 字段定义发色 / 眼色 / 肤色 / 体型作为锚。</p>
+  </div>
+  <div class="feature-card">
+    <h3>角色图库（预生成）</h3>
+    <p>每个角色每个 story 配预渲染的封面图（Story Image Library），近期已批量生成 135 张。这部分走 <strong>n8n + ComfyUI + RunPod</strong>（Workflow 仓库），不在 Vivi 仓库。</p>
+    <div class="meta">脚本：<code>scripts/submit_new_prompts.py</code> · POST n8n webhook</div>
+  </div>
+
+  <h2>语音播放（TTS）</h2>
+  <p>每条 AI 消息右侧有播放按钮，点击调 <code>edge-tts</code> 合成 mp3 流播放。每个角色配 <code>voice</code>（默认 <code>en-US-AvaNeural</code>）+ <code>voice_rate</code> + <code>voice_pitch</code> 微调。</p>
+
+  <h2>角色召回 Push（Recall Push）</h2>
+  <p>近期已上线（#99）：每日定时给 N 天未活跃用户发 Bot 消息，含视频 + 角色第一人称问候语。是被动用户激活的关键手段。</p>
+
+  <h2>已实现功能清单（v2 迭代后）</h2>
+  <table>
+    <thead><tr><th>功能</th><th>状态</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>SSE 流式输出</td><td>✅</td><td>打字机效果 + 光标闪烁</td></tr>
+      <tr><td>礼物 Prompt 注入</td><td>✅</td><td>6 种礼物，下一条 AI 回复响应</td></tr>
+      <tr><td>能量每日重置</td><td>✅</td><td>UTC 0 点 10⚡</td></tr>
+      <tr><td>每角色 3 个故事</td><td>✅</td><td>共 135 个剧情</td></tr>
+      <tr><td>亲密度 6 级</td><td>✅</td><td>每条消息 +2 XP</td></tr>
+      <tr><td>首充翻倍</td><td>✅</td><td>首次 Stars 购买双倍💎</td></tr>
+      <tr><td>每日签到 +5⚡</td><td>✅</td><td>Settings 页顶部</td></tr>
+      <tr><td>Onboarding 引导</td><td>✅</td><td>4 屏新用户欢迎</td></tr>
+      <tr><td>年龄确认 + NSFW 开关</td><td>✅</td><td>但近期已下线 NSFW toggle（默认全开）</td></tr>
+      <tr><td>Mem0 长期记忆</td><td>✅</td><td>Qdrant 语义检索替代 keyword</td></tr>
+      <tr><td>Your Character 虚拟角色</td><td>✅</td><td>99💎/次</td></tr>
+      <tr><td>SSE 两阶段生图</td><td>✅</td><td>base 预览 → face-swap 终图</td></tr>
+      <tr><td>角色召回 Push</td><td>✅</td><td>视频 + 第一人称问候</td></tr>
+    </tbody>
+  </table>
+
+  <h2>产品 Backlog（PM 评估优先级）</h2>
+  <table>
+    <thead><tr><th>功能</th><th>预估复杂度</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>付费墙精准时机</td><td>低</td><td>对话高潮处而非能量耗尽后</td></tr>
+      <tr><td>对话模式切换</td><td>低</td><td>Sweet / Flirty / Intimate 三档</td></tr>
+      <tr><td>成就系统</td><td>低</td><td>里程碑徽章 + 💎奖励</td></tr>
+      <tr><td>角色自定义</td><td>中</td><td>用户设置称呼方式、角色态度</td></tr>
+      <tr><td>动态角色图片系统</td><td>高</td><td>多套状态图 + 礼物触发图</td></tr>
+      <tr><td>限时活动系统</td><td>中</td><td>节日故事 / 限时角色</td></tr>
+      <tr><td>联盟推广</td><td>中</td><td>邀请码 + 佣金（Settings 入口已埋）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="/vivi/architecture">
+      <div class="dir">← 上一篇</div>
+      <div class="label">01 · 系统架构总览</div>
+    </a>
+    <a class="next" href="/vivi/monetization">
+      <div class="dir">下一篇 →</div>
+      <div class="label">03 · 商业化体系</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

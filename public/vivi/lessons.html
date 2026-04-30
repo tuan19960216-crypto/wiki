@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>踩坑经验 · Vivi</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #a78bfa; --accent-soft: rgba(167, 139, 250, 0.15);
+    --accent-2: #22d3ee; --accent-2-soft: rgba(34, 211, 238, 0.15);
+    --accent-3: #f472b6; --accent-3-soft: rgba(244, 114, 182, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 24px; font-weight: 700; margin: 56px 0 16px; letter-spacing: -0.01em; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h2 .secn { font-size: 12px; color: var(--text-muted); letter-spacing: 0.12em; font-weight: 500; margin-right: 8px; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; word-break: break-word; }
+  a { color: var(--accent-2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin: 12px 0; border-left: 3px solid var(--accent); }
+  .lesson h3 { margin: 0 0 8px; font-size: 16px; color: var(--text); font-weight: 600; }
+  .lesson .tag-row { font-size: 11px; color: var(--text-muted); letter-spacing: 0.06em; margin-bottom: 6px; text-transform: uppercase; }
+  .lesson p { margin: 0 0 10px; font-size: 14px; line-height: 1.65; }
+  .lesson p:last-child { margin-bottom: 0; }
+  .lesson .why { color: var(--text-dim); font-size: 13.5px; }
+  .lesson .why strong { color: var(--text); }
+  .lesson .apply { color: var(--text); font-size: 13.5px; }
+  .lesson .apply strong { color: var(--accent); }
+
+  .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin: 24px 0; }
+  .toc h3 { margin: 0 0 12px; font-size: 13px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+  .toc ol { list-style: none; padding: 0; margin: 0; counter-reset: t; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 16px; }
+  .toc li { counter-increment: t; padding-left: 28px; position: relative; font-size: 13.5px; }
+  .toc li::before { content: counter(t, upper-latin); position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; font-family: ui-monospace, monospace; font-size: 12px; }
+  .toc a { color: var(--text-dim); }
+  .toc a:hover { color: var(--accent); }
+  @media (max-width: 720px) { .toc ol { grid-template-columns: 1fr; } }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <span style="color: var(--text-dim);">踩坑经验</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">06 · Lessons</span>
+    <h1>踩坑经验（必读）</h1>
+    <p class="subtitle">
+      Vivi 团队过去半年踩过的所有重要坑，按主题分类。每条包含"现象"、"根因"、"今后怎么做"三段。新人读完省一周排查时间。
+    </p>
+  </header>
+
+  <div class="toc">
+    <h3>目录</h3>
+    <ol>
+      <li><a href="#a">Telegram Mini App 特性</a></li>
+      <li><a href="#b">CI / CDN / 部署陷阱</a></li>
+      <li><a href="#c">数据与基础设施</a></li>
+      <li><a href="#d">LLM 选型 + NSFW 合规</a></li>
+      <li><a href="#e">生图与第三方 API</a></li>
+      <li><a href="#f">前端工程</a></li>
+      <li><a href="#g">监控与埋点</a></li>
+      <li><a href="#h">协作与流程</a></li>
+    </ol>
+  </div>
+
+  <h2 id="a"><span class="secn">A</span>Telegram Mini App 特性</h2>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · 认证</div>
+    <h3>① initData 必须在每次请求时懒读取</h3>
+    <p class="why"><strong>现象：</strong>用户偶发 401。<strong>根因：</strong><code>Telegram.WebApp.initData</code> 在模块顶层捕获时是空字符串（脚本加载时机早于 Telegram SDK 初始化）。</p>
+    <p class="apply"><strong>今后：</strong>在 <code>api.js</code> 的请求函数内每次现读，<strong>禁止</strong>在模块顶层 <code>const initData = ...</code>。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · 路由</div>
+    <h3>② openTelegramLink ?start= 对老用户无效</h3>
+    <p class="why"><strong>现象：</strong>分享 story 链接给已用过 Bot 的用户，点进去不跳目标 story。<strong>根因：</strong>Telegram 客户端对已建会话的 Bot 不再处理 <code>?start=</code> 参数。</p>
+    <p class="apply"><strong>今后：</strong>站内 story 跳转用 <code>location.hash</code>，<strong>禁止</strong>用 <code>openTelegramLink('https://t.me/Bot?start=xxx')</code>。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · 认证</div>
+    <h3>③ Telegram 8.0+ signature 参与 HMAC</h3>
+    <p class="why"><strong>现象：</strong>新版 Telegram 客户端调用偶发认证失败。<strong>根因：</strong>Telegram 8.0+ 在 initData 中加了 <code>signature</code> 字段并纳入 HMAC 计算，老的"pop signature"代码会破坏校验。</p>
+    <p class="apply"><strong>今后：</strong>auth 校验时<strong>不要 pop signature</strong>，把它和其他字段一起参与签名计算。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · UI</div>
+    <h3>④ Telegram WebView 键盘行为受限</h3>
+    <p class="why"><strong>现象：</strong>输入框被键盘遮挡 / 高度跳动。<strong>根因：</strong>Telegram WebView 不支持 <code>position: fixed</code>、<code>scrollIntoView</code>、<code>100vh</code>。</p>
+    <p class="apply"><strong>今后：</strong>用 Telegram 提供的 <code>--tg-viewport-height</code> CSS 变量做高度定位，避开上述 web 默认方案。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · 支付</div>
+    <h3>⑤ tg.openInvoice 必须追踪 invoice_callback</h3>
+    <p class="why"><strong>现象：</strong>付费漏斗看不到取消率，转化率虚高。<strong>根因：</strong>Telegram 会在 client 多次回调 <code>openInvoice</code>，且取消行为只能通过回调 status 知道。</p>
+    <p class="apply"><strong>今后：</strong>callback 必须埋 <code>invoice_callback</code> 事件（status: paid / cancelled / failed），<strong>同一笔支付要去重</strong>，否则会重复计数（已修过 #103）。</p>
+  </div>
+
+  <h2 id="b"><span class="secn">B</span>CI / CDN / 部署陷阱</h2>
+
+  <div class="lesson">
+    <div class="tag-row">部署</div>
+    <h3>⑥ Vivi 无 PR 级 CI，merge = 立即 deploy</h3>
+    <p class="why"><strong>现象：</strong>合并 PR 后 30 秒内生产环境出问题。<strong>根因：</strong>Vivi repo 没有 PR 级 CI hook，只有 push 到 main 触发的部署 workflow。</p>
+    <p class="apply"><strong>今后：</strong>合并 PR 前<strong>手动跑测试</strong>。改动较大时先在本地起服务 + 跑 pytest，再合并。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">部署</div>
+    <h3>⑦ push 后必须 gh run 确认 CI 通过才算"已部署"</h3>
+    <p class="why"><strong>现象：</strong>说"已部署"实际测试失败 CI 静默阻断。<strong>根因：</strong>测试失败时 deploy job 不会跑，但 git push 已成功，从客户端看似没问题。</p>
+    <p class="apply"><strong>今后：</strong>push 后 <code>gh run list --limit 1</code> → 等 <code>success</code> → 再 curl 生产文件验证内容。CI 绿不等于 CDN 已刷新。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">部署</div>
+    <h3>⑧ 手动 flyctl deploy 会静默覆盖 CI 部署</h3>
+    <p class="why"><strong>现象：</strong>生产代码与 GitHub main 脱节，排查 bug 时怎么都对不上。<strong>根因：</strong><code>flyctl deploy</code> 直接从本地推 image，不会经过 GHA。</p>
+    <p class="apply"><strong>今后：</strong>统一走 git push → GHA 自动部署。排查问题第一步 <strong>SSH 进容器看实际 commit hash</strong>，确认服务器版本。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">CDN</div>
+    <h3>⑨ Cloudflare Pages 部署后必须 curl 生产域名</h3>
+    <p class="why"><strong>现象：</strong>CI 绿了但用户看不到改动。<strong>根因：</strong>CF Pages 内容哈希不变时不刷新 CDN（短时间内连续部署同样内容）。</p>
+    <p class="apply"><strong>今后：</strong><code>webapp/index.html</code> 的 <code>?v=N</code> 必须 bump，再 <code>curl https://vivi-app-e7m.pages.dev/index.html | grep "?v="</code> 验证。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">CI</div>
+    <h3>⑩ CF Pages GitHub Actions 不解析中文 commit message</h3>
+    <p class="why"><strong>现象：</strong>带中文的 commit 推上去，CF Pages 没触发部署。<strong>根因：</strong>CF Pages 的 GHA action 解析失败，整个 workflow 静默挂掉。</p>
+    <p class="apply"><strong>今后：</strong>触发部署的 commit message <strong>必须用 ASCII</strong>。中文描述放 PR description / commit body 第二段。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">CORS</div>
+    <h3>⑪ CORS regex 必须用可选组匹配生产域名（无 hash 前缀）</h3>
+    <p class="why"><strong>现象：</strong>生产前端跨域请求被拒。<strong>根因：</strong>原 regex 写死了 hash 前缀子域名，不匹配主生产域名。</p>
+    <p class="apply"><strong>今后：</strong>FastAPI CORS regex 用可选组兼容两种域名形态：<code>vivi-app(?:-[a-z0-9]+)?\.pages\.dev</code>。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">CI · 测试</div>
+    <h3>⑫ CI pytest 必须设假环境变量</h3>
+    <p class="why"><strong>现象：</strong>CI 跑 pytest 起步就炸。<strong>根因：</strong>Pydantic <code>Settings()</code> 初始化时缺 required 环境变量直接 raise。</p>
+    <p class="apply"><strong>今后：</strong>CI workflow 里 <code>TELEGRAM_BOT_TOKEN=test_token_for_ci</code>、<code>OPENROUTER_API_KEY=test_key_for_ci</code>。共享 .env 时 Settings 必须 <code>extra="ignore"</code>。</p>
+  </div>
+
+  <h2 id="c"><span class="secn">C</span>数据与基础设施</h2>
+
+  <div class="lesson">
+    <div class="tag-row">数据库</div>
+    <h3>⑬ 生产 DB 是 Turso 云端，不是 Fly.io 本地 SQLite</h3>
+    <p class="why"><strong>现象：</strong>SSH 进容器查 SQLite 文件查不到生产数据。<strong>根因：</strong>Vivi 已迁移到 Turso 云数据库，本地 SQLite 只在 dev fallback 时才用。</p>
+    <p class="apply"><strong>今后：</strong>查数据走 <code>turso db shell vividreams</code>，<strong>不要</strong> SSH 后 <code>sqlite3 /app/data/...</code>。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">Fly.io</div>
+    <h3>⑭ Fly.io 持久化路径必须查 fly.toml 的 mount destination</h3>
+    <p class="why"><strong>现象：</strong>把数据写到 <code>/data/</code>，重启后丢失。<strong>根因：</strong>Vivi 的 volume mount destination 是 <code>/app/data</code>，<strong>不是</strong> <code>/data</code>。</p>
+    <p class="apply"><strong>今后：</strong>所有持久化代码（Mem0 Qdrant、上传文件）路径必须查 <code>fly.toml</code> 的 <code>[[mounts]]</code>。Vivi 是 <code>/app/data</code>。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">Fly.io</div>
+    <h3>⑮ Fly.io 换 app name 后必须重新生成 deploy token</h3>
+    <p class="why"><strong>现象：</strong>改完 app name 后 GHA 部署直接 401。<strong>根因：</strong>Fly.io deploy token 权限绑在<strong>原 app</strong>。</p>
+    <p class="apply"><strong>今后：</strong><code>fly tokens create deploy -a &lt;new-app&gt;</code> → 更新 GitHub Secret <code>FLY_API_TOKEN</code>。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">数据库 · 测试</div>
+    <h3>⑯ 改 DB 默认值前先 grep 所有测试断言</h3>
+    <p class="why"><strong>现象：</strong>改了 <code>energy</code> 默认值，CI 5+ 个测试爆炸要逐个修。<strong>根因：</strong>测试断言里硬编码了旧默认值。</p>
+    <p class="apply"><strong>今后：</strong>改默认值前先 <code>grep -rn "energy.*30" tests/</code>，一次性更新所有断言。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">数据库 · Schema</div>
+    <h3>⑰ 生产 DB schema 可能滞后，CREATE TABLE 不改已有表</h3>
+    <p class="why"><strong>现象：</strong>新代码读老表的字段，报 <code>no such column</code>。<strong>根因：</strong><code>CREATE TABLE IF NOT EXISTS</code> 不会修改已存在的表。</p>
+    <p class="apply"><strong>今后：</strong>新增字段必须写自动迁移：<code>PRAGMA table_info</code> 检查 → <code>ALTER TABLE ... ADD COLUMN</code>。</p>
+  </div>
+
+  <h2 id="d"><span class="secn">D</span>LLM 选型 + NSFW 合规</h2>
+
+  <div class="lesson">
+    <div class="tag-row">LLM · 合规</div>
+    <h3>⑱ NSFW 产品任何环节不能用 Google / OpenAI 模型</h3>
+    <p class="why"><strong>现象：</strong>2026-04-13 OpenRouter 突然 403 拒绝调用，理由是 "violation of provider Terms Of Service"。<strong>根因：</strong>Vivi 的提取任务（亲密度分析、记忆 LLM）用了 Gemini Flash，输入上下文含 NSFW 字符串触发 Google TOS 封禁。</p>
+    <p class="apply"><strong>今后：</strong>聊天 / 提取 / Mem0 / 任何环节统一走非审查模型（OpenRouter 上的 <code>sao10k/l3.3-euryale-70b</code> + <code>qwen/qwen-2.5-7b-instruct</code>），<strong>禁止</strong>使用 Google / OpenAI / Anthropic 系列。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">LLM · 排障</div>
+    <h3>⑲ OpenRouter 403 先查账号 Logs 区分 Key 级 / 账号级封禁</h3>
+    <p class="why"><strong>现象：</strong>OpenRouter API 突然 403。<strong>根因：</strong>有时是 API Key 级别（换 Key 即可），有时是账号级别（必须改模型）。</p>
+    <p class="apply"><strong>今后：</strong>403 第一步：登录 OpenRouter Dashboard 看 Logs 页区分。Key 级别 = revoke + 重建一个；账号级别 = 必须切非审查模型。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">LLM · 容错</div>
+    <h3>⑳ LLM 必须有 fallback 模型 + logger.exception 完整 traceback</h3>
+    <p class="why"><strong>现象：</strong>2026-04-01 主模型 404 整个聊天功能挂掉，日志只有 "AI service error" 没有原因。<strong>根因：</strong>没 fallback、没记录 traceback。</p>
+    <p class="apply"><strong>今后：</strong>OpenRouter 调用必须带 fallback 模型；try/except 用 <code>logger.exception()</code> 记完整堆栈。LLM 调用失败必须退 1⚡ 给用户。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">埋点 · 合规</div>
+    <h3>㉑ NSFW 产品埋点禁止上报 content 字段</h3>
+    <p class="why"><strong>现象：</strong>PostHog 数据可能含成人对话内容，第三方拒绝服务风险。<strong>根因：</strong>原始埋点把消息正文当属性传了。</p>
+    <p class="apply"><strong>今后：</strong>事件属性只传元数据：<code>message_length</code> / <code>message_index</code> / <code>char_name</code>，<strong>禁止</strong>传 <code>content</code>。</p>
+  </div>
+
+  <h2 id="e"><span class="secn">E</span>生图与第三方 API</h2>
+
+  <div class="lesson">
+    <div class="tag-row">生图 · 模型</div>
+    <h3>㉒ Venice.ai fluently-xl 是动漫模型，写实场景不可用</h3>
+    <p class="why"><strong>现象：</strong>用 fluently-xl 生女性写实图片，结果出动漫风。<strong>根因：</strong>模型名不带 "anime" 但实际是动漫训练。</p>
+    <p class="apply"><strong>今后：</strong>写实路径用 <code>lustify-v8</code>（NSFW）或 fal.ai FLUX Pro v1.1。换 Venice 模型前先看模型卡描述。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">生图 · API</div>
+    <h3>㉓ fal.ai face-swap 422（无人脸）必须优雅降级</h3>
+    <p class="why"><strong>现象：</strong>生图 task 整个失败，用户扣完 15💎 看不到图。<strong>根因：</strong>face-swap 对 NSFW 图人脸不够清晰常返回 422，<code>raise_for_status()</code> 直接抛错。</p>
+    <p class="apply"><strong>今后：</strong>422 时降级返回 base 图（用户能看到模糊预览也比报错好）。<strong>禁止</strong>对 face-swap 错误 raise。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">生图 · API</div>
+    <h3>㉔ response_format=url 可能仍返回 data URI</h3>
+    <p class="why"><strong>现象：</strong>Venice.ai 返回的"URL"传给 fal.ai face-swap，超时 111s 后 422。<strong>根因：</strong>Venice <code>response_format="url"</code> 实际仍返回 data URI（base64），fal.ai 处理不了。</p>
+    <p class="apply"><strong>今后：</strong>拿到 URL 先检测 <code>data:</code> 前缀；NSFW 主路径改走 fal.ai FLUX Pro v1.1（返回真 URL），Venice 仅作 fallback。<strong>禁止</strong>对 data URI 二次 JPEG 压缩（双重压缩明显模糊）。</p>
+  </div>
+
+  <h2 id="f"><span class="secn">F</span>前端工程</h2>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · 构建</div>
+    <h3>㉕ 改独立 view 文件后必须同步 bundle.js</h3>
+    <p class="why"><strong>现象：</strong>改了 <code>views/chat.js</code> 但生产无变化。<strong>根因：</strong>Vivi 前端无构建步骤，页面只加载 <code>webapp/js/bundle.js</code>，<code>views/*.js</code> 是<strong>源文件未被加载</strong>。</p>
+    <p class="apply"><strong>今后：</strong>改完 view 必须手动同步到 bundle.js 对应位置。建议：在两份代码顶部都加注释 "if you change one, change the other"。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · 路由</div>
+    <h3>㉖ SPA 异步路由必须用 _routeVersion 防并发</h3>
+    <p class="why"><strong>现象：</strong>路由跳转中触发自动跳转，页面 DOM 错乱。<strong>根因：</strong>异步 <code>route()</code> 之间互相覆盖 DOM。</p>
+    <p class="apply"><strong>今后：</strong>路由器维护 <code>_routeVersion</code> 计数器，每次 route 时自增；异步 callback 完成后比对版本号决定是否更新 DOM。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · SSE</div>
+    <h3>㉗ SSE reader.read() 循环 break 前必须 flush buffer</h3>
+    <p class="why"><strong>现象：</strong>聊天最后一句偶发缺字。<strong>根因：</strong>SSE reader 循环 done=true 时 buffer 里还有最后一条事件未处理就 break 了。</p>
+    <p class="apply"><strong>今后：</strong>break 前先把 buffer 残余按 <code>\n\n</code> 分一次。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">前端 · 状态</div>
+    <h3>㉘ chat.js 的 sending flag 每次 render 必须重置</h3>
+    <p class="why"><strong>现象：</strong>切换聊天后输入框锁死无法发送。<strong>根因：</strong>切页时 <code>sending=true</code> 状态没清理。</p>
+    <p class="apply"><strong>今后：</strong>每次 <code>render()</code> 必须 <code>sending=false</code>，长生命周期引用提升为模块级变量（render 内局部变量不可被异步回调安全捕获）。</p>
+  </div>
+
+  <h2 id="g"><span class="secn">G</span>监控与埋点</h2>
+
+  <div class="lesson">
+    <div class="tag-row">埋点 · SDK</div>
+    <h3>㉙ 第三方分析 SDK 必须走反向代理 + 服务端转发</h3>
+    <p class="why"><strong>现象：</strong>PostHog 事件大量丢失，前端 stub 看似存在但没真发出去。<strong>根因：</strong>Telegram WebView 内大量装广告拦截器，三层拦截（DNS / 指纹 / JS 内部）只反代解决第一层。</p>
+    <p class="apply"><strong>今后：</strong>① 反代 <code>/phog/*</code>；② 服务端 SDK 兜底转发（事件带 <code>$source: "server"</code>）；③ <code>sendBeacon</code> + <code>pagehide</code>。三层兜底缺一不可。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">埋点 · 配置</div>
+    <h3>㉚ PostHog person_profiles 必须用 always</h3>
+    <p class="why"><strong>现象：</strong>匿名用户事件全部丢失。<strong>根因：</strong>默认 <code>identified_only</code> 会丢未 identify 的事件，而 Telegram 用户在 onboarding 完成前是匿名状态。</p>
+    <p class="apply"><strong>今后：</strong>PostHog init 用 <code>person_profiles: 'always'</code>。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">埋点 · 一致性</div>
+    <h3>㉛ 前端事件名与监控查询名必须 100% 一致</h3>
+    <p class="why"><strong>现象：</strong>监控查询永远返回 0。<strong>根因：</strong>前端打了 <code>plan_subscribe</code>，监控脚本查 <code>subscribe_plan</code>。</p>
+    <p class="apply"><strong>今后：</strong>新增监控查询时<strong>同时确认</strong>前端已 capture 该事件。两者必须配对上线，否则永久 0。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">埋点 · 隔离</div>
+    <h3>㉜ 数据与产品形态不符时先怀疑 project_id 传错</h3>
+    <p class="why"><strong>现象：</strong>看 PostHog 数据像 Web 产品而非 Telegram。<strong>根因：</strong>PostHog Project ID 配错（<code>368707</code> 是 Softie，<code>377981</code> 才是 Vivi）。</p>
+    <p class="apply"><strong>今后：</strong>数据反常时三重交叉验证（Bot API + 渠道能力 + 支付通道）。Vivi 的所有埋点配置 project_id <strong>必须</strong> <code>377981</code>。</p>
+  </div>
+
+  <h2 id="h"><span class="secn">H</span>协作与流程</h2>
+
+  <div class="lesson">
+    <div class="tag-row">流程 · 接手</div>
+    <h3>㉝ 项目拆分必须全链路审计</h3>
+    <p class="why"><strong>现象：</strong>从 Softie 拆出 Vivi 时只改了前端 repo，后端、监控、CI 仍指向旧项目。<strong>根因：</strong>没做全链路审计。</p>
+    <p class="apply"><strong>今后：</strong>项目拆分 / 接手时必须列清单：前端 / 后端 / 监控（PostHog/Sentry/Clarity）/ CI workflow / Lark webhook / 域名 / DNS。一项一项核对。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">流程 · 协作</div>
+    <h3>㉞ 删 / 替换 API 端点前必须 grep tests/</h3>
+    <p class="why"><strong>现象：</strong>删了端点后线上正常，但 CI 大面积红。<strong>根因：</strong>测试里硬编码了旧端点路径。</p>
+    <p class="apply"><strong>今后：</strong>删 / 改端点前 <code>grep -rn "/api/old-endpoint" tests/</code>，连同测试一起改。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">流程 · 文档</div>
+    <h3>㉟ 面向混合受众的文档必须分层递进</h3>
+    <p class="why"><strong>现象：</strong>文档里堆术语，PM 看不懂、工程不爱看。<strong>根因：</strong>没分层。</p>
+    <p class="apply"><strong>今后：</strong>面向 PM + 工程混合受众的文档（比如这份知识库）必须按 <strong>产品 → 协作 → 技术</strong> 分层递进，每层独立可读。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">流程 · Lark</div>
+    <h3>㊱ Lark 推送只 @ 指定人，不 @all</h3>
+    <p class="why"><strong>现象：</strong>群里通知 @all 噪音爆炸。<strong>根因：</strong>把 @all 当默认。</p>
+    <p class="apply"><strong>今后：</strong>所有推送只 @ <strong>野荞</strong>（open_id <code>239e82d1</code>），<strong>禁止</strong> @all。表格 / 对比信息用 <code>column_set</code> 多列布局，<strong>禁止</strong>用 ASCII 图或 Markdown 表格（Lark 不渲染）。</p>
+  </div>
+
+  <div class="lesson">
+    <div class="tag-row">流程 · 自动化</div>
+    <h3>㊲ 禁止 Stop hook 用 git add -A + commit + push</h3>
+    <p class="why"><strong>现象：</strong>本地未 commit 的改动被 hook 静默 push 覆盖到远端。<strong>根因：</strong>Stop hook 自动 <code>git add -A</code> 把所有未追踪文件都吃进去。</p>
+    <p class="apply"><strong>今后：</strong>子 agent 自动 commit 必须在 prompt 中指定 commit message 或禁止自动 commit。Stop hook 不能加 git 操作。</p>
+  </div>
+
+  <div class="pager">
+    <a href="/vivi/operations">
+      <div class="dir">← 上一篇</div>
+      <div class="label">05 · 运营与排障 SOP</div>
+    </a>
+    <a class="next" href="/vivi/">
+      <div class="dir">回到首页 →</div>
+      <div class="label">Vivi 知识库</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>
