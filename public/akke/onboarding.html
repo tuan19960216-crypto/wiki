@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 新人知识库</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --accent-2: #60a5fa;
+    --accent-2-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Layout ── */
+  .wrap {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 0;
+    max-width: 1280px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  aside.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 40px 24px 40px 32px;
+    border-right: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .sidebar h4 {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin: 28px 0 10px;
+  }
+  .sidebar h4:first-of-type { margin-top: 0; }
+  .sidebar a {
+    display: block;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 0;
+    transition: color 0.15s ease;
+    line-height: 1.5;
+  }
+  .sidebar a:hover { color: var(--accent); }
+  .sidebar .home {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar .home a { display: inline; padding: 0; color: var(--text-muted); }
+  .sidebar .home a:hover { color: var(--accent); }
+
+  main {
+    padding: 56px 56px 120px;
+    max-width: 920px;
+  }
+
+  /* ── Hero ── */
+  header.hero {
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 56px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: 44px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #e4e7ed 30%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle {
+    font-size: 18px;
+    color: var(--text-dim);
+    margin: 0 0 24px;
+    line-height: 1.6;
+  }
+  .meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  /* ── Section heads ── */
+  section { scroll-margin-top: 24px; }
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 72px 0 12px;
+    letter-spacing: -0.01em;
+  }
+  h2:first-of-type { margin-top: 0; }
+  .section-sub {
+    color: var(--text-dim);
+    margin: 0 0 28px;
+    font-size: 15px;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    letter-spacing: -0.005em;
+  }
+  p { color: var(--text-dim); }
+  strong { color: var(--text); font-weight: 600; }
+  code {
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    color: #c4b5fd;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .card h3 { margin-top: 0; }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 920px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+
+  /* ── Pipeline diagram ── */
+  .pipeline-wrap {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 24px 0 32px;
+  }
+  .pipeline-wrap svg {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ── Step list ── */
+  .steps { list-style: none; padding: 0; margin: 0; }
+  .steps li {
+    display: flex;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .steps li:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .step-body { flex: 1; }
+  .step-body strong { display: block; margin-bottom: 2px; font-size: 15px; color: var(--text); }
+  .step-body span { font-size: 14px; color: var(--text-dim); }
+  .step-tag {
+    display: inline-block;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 6px;
+    font-family: "SF Mono", Menlo, monospace;
+  }
+
+  /* ── Table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: var(--bg-deep);
+  }
+  td { color: var(--text-dim); vertical-align: top; }
+  td:first-child { color: var(--text); font-weight: 500; }
+
+  /* ── Role tabs ── */
+  .role {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .role-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .role-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .role.staff .role-icon    { background: var(--accent-soft); color: var(--accent); }
+  .role.owner .role-icon    { background: var(--accent-2-soft); color: var(--accent-2); }
+  .role.operator .role-icon { background: var(--success-soft); color: var(--success); }
+  .role.dev .role-icon      { background: var(--warning-soft); color: var(--warning); }
+  .role h3 { margin: 0; font-size: 18px; }
+  .role-sub { font-size: 13px; color: var(--text-muted); margin: 2px 0 0; }
+  .role ul { padding-left: 20px; margin: 8px 0 0; color: var(--text-dim); font-size: 14px; }
+  .role ul li { margin: 6px 0; }
+
+  /* ── Pitfall ── */
+  .pitfall {
+    background: var(--danger-soft);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .pitfall .label {
+    color: var(--danger);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .pitfall strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 15px; }
+  .pitfall p { margin: 0; color: var(--text-dim); font-size: 14px; }
+
+  /* ── Glossary ── */
+  .glossary {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 0;
+  }
+  .glossary dl { margin: 0; }
+  .glossary dt {
+    font-weight: 600;
+    color: var(--text);
+    padding: 14px 24px 4px;
+    font-size: 15px;
+  }
+  .glossary dt code { margin-right: 8px; }
+  .glossary dd {
+    margin: 0 0 14px;
+    padding: 0 24px;
+    color: var(--text-dim);
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+  }
+  .glossary dd:last-child { border-bottom: none; }
+
+  /* ── Misc ── */
+  .lead {
+    background: var(--bg-elevated);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 16px 0 24px;
+    color: var(--text-dim);
+  }
+  .lead strong { color: var(--text); }
+  .kv {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px 20px;
+    margin: 8px 0;
+    font-size: 14px;
+  }
+  .kv .k { color: var(--text-muted); }
+  .kv .v { color: var(--text-dim); }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 900px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside.sidebar { display: none; }
+    main { padding: 32px 24px 80px; }
+    h1 { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <aside class="sidebar">
+    <div class="home"><a href="/">← upio.ai</a></div>
+    <h4>开始</h4>
+    <a href="#what">一句话 Akke</a>
+    <a href="#why">解决什么生意</a>
+    <a href="#flow">业务全景</a>
+    <h4>系统理解</h4>
+    <a href="#arch">三段式架构</a>
+    <a href="#trace">一条评论的旅程</a>
+    <a href="#data">核心数据表</a>
+    <a href="#tenancy">多租户与权限</a>
+    <h4>动手</h4>
+    <a href="#roles">你是哪种角色</a>
+    <a href="#quickstart">15 分钟上手</a>
+    <a href="#pitfalls">5 条致命坑</a>
+    <h4>速查</h4>
+    <a href="#glossary">术语词典</a>
+    <a href="#further">延伸资源</a>
+    <a href="#help">求助渠道</a>
+  </aside>
+
+  <main>
+
+    <header class="hero">
+      <span class="tag">Akke · 新人知识库</span>
+      <h1>从一条评论<br>到一个买家私信</h1>
+      <p class="subtitle">这份指引专治"信息太多不知道从哪看起"。<br>读完 15 分钟，你能判断第一周做什么、找谁、怕什么。</p>
+      <div class="meta">
+        <span>📅 2026-05-01 更新</span>
+        <span>🏷️ Onboarding · 全角色友好</span>
+        <span>⏱️ 阅读约 15 分钟</span>
+      </div>
+    </header>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="what">
+      <h2>一句话 Akke</h2>
+      <div class="lead">
+        <strong>Akke</strong> = 抖音评论 → AI 筛意向 → 人工审核 → 自动私信触达
+        的<strong>全屋定制行业获客 SaaS</strong>。
+      </div>
+      <div class="kv">
+        <span class="k">当前阶段</span><span class="v">V1 内测（2026-04 起）</span>
+        <span class="k">服务对象</span><span class="v">橱柜、衣柜、家具定制等全屋定制商家</span>
+        <span class="k">部署区域</span><span class="v">Vercel + Supabase + Fly.io（东京）</span>
+        <span class="k">语言/技术</span><span class="v">中文为主；Next.js 16 + Postgres + Python/Playwright</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="why">
+      <h2>我们在解决什么生意</h2>
+      <p class="section-sub">先讲清楚生意，再讲怎么用代码解决它。</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>🎯 谁是客户</h3>
+          <p>全屋定制商家 — 装修旺季订单上不来、淡季销售养不住，转介绍纯靠运气。</p>
+        </div>
+        <div class="card">
+          <h3>💔 痛点</h3>
+          <p>抖音家居视频评论区埋着一堆真实买家（"这衣柜多少钱？我家在成都"），但翻评论 + 人工私信完全做不过来。</p>
+        </div>
+        <div class="card">
+          <h3>✨ Akke 答卷</h3>
+          <p>把"找意向 → 写文案 → 发出去"做成可量化的流水线，AI 干筛选和初稿，人只做关键判断。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="flow">
+      <h2>业务全景：一张图</h2>
+      <p class="section-sub">从公开评论到私信送达，一共 7 步。</p>
+
+      <div class="pipeline-wrap">
+        <svg viewBox="0 0 920 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Akke 业务全景图">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7384"/>
+            </marker>
+            <linearGradient id="gA" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.12"/>
+            </linearGradient>
+            <linearGradient id="gB" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.12"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Row 1: Scrape lane -->
+          <g>
+            <rect x="20"  y="40" width="130" height="60" rx="10" fill="#141821" stroke="#60a5fa" stroke-opacity="0.45"/>
+            <text x="85"  y="68" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">① 抓评论</text>
+            <text x="85"  y="86" text-anchor="middle" fill="#9ba3b4" font-size="11">视频/评论入库</text>
+
+            <rect x="170" y="40" width="130" height="60" rx="10" fill="url(#gA)" stroke="#60a5fa" stroke-opacity="0.45"/>
+            <text x="235" y="68" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">② AI 评分</text>
+            <text x="235" y="86" text-anchor="middle" fill="#cbd5e1" font-size="11">高/中/低意向</text>
+
+            <rect x="320" y="40" width="130" height="60" rx="10" fill="url(#gA)" stroke="#60a5fa" stroke-opacity="0.45"/>
+            <text x="385" y="68" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">③ AI 起草</text>
+            <text x="385" y="86" text-anchor="middle" fill="#cbd5e1" font-size="11">个性化首发</text>
+
+            <line x1="150" y1="70" x2="170" y2="70" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar)"/>
+            <line x1="300" y1="70" x2="320" y2="70" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar)"/>
+
+            <!-- bridge to row 2 -->
+            <line x1="385" y1="100" x2="385" y2="135" stroke="#6b7384" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#ar)"/>
+          </g>
+
+          <!-- Row 2: Approval / Send lane -->
+          <g>
+            <rect x="320" y="135" width="130" height="60" rx="10" fill="#141821" stroke="#fbbf24" stroke-opacity="0.45"/>
+            <text x="385" y="163" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">④ 人审</text>
+            <text x="385" y="181" text-anchor="middle" fill="#9ba3b4" font-size="11">通过/编辑/拒绝</text>
+
+            <rect x="470" y="135" width="130" height="60" rx="10" fill="url(#gB)" stroke="#8b5cf6" stroke-opacity="0.45"/>
+            <text x="535" y="163" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">⑤ 自动发送</text>
+            <text x="535" y="181" text-anchor="middle" fill="#cbd5e1" font-size="11">个人号 DM</text>
+
+            <rect x="620" y="135" width="130" height="60" rx="10" fill="url(#gB)" stroke="#8b5cf6" stroke-opacity="0.45"/>
+            <text x="685" y="163" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">⑥ 跟进回复</text>
+            <text x="685" y="181" text-anchor="middle" fill="#cbd5e1" font-size="11">收件箱轮询</text>
+
+            <rect x="770" y="135" width="130" height="60" rx="10" fill="#141821" stroke="#34d399" stroke-opacity="0.45"/>
+            <text x="835" y="163" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">⑦ 转交微信</text>
+            <text x="835" y="181" text-anchor="middle" fill="#9ba3b4" font-size="11">人接管成交</text>
+
+            <line x1="450" y1="165" x2="470" y2="165" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar)"/>
+            <line x1="600" y1="165" x2="620" y2="165" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar)"/>
+            <line x1="750" y1="165" x2="770" y2="165" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar)"/>
+          </g>
+
+          <!-- lane labels -->
+          <text x="20" y="30"  fill="#60a5fa" font-size="10" font-weight="600" letter-spacing="2">公 域 数 据</text>
+          <text x="320" y="125" fill="#8b5cf6" font-size="10" font-weight="600" letter-spacing="2">私 域 触 达</text>
+        </svg>
+      </div>
+
+      <p>每一步都对应到一段代码 + 一张数据表。下一节看具体走法。</p>
+
+      <table>
+        <thead><tr><th>步骤</th><th>谁在跑</th><th>数据落点</th></tr></thead>
+        <tbody>
+          <tr><td>① 抓评论</td><td>Fly worker（Python）</td><td><code>videos</code> · <code>comments</code></td></tr>
+          <tr><td>② AI 评分</td><td>Vercel Cron + LLM</td><td><code>comments.intent_score</code></td></tr>
+          <tr><td>③ AI 起草</td><td>Vercel API + LLM</td><td><code>messages</code> · <code>message_queue</code></td></tr>
+          <tr><td>④ 人审</td><td>运营在仪表盘点</td><td><code>message_queue.status</code></td></tr>
+          <tr><td>⑤ 自动发送</td><td>本地 Mac / iPhone WDA</td><td><code>messages.status=sent</code></td></tr>
+          <tr><td>⑥ 跟进回复</td><td>Worker 收件箱轮询</td><td>新 <code>messages</code> 入库</td></tr>
+          <tr><td>⑦ 转交微信</td><td>运营人工接手</td><td><code>conversations.stage=handed_off</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="arch">
+      <h2>三段式架构</h2>
+      <p class="section-sub">三块独立部署的代码，靠 Supabase 这张共享数据库交换状态。</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>🖥️ Vercel</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin:0 0 10px"><strong style="color:var(--accent)">Next.js 16 · App Router</strong></p>
+          <p>仪表盘 UI（运营在这里审消息）+ API 层 + Vercel Cron 定时触发器。鉴权用 Supabase SSR；目录在 <code>src/</code>。</p>
+        </div>
+        <div class="card">
+          <h3>🗄️ Supabase</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin:0 0 10px"><strong style="color:var(--accent-2)">Postgres · RLS · Auth</strong></p>
+          <p>共享事实源。多租户隔离靠 <strong>Row-Level Security</strong> 政策，按 <code>org_id</code> 自动过滤。schema 在 <code>supabase/migrations/</code>。</p>
+        </div>
+        <div class="card">
+          <h3>🤖 Fly.io Worker</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin:0 0 10px"><strong style="color:var(--success)">FastAPI · Playwright · 东京</strong></p>
+          <p>抓抖音评论、调签名 API、跑无头浏览器兜底。代码在 <code>worker/</code>。1GB VM 只能开一个 Chromium。</p>
+        </div>
+      </div>
+
+      <div class="lead" style="margin-top:24px">
+        <strong>关键心智：</strong>Supabase 是三方共享的<strong>唯一事实源</strong>。任何一段代码改了数据，另两段下一轮读到的就是新值 —— 没有"谁告诉谁"的消息总线。
+      </div>
+
+      <h3>三方怎么对话</h3>
+      <ul class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><strong>Vercel Cron 入队</strong><span>每天 9 点把"今天要抓的号源"写进 <code>scrape_jobs</code> 表，<strong>立即返回</strong>。<span class="step-tag">cron/scrape</span></span></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><strong>Worker 出队</strong><span>背景轮询 ~30s 一次，挑 <code>pending</code> 行执行；结果（视频/评论）写回 Supabase。<span class="step-tag">worker/queue.py</span></span></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><strong>Vercel API 直连 Worker</strong><span>需要实时动作（如手动"立即抓取"按钮）走 HTTP，带 <code>FLY_WORKER_SECRET</code> Bearer。<span class="step-tag">/scrape/source/{id}</span></span></div></li>
+      </ul>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="trace">
+      <h2>一条评论的旅程</h2>
+      <p class="section-sub">用一个具体例子串完整条链路，建立"端到端"心智。</p>
+
+      <div class="lead">
+        <strong>场景：</strong>客户 @家居小张 在某衣柜博主视频下评论<em>"我家成都的，整体衣柜大概多少钱"</em> —— 看 Akke 怎么把这条变成一条已送达的私信。
+      </div>
+
+      <ul class="steps">
+        <li><span class="step-num">T0</span><div class="step-body"><strong>09:00 · Cron 入队</strong><span>Vercel Cron 触发 <code>/api/cron/scrape</code>，把"该博主"写入 <code>scrape_jobs(status=pending)</code>。</span></div></li>
+        <li><span class="step-num">T1</span><div class="step-body"><strong>09:00:30 · Worker 抓评论</strong><span>Fly worker 出队，先用 f2 签名直调 <strong>抖音 Web API</strong>（不开浏览器，快一个数量级），失败才落 Playwright；评论入 <code>comments</code> 表，附带 IP 属地。</span></div></li>
+        <li><span class="step-num">T2</span><div class="step-body"><strong>10:00 · Cron 跑 LLM 评分</strong><span><code>/api/cron/analyze</code> 抓所有 <code>intent_score IS NULL</code> 的评论，分 batch 喂给大模型（DeepSeek V3），打 0~10 分 + 标签；高意向写回 <code>intent_score ≥ 7</code>。</span></div></li>
+        <li><span class="step-num">T3</span><div class="step-body"><strong>10:01 · 高意向 → 起草首发</strong><span>评分高的评论自动触发"起首发文案"路径：调 Qwen3-235B + 客户画像 + 品牌知识 + 视频上下文 → 写一条 <code>messages</code>（status=draft）+ <code>message_queue</code>（status=<code>pending_approval</code>）。</span></div></li>
+        <li><span class="step-num">T4</span><div class="step-body"><strong>10:30 · 运营审核</strong><span>Operator 打开 <code>/queue</code>，看到这条候选：左边是评论原文 + LLM 评分理由，右边是 AI 起草内容。3 选 1：<strong>通过 / 编辑后通过 / 拒绝</strong>。点了通过 → 行流转到 <code>approved</code>。</span></div></li>
+        <li><span class="step-num">T5</span><div class="step-body"><strong>当日发送窗口 · 自动发出</strong><span>本地 Mac / iPhone WDA daemon 起来，按"暖场→打开主页→输入文案→发送"序列把私信送达；解 protobuf 校验业务级 status_code，确认真投递后写 <code>messages.status=sent</code>。</span></div></li>
+        <li><span class="step-num">T6</span><div class="step-body"><strong>对方回复 → 收件箱轮询接住</strong><span>worker dm_inbox_poll 周期性扫私信收件箱，发现新对话即写入 <code>messages</code>，<code>conversations.stage</code> 自动从 <code>ice_break</code> 推进到 <code>nurture</code>。</span></div></li>
+        <li><span class="step-num">T7</span><div class="step-body"><strong>意向坚定 → 转微信</strong><span>LLM 检测到决策信号（"加你微信吧"/"现在能上门吗"），切到 <code>decision</code> 阶段并注入品牌微信 ID/二维码；运营人工接手 → 阶段标 <code>handed_off</code>。</span></div></li>
+      </ul>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="data">
+      <h2>核心数据表</h2>
+      <p class="section-sub">不需要记字段，只需要知道每张表"管什么"。</p>
+
+      <h3>身份与租户</h3>
+      <table>
+        <thead><tr><th>表</th><th>装的是什么</th></tr></thead>
+        <tbody>
+          <tr><td><code>organizations</code></td><td>客户公司（一家定制品牌就是一个 org）</td></tr>
+          <tr><td><code>user_org_memberships</code></td><td>谁属于哪个 org，角色是什么（Owner / Operator）</td></tr>
+          <tr><td><code>brand_profile</code></td><td>每个 org 一份：品牌话术、微信号、二维码、报价规则</td></tr>
+        </tbody>
+      </table>
+
+      <h3>账号池</h3>
+      <table>
+        <thead><tr><th>表</th><th>装的是什么</th></tr></thead>
+        <tbody>
+          <tr><td><code>accounts</code></td><td>抖音账号 — 分两类：<strong>scraping</strong>（用于抓评论）和 <strong>messaging</strong>（用于发私信）。每个账号严格归属一个 org。</td></tr>
+          <tr><td><code>source_accounts</code></td><td>"号源" — 我们要持续抓哪些博主的视频评论</td></tr>
+        </tbody>
+      </table>
+
+      <h3>采集管线</h3>
+      <table>
+        <thead><tr><th>表</th><th>装的是什么</th></tr></thead>
+        <tbody>
+          <tr><td><code>videos</code></td><td>抓到的视频元数据 + 描述</td></tr>
+          <tr><td><code>comments</code></td><td>评论原文 + IP 属地 + 城市 + LLM 打分（<code>intent_score</code>）+ 标签</td></tr>
+          <tr><td><code>scrape_jobs</code></td><td>"待抓任务"队列 + 进度 + 重试次数</td></tr>
+        </tbody>
+      </table>
+
+      <h3>对话管线</h3>
+      <table>
+        <thead><tr><th>表</th><th>装的是什么</th></tr></thead>
+        <tbody>
+          <tr><td><code>conversations</code></td><td>一个抖音用户 ↔ 一个我方账号 的会话；带 <strong>stage 状态机</strong>：<code>ice_break → nurture → decision → handed_off → closed</code></td></tr>
+          <tr><td><code>messages</code></td><td>所有发出去 / 收到的消息原文（含草稿）</td></tr>
+          <tr><td><code>message_queue</code></td><td>"等审核 / 已批准 / 已拒绝" 的人审闸门</td></tr>
+        </tbody>
+      </table>
+
+      <h3>知识库与统计</h3>
+      <table>
+        <thead><tr><th>表</th><th>装的是什么</th></tr></thead>
+        <tbody>
+          <tr><td><code>knowledge_documents</code></td><td>品牌话术文档（运营录入，注入 LLM prompt）</td></tr>
+          <tr><td><code>conversation_examples</code></td><td>金牌对话样本（few-shot 给 LLM）</td></tr>
+          <tr><td><code>daily_stats</code></td><td>每天的发送量、回复率、转化率快照</td></tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top:20px">完整 schema 在 <code>supabase/migrations/</code>，21 个迁移文件按编号顺序就是项目演化史。</p>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="tenancy">
+      <h2>多租户与权限</h2>
+      <p class="section-sub">2026-04-23 上线的多租户体系，3 类角色 + 3 层防御。</p>
+
+      <h3>3 类角色</h3>
+      <div class="grid-3">
+        <div class="card">
+          <h3 style="color:var(--accent)">Staff</h3>
+          <p>Akke 团队成员（我们）。可看所有 org 的数据，可切组织视图，可进 <code>/staff/admin</code> 改授权。</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--accent-2)">Owner</h3>
+          <p>客户公司老板。管自己 org 的品牌档案、邀请成员、看全量统计。</p>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--success)">Operator</h3>
+          <p>客户公司一线审批员。每天审消息卡片就是主业。</p>
+        </div>
+      </div>
+
+      <h3>3 层防御（缺一不可）</h3>
+      <ul class="steps">
+        <li><span class="step-num">A</span><div class="step-body"><strong>RLS（数据库层）</strong><span>Postgres 政策按 <code>org_id</code> 自动过滤。任何 SQL 查询都拿不到不属于你的行。<strong>这一层只做 org 隔离，不做角色差异化。</strong></span></div></li>
+        <li><span class="step-num">B</span><div class="step-body"><strong>API Guard（应用层）</strong><span><code>src/lib/auth/guards.ts</code> 提供 <code>requireAuth/Staff/OrgMember/Owner</code>。每个 API 路由必须显式调，不能漏。这一层管角色 — Operator 不能改品牌档案。</span></div></li>
+        <li><span class="step-num">C</span><div class="step-body"><strong>UI 置灰（界面层）</strong><span>用户角色不够时按钮不该出现 / 出现也是禁用态。这是 UX 兜底，不是安全兜底。</span></div></li>
+      </ul>
+
+      <div class="lead" style="margin-top:20px">
+        <strong>为什么三层都要：</strong>RLS 防"绕过 API 直发 SQL"；API guard 防"前端伪造 UI 状态"；UI 置灰防"把按钮放出来又拒绝服务的体验灾难"。
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="roles">
+      <h2>你是哪种角色？Day 1 清单</h2>
+      <p class="section-sub">挑一个最像你的开始。可以跨角色看，但 Day 1 只盯一份。</p>
+
+      <div class="grid-4">
+
+        <div class="role staff">
+          <div class="role-head">
+            <div class="role-icon">🧑‍💼</div>
+            <div>
+              <h3>Staff（Akke 平台）</h3>
+              <p class="role-sub">Akke 内部团队</p>
+            </div>
+          </div>
+          <ul>
+            <li>用 Lark 账号 SSO 登录</li>
+            <li>左上角 <strong>Org Switcher</strong> 切到任一客户组织巡检</li>
+            <li>进 <code>/staff/admin</code> 管面板（授权/封禁/角色）</li>
+            <li>读完<a href="#tenancy">"多租户三层防御"</a>章节</li>
+          </ul>
+        </div>
+
+        <div class="role owner">
+          <div class="role-head">
+            <div class="role-icon">👔</div>
+            <div>
+              <h3>Owner（商家老板）</h3>
+              <p class="role-sub">客户公司决策者</p>
+            </div>
+          </div>
+          <ul>
+            <li>首登配置抖音号源 — 粘贴博主主页链接<strong>不要要 sec_uid</strong></li>
+            <li>进 <code>/knowledge</code> 录品牌话术、报价规则、金牌对话</li>
+            <li>进 <code>/members</code> 邀请审批员加入</li>
+            <li>看 <code>/stats</code> 关注当日发送数和意向转化</li>
+          </ul>
+        </div>
+
+        <div class="role operator">
+          <div class="role-head">
+            <div class="role-icon">🧑‍🔧</div>
+            <div>
+              <h3>Operator（一线审批）</h3>
+              <p class="role-sub">客户公司运营</p>
+            </div>
+          </div>
+          <ul>
+            <li>打开 <code>/queue</code> 待审消息卡片队列</li>
+            <li>每条消息 3 选 1：<strong>✅ 通过 / ✏️ 编辑后通过 / ❌ 拒绝</strong></li>
+            <li>有疑问看 <a href="#trace">"一条评论的旅程"</a> 章节理解上下文</li>
+            <li>下班前看 <code>/stats</code> 自评一天的判断质量</li>
+          </ul>
+        </div>
+
+        <div class="role dev">
+          <div class="role-head">
+            <div class="role-icon">👨‍💻</div>
+            <div>
+              <h3>工程师</h3>
+              <p class="role-sub">开发 Akke 本身</p>
+            </div>
+          </div>
+          <ul>
+            <li><code>git clone</code> → <code>cp .env.local.example .env.local</code> 补 5 个密钥</li>
+            <li><code>npm install &amp;&amp; npm run dev</code> → <code>localhost:3000/login</code></li>
+            <li><code>npm run test:all</code> 跑健康体检（data audit + schema probe + LLM smoke）</li>
+            <li>必读 <code>CLAUDE.md</code>（架构 + 约定 + 踩坑索引）</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="quickstart">
+      <h2>15 分钟上手</h2>
+      <p class="section-sub">每个场景挑一个你最常做的练手。</p>
+
+      <table>
+        <thead><tr><th>场景</th><th>步骤</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>🧑‍🔧 审一条消息</td>
+            <td><code>/queue</code> → 点卡片 → 看 LLM 评分和起草内容 → 通过 / 编辑 / 拒绝</td>
+          </tr>
+          <tr>
+            <td>👔 录一条话术</td>
+            <td><code>/knowledge</code> → <strong>+ 新建文档</strong> → 选分类（话术 / 报价 / 案例）→ 粘贴即走</td>
+          </tr>
+          <tr>
+            <td>👔 添新博主号源</td>
+            <td><code>/sources</code> → 粘 v.douyin.com 短链或博主主页 URL → 系统 302 解析出 sec_uid</td>
+          </tr>
+          <tr>
+            <td>🧑‍💼 切组织看全局</td>
+            <td>左上角 Org Switcher 选目标组织，所有数据视图随之切换</td>
+          </tr>
+          <tr>
+            <td>👨‍💻 本地跑前端</td>
+            <td><code>npm run dev</code>，连 staging Supabase，热更新秒级生效</td>
+          </tr>
+          <tr>
+            <td>👨‍💻 部署后端 worker</td>
+            <td><code>cd worker &amp;&amp; fly deploy</code>（必须 cd 进子目录，否则 build context 会到 1.9GB）</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="pitfalls">
+      <h2>5 条最致命的坑</h2>
+      <p class="section-sub">不是"可能出错"，是"一定会踩"。上岗前过一遍省一天调试。</p>
+
+      <div class="pitfall">
+        <div class="label">坑 01 · 部署</div>
+        <strong>Fly worker 必须 <code>cd worker</code> 再 deploy</strong>
+        <p>仓库根有 <code>node_modules</code> 和 <code>.next</code>，不进子目录 build context 会炸到 1.9GB；<code>fly deploy -c worker/fly.toml</code> 不会改 build root。正确：<code>cd worker && fly deploy</code>。</p>
+      </div>
+
+      <div class="pitfall">
+        <div class="label">坑 02 · Schema</div>
+        <strong><code>messages.status</code> 只认 <code>pending_approval</code></strong>
+        <p>手误写 <code>pending</code> 会直接触发 CHECK 约束报错。还有：<code>message_queue</code> 没有 <code>content</code> 字段，消息内容写在 <code>messages</code>，<code>message_queue</code> 只是闸门。</p>
+      </div>
+
+      <div class="pitfall">
+        <div class="label">坑 03 · 假成功</div>
+        <strong>Worker HTTP 200 可能是假成功</strong>
+        <p>抖音发送失败时 worker 会返回 <code>{success: false}</code> 但 HTTP 还是 200。只判 <code>res.ok</code> 会把"消息没发出去"当成功。<strong>必须同时检查 <code>data.success</code>。</strong>而且抖音的 <code>cmd:100</code> 也不是真投递 — 要解 protobuf 拿业务级 status_code。</p>
+      </div>
+
+      <div class="pitfall">
+        <div class="label">坑 04 · 抖音陌生人 DM 配额</div>
+        <strong>陌生人首条 DM 是 "1 条 / 对 / 方向" 永久配额</strong>
+        <p>同一 sec_uid 招呼信息只能发 1 条 — 对方没回复 / 没互关之前再发都返 7462 错误码。<strong>规模触达只能扩号</strong>，单号扩不动。</p>
+      </div>
+
+      <div class="pitfall">
+        <div class="label">坑 05 · IP 地理</div>
+        <strong>Fly Tokyo 出口 IP 被抖音封</strong>
+        <p>抖音 handle/搜索/profile API 从 Fly 出口全部返回空；QR 登录面板根本不会出现。绕过：① 评论抓取走 f2 签名直调 ② 号源解析走 <code>v.douyin.com</code> 短链 302 跳转 ③ Cookie 在本地 Mac Playwright 登录后导入；④ 真正发送 DM 已切到客户本地 Mac / iPhone WDA。</p>
+      </div>
+
+      <p style="margin-top:24px;font-size:13px;color:var(--text-muted)">
+        想看更全的坑列表？项目 <code>docs/claude-memory/MEMORY.md</code> 里有 100+ 条按主题归类的记忆，每一条都对应一次真实事故。
+      </p>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="glossary">
+      <h2>术语词典</h2>
+      <p class="section-sub">看到这些词不慌。</p>
+
+      <div class="glossary">
+        <dl>
+          <dt>org / 组织 / 租户</dt>
+          <dd>一家客户公司在 Akke 里的隔离单位，所有数据按 <code>org_id</code> 强隔离。</dd>
+
+          <dt><code>sec_uid</code></dt>
+          <dd>抖音用户的内部 ID，36 位字符串。系统内部使用；<strong>永远不要让用户手动输入</strong>，让系统从分享链接自动解析。</dd>
+
+          <dt>号源 / source_account</dt>
+          <dd>"我们要持续盯哪些博主的评论区"。粘贴博主主页链接即可，系统通过 <code>v.douyin.com</code> 短链 302 跳转拿到 sec_uid。</dd>
+
+          <dt>scraping account vs messaging account</dt>
+          <dd>两类抖音账号 — 抓评论的（公开数据）和发 DM 的（私域触达）。<strong>独立账号池、独立速率预算、独立健康监控</strong>，一边被风控不影响另一边。</dd>
+
+          <dt>意向打分 / intent_score</dt>
+          <dd>0~10 分。LLM 看完评论 + IP 属地 + 视频上下文给的"这条评论后的人多想买"评分。≥7 算高意向，会自动起草首发文案。</dd>
+
+          <dt>stage 状态机</dt>
+          <dd>conversation 的 5 阶段：<code>ice_break</code>（破冰首发）→ <code>nurture</code>（来回沟通）→ <code>decision</code>（要微信/约时间）→ <code>handed_off</code>（人工接手）→ <code>closed</code>。LLM 选 prompt 模板时按这个走。</dd>
+
+          <dt>message_queue 闸门</dt>
+          <dd>所有出站 DM 必须先经过这张表。<code>pending_approval</code> 等审、<code>approved</code> 待发、<code>rejected</code> 丢弃、<code>sent</code> 已送达。<strong>没有"自动发不审"模式。</strong></dd>
+
+          <dt>RLS / Row-Level Security</dt>
+          <dd>Postgres 的行级权限。Akke 每张业务表的 RLS 政策都是"只能看自己 org 的行"，由 Supabase auth 自动注入用户身份。</dd>
+
+          <dt>Vercel Cron</dt>
+          <dd>Vercel 的定时任务（<code>vercel.json</code> 里声明）。每天 9 点抓评论、10 点跑评分、12 点查回复、23 点出日报。</dd>
+
+          <dt>worker</dt>
+          <dd>跑在 Fly.io 东京机器上的 Python 服务。负责所有需要"打开浏览器 / 调抖音原生 API"的脏活。</dd>
+
+          <dt>WDA / iPhone Mirroring</dt>
+          <dd>2026-04-30 后采用的私信发送方案：iPhone 真机 + WebDriverAgent 自动化抖音 app + iPhone Mirroring 远程操控。比 Web 路径风控宽松 10 倍。</dd>
+
+          <dt>knowledge_documents</dt>
+          <dd>客户录入的品牌话术 / 报价规则 / 案例库，会被截取（≤ 1500 字）注入 LLM prompt 让回复"懂行"。</dd>
+
+          <dt>handoff</dt>
+          <dd>当 LLM 检测到客户表达决策意向（"加微信"/"现在能上门"），自动给客户推品牌微信号 / 二维码并标 <code>handed_off</code>，运营人工接手。</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="further">
+      <h2>延伸资源</h2>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>📖 仓库内必读</h3>
+          <ul style="padding-left:18px;color:var(--text-dim);font-size:14px">
+            <li><code>CLAUDE.md</code> — 工程师必读，架构 + 约定 + 部署校验</li>
+            <li><code>docs/onboarding.md</code> — 本指引的源 markdown</li>
+            <li><code>docs/claude-memory/</code> — 100+ 条主题化的踩坑记忆</li>
+            <li><code>supabase/migrations/</code> — schema 演化史</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🌐 团队知识库</h3>
+          <ul style="padding-left:18px;color:var(--text-dim);font-size:14px">
+            <li><a href="/akke/anti-risk-control" style="color:var(--accent)">Akke 双链路防风控架构总览</a></li>
+            <li><a href="/" style="color:var(--accent)">upio.ai 团队知识库首页</a></li>
+            <li>Lark 知识库 · Akke 项目空间（请向 Staff 索取链接）</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section id="help">
+      <h2>求助渠道</h2>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>🛠️ 技术问题</h3>
+          <p>找 <strong>Gustavo</strong>，或在仓库 issues 留信息。<br>先翻 <code>CLAUDE.md</code> 的"部署验证规范"自救。</p>
+        </div>
+        <div class="card">
+          <h3>💬 业务 / 流程</h3>
+          <p>Akke Lark 群直接 @ 相关同学。<br>客户运营问题优先 @ Owner 同学。</p>
+        </div>
+        <div class="card">
+          <h3>🚨 紧急故障</h3>
+          <p>立即 Lark 群广播 + 同步 Staff。<br>翻 <code>docs/claude-memory/</code> 找最近相关条目，多数事故有先例。</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>
+        Akke · 新人知识库 · 维护 by Akke 团队<br>
+        发现错漏请直接改 <code>docs/onboarding.md</code> 并 PR<br>
+        <a href="/">← 回到 upio.ai 首页</a>
+      </p>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>
