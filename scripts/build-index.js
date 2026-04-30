@@ -5,8 +5,8 @@ const publicDir = path.join(__dirname, '..', 'public');
 
 const PROJECTS = [
   { name: 'Vivi', tagline: 'Telegram 上的 AI 梦境社交 mini-app' },
-  { name: 'Softie', tagline: 'AI 图片 / 视频生成工作流' },
-  { name: 'Akke', tagline: '抖音全屋定制智能获客' },
+  { name: 'Softie', tagline: 'AI 陪伴聊天 · 美国市场（含 Web + Android）', href: '/softie/' },
+  { name: 'Akke', tagline: '抖音全屋定制智能获客', href: '/akke/anti-risk-control' },
 ];
 
 function getHtmlFiles(dir, base = '') {
@@ -42,9 +42,16 @@ for (const f of files) {
   groups[f.folder].push(f);
 }
 
+const FOLDER_LABELS = {
+  root: '通用指南',
+  softie: 'Softie 项目',
+  akke: 'Akke 项目',
+  vivi: 'Vivi 项目',
+};
+
 const folderSections = Object.entries(groups)
   .map(([folder, items]) => {
-    const folderName = folder === 'root' ? '通用指南' : folder.replace(/\//g, ' / ');
+    const folderName = FOLDER_LABELS[folder] || folder.replace(/\//g, ' / ');
     const links = items
       .map(f => {
         const date = f.modified.toISOString().split('T')[0];
@@ -61,13 +68,20 @@ ${links}
   })
   .join('\n');
 
-const projectCards = PROJECTS.map(
-  p => `        <article class="project-card">
+const projectCards = PROJECTS.map(p => {
+  if (p.href) {
+    return `        <a class="project-card project-card--live" href="${p.href}">
+          <span class="badge badge--live">进入</span>
+          <h3>${p.name}</h3>
+          <p>${p.tagline}</p>
+        </a>`;
+  }
+  return `        <article class="project-card">
           <span class="badge">敬请期待</span>
           <h3>${p.name}</h3>
           <p>${p.tagline}</p>
-        </article>`
-).join('\n');
+        </article>`;
+}).join('\n');
 
 const totalCount = files.length;
 
@@ -144,14 +158,21 @@ const html = `<!DOCTYPE html>
     }
     .project-card {
       position: relative;
+      display: block;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px 22px 22px;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, transform 0.15s ease;
+      text-decoration: none;
+      color: inherit;
     }
     .project-card:hover {
       border-color: #2f3647;
+    }
+    .project-card--live:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
     }
     .project-card h3 {
       margin: 0 0 8px;
@@ -176,6 +197,10 @@ const html = `<!DOCTYPE html>
       background: rgba(155, 163, 180, 0.1);
       color: var(--text-muted);
       letter-spacing: 0.04em;
+    }
+    .badge--live {
+      background: var(--accent-soft);
+      color: var(--accent);
     }
     .docs-section {
       margin-bottom: 36px;

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>监控与告警 · Softie</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #ec4899; --accent-soft: rgba(236, 72, 153, 0.15);
+    --accent-2: #8b5cf6; --accent-2-soft: rgba(139, 92, 246, 0.15);
+    --accent-3: #60a5fa; --accent-3-soft: rgba(96, 165, 250, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  pre { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.65; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13px; }
+  a { color: var(--accent-3); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .callout { background: var(--accent-soft); border: 1px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text); }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+  .callout.info { background: var(--accent-3-soft); border-color: var(--accent-3); border-left-color: var(--accent-3); }
+  .callout strong { color: var(--text); }
+
+  /* Tool grid */
+  .tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 24px 0; }
+  @media (max-width: 720px) { .tools { grid-template-columns: 1fr; } }
+  .tool { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .tool .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .tool .name { font-size: 17px; font-weight: 600; color: var(--text); }
+  .tool .role { font-size: 11.5px; color: var(--accent); background: var(--accent-soft); padding: 3px 10px; border-radius: 999px; font-weight: 600; letter-spacing: 0.04em; }
+  .tool .desc { color: var(--text-dim); font-size: 14px; margin: 0 0 12px; line-height: 1.65; }
+  .tool .meta { font-size: 12.5px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 10px; }
+  .tool .meta span { display: block; padding: 2px 0; }
+  .tool .meta strong { color: var(--text-dim); font-weight: 500; }
+
+  /* Bot table */
+  .bot-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 10px; display: grid; grid-template-columns: 140px 1fr 200px; gap: 16px; align-items: start; }
+  .bot-name { font-weight: 600; color: var(--text); font-size: 15px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .bot-purpose { color: var(--text-dim); font-size: 14px; }
+  .bot-trigger { color: var(--text-muted); font-size: 12.5px; text-align: right; }
+  .bot-trigger code { font-size: 11.5px; }
+  @media (max-width: 720px) { .bot-card { grid-template-columns: 1fr; } .bot-trigger { text-align: left; } }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/softie/">Softie</a><span>/</span>
+    <span style="color: var(--text-dim);">监控与告警</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">04 · Observability</span>
+    <h1>监控与告警体系</h1>
+    <p class="subtitle">
+      Softie 用了 4 个观测平台 + 一组 Lark 机器人。这一页讲清楚谁负责什么、出问题第一时间该看哪里。原则：能用一个工具搞定就别引入第二个，加监控前先做重叠检查。
+    </p>
+  </header>
+
+  <h2>四大观测平台</h2>
+  <p>每个平台职责单一，重叠尽量少。这是 2026-04-07 决策的分工：</p>
+
+  <div class="tools">
+    <div class="tool">
+      <div class="head"><span class="name">Sentry</span><span class="role">错误监控</span></div>
+      <p class="desc">所有未捕获异常 + 主动 captureException；浏览器端、Node 端、Worker 端三套 DSN 区分。</p>
+      <div class="meta">
+        <span><strong>org</strong> · softieai（注意 typo，旧文档可能写 softie）</span>
+        <span><strong>项目</strong> · javascript-nextjs（生产）/ 已删 dev（噪音）</span>
+        <span><strong>看哪里</strong> · Issues by Frequency；Alerts</span>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="head"><span class="name">PostHog</span><span class="role">产品分析</span></div>
+      <p class="desc">用户行为漏斗、转化、留存、Feature Flag。Softie 主力分析平台，关键事件必须服务端追踪兜底。</p>
+      <div class="meta">
+        <span><strong>项目</strong> · Softie #368707 · Vivi #377981 独立</span>
+        <span><strong>关键事件</strong> · paywall_view / payment_success / payment_failed / chat_message_receive</span>
+        <span><strong>注意</strong> · 登录 identify、退出 reset；不然数据匿名 + 跨用户污染</span>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="head"><span class="name">Langfuse</span><span class="role">LLM Trace</span></div>
+      <p class="desc">所有 OpenRouter / Google / Groq 调用都包 trace；记录 prompt、completion、tokens、成本、用户。</p>
+      <div class="meta">
+        <span><strong>区域</strong> · US（fallback URL 必须 us.cloud.langfuse.com）</span>
+        <span><strong>关键路径</strong> · 推送 worker 走 generate.message.ts，95% LLM 消耗在这里</span>
+        <span><strong>必做</strong> · 所有退出路径（正常 + catch）都要 await flushAsync()，否则丢数据</span>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="head"><span class="name">Microsoft Clarity</span><span class="role">录屏 + 热图</span></div>
+      <p class="desc">免费录全部用户 session；观察用户实际操作路径、卡点、误触。</p>
+      <div class="meta">
+        <span><strong>项目</strong> · sb2b5hua80</span>
+        <span><strong>策略</strong> · 反转屏蔽（默认全录，敏感字段单独 mask）</span>
+        <span><strong>平台标签</strong> · 用 custom tag 区分 web / android</span>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="head"><span class="name">Google Analytics 4</span><span class="role">广告归因</span></div>
+      <p class="desc">仅用于 Google Ads 投放归因（广告组 → 转化）。日常分析走 PostHog。</p>
+      <div class="meta">
+        <span><strong>ID</strong> · G-J2THM7ZNYT · AW-17491175335</span>
+        <span><strong>不要</strong> · 在 GA 看产品漏斗，那是 PostHog 的活</span>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="head"><span class="name">Meta Pixel</span><span class="role">Meta Ads 归因</span></div>
+      <p class="desc">仅用于 Facebook/Instagram 广告投放归因。</p>
+      <div class="meta">
+        <span><strong>状态</strong> · Token 因安全锁(459)失效，待范丽重新授权</span>
+        <span><strong>不引入</strong> · Mixpanel；分析平台分工已定</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Lark 机器人矩阵</h2>
+  <p>所有自动化告警走 Lark 群。Webhook URL 在 <code>~/.claude/projects/-Users-gloom-softieweb/memory/reference_lark_webhooks.md</code>，<strong>推送前必须查记忆库确认归属，不要猜</strong>。</p>
+
+  <div class="bot-card">
+    <span class="bot-name">Pay-Bot</span>
+    <span class="bot-purpose">支付异常 / 健康检查告警 / reconcile 失败 / 转化率突降</span>
+    <span class="bot-trigger">来源：<code>payment-health-cron.yml</code> + <code>payment-reconcile-cron.yml</code></span>
+  </div>
+  <div class="bot-card">
+    <span class="bot-name">Cost-Bot</span>
+    <span class="bot-purpose">8 大服务的每日费用汇总（OpenRouter / fal / R2 / Fly / Sentry / Langfuse / OneSignal / Clarity）</span>
+    <span class="bot-trigger">来源：<code>~/scripts/</code> 全局脚本，crontab 每天 10:00</span>
+  </div>
+  <div class="bot-card">
+    <span class="bot-name">Ads-Bot</span>
+    <span class="bot-purpose">Google/Meta Ads 投放数据日报：花费、CPC、转化、CAC</span>
+    <span class="bot-trigger">来源：每日数据监控管道</span>
+  </div>
+  <div class="bot-card">
+    <span class="bot-name">GitHub-Bot</span>
+    <span class="bot-purpose">PR opened / merged / CI failed 等仓库事件</span>
+    <span class="bot-trigger">来源：GitHub webhook</span>
+  </div>
+  <div class="bot-card">
+    <span class="bot-name">Vivi-PM</span>
+    <span class="bot-purpose">PM 视角通知（产品需求、上线公告）</span>
+    <span class="bot-trigger">来源：手动 / Lark workflow</span>
+  </div>
+  <div class="bot-card">
+    <span class="bot-name">Vivi-Bot / Gus-Bot</span>
+    <span class="bot-purpose">技术上线、部署完成、Sentry 告警等技术性消息</span>
+    <span class="bot-trigger">来源：Softie 项目组群（chat_id <code>oc_d200...4ef6</code>）</span>
+  </div>
+  <div class="bot-card">
+    <span class="bot-name">Study-Bot</span>
+    <span class="bot-purpose">学习/技能分享通知，全局可用（不限 Softie）</span>
+    <span class="bot-trigger">来源：手动 / 周期分享</span>
+  </div>
+  <div class="bot-card">
+    <span class="bot-name">Softie-Auto</span>
+    <span class="bot-purpose">每日数据报告完整版（Clarity 漏斗、PostHog 关键事件、DB 指标）</span>
+    <span class="bot-trigger">来源：daily-data-monitor.yml，10:30 BJT</span>
+  </div>
+
+  <h2>Lark 卡片格式规范（CLAUDE.md 全局规则）</h2>
+  <p>向 Lark 群推送<strong>必须</strong>用 interactive 卡片，禁止纯文本/post：</p>
+  <ul>
+    <li><code>header.template</code> 用颜色区分类型：<code>indigo</code>（技术）/ <code>red</code>（告警）/ <code>green</code>（成功）/ <code>orange</code>（注意）/ <code>blue</code>（信息）</li>
+    <li>分段用 <code>{tag: 'hr'}</code>，底部用 <code>note</code> 标来源 + 日期</li>
+    <li><strong>禁止</strong> Markdown 表格 / ASCII 图（Lark 不渲染）；改用 <code>column_set</code> 多列布局</li>
+    <li>构造好<strong>只发一次</strong>，反复测试推送会骚扰群成员（用 <code>--dry-run</code> 验证）</li>
+  </ul>
+
+  <h2>每日数据监控管道 v2</h2>
+  <p>2026-04-07 参考 Vivi DailyLoop 重构。架构：</p>
+  <ol>
+    <li><strong>Clarity</strong>：5 路并行拉录屏摘要 + 漏斗</li>
+    <li><strong>PostHog</strong>：16 个关键事件的漏斗（注册 → 选角色 → 发首条 → 看 paywall → 付款）</li>
+    <li><strong>Meta Ads</strong>：花费 + 触达 + 转化（API v24）</li>
+    <li><strong>DB 指标</strong>：DAU、新用户、付费用户数、Sparks 流转</li>
+    <li><strong>需求引擎</strong>：基于异常波动生成 REQ-* 结构化需求条目</li>
+    <li><strong>输出</strong>：写到 Bitable（每日数据看板）+ Lark 卡片（Softie-Auto 群）+ AI 建议</li>
+  </ol>
+  <div class="callout warn">
+    <strong>HogQL 参数化陷阱</strong>：某些 PostHog deployment 上 <code>{event:String}</code> 参数化语法报错。已改用白名单校验 + inline。改 HogQL 前先在该 deployment 试。
+  </div>
+
+  <h2>关键告警阈值</h2>
+  <table>
+    <thead><tr><th>告警</th><th>阈值</th><th>动作</th></tr></thead>
+    <tbody>
+      <tr><td>支付转化率</td><td>15 分钟窗口跌破基线</td><td>Pay-Bot 卡片 + Sentry alert</td></tr>
+      <tr><td>BullMQ waiting</td><td>&gt;200（warn）/ &gt;1000（critical）</td><td>每日 08:00 BJT 检查 + Lark</td></tr>
+      <tr><td>BullMQ failed</td><td>&gt;50（warn）/ &gt;200（critical）</td><td>每日 08:00 BJT 检查 + Lark</td></tr>
+      <tr><td>OpenRouter 余额</td><td>&lt; $50</td><td>Cost-Bot 提醒充值</td></tr>
+      <tr><td>Fly 机器健康</td><td>any not passing</td><td>Sentry uptime alert</td></tr>
+      <tr><td>关键 endpoint 200</td><td>非 2xx</td><td>status-monitor.yml 推 Lark</td></tr>
+    </tbody>
+  </table>
+
+  <h2>「上线后 5 分钟」规范</h2>
+  <p>CLAUDE.md 全局要求：上线后 5 分钟内自动 curl 关键 endpoint，验证 200 + 关键 payload 字段在位。<code>status-monitor.yml</code> 负责跑这个；新关键路径上线时记得加进去。</p>
+
+  <h2>查问题速查表</h2>
+  <table>
+    <thead><tr><th>用户报错 / 现象</th><th>第一站</th></tr></thead>
+    <tbody>
+      <tr><td>"页面白屏"、"按钮没反应"</td><td>Sentry → 浏览器端 issues</td></tr>
+      <tr><td>"扣费但没解锁"、"支付失败"</td><td>PostHog 事件链 + 看 orders 表 + Pay-Bot 群历史</td></tr>
+      <tr><td>"AI 回复很慢 / 没回复"</td><td>Langfuse trace + Sentry 服务端 issues</td></tr>
+      <tr><td>"我点不通某个 flow"</td><td>Clarity 录屏看用户实际操作</td></tr>
+      <tr><td>"昨天的推送没收到"</td><td>worker logs (<code>fly logs -a softieweb -i worker</code>) + 队列深度</td></tr>
+      <tr><td>"成本突涨"</td><td>Cost-Bot 历史 + Langfuse 按 model 分组</td></tr>
+      <tr><td>"DAU 突降"</td><td>每日数据监控管道当天报告 + Bitable</td></tr>
+    </tbody>
+  </table>
+
+  <h2>禁忌</h2>
+  <ul>
+    <li>新功能上线<strong>不</strong>埋点 = 永远不知道效果。关键转化点必须埋点</li>
+    <li><strong>不</strong>要在 PostHog 加和 Sentry/Langfuse 重叠的功能（DB/Redis/API probe）—— 先识别真正盲区再动手</li>
+    <li>生产观测改动遵循「最小足迹」：独立脚本 + 只读 + <code>continue-on-error</code>，不动生产代码路径</li>
+    <li>加新 Bot 前先看现有 7 个能不能复用，避免群多消息散</li>
+  </ul>
+
+  <div class="pager">
+    <a href="/softie/deployment">
+      <div class="dir">← 上一篇</div>
+      <div class="label">03 · 部署与 CI/CD</div>
+    </a>
+    <a class="next" href="/softie/payments-and-sparks">
+      <div class="dir">下一篇 →</div>
+      <div class="label">05 · 支付与 Sparks 经济</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

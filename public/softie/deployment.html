@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>部署与 CI/CD · Softie</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #ec4899; --accent-soft: rgba(236, 72, 153, 0.15);
+    --accent-2: #8b5cf6; --accent-2-soft: rgba(139, 92, 246, 0.15);
+    --accent-3: #60a5fa; --accent-3-soft: rgba(96, 165, 250, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  pre { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.65; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13px; }
+  a { color: var(--accent-3); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .callout { background: var(--accent-soft); border: 1px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text); }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+  .callout.info { background: var(--accent-3-soft); border-color: var(--accent-3); border-left-color: var(--accent-3); }
+  .callout.danger { background: var(--danger-soft); border-color: var(--danger); border-left-color: var(--danger); }
+  .callout strong { color: var(--text); }
+
+  /* Pipeline diagram */
+  .pipeline { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin: 24px 0; }
+  .pipeline-row { display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap; }
+  .pipe-stage { flex: 1; min-width: 160px; background: var(--bg-deep); border: 1px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; position: relative; }
+  .pipe-stage h4 { margin: 0 0 6px; font-size: 14px; color: var(--text); }
+  .pipe-stage p { margin: 0; font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
+  .pipe-stage .dur { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 999px; background: var(--accent-3-soft); color: var(--accent-3); font-size: 11px; font-weight: 600; }
+  .pipe-arrow { display: flex; align-items: center; justify-content: center; color: var(--border-strong); font-size: 18px; }
+  @media (max-width: 720px) { .pipe-arrow { transform: rotate(90deg); } .pipeline-row { flex-direction: column; } }
+
+  /* Workflow cards */
+  .wf-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+  .wf-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+  .wf-name { font-weight: 600; color: var(--text); font-size: 15.5px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .wf-trigger { font-size: 11.5px; color: var(--accent); background: var(--accent-soft); padding: 3px 10px; border-radius: 999px; font-weight: 600; letter-spacing: 0.04em; }
+  .wf-body { font-size: 14px; color: var(--text-dim); line-height: 1.65; }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/softie/">Softie</a><span>/</span>
+    <span style="color: var(--text-dim);">部署与 CI/CD</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">03 · Deployment</span>
+    <h1>部署与 CI/CD</h1>
+    <p class="subtitle">
+      推 main → 自动上线。但「自动」不等于「不用看」—— 这一页讲清楚部署链路、必须遵守的验证规范、以及出问题时怎么回滚。
+    </p>
+  </header>
+
+  <h2>部署流水线</h2>
+  <div class="pipeline">
+    <div class="pipeline-row">
+      <div class="pipe-stage">
+        <h4>① Push to main</h4>
+        <p>本地直接推 main 即可（2 人团队约定）；或 PR 合并触发</p>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-stage">
+        <h4>② CI Checks</h4>
+        <p>type-check + lint + unit/integration test，失败则停</p>
+        <span class="dur">~3 min</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-stage">
+        <h4>③ Docker Build</h4>
+        <p>buildx + GHA cache；NEXT_PUBLIC_* 通过 build-args 注入</p>
+        <span class="dur">~4 min</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-stage">
+        <h4>④ DB Migrate</h4>
+        <p><strong>显式</strong>跑 <code>pnpm db:migrate</code>，否则线上 schema 落后</p>
+        <span class="dur">~30s</span>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-stage">
+        <h4>⑤ Fly Deploy</h4>
+        <p>滚动更新 app + worker；新机器健康后旧机下线</p>
+        <span class="dur">~2 min</span>
+      </div>
+    </div>
+  </div>
+  <p>CI 与 Docker 构建并行执行，整体约 7-9 分钟。</p>
+
+  <div class="callout danger">
+    <strong>硬规矩 · CLAUDE.md 全局规则：</strong>
+    <code>git push</code> 后必须确认 CI 通过才能告诉用户"已部署"。<br>
+    1. <code>gh run list --limit 1</code> 看最新状态；<br>
+    2. 若 in_progress 等完成；若 failure 用 <code>gh run view &lt;id&gt; --log-failed</code> 查原因；<br>
+    3. 最后 <code>curl https://www.softie.ai/&lt;path&gt;</code> 验证生产文件包含改动（CDN 可能没刷新）。
+  </div>
+
+  <h2>所有 GHA Workflows</h2>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">fly-deploy.yml</span>
+      <span class="wf-trigger">push: main</span>
+    </div>
+    <div class="wf-body">主部署 workflow。CI（type-check / lint / test）与 Docker 构建并行；Docker 用 GHA cache 加速；构建完成后滚动部署到 Fly.io。dev app（softieweb-dev）当前未启用，2 人团队 localhost 开发即可。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">pr-checks.yml</span>
+      <span class="wf-trigger">pull_request</span>
+    </div>
+    <div class="wf-body">PR 必须通过的检查：type-check + ESLint + 单元测试。是合并前的最后一道。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">claude.yml</span>
+      <span class="wf-trigger">@claude mention</span>
+    </div>
+    <div class="wf-body">PR 评论里 @claude 可触发 Claude Code Action 做代码审查。CLAUDE.md 全局规则：所有 PR 必须有 Claude 自动审查；high-risk 评论必须人工 ack。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">claude-code-review.yml</span>
+      <span class="wf-trigger">PR opened</span>
+    </div>
+    <div class="wf-body">PR 一开就自动跑 Claude review，标注 risk 并 inline 评论。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">payment-health-cron.yml</span>
+      <span class="wf-trigger">cron: */15 * * * *</span>
+    </div>
+    <div class="wf-body">每 15 分钟从 PostHog 拉支付事件，计算转化率；阈值跌破推 Pay-Bot 卡片告警。设计目标：「24h 0 转化」级别故障在 15 分钟内抓到。脚本：<code>scripts/check-payment-health.ts</code>。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">payment-reconcile-cron.yml</span>
+      <span class="wf-trigger">cron / 周期</span>
+    </div>
+    <div class="wf-body">把 webhook 漏掉的订单从 Airwallex/Stripe API 补回 DB。崩了会推 Pay-Bot。原本是 Vercel cron，2026-04-23 迁到 GHA（清理 Vercel 影子部署）。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">daily-data-monitor.yml</span>
+      <span class="wf-trigger">cron: 30 2 * * * (10:30 BJT)</span>
+    </div>
+    <div class="wf-body">每日数据监控管道 v2：Clarity 5 路并行 + PostHog 16 事件漏斗 + Meta Ads + 结构化需求引擎；输出到 Bitable + Lark 卡片 + AI 建议。失败会推 Lark 告警。同时跑队列深度检查（waiting&gt;200/1000、failed&gt;50/200 时告警）。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">daily-cost-report.yml</span>
+      <span class="wf-trigger">cron: 每天 10:00</span>
+    </div>
+    <div class="wf-body">8 大服务费用汇总（OpenRouter / fal / R2 / Fly / Sentry / Langfuse / OneSignal / Clarity）→ Cost-Bot 卡片。脚本在 <code>~/scripts/</code> 全局，crontab 触发，与项目独立。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">clarity-daily-report.yml</span>
+      <span class="wf-trigger">cron 每日</span>
+    </div>
+    <div class="wf-body">单独的 Clarity 录屏数据日报，作为日报备援。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">db-backup.yml</span>
+      <span class="wf-trigger">cron 每日</span>
+    </div>
+    <div class="wf-body">PostgreSQL 全量备份；落到对象存储。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">email-retention-cron.yml</span>
+      <span class="wf-trigger">cron 每日</span>
+    </div>
+    <div class="wf-body">用户留存邮件触达（沉默 N 天召回）。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">status-monitor.yml</span>
+      <span class="wf-trigger">cron 短间隔</span>
+    </div>
+    <div class="wf-body">关键 endpoint 200 + payload 字段在位检查；CDN 缓存验证；上线后 5 分钟内自动跑（CLAUDE.md 全局要求）。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">security-audit.yml</span>
+      <span class="wf-trigger">push / cron</span>
+    </div>
+    <div class="wf-body">依赖漏洞扫描；secrets 泄漏检查。</div>
+  </div>
+
+  <div class="wf-card">
+    <div class="wf-head">
+      <span class="wf-name">lark-notify.yml</span>
+      <span class="wf-trigger">workflow_call</span>
+    </div>
+    <div class="wf-body">复用型 workflow：被其他 workflow 调用统一推 Lark 卡片。Bot 路由见 <a href="/softie/observability">Observability</a>。</div>
+  </div>
+
+  <h2>fly.toml 关键点</h2>
+  <ul>
+    <li><strong>app = softieweb</strong>，primary region <code>lax</code>（洛杉矶，目标用户在美西）</li>
+    <li><strong>两进程组</strong>：<code>app</code>（Next.js）+ <code>worker</code>（BullMQ）—— 独立扩缩容</li>
+    <li><strong>build args</strong> 必须包含所有 <code>NEXT_PUBLIC_*</code>，因为 CI 用独立的 docker/build-push-action 构建，<code>fly.toml</code> 的 build args 只对本地 fly deploy 生效，<strong>workflow 里得重复声明一遍</strong>（这是踩过的坑）</li>
+    <li><strong>1GB 内存</strong>（US 用户性能优化后）；DB pool 10；根布局已去掉 <code>headers()</code> 调用</li>
+    <li><strong>release_command</strong> 当前没跑 migrate（Fly.io 部署不自动跑 migration），由 GHA 显式调用</li>
+  </ul>
+
+  <h2>回滚操作</h2>
+
+  <h3>代码回滚（推荐）</h3>
+  <pre><code># 找上一个 good commit
+git log --oneline --all -20
+
+# 回滚 commit 并推
+git revert &lt;bad-sha&gt;
+git push origin main
+# CI 走完即生效</code></pre>
+
+  <h3>Fly.io release rollback</h3>
+  <pre><code>fly releases list -a softieweb
+fly releases rollback &lt;version&gt; -a softieweb</code></pre>
+  <p>这只回滚 Docker 镜像，<strong>不回滚 DB</strong>。如果 migration 已经跑了 destructive 改动（drop column 等），必须先 restore 备份再回滚镜像。</p>
+
+  <h3>Cloudflare 缓存清理</h3>
+  <pre><code># Dashboard: Caching → Configuration → Purge Everything
+# 或用 API（token 在记忆库 reference_cloudflare_token.md）</code></pre>
+
+  <h2>部署后必查清单</h2>
+  <ol>
+    <li><code>gh run list --limit 1</code> → CI <code>success</code></li>
+    <li><code>fly status -a softieweb</code> → 所有机器 <code>passing</code></li>
+    <li><code>curl https://www.softie.ai/api/health</code>（如有）或关键页面 → 200 + 改动内容在 HTML 里</li>
+    <li>看 Sentry 5 分钟内有没有新 issue 涌入</li>
+    <li>看 Pay-Bot / Cost-Bot 群有没有异常告警</li>
+    <li>动了支付：在 demo 账号跑一次 end-to-end</li>
+  </ol>
+
+  <h2>常见坑（部署相关）</h2>
+  <table>
+    <thead><tr><th>症状</th><th>真相</th><th>修法</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>新代码部署后线上行为没变</td>
+        <td>Cloudflare 橙云 CDN 缓存（24h+）</td>
+        <td>Purge Everything；或在 Cloudflare 侧加 Cache Rule override</td>
+      </tr>
+      <tr>
+        <td>线上 42703 column does not exist</td>
+        <td>Fly 部署不会自动跑 migration</td>
+        <td>用 <code>fly ssh console</code> 进容器跑 <code>pnpm db:migrate</code>；后续 GHA 显式加这一步</td>
+      </tr>
+      <tr>
+        <td>NEXT_PUBLIC_FOO 在生产是 undefined</td>
+        <td>fly.toml 的 build-args 没同步到 GHA workflow</td>
+        <td>在 <code>.github/workflows/fly-deploy.yml</code> 的 build-push-action 里也加一份</td>
+      </tr>
+      <tr>
+        <td>Docker 构建慢（10+ 分钟）</td>
+        <td>BuildKit mount cache 在 GHA 无效</td>
+        <td>用 <code>actions/cache</code> 或 <code>cache-from/cache-to: type=gha</code></td>
+      </tr>
+      <tr>
+        <td>新 secret 写了 GHA workflow 但运行时空值</td>
+        <td><code>${{ secrets.FOO }}</code> 引用不代表 secret 已配置</td>
+        <td><code>gh secret list</code> 确认存在再触发；不要相信 workflow 文件</td>
+      </tr>
+      <tr>
+        <td>fly scale 后内存没变</td>
+        <td>命令可能不持久</td>
+        <td>事后 <code>fly status</code> 验证；混合机型必须逐台求和</td>
+      </tr>
+      <tr>
+        <td>Vercel 莫名其妙又部署了一份</td>
+        <td>旧账号 GitHub App 没卸载，影子部署</td>
+        <td>Vercel 控制台 disconnect + GitHub Settings → Apps 卸载 fly-io app</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>禁止操作</h2>
+  <ul>
+    <li><strong>禁用 <code>--no-verify</code>、<code>--no-gpg-sign</code></strong>（CLAUDE.md 全局规则）</li>
+    <li><strong>禁用 <code>flyctl deploy --depot</code></strong>，必须 <code>--depot=false</code> —— Depot 会让 internal 网络失败</li>
+    <li><strong>禁止</strong>没有 GHA secret 验证就推改动；先 <code>gh secret list</code></li>
+    <li><strong>禁止</strong>覆盖 APK 文件名（<code>latest.apk</code> 类）—— Cloudflare 缓存 7+ 天会让用户拿不到新版；APK 必须版本化文件名</li>
+    <li><strong>禁止</strong>跳过 Husky pre-commit；钩子失败就修</li>
+  </ul>
+
+  <div class="pager">
+    <a href="/softie/getting-started">
+      <div class="dir">← 上一篇</div>
+      <div class="label">02 · 本地开发环境</div>
+    </a>
+    <a class="next" href="/softie/observability">
+      <div class="dir">下一篇 →</div>
+      <div class="label">04 · 监控与告警</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

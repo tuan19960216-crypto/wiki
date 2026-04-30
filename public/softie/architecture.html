@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>系统架构总览 · Softie</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #ec4899; --accent-soft: rgba(236, 72, 153, 0.15);
+    --accent-2: #8b5cf6; --accent-2-soft: rgba(139, 92, 246, 0.15);
+    --accent-3: #60a5fa; --accent-3-soft: rgba(96, 165, 250, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 {
+    font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2;
+    background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  pre { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.65; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13px; }
+  a { color: var(--accent-3); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin: 16px 0; }
+  .card h3:first-child { margin-top: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Architecture diagram */
+  .arch-diagram {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px;
+    padding: 32px 24px; margin: 24px 0;
+  }
+  .layer-row {
+    display: grid; grid-template-columns: 140px 1fr; gap: 20px;
+    padding: 18px 0; border-bottom: 1px dashed var(--border);
+  }
+  .layer-row:last-child { border-bottom: none; }
+  .layer-label {
+    font-size: 12px; color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 0.1em; font-weight: 600; padding-top: 6px;
+  }
+  .layer-boxes { display: flex; flex-wrap: wrap; gap: 10px; }
+  .box {
+    background: var(--bg-deep); border: 1px solid var(--border-strong);
+    border-radius: 8px; padding: 10px 14px; font-size: 14px;
+    color: var(--text); min-width: 110px;
+  }
+  .box .b-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+  .box.front { border-color: var(--accent-3); background: var(--accent-3-soft); }
+  .box.api { border-color: var(--accent); background: var(--accent-soft); }
+  .box.svc { border-color: var(--accent-2); background: var(--accent-2-soft); }
+  .box.data { border-color: var(--success); background: var(--success-soft); }
+  .box.ext { border-color: var(--warning); background: var(--warning-soft); }
+  @media (max-width: 720px) { .layer-row { grid-template-columns: 1fr; } }
+
+  /* Flow steps */
+  .flow { counter-reset: flow-step; }
+  .flow-step {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 18px 14px 50px;
+    margin-bottom: 10px; position: relative;
+  }
+  .flow-step::before {
+    counter-increment: flow-step; content: counter(flow-step);
+    position: absolute; left: 14px; top: 14px;
+    width: 24px; height: 24px; border-radius: 6px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .flow-step strong { color: var(--text); display: block; margin-bottom: 2px; }
+  .flow-step span { color: var(--text-dim); font-size: 14px; }
+
+  .callout {
+    background: var(--accent-soft); border: 1px solid var(--accent);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px; padding: 14px 18px; margin: 16px 0;
+    font-size: 14px; color: var(--text);
+  }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+  .callout.info { background: var(--accent-3-soft); border-color: var(--accent-3); border-left-color: var(--accent-3); }
+  .callout strong { color: var(--text); }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/softie/">Softie</a><span>/</span>
+    <span style="color: var(--text-dim);">系统架构总览</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">01 · Architecture</span>
+    <h1>系统架构总览</h1>
+    <p class="subtitle">
+      这一页讲清楚 Softie 是怎么拼起来的：从用户点开页面到 LLM 流式返回字、再到推送召回沉默用户，所有组件都在同一张图里能找到位置。
+    </p>
+  </header>
+
+  <h2>分层架构</h2>
+  <div class="arch-diagram">
+    <div class="layer-row">
+      <div class="layer-label">客户端</div>
+      <div class="layer-boxes">
+        <div class="box front">Web<br><span class="b-sub">www.softie.ai</span></div>
+        <div class="box front">Capacitor Android<br><span class="b-sub">Google Play / 官网 APK</span></div>
+        <div class="box front">Capacitor iOS<br><span class="b-sub">未上架</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">边缘 / CDN</div>
+      <div class="layer-boxes">
+        <div class="box ext">Cloudflare<br><span class="b-sub">DNS + CDN（橙云）+ R2 自定义域</span></div>
+        <div class="box ext">media.softie.ai<br><span class="b-sub">R2 公共桶 → 媒体 CDN</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">应用层</div>
+      <div class="layer-boxes">
+        <div class="box api">Next.js 15 App Router<br><span class="b-sub">SSR + API Routes (Fly.io · LAX)</span></div>
+        <div class="box api">BullMQ Worker<br><span class="b-sub">esbuild bundle · dist/worker.js</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">业务服务</div>
+      <div class="layer-boxes">
+        <div class="box svc">Better Auth<br><span class="b-sub">Email + Google OAuth</span></div>
+        <div class="box svc">Mastra Agents<br><span class="b-sub">AI 工作流 src/mastra/</span></div>
+        <div class="box svc">Sparks Service<br><span class="b-sub">虚拟币</span></div>
+        <div class="box svc">Payment Service<br><span class="b-sub">Airwallex 主 + Stripe 备</span></div>
+        <div class="box svc">Media Service<br><span class="b-sub">付费媒体权限</span></div>
+        <div class="box svc">SSE Connection<br><span class="b-sub">流式消息</span></div>
+        <div class="box svc">Proactive Push<br><span class="b-sub">主动推送</span></div>
+        <div class="box svc">Content Moderation<br><span class="b-sub">审核</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">数据层</div>
+      <div class="layer-boxes">
+        <div class="box data">PostgreSQL<br><span class="b-sub">Drizzle ORM · 28+ migrations</span></div>
+        <div class="box data">Redis<br><span class="b-sub">SSE pub/sub · BullMQ · 分布式锁</span></div>
+        <div class="box data">Cloudflare R2<br><span class="b-sub">S3 兼容 · 媒体存储</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">外部依赖</div>
+      <div class="layer-boxes">
+        <div class="box ext">OpenRouter<br><span class="b-sub">主 LLM 网关</span></div>
+        <div class="box ext">Google AI / Groq<br><span class="b-sub">备用 / 轻量任务</span></div>
+        <div class="box ext">fal.ai<br><span class="b-sub">媒体生成</span></div>
+        <div class="box ext">OneSignal<br><span class="b-sub">Push 通知</span></div>
+        <div class="box ext">Resend<br><span class="b-sub">邮件</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-label">观测</div>
+      <div class="layer-boxes">
+        <div class="box ext">Sentry · 错误</div>
+        <div class="box ext">PostHog · 行为</div>
+        <div class="box ext">Langfuse · LLM Trace</div>
+        <div class="box ext">Clarity · 录屏热图</div>
+        <div class="box ext">Lark Webhooks · 告警</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>核心目录结构</h2>
+  <p>仓库根目录的 <code>CLAUDE.md</code> 是规范来源；新人入职第一件事就是把它读完。源码骨架：</p>
+  <pre><code>softieweb/
+├─ src/
+│  ├─ app/                  # Next.js App Router（页面 + API routes）
+│  │  ├─ api/               # 后端：chat / payment / sparks / media / webhooks ...
+│  │  ├─ new-chat/[id]/     # 当前活跃聊天页（旧 /chat/[id] 已重定向）
+│  │  ├─ characters/        # 角色 CRUD 页
+│  │  └─ admin/             # 管理后台
+│  ├─ components/           # 复用 UI（Radix + shadcn/ui + cva）
+│  ├─ stores/               # Zustand state（useChatV2Store 是当前的）
+│  ├─ hooks/                # camelCase 自定义 hook
+│  ├─ lib/                  # 核心服务与工具
+│  │  ├─ db/                # Drizzle schema · queries · 客户端
+│  │  ├─ auth/              # Better Auth 配置 + auth-utils
+│  │  ├─ payment/           # Airwallex + Stripe + 统一服务
+│  │  ├─ sparks/            # 虚拟币
+│  │  ├─ sse-connection/    # 流式消息
+│  │  ├─ proactive/         # 主动推送
+│  │  ├─ analytics/         # PostHog/GA/Clarity 封装
+│  │  ├─ langfuse.ts        # LLM 观测
+│  │  ├─ r2-storage.ts      # 对象存储
+│  │  └─ redis-client.ts    # ioredis 单例
+│  └─ mastra/               # Mastra agents / tools / workflows
+├─ scripts/                 # tsx 脚本（worker 启动 / 监控 / 一次性维护）
+├─ drizzle/migrations/      # 0001 ~ 0028 migration（按编号顺序）
+├─ tests/
+│  ├─ unit/                 # vitest
+│  └─ integration/          # vitest，连真 DB
+├─ android/                 # Capacitor Android（JDK 21 必需）
+├─ .github/workflows/       # CI/CD：fly-deploy / pr-checks / cron 报表 ...
+├─ fly.toml                 # 生产配置（已绑 NEXT_PUBLIC_* build args）
+└─ CLAUDE.md                # 项目规范（必读）
+</code></pre>
+
+  <div class="callout warn">
+    <strong>⚠️ 命名陷阱：</strong>聊天有两套 store —— <code>useChatV2Store</code>（活跃）和 <code>useChatStore</code>（已废弃）。改聊天逻辑前先确认导入的是 V2，否则改的是死代码。
+  </div>
+
+  <h2>核心数据流：聊天消息</h2>
+  <p>一条用户消息从浏览器到 LLM 再回到屏幕，会经过这些环节：</p>
+  <ol class="flow">
+    <li class="flow-step"><strong>前端发送</strong><span>用户在 <code>/new-chat/[id]</code> 输入；<code>useChatV2Store</code> 调 <code>POST /api/chat</code>，附带 <code>x-app-source: google-play</code>（如果是 Android 客户端）。</span></li>
+    <li class="flow-step"><strong>API Route 验权 + 计费</strong><span>Better Auth 校验 session；查 <code>businessUser.id</code>（UUID）做后续 DB 操作；按订阅状态判断是否本月用完免费 5 条；扣 Sparks（如适用）。</span></li>
+    <li class="flow-step"><strong>调 LLM（AI SDK v5）</strong><span>主模型：OpenRouter；轻量任务：grok-4-fast；记忆/工具：Mastra agent。所有调用包裹 Langfuse trace（含 <code>flushAsync</code>）。</span></li>
+    <li class="flow-step"><strong>SSE 流式回写</strong><span>Worker 把 token 写到 Redis pub/sub channel；前端走 <code>EventSource</code> 订阅，边收边渲染。</span></li>
+    <li class="flow-step"><strong>持久化</strong><span>消息以 <code>messagesV2</code> 格式入库（注意：这表列名是 camelCase，其他表是 snake_case）；服务端追踪 <code>chat_message_receive</code> 到 PostHog。</span></li>
+    <li class="flow-step"><strong>记忆抽取</strong><span>每 6 轮触发 <code>extractMemoryAnchors</code>，去重后落到 memory anchors 表，下一轮 pre-process 注入 system prompt。</span></li>
+  </ol>
+
+  <h2>核心数据流：支付</h2>
+  <ol class="flow">
+    <li class="flow-step"><strong>前端 paywall</strong><span><code>SubscriptionsDrawer</code> 弹出，曝光时打 <code>paywall_view</code>；选套餐后调 <code>POST /api/payment/create</code>。</span></li>
+    <li class="flow-step"><strong>三级降级</strong><span>① Airwallex SDK 嵌入式；② SDK 失败 → URL 直跳；③ Airwallex 整体不可用 → Stripe 兜底。三层都失败才返回错误。</span></li>
+    <li class="flow-step"><strong>用户支付</strong><span>跳第三方 hosted page；完成后回到 <code>/payment/success</code>，前端打 <code>payment_success</code>（兜底）。</span></li>
+    <li class="flow-step"><strong>Webhook（权威源）</strong><span>Airwallex/Stripe 推送到 <code>/api/webhooks/*</code>；幂等校验 → 写订单 → 更新订阅 → posthog-node 服务端打 <code>payment_success</code>（防前端漏报）。</span></li>
+    <li class="flow-step"><strong>Reconcile Cron</strong><span>GHA <code>payment-reconcile-cron.yml</code> 周期跑 <code>scripts/reconcile-payments.ts</code>，把 webhook 漏的订单补回；崩了会推 Pay-Bot。</span></li>
+    <li class="flow-step"><strong>Health Cron</strong><span><code>payment-health-cron.yml</code> 每 15 分钟从 PostHog 拉成功率，低于阈值推 Pay-Bot 告警。</span></li>
+  </ol>
+
+  <h2>核心数据流：主动推送（Push）</h2>
+  <ol class="flow">
+    <li class="flow-step"><strong>定时调度</strong><span>BullMQ <code>delayed</code> 任务由 worker 执行。频率分层 v2 上线后日均推送量 ↓60%。</span></li>
+    <li class="flow-step"><strong>角色选择 + 文案生成</strong><span><code>generate.message.ts</code> 走 LLM 生成首条文字 / 视频问句；包 Langfuse trace（这是 95% 的 LLM 消耗）。</span></li>
+    <li class="flow-step"><strong>多路径分发</strong><span>在线用户走 SSE 直推到 <code>/new-chat</code>；离线用户走 OneSignal Push；跨设备走站内信。</span></li>
+    <li class="flow-step"><strong>过滤兜底</strong><span>新用户角色为空时使用 fallback 角色；Pro 用户漏发的 follow-up bug 已修；空角色 + 在线用户 + 角色数都有降级路径。</span></li>
+  </ol>
+
+  <h2>核心数据模型</h2>
+  <table>
+    <thead><tr><th>表</th><th>用途</th><th>关键字段</th><th>注意</th></tr></thead>
+    <tbody>
+      <tr><td><code>users</code></td><td>业务用户</td><td>id (UUID), email, role</td><td>不是 Better Auth 的 session.user！</td></tr>
+      <tr><td><code>account / session / verification</code></td><td>Better Auth 内部</td><td>userId (text)</td><td>session.user.id 是 text，不能直接当 UUID 用</td></tr>
+      <tr><td><code>characters</code></td><td>AI 角色（系统 + UGC）</td><td>id, ownerId, isPrivate, status</td><td>UGC 默认强制 private（API 忽略前端 isPrivate）</td></tr>
+      <tr><td><code>messagesV2</code></td><td>当前消息表</td><td>chatId, userId (UUID), role, content (jsonb)</td><td><strong>列名是 camelCase</strong>，其他表 snake_case</td></tr>
+      <tr><td><code>orders</code></td><td>支付订单</td><td>userId (UUID), amount, status</td><td>userId 是 UUID，查询前必须翻译</td></tr>
+      <tr><td><code>subscriptions</code></td><td>订阅状态</td><td>userId, plan, expiresAt</td><td>Pro = 无限聊天</td></tr>
+      <tr><td><code>sparks_balance / sparks_ledger</code></td><td>虚拟币账本</td><td>userId, balance, txnType</td><td>仅用于解锁付费媒体，<strong>不</strong>用于聊天计费</td></tr>
+      <tr><td><code>memoryAnchors</code></td><td>角色记忆</td><td>chatId, anchor, strength</td><td>每 6 轮抽取，去重后注入 system prompt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>关键 API Route 一览</h2>
+  <table>
+    <thead><tr><th>路由</th><th>职责</th></tr></thead>
+    <tbody>
+      <tr><td><code>/api/chat</code></td><td>聊天主入口；扣免费额度 / Sparks；调 LLM；写 messagesV2</td></tr>
+      <tr><td><code>/api/auth/*</code></td><td>Better Auth 自动挂载（不要手动模拟 cookie）</td></tr>
+      <tr><td><code>/api/payment/create</code></td><td>创建订单 → 返回支付 URL（含三级降级）</td></tr>
+      <tr><td><code>/api/webhooks/airwallex</code><br><code>/api/webhooks/stripe</code></td><td>支付权威源；幂等；写订单 + posthog-node 打 payment_success</td></tr>
+      <tr><td><code>/api/sparks/*</code></td><td>余额查询、消费、退款</td></tr>
+      <tr><td><code>/api/media/*</code><br><code>/api/upload/*</code></td><td>R2 直传 + 付费内容权限校验</td></tr>
+      <tr><td><code>/api/characters/*</code></td><td>角色 CRUD（注意：UGC 强制 private）</td></tr>
+      <tr><td><code>/api/proactive-messaging/*</code></td><td>主动推送触发与状态</td></tr>
+      <tr><td><code>/api/admin/*</code></td><td>管理后台（角色、内容审核、用户）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>BullMQ Worker</h2>
+  <p>Worker 是独立进程（fly.toml 中 <code>[processes].worker</code>），用 esbuild 把 <code>scripts/start-worker.ts</code> 打成 <code>dist/worker.js</code> 单文件。它负责：</p>
+  <ul>
+    <li><strong>Proactive Messaging</strong> —— 推送召回（最大 LLM 消耗源）</li>
+    <li><strong>Memory Extraction</strong> —— 角色记忆锚点抽取</li>
+    <li><strong>定时任务</strong> —— 部分由 worker 跑，部分由 GHA cron 跑（见下表）</li>
+  </ul>
+  <div class="callout info">
+    <strong>队列深度监控</strong>已上线（<code>scripts/check-queue-depth.ts</code>）。每天 08:00 BJT 检查 waiting&gt;200/1000、failed&gt;50/200，超阈值推 Lark 卡片。
+  </div>
+
+  <h2>定时任务的两个家</h2>
+  <p>跑定时任务有两个地方，新人容易混：</p>
+  <table>
+    <thead><tr><th>类型</th><th>位置</th><th>用例</th></tr></thead>
+    <tbody>
+      <tr><td>BullMQ delayed jobs</td><td>worker 进程</td><td>主动推送、单用户调度</td></tr>
+      <tr><td>GitHub Actions cron</td><td><code>.github/workflows/*-cron.yml</code></td><td>支付对账、健康检查、每日报表、备份、邮件清理</td></tr>
+    </tbody>
+  </table>
+  <p>选择规则：跟用户上下文相关 → BullMQ；纯系统级、不依赖应用进程 → GHA cron（重启 fly 不影响、跑失败有 GHA 历史可查）。</p>
+
+  <div class="pager">
+    <a href="/softie/">
+      <div class="dir">← 上一级</div>
+      <div class="label">Softie 知识库首页</div>
+    </a>
+    <a class="next" href="/softie/getting-started">
+      <div class="dir">下一篇 →</div>
+      <div class="label">02 · 本地开发环境</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

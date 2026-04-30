@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softie 项目知识库 · 新人入门</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #ec4899;
+    --accent-soft: rgba(236, 72, 153, 0.15);
+    --accent-2: #8b5cf6;
+    --accent-2-soft: rgba(139, 92, 246, 0.12);
+    --accent-3: #60a5fa;
+    --accent-3-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  header.hero { padding: 16px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 {
+    font-size: 48px; font-weight: 700; margin: 0 0 16px;
+    letter-spacing: -0.02em; line-height: 1.15;
+    background: linear-gradient(135deg, #e4e7ed 20%, var(--accent) 80%, var(--accent-2) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { font-size: 19px; color: var(--text-dim); margin: 0 0 24px; max-width: 720px; }
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+  .hero-meta strong { color: var(--text-dim); font-weight: 500; }
+
+  h2 { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin: 56px 0 20px; }
+
+  /* Quick Facts */
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 48px; }
+  .fact { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 16px; }
+  .fact .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .fact .val { font-size: 16px; color: var(--text); font-weight: 600; }
+  .fact .sub { font-size: 12.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+  @media (max-width: 860px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Doc grid */
+  .doc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .doc-grid { grid-template-columns: 1fr; } }
+  .doc-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 22px 20px;
+    text-decoration: none; color: inherit; display: block;
+    transition: border-color .2s, transform .15s;
+  }
+  .doc-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .doc-card .num { font-size: 11px; color: var(--text-muted); letter-spacing: 0.12em; font-weight: 600; }
+  .doc-card h3 { margin: 6px 0 8px; font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.005em; }
+  .doc-card p { margin: 0; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+  .doc-card .arrow { display: inline-block; margin-top: 14px; font-size: 13px; color: var(--accent); font-weight: 500; }
+
+  /* External Links */
+  .links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .links { grid-template-columns: 1fr; } }
+  .link {
+    display: flex; flex-direction: column; gap: 4px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+    text-decoration: none; transition: border-color .2s;
+  }
+  .link:hover { border-color: var(--border-strong); }
+  .link .name { color: var(--text); font-weight: 600; font-size: 14px; }
+  .link .url { color: var(--text-muted); font-size: 12.5px; font-family: ui-monospace, "SF Mono", Menlo, monospace; word-break: break-all; }
+
+  /* Pillar callouts (the 4 things every newcomer must know) */
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px;
+    border-left: 3px solid var(--accent);
+  }
+  .pillar:nth-child(2) { border-left-color: var(--accent-2); }
+  .pillar:nth-child(3) { border-left-color: var(--accent-3); }
+  .pillar:nth-child(4) { border-left-color: var(--success); }
+  .pillar h4 { margin: 0 0 8px; font-size: 16px; font-weight: 600; color: var(--text); }
+  .pillar p { margin: 0; font-size: 14px; color: var(--text-dim); line-height: 1.65; }
+  .pillar code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><span style="color: var(--text-dim);">Softie</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">新人入门 · Onboarding</span>
+    <h1>Softie 项目知识库</h1>
+    <p class="subtitle">
+      Softie 是一个面向美国市场的 AI 陪伴聊天产品。这是新人入职后从零到能独立修 bug、上线功能所需的全部背景知识 —— 架构、开发、部署、监控、踩坑都在这里。
+    </p>
+    <div class="hero-meta">
+      <span><strong>产品</strong> · AI 陪伴聊天 + 角色 UGC + 媒体生成</span>
+      <span><strong>目标市场</strong> · 美国（英语为主）</span>
+      <span><strong>团队规模</strong> · 2 人</span>
+    </div>
+  </header>
+
+  <h2>项目快照</h2>
+  <div class="facts">
+    <div class="fact">
+      <div class="label">技术栈</div>
+      <div class="val">Next.js 15 · TS</div>
+      <div class="sub">App Router · Turbopack · Drizzle ORM</div>
+    </div>
+    <div class="fact">
+      <div class="label">部署平台</div>
+      <div class="val">Fly.io (LAX)</div>
+      <div class="sub">app: <code style="color:var(--text-dim)">softieweb</code> · main → 自动部署</div>
+    </div>
+    <div class="fact">
+      <div class="label">数据库</div>
+      <div class="val">PostgreSQL</div>
+      <div class="sub">Drizzle migrations · Redis(BullMQ+SSE)</div>
+    </div>
+    <div class="fact">
+      <div class="label">前端入口</div>
+      <div class="val">www.softie.ai</div>
+      <div class="sub">Web + Capacitor Android(Google Play)</div>
+    </div>
+  </div>
+
+  <h2>新人必读 · 四件大事</h2>
+  <div class="pillars">
+    <div class="pillar">
+      <h4>① 别动 messages 表</h4>
+      <p>当前消息系统是 <code>messagesV2</code>。老的 <code>messages</code> 表已废弃，但仍有遗留代码。所有读写都走 V2，转纯文本用 <code>convertMessageToPreviewText()</code>。</p>
+    </div>
+    <div class="pillar">
+      <h4>② ID 有两种，不要混</h4>
+      <p>Better Auth 的 <code>session.user.id</code> 是 text；DB 业务表（orders/messagesV2）的 <code>userId</code> 是 UUID。需要用 <code>businessUser.id</code> 翻译，否则 postgres 直接报错并 500。</p>
+    </div>
+    <div class="pillar">
+      <h4>③ 部署不会自动跑 migration</h4>
+      <p>Fly.io 部署仅启动新容器，不跑 <code>db:migrate</code>。新 migration 必须在 GHA workflow 里显式调用，否则线上 DB 会落后导致 42703。</p>
+    </div>
+    <div class="pillar">
+      <h4>④ 推完代码 ≠ 已部署</h4>
+      <p>必须 <code>gh run list</code> 确认 CI <code>success</code>，再用 <code>curl</code> 验证生产文件包含改动。CI 绿灯不代表 CDN 已刷新（橙云缓存 24h+）。</p>
+    </div>
+  </div>
+
+  <h2>知识库目录</h2>
+  <div class="doc-grid">
+    <a class="doc-card" href="/softie/architecture">
+      <div class="num">01 · ARCHITECTURE</div>
+      <h3>系统架构总览</h3>
+      <p>Next.js + Mastra Agents + Drizzle + Redis + R2 是怎么拼在一起的；核心数据流（聊天、支付、推送）如何走；BullMQ Worker 干什么。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/softie/getting-started">
+      <div class="num">02 · GETTING STARTED</div>
+      <h3>本地开发环境</h3>
+      <p>从 0 到能跑起 dev server：依赖、env、Docker Postgres+Redis、常用命令、Android 调试 (JDK 21)、调试技巧。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/softie/deployment">
+      <div class="num">03 · DEPLOYMENT</div>
+      <h3>部署与 CI/CD</h3>
+      <p>main 分支自动上线流程、GHA workflows 全景、回滚命令、必须遵守的「推完必验」规范、Cloudflare CDN 刷新。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/softie/observability">
+      <div class="num">04 · OBSERVABILITY</div>
+      <h3>监控与告警体系</h3>
+      <p>Sentry / PostHog / Langfuse / Clarity 分工；Lark Bot 矩阵（Pay-Bot / Cost-Bot / Ads-Bot）；每日数据监控自动化管道。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/softie/payments-and-sparks">
+      <div class="num">05 · PAYMENTS</div>
+      <h3>支付与 Sparks 经济</h3>
+      <p>Airwallex 主 + Stripe 备的双轨；订阅 vs Sparks 区别；webhook 幂等；reconcile cron；ID 翻译陷阱与 Branded Types 防御。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+    <a class="doc-card" href="/softie/lessons-learned">
+      <div class="num">06 · LESSONS</div>
+      <h3>踩坑经验（必读）</h3>
+      <p>过去半年踩过的所有坑按主题分类：环境变量、Drizzle、Capacitor、推送、Lark、Fly.io、定价、性能。新人省一周。</p>
+      <span class="arrow">阅读 →</span>
+    </a>
+  </div>
+
+  <h2>外部资源</h2>
+  <div class="links">
+    <a class="link" href="https://www.softie.ai" target="_blank">
+      <span class="name">生产站点</span>
+      <span class="url">https://www.softie.ai</span>
+    </a>
+    <a class="link" href="https://github.com/" target="_blank">
+      <span class="name">GitHub 仓库</span>
+      <span class="url">softieweb (private)</span>
+    </a>
+    <a class="link" href="https://fly.io/apps/softieweb" target="_blank">
+      <span class="name">Fly.io 控制台</span>
+      <span class="url">fly.io/apps/softieweb</span>
+    </a>
+    <a class="link" href="https://us.i.posthog.com/project/368707" target="_blank">
+      <span class="name">PostHog · Softie</span>
+      <span class="url">project 368707</span>
+    </a>
+    <a class="link" href="https://sentry.io/organizations/softieai/" target="_blank">
+      <span class="name">Sentry</span>
+      <span class="url">org: softieai</span>
+    </a>
+    <a class="link" href="https://us.cloud.langfuse.com" target="_blank">
+      <span class="name">Langfuse</span>
+      <span class="url">us.cloud.langfuse.com</span>
+    </a>
+    <a class="link" href="https://clarity.microsoft.com" target="_blank">
+      <span class="name">Microsoft Clarity</span>
+      <span class="url">project sb2b5hua80</span>
+    </a>
+    <a class="link" href="https://play.google.com/console" target="_blank">
+      <span class="name">Google Play Console</span>
+      <span class="url">ai.softie.web · 1.0.2</span>
+    </a>
+    <a class="link" href="https://dash.cloudflare.com" target="_blank">
+      <span class="name">Cloudflare</span>
+      <span class="url">DNS · CDN · R2 · 域名</span>
+    </a>
+  </div>
+
+  <footer>
+    Softie 知识库 · 最后更新 2026-05-01 · <a href="/">← 返回 upio.ai</a>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>支付与 Sparks 经济 · Softie</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #ec4899; --accent-soft: rgba(236, 72, 153, 0.15);
+    --accent-2: #8b5cf6; --accent-2-soft: rgba(139, 92, 246, 0.15);
+    --accent-3: #60a5fa; --accent-3-soft: rgba(96, 165, 250, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  pre { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.65; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13px; }
+  a { color: var(--accent-3); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .callout { background: var(--accent-soft); border: 1px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text); }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+  .callout.info { background: var(--accent-3-soft); border-color: var(--accent-3); border-left-color: var(--accent-3); }
+  .callout.danger { background: var(--danger-soft); border-color: var(--danger); border-left-color: var(--danger); }
+  .callout strong { color: var(--text); }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  @media (max-width: 720px) { .compare { grid-template-columns: 1fr; } }
+  .compare-col { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+  .compare-col.left { border-top: 3px solid var(--accent-3); }
+  .compare-col.right { border-top: 3px solid var(--accent); }
+  .compare-col h3 { margin-top: 0; }
+  .compare-col ul { padding-left: 18px; }
+
+  .tier { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+  @media (max-width: 720px) { .tier { grid-template-columns: 1fr; } }
+  .tier-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+  .tier-card.middle { border-color: var(--accent); }
+  .tier-card .price { font-size: 28px; font-weight: 700; color: var(--text); margin: 8px 0; }
+  .tier-card .name { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .tier-card ul { font-size: 13.5px; padding-left: 18px; margin: 8px 0 0; }
+
+  .step { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px 18px 50px; margin-bottom: 8px; position: relative; counter-increment: stp; }
+  .steps { counter-reset: stp; }
+  .step::before { content: counter(stp); position: absolute; left: 14px; top: 16px; width: 26px; height: 26px; border-radius: 7px; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700; }
+  .step h4 { margin: 0 0 4px; font-size: 15.5px; color: var(--text); }
+  .step p { margin: 0; font-size: 14px; color: var(--text-dim); }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/softie/">Softie</a><span>/</span>
+    <span style="color: var(--text-dim);">支付与 Sparks 经济</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">05 · Payments</span>
+    <h1>支付与 Sparks 经济</h1>
+    <p class="subtitle">
+      Softie 收入分两条线：订阅（聊天解锁）+ Sparks（媒体解锁）。这一页讲清楚两套体系怎么工作、怎么扣费、出错怎么修。新人改任何 <code>/api/payment/*</code> 前必须读完。
+    </p>
+  </header>
+
+  <h2>核心概念：两条收入线</h2>
+  <div class="compare">
+    <div class="compare-col left">
+      <h3>订阅（Subscription）</h3>
+      <p>解锁聊天的核心模型。不是按消息扣费。</p>
+      <ul>
+        <li><strong>免费用户</strong>：每月 5 条免费消息</li>
+        <li><strong>Pro 用户</strong>：无限聊天</li>
+        <li><strong>计费</strong>：月付 / 年付 / 终身（套餐配置见 <code>src/config/</code>）</li>
+        <li><strong>状态字段</strong>：<code>subscriptions.plan</code>、<code>expiresAt</code></li>
+      </ul>
+    </div>
+    <div class="compare-col right">
+      <h3>Sparks（虚拟币）</h3>
+      <p>仅用于解锁付费媒体（图片/视频/语音）。</p>
+      <ul>
+        <li><strong>不</strong>用于聊天计费 —— 这是 V2 改造后的明确边界</li>
+        <li><strong>消费</strong>：媒体解锁、角色 UGC 创建（已废除，2026-04-11 改为强制 private + 0 Sparks）</li>
+        <li><strong>充值</strong>：通过订阅赠送 / 单独购买 Sparks 包</li>
+        <li><strong>账本</strong>：<code>sparks_balance</code> + <code>sparks_ledger</code>（双写）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout info">
+    <strong>V2 计费模型：</strong>2025 年起明确分工 —— 订阅管聊天上限，Sparks 管媒体解锁。改任何聊天计费逻辑前，先确认走的是订阅检查（<code>subscription-service.ts</code>），不是 Sparks 扣减（<code>sparks-service.ts</code>）。
+  </div>
+
+  <h2>订阅套餐（参考）</h2>
+  <div class="tier">
+    <div class="tier-card">
+      <div class="name">Free</div>
+      <div class="price">$0</div>
+      <ul>
+        <li>每月 5 条免费聊天</li>
+        <li>所有公开角色可见</li>
+        <li>不能解锁付费媒体</li>
+      </ul>
+    </div>
+    <div class="tier-card middle">
+      <div class="name">Pro</div>
+      <div class="price">$9.99/月</div>
+      <ul>
+        <li>无限聊天</li>
+        <li>赠送 Sparks（按套餐）</li>
+        <li>优先模型 / 更长记忆</li>
+      </ul>
+    </div>
+    <div class="tier-card">
+      <div class="name">Lifetime</div>
+      <div class="price">$99</div>
+      <ul>
+        <li>一次性付清</li>
+        <li>价格从 config 动态读取</li>
+        <li><strong>禁止</strong>写虚假折扣</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout danger">
+    <strong>不允许虚假营销数字（feedback_no_fake_marketing.md）：</strong>所有展示的折扣、原价、优惠必须从 <code>src/config/</code> 动态读取。曾经写过「70% OFF」字面量，2026-03-29 已全部清理。新人写 paywall UI 时必须用 config 值，不能 hardcode。
+  </div>
+
+  <h2>支付通道：Airwallex 主 + Stripe 备</h2>
+
+  <h3>三级降级</h3>
+  <p>这是 2026-03-28 PR #38 修的核心架构 —— 单一 SDK 失败不能整体阻塞付款：</p>
+  <ol class="steps">
+    <li class="step">
+      <h4>Airwallex 嵌入式 SDK</h4>
+      <p>默认走 <code>@airwallex/components-sdk</code>，前端嵌入支付组件，体验最顺。</p>
+    </li>
+    <li class="step">
+      <h4>Airwallex URL 直跳</h4>
+      <p>SDK 加载失败 / 浏览器拦截 → 退回 hosted page URL 直接跳转。</p>
+    </li>
+    <li class="step">
+      <h4>Stripe 兜底</h4>
+      <p>Airwallex 整体不可用 → 用 Stripe Checkout。Stripe 需要单独的 webhook endpoint。</p>
+    </li>
+  </ol>
+  <p>三层都失败才返回错误给用户。Sentry 会按降级层级打 tag，方便看哪一层挂了多。</p>
+
+  <h2>支付完整流程</h2>
+  <ol class="steps">
+    <li class="step">
+      <h4>Paywall 曝光</h4>
+      <p>用户达到 5 条限额 / 点击付费媒体 / 主动点订阅入口 → <code>SubscriptionsDrawer</code> 弹出。曝光时 PostHog 打 <code>paywall_view</code>。</p>
+    </li>
+    <li class="step">
+      <h4>选套餐 → POST /api/payment/create</h4>
+      <p>API 校验 session → 翻译 <code>session.user.id</code> → <code>businessUser.id</code> → 在 <code>orders</code> 表插入 PENDING 行 → 调 Airwallex/Stripe 创建支付意图 → 返回 URL/intent_id。</p>
+    </li>
+    <li class="step">
+      <h4>用户在第三方页面支付</h4>
+      <p>跳 Airwallex/Stripe hosted page 或嵌入组件。完成后 redirect 回 <code>/payment/success</code>，前端打 <code>payment_success</code>（<strong>仅兜底，不是权威源</strong>）。</p>
+    </li>
+    <li class="step">
+      <h4>Webhook（权威源）</h4>
+      <p><code>/api/webhooks/airwallex</code> 或 <code>/api/webhooks/stripe</code> 收到事件 → 验签 → 幂等检查 → 更新 <code>orders.status = COMPLETED</code> → 升级 <code>subscriptions</code> / 加 Sparks → posthog-node 服务端打 <code>payment_success</code>（防前端漏报）。</p>
+    </li>
+    <li class="step">
+      <h4>Reconcile Cron（兜底）</h4>
+      <p>GHA <code>payment-reconcile-cron.yml</code> 周期跑：找 webhook 漏的 PENDING 订单（超过 N 分钟）→ 主动查 Airwallex/Stripe API 状态 → 若已完成则补单。</p>
+    </li>
+    <li class="step">
+      <h4>Health Cron</h4>
+      <p><code>payment-health-cron.yml</code> 每 15 分钟从 PostHog 拉转化率，跌破基线推 Pay-Bot。设计目标：「24h 0 转化」级别故障在 15 分钟内抓到。</p>
+    </li>
+  </ol>
+
+  <h2>ID 翻译陷阱（最重要的事）</h2>
+  <div class="callout danger">
+    <strong>这是 Softie 历史上最反复的支付 bug 来源。</strong>
+  </div>
+  <p>系统里有<strong>两种 ID</strong>：</p>
+  <table>
+    <thead><tr><th>来源</th><th>类型</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td><code>session.user.id</code>（Better Auth）</td><td><strong>text</strong></td><td>auth 内部、前端展示</td></tr>
+      <tr><td><code>businessUser.id</code> / <code>users.id</code></td><td><strong>UUID</strong></td><td><code>orders</code>、<code>messagesV2</code>、<code>subscriptions</code> 等所有业务表的 <code>userId</code></td></tr>
+    </tbody>
+  </table>
+  <p>查询 orders/subscriptions 时如果直接：</p>
+  <pre><code>// ❌ 错误 —— postgres 直接报错并 500，原始 SQL 还会泄露到浏览器
+eq(orders.userId, session.user.id)</code></pre>
+  <p>正确写法：</p>
+  <pre><code>// ✅ 先翻译
+const businessUser = await getBusinessUserByAuthId(session.user.id);
+if (!businessUser) return 401;
+eq(orders.userId, businessUser.id)</code></pre>
+
+  <h3>Branded Types 防御层（5c92239）</h3>
+  <p>2026-04-23 加了 <code>AuthUserId</code> / <code>BusinessUserId</code> 两个 branded type，让 TypeScript 编译期就拒绝混用：</p>
+  <pre><code>type AuthUserId = string &amp; { __brand: 'AuthUserId' };
+type BusinessUserId = string &amp; { __brand: 'BusinessUserId' };
+
+// orders.userId 类型是 BusinessUserId，传 AuthUserId 进去直接编译报错</code></pre>
+  <p>50 个文件 / 115 处历史错配在那次 PR 里全修了。<strong>新代码只要用 branded type，就不会再犯</strong>。</p>
+
+  <h2>Webhook 处理要点</h2>
+  <ul>
+    <li><strong>幂等</strong>：同一 event_id 不能重复加积分 / 升订阅。用 webhook events 表去重</li>
+    <li><strong>验签</strong>：Airwallex 用 HMAC-SHA256；Stripe 用官方 SDK <code>constructEvent</code></li>
+    <li><strong>服务端 PostHog 兜底</strong>：必须用 <code>posthog-node</code> 在 webhook 里打 <code>payment_success</code> / <code>payment_failed</code>，不能只靠前端（前端可能在 redirect 时丢事件）</li>
+    <li><strong>Sentry 包裹</strong>：webhook 入口用 <code>withSentry</code> 或 try/catch + captureException</li>
+    <li><strong>不要</strong>在 webhook 里跑长耗时操作；扔到 BullMQ 异步</li>
+  </ul>
+
+  <h2>Sparks 服务</h2>
+  <p>核心文件：<code>src/lib/sparks/</code> + <code>src/lib/sparks-service.ts</code></p>
+  <ul>
+    <li><strong>双写账本</strong>：每次扣减都写 <code>sparks_balance</code> 和 <code>sparks_ledger</code>，事务包裹</li>
+    <li><strong>退款</strong>：媒体生成失败 / 用户取消 → ledger 补反向条目</li>
+    <li><strong>权限校验</strong>：解锁付费媒体走 <code>media-permission-service.ts</code> —— 既要看 Sparks 余额，也要看是否已购买</li>
+    <li><strong>Pro 赠送</strong>：订阅成功的 webhook 里给 Pro 用户加 Sparks（按套餐）</li>
+  </ul>
+
+  <h2>本地测试支付</h2>
+  <ol>
+    <li>用 sandbox key（<code>NEXT_PUBLIC_AIRWALLEX_ENVIRONMENT=demo</code>）</li>
+    <li>本地起 ngrok 暴露 <code>localhost:3000</code></li>
+    <li>在 Airwallex/Stripe 控制台改 webhook URL → ngrok 地址</li>
+    <li>在 demo 模式发起支付 → 用测试卡号完成</li>
+    <li><strong>测完改回</strong>，否则同事的测试事件会发到你的 ngrok</li>
+  </ol>
+  <p>验证：<code>pnpm payment:check</code>（<code>scripts/check-airwallex-config.ts</code>）会自检 key 是否配齐。</p>
+
+  <h2>关键文件速查</h2>
+  <table>
+    <thead><tr><th>文件</th><th>职责</th></tr></thead>
+    <tbody>
+      <tr><td><code>src/lib/payment/payment-service.ts</code></td><td>统一支付服务入口</td></tr>
+      <tr><td><code>src/lib/payment/payment-types.ts</code></td><td>类型定义（Branded Types 在这里）</td></tr>
+      <tr><td><code>src/lib/payment/providers/</code></td><td>Airwallex / Stripe 各自的 provider 实现</td></tr>
+      <tr><td><code>src/lib/airwallex-client.ts</code></td><td>Airwallex SDK 封装</td></tr>
+      <tr><td><code>src/lib/unified-payment-service.ts</code></td><td>三级降级路由</td></tr>
+      <tr><td><code>src/lib/subscription-service.ts</code></td><td>订阅状态读写</td></tr>
+      <tr><td><code>src/lib/sparks-service.ts</code></td><td>Sparks 余额 + ledger</td></tr>
+      <tr><td><code>src/lib/sparks-config.ts</code></td><td>套餐定价、赠送规则（动态读取，禁止 hardcode）</td></tr>
+      <tr><td><code>src/lib/media-permission-service.ts</code></td><td>付费媒体权限</td></tr>
+      <tr><td><code>scripts/check-payment-health.ts</code></td><td>15 分钟健康检查</td></tr>
+      <tr><td><code>scripts/reconcile-payments.ts</code></td><td>对账补单（GHA cron）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>常见事故与修法</h2>
+  <table>
+    <thead><tr><th>症状</th><th>真因</th><th>修</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>POST /api/payment/create 500</td>
+        <td>查 orders 用了 session.user.id（text）当 UUID</td>
+        <td>翻译成 businessUser.id；并用 Branded Type 编译期防御</td>
+      </tr>
+      <tr>
+        <td>支付成功但订阅没升级</td>
+        <td>webhook 验签失败 / 超时 / 没幂等</td>
+        <td>看 webhook 入口 Sentry；reconcile cron 会兜底</td>
+      </tr>
+      <tr>
+        <td>Sparks 重复扣 / 重复加</td>
+        <td>没有去重，同一 event_id 处理两次</td>
+        <td>webhook events 表强制 unique；ledger 用 transaction</td>
+      </tr>
+      <tr>
+        <td>SubscriptionsDrawer 弹不出来</td>
+        <td>snapPoints 数组越界（98% 流失率根因）</td>
+        <td>已修；改 drawer 时确认 snapPoints[index] 不越界</td>
+      </tr>
+      <tr>
+        <td>支付成功但 PostHog 没事件</td>
+        <td>只靠前端打点，redirect 时丢了</td>
+        <td>webhook 必须用 posthog-node 服务端打</td>
+      </tr>
+      <tr>
+        <td>反复改两轮没修好的 Better Auth 问题</td>
+        <td>手动模拟 cookie 格式</td>
+        <td><strong>不要</strong>手工构造 session_data；只设 session_token，让 Better Auth 自己处理</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <a href="/softie/observability">
+      <div class="dir">← 上一篇</div>
+      <div class="label">04 · 监控与告警</div>
+    </a>
+    <a class="next" href="/softie/lessons-learned">
+      <div class="dir">下一篇 →</div>
+      <div class="label">06 · 踩坑经验（必读）</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

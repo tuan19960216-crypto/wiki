@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本地开发环境 · Softie</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #ec4899; --accent-soft: rgba(236, 72, 153, 0.15);
+    --accent-2: #8b5cf6; --accent-2-soft: rgba(139, 92, 246, 0.15);
+    --accent-3: #60a5fa; --accent-3-soft: rgba(96, 165, 250, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 10px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); margin: 0 0 16px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  pre { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.65; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13px; }
+  a { color: var(--accent-3); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 12px 16px 12px 44px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; position: relative; color: var(--text); font-size: 14.5px; }
+  .checklist li::before { content: '✓'; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; border-radius: 5px; background: var(--success-soft); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+  .checklist li .desc { display: block; font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  .step { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 14px; position: relative; counter-increment: stp; }
+  .steps { counter-reset: stp; }
+  .step .step-num { position: absolute; left: -10px; top: 18px; width: 28px; height: 28px; border-radius: 8px; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+  .step h3 { margin-top: 0; padding-left: 22px; }
+  .step pre { margin: 12px 0 0; }
+  .step p:last-child { margin-bottom: 0; }
+
+  .callout { background: var(--accent-soft); border: 1px solid var(--accent); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--text); }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); border-left-color: var(--warning); }
+  .callout.info { background: var(--accent-3-soft); border-color: var(--accent-3); border-left-color: var(--accent-3); }
+  .callout.danger { background: var(--danger-soft); border-color: var(--danger); border-left-color: var(--danger); }
+  .callout strong { color: var(--text); }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/softie/">Softie</a><span>/</span>
+    <span style="color: var(--text-dim);">本地开发环境</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">02 · Getting Started</span>
+    <h1>本地开发环境</h1>
+    <p class="subtitle">
+      从拿到 Mac、克隆仓库到 <code style="font-size:15px">pnpm dev</code> 在 3000 端口跑起来。新人按这一页一步步走，正常 30 分钟内能进生产化的开发循环。
+    </p>
+  </header>
+
+  <h2>前置依赖</h2>
+  <ul class="checklist">
+    <li><strong>Node.js 22.x</strong> ·  CI 用 22；本地用 nvm 装 <code>nvm install 22 && nvm use 22</code><span class="desc">不要用 18/20，AI SDK v5 在老版本 Node 有兼容问题</span></li>
+    <li><strong>pnpm</strong> · 项目锁定 pnpm，<strong>禁止</strong> npm/yarn<span class="desc">CLAUDE.md 写明：用 <code>pnpm</code>，跑 TS 脚本用 <code>pnpm tsx</code> 而不是 <code>pnpx tsx</code></span></li>
+    <li><strong>Docker Desktop</strong> · 用 <code>pnpm db:local:up</code> 起 Postgres + Redis<span class="desc">本地不要连生产 DB，连开发 DB 都很危险（无 staging）</span></li>
+    <li><strong>JDK 21</strong>（仅做 Android 时）· Capacitor 6+ 必须 Java 21<span class="desc">默认 macOS 是 JDK 17，跑 gradle 会报 invalid source release</span></li>
+    <li><strong>fly CLI</strong>（部署 / 排障时）· <code>brew install flyctl</code><span class="desc">需要 Gus 邀请加入 fly 组织才能 ssh / 看 logs</span></li>
+    <li><strong>gh CLI</strong> · <code>brew install gh</code><span class="desc">部署后必须 <code>gh run list</code> 验证 CI 绿灯，是项目硬规范</span></li>
+  </ul>
+
+  <h2>5 步起项目</h2>
+  <div class="steps">
+
+    <div class="step">
+      <span class="step-num">1</span>
+      <h3>克隆 + 安装依赖</h3>
+      <pre><code>git clone &lt;repo&gt; softieweb
+cd softieweb
+nvm use 22
+pnpm install</code></pre>
+      <p>第一次 install 会比较慢（几百个包 + Capacitor 原生）。Husky 会自动装 pre-commit hook 跑 Prettier + ESLint。</p>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span>
+      <h3>配置环境变量</h3>
+      <p>找 Gus 要 <code>.env.local</code>。生产 secret 走 Fly.io / GHA Secrets，本地用单独一份。最少需要：</p>
+      <pre><code>DATABASE_URL="postgres://postgres:postgres@localhost:5432/softie"
+REDIS_URL="redis://localhost:6379"
+BETTER_AUTH_SECRET="..."   # openssl rand -hex 32
+BETTER_AUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+
+# AI（生产 key 即可，量小不会爆）
+OPENROUTER_API_KEY="..."
+GOOGLE_GENERATIVE_AI_API_KEY="..."
+
+# 支付（用 sandbox 模式即可，不要用 prod key）
+AIRWALLEX_CLIENT_ID="..."
+AIRWALLEX_API_KEY="..."
+NEXT_PUBLIC_AIRWALLEX_ENVIRONMENT="demo"
+
+# 可选：本地不开 R2 上传也行，paywall 流程不依赖
+R2_ACCOUNT_ID="..."
+R2_ACCESS_KEY_ID="..."
+R2_SECRET_ACCESS_KEY="..."</code></pre>
+      <div class="callout warn">
+        <strong>NEXT_PUBLIC_*</strong> 是构建时替换。改完必须重启 dev server，热重载读不到。要动态运行时读取得用 <code>process.env[key]</code> 字符串索引绕过 webpack。
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span>
+      <h3>起本地 DB + Redis</h3>
+      <pre><code>pnpm db:local:up   # docker compose 起 postgres + redis
+pnpm db:push       # 把 schema 推到本地 DB（开发用，生产用 db:migrate）
+pnpm db:seed       # 灌测试角色 + 用户</code></pre>
+      <p>关 DB 用 <code>pnpm db:local:down</code>。需要图形界面看表用 <code>pnpm db:studio</code>。</p>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <h3>起 Web + Worker</h3>
+      <pre><code># 推荐：一条命令同时起 Next.js 和 BullMQ worker
+pnpm dev:all
+
+# 或者分开起：
+pnpm dev          # Next.js (Turbopack)，端口 3000
+pnpm dev:worker   # BullMQ worker watch 模式</code></pre>
+      <p>不起 worker 也能登录、发消息，但<strong>主动推送、记忆抽取</strong>不会触发。</p>
+      <div class="callout info">
+        端口 3000 已经被占用很常见 —— 先 <code>curl localhost:3000</code> 看看是不是上次没关的进程。要查跑了什么用 <code>lsof -i :3000</code>。
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span>
+      <h3>验证：端到端跑通</h3>
+      <ol>
+        <li>浏览器打开 <code>http://localhost:3000</code></li>
+        <li>注册一个测试账号（邮箱+密码即可，不需要走 Google OAuth）</li>
+        <li>进 <code>/discover</code>，点一个角色 → 进入 <code>/new-chat/[id]</code></li>
+        <li>发消息，能看到 SSE 流式返回字</li>
+        <li>检查 <code>messagesV2</code> 表里有新行</li>
+      </ol>
+      <p>能走完 = 环境装好。</p>
+    </div>
+
+  </div>
+
+  <h2>常用命令清单</h2>
+  <table>
+    <thead><tr><th>命令</th><th>什么时候用</th></tr></thead>
+    <tbody>
+      <tr><td><code>pnpm dev:all</code></td><td>日常开发，web + worker 一起</td></tr>
+      <tr><td><code>pnpm lint</code></td><td>提 PR 前快速验证（ESLint 足以判断能否构建）</td></tr>
+      <tr><td><code>pnpm type-check</code></td><td>tsc --noEmit；改 schema/API 后必跑</td></tr>
+      <tr><td><code>pnpm test:unit</code></td><td>vitest 单元测试（<code>tests/unit/</code>）</td></tr>
+      <tr><td><code>pnpm test:integration</code></td><td>vitest 集成测试，连真 DB</td></tr>
+      <tr><td><code>pnpm test</code></td><td>Playwright e2e</td></tr>
+      <tr><td><code>pnpm test:headed</code></td><td>Playwright 带浏览器界面（调试用）</td></tr>
+      <tr><td><code>pnpm db:generate</code></td><td>改了 <code>src/lib/db/schema.ts</code> 后生成 migration</td></tr>
+      <tr><td><code>pnpm db:migrate</code></td><td>把生成的 SQL 应用到当前连接的 DB</td></tr>
+      <tr><td><code>pnpm db:push</code></td><td><strong>仅本地</strong>：直接 push schema 不生成 migration（开发快迭代）</td></tr>
+      <tr><td><code>pnpm db:studio</code></td><td>开 Drizzle Studio 看表</td></tr>
+      <tr><td><code>pnpm cap:sync</code></td><td>改完前端，同步到 Android 工程</td></tr>
+      <tr><td><code>pnpm cap:open:android</code></td><td>打开 Android Studio</td></tr>
+      <tr><td><code>pnpm build</code></td><td>完整生产构建（一般不用，CI 跑）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Android 调试要点</h2>
+  <p>Capacitor 把 <code>www.softie.ai</code> 嵌进原生 WebView。本地调试两条路：</p>
+  <ol>
+    <li><strong>远程模式</strong>：直接连生产域名（默认）。改前端不需要 cap sync，但调试需要在 Chrome <code>chrome://inspect</code> 查 WebView。</li>
+    <li><strong>本地模式</strong>：把 <code>capacitor.config.ts</code> 的 <code>server.url</code> 改成局域网 IP+3000，能调本地代码，但 Google 登录会因 origin 不匹配失败。</li>
+  </ol>
+  <div class="callout danger">
+    <strong>JDK 必须 21</strong>。如果 gradle 报 <code>invalid source release: 21</code>：<br>
+    <code>brew install openjdk@21 && export JAVA_HOME=/opt/homebrew/opt/openjdk@21</code>
+  </div>
+  <div class="callout warn">
+    <strong>Google 登录陷阱</strong>：Capacitor Google Auth 插件只读 <code>clientId</code> 字段，不是 <code>serverClientId</code>（虽然官方文档曾经写错过）。配错会返回 DEVELOPER_ERROR 或账号选择器立即 cancel。
+  </div>
+
+  <h2>调试技巧</h2>
+
+  <h3>看支付流程</h3>
+  <p>本地起 sandbox，发起支付后跳 Airwallex demo 页。看 webhook 得用 <code>ngrok</code> 把本地暴露出去 + 在 Airwallex 控制台改 webhook URL。临时调通后记得改回去，不然测试事件会污染同事环境。</p>
+
+  <h3>看 LLM trace</h3>
+  <p>所有 LLM 调用都过 Langfuse（<code>src/lib/langfuse.ts</code>）。本地开发 trace 默认上报到生产 Langfuse 项目，<strong>看自己的就过滤 userId</strong>。</p>
+
+  <h3>看 SSE 流</h3>
+  <p>浏览器 DevTools → Network → 类型 EventStream，能看到 token 一条条进来。worker 一侧的 Redis pub/sub 用 <code>redis-cli SUBSCRIBE chat:*</code> 看。</p>
+
+  <h3>命中 NSFW 模型</h3>
+  <p>主模型在 <code>src/lib/ai-config.ts</code>。降级模型不能比主模型贵；轻量任务（标题生成等）用 grok-4-fast。改完先跑 <code>pnpm test:integration</code>。</p>
+
+  <h2>分支与提交规范</h2>
+  <ul>
+    <li><strong>分支</strong>：直接在 <code>main</code> 上推没问题（2 人团队），重大改动开 PR 让 Claude 自动审查（<code>.github/workflows/claude.yml</code>）</li>
+    <li><strong>Conventional Commits</strong>：<code>feat:</code> / <code>fix:</code> / <code>chore:</code> / <code>docs:</code></li>
+    <li><strong>Husky pre-commit</strong>：自动跑 Prettier + ESLint，格式化是强制的</li>
+    <li><strong>禁用 --no-verify</strong>：hook 失败必须修，不能 bypass</li>
+  </ul>
+
+  <h2>OpenSpec 工作流</h2>
+  <p>大改动（架构调整、契约变更、breaking change）走 OpenSpec：先读 <code>openspec/AGENTS.md</code>，写 spec → 评审 → 实现 → 验收。日常 bug 修复和小 feature 不需要走，直接动手。</p>
+
+  <div class="pager">
+    <a href="/softie/architecture">
+      <div class="dir">← 上一篇</div>
+      <div class="label">01 · 系统架构总览</div>
+    </a>
+    <a class="next" href="/softie/deployment">
+      <div class="dir">下一篇 →</div>
+      <div class="label">03 · 部署与 CI/CD</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>

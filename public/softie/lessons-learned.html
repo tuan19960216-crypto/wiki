@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>踩坑经验 · Softie</title>
+<style>
+  :root {
+    --bg: #0b0d12; --bg-elevated: #141821; --bg-deep: #1a1f2b;
+    --border: #242a38; --border-strong: #2f3646;
+    --text: #e4e7ed; --text-dim: #9ba3b4; --text-muted: #6b7384;
+    --accent: #ec4899; --accent-soft: rgba(236, 72, 153, 0.15);
+    --accent-2: #8b5cf6; --accent-2-soft: rgba(139, 92, 246, 0.15);
+    --accent-3: #60a5fa; --accent-3-soft: rgba(96, 165, 250, 0.15);
+    --success: #34d399; --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24; --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 760px; }
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; padding-top: 8px; border-top: 1px solid var(--border); }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+  h3 { font-size: 17px; font-weight: 600; margin: 24px 0 6px; letter-spacing: -0.005em; color: var(--text); }
+  p { color: var(--text-dim); margin: 0 0 12px; }
+  ul, ol { color: var(--text-dim); padding-left: 22px; margin: 0 0 12px; }
+  li { margin-bottom: 4px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 13.5px; color: var(--accent); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  pre { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-size: 13px; line-height: 1.6; margin: 12px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13px; }
+  a { color: var(--accent-3); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .why { background: var(--bg-elevated); border-left: 3px solid var(--accent); padding: 14px 18px; border-radius: 8px; margin: 8px 0 14px; font-size: 14px; }
+  .why p { margin: 0 0 6px; color: var(--text-dim); }
+  .why p:last-child { margin-bottom: 0; }
+  .why strong { color: var(--text); font-weight: 600; }
+
+  .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 40px; }
+  .toc h3 { margin: 0 0 12px; padding: 0; border: none; font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .toc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px; }
+  @media (max-width: 720px) { .toc-grid { grid-template-columns: 1fr; } }
+  .toc-grid a { font-size: 14px; padding: 6px 0; display: block; }
+
+  .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; text-decoration: none; flex: 1; max-width: 320px; transition: border-color .2s; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .dir { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pager .label { color: var(--text); font-weight: 600; margin-top: 4px; }
+  .pager .next { text-align: right; margin-left: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/softie/">Softie</a><span>/</span>
+    <span style="color: var(--text-dim);">踩坑经验</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">06 · Lessons Learned</span>
+    <h1>踩坑经验（必读）</h1>
+    <p class="subtitle">
+      这是过去半年（2025年底 - 2026年中）所有付出代价才学到的教训，按主题分类。新人入职先扫一遍标题，遇到对应场景再回来读细节，能省一周。
+    </p>
+  </header>
+
+  <div class="toc">
+    <h3>跳转</h3>
+    <div class="toc-grid">
+      <a href="#env">① 环境变量与构建</a>
+      <a href="#auth">② Auth & ID</a>
+      <a href="#drizzle">③ Drizzle & 数据库</a>
+      <a href="#capacitor">④ Capacitor / Android</a>
+      <a href="#payment">⑤ 支付与计费</a>
+      <a href="#push">⑥ 推送与召回</a>
+      <a href="#langfuse">⑦ Langfuse / LLM</a>
+      <a href="#posthog">⑧ PostHog 埋点</a>
+      <a href="#sentry">⑨ Sentry 监控</a>
+      <a href="#flyio">⑩ Fly.io 部署</a>
+      <a href="#lark">⑪ Lark 推送</a>
+      <a href="#nextjs">⑫ Next.js 行为</a>
+      <a href="#perf">⑬ 性能</a>
+      <a href="#process">⑭ 工作流程</a>
+    </div>
+  </div>
+
+  <h2 id="env">① 环境变量与构建</h2>
+
+  <h3>NEXT_PUBLIC_* 是构建时替换</h3>
+  <p>不是运行时读 <code>process.env</code>。改完必须重启 dev server / 重新构建。</p>
+  <div class="why"><p><strong>Why：</strong>Webpack 会在 build 阶段把 <code>process.env.NEXT_PUBLIC_FOO</code> 静态替换成字面量。</p>
+  <p><strong>How：</strong>需要运行时动态读取（极少场景）用 <code>process.env[key]</code> 字符串索引绕过 webpack。</p></div>
+
+  <h3>fly.toml 和 GHA workflow 必须双声明</h3>
+  <p><code>NEXT_PUBLIC_*</code> 在 <code>fly.toml</code> 的 <code>[build.args]</code> 写了不够 —— GHA 用 docker/build-push-action 独立构建，<code>fly.toml</code> 不生效。</p>
+  <div class="why"><p><strong>Why：</strong><code>fly.toml</code> 只对本地 <code>flyctl deploy</code> 生效；CI 走的是独立 docker build。</p>
+  <p><strong>How：</strong>每次新增 NEXT_PUBLIC_* 必须改两处。换 token 同理：本地 + GHA secrets + fly.toml + workflow build-args 四处全改。</p></div>
+
+  <h3>GHA secret 引用 ≠ 已配置</h3>
+  <p>workflow 里写 <code>${{ secrets.FOO }}</code> 不代表 <code>FOO</code> 存在。会静默用空值。</p>
+  <div class="why"><p><strong>How：</strong>必须 <code>gh secret list</code> 确认存在再触发；不要相信 workflow 文件。</p></div>
+
+  <h2 id="auth">② Auth & ID 类型</h2>
+
+  <h3>session.user.id ≠ users.id (UUID)</h3>
+  <p>Better Auth 的 <code>session.user.id</code> 是 text，业务表的 <code>userId</code> 是 UUID，混用 postgres 直接拒绝并 500 + 泄露 SQL 到浏览器。</p>
+  <div class="why"><p><strong>How：</strong>查 <code>orders</code> / <code>messagesV2</code> / <code>subscriptions</code> 等任何 UUID 列前，先翻译成 <code>businessUser.id</code>。已加 Branded Types 编译期防御。</p></div>
+
+  <h3>不要手动模拟框架内部 cookie</h3>
+  <p>Better Auth 的 <code>session_data</code> 手工构造必失败。只设 <code>session_token</code>，让框架自己处理。</p>
+  <div class="why"><p><strong>Why：</strong>Android Google 登录修了三轮（clientId 字段名 → cookie 前缀 → session_data 格式），根因就是手动模拟内部 cookie。</p></div>
+
+  <h3>串联 bug 修两轮以上 → 读源码</h3>
+  <p>同功能修 2 轮以上，停下读 <code>node_modules</code> 源码。逐层猜会无限循环。</p>
+
+  <h2 id="drizzle">③ Drizzle & 数据库</h2>
+
+  <h3>Fly.io 部署不自动跑 migration</h3>
+  <p>Fly 部署仅启动新容器。新 migration 必须在 <code>fly.toml</code> <code>release_command</code> 或 GHA workflow 显式调 <code>pnpm db:migrate</code>。</p>
+  <div class="why"><p><strong>Why：</strong>PR 合并后线上 schema 静默落后，下次访问 42703 直接崩。</p>
+  <p><strong>How：</strong>schema drift 时查 <code>information_schema</code> 定位缺失列；手工补 DDL + INSERT <code>__drizzle_migrations</code> 后再跑 db:migrate。</p></div>
+
+  <h3>messagesV2 表列名是 camelCase</h3>
+  <p>其他表 snake_case，messagesV2 是历史遗留 camelCase。原生 SQL 必须对齐实际列名。</p>
+
+  <h3>Drizzle raw sql 模板不要塞 Date</h3>
+  <p><code>sql\`... \${date}\`</code> 透传 Date 给 postgres driver 会 <code>ERR_INVALID_ARG_TYPE</code>。</p>
+  <div class="why"><p><strong>How：</strong>用 <code>gt</code> / <code>lt</code> helper，或显式 <code>date.toISOString()</code>。</p></div>
+
+  <h3>DB 字段 null 运行时安全</h3>
+  <p>TypeScript non-nullable 声明不保证运行时安全。<code>hotVideo</code> 等可空字段必须加 <code>|| ''</code> guard。</p>
+
+  <h2 id="capacitor">④ Capacitor / Android</h2>
+
+  <h3>JDK 必须 21</h3>
+  <p>Capacitor 6+ 依赖 Java 21 source。默认 macOS 是 JDK 17，gradle 报 invalid source release。</p>
+
+  <h3>Google Auth 字段名是 clientId</h3>
+  <p>Capacitor Google Auth 插件只读 <code>clientId</code>，不是 <code>serverClientId</code>。配错返回 DEVELOPER_ERROR / 账号选择器立即 cancel。</p>
+
+  <h3>WebView 内联脚本竞态</h3>
+  <p>原生 flags 未就绪时 React 已经渲染。需延迟重试 + React 二次确认。</p>
+
+  <h3>Android 签名密钥不能丢</h3>
+  <p><code>upload-keystore.jks</code> + <code>keystore.properties</code>，alias <code>upload</code>。<strong>丢了无法更新应用</strong>。备份位置见记忆库。</p>
+
+  <h3>APK 部署必须版本化文件名</h3>
+  <p>禁止覆盖 <code>latest.apk</code>。Cloudflare 缓存 7+ 天，覆盖会让用户拿不到新版。</p>
+
+  <h2 id="payment">⑤ 支付与计费</h2>
+
+  <h3>支付 SDK 必须独立降级路径</h3>
+  <p>Airwallex SDK 加载失败 → URL 直跳；整体不可用 → Stripe 兜底。三级降级是硬要求。</p>
+
+  <h3>不允许虚假营销数字</h3>
+  <p>所有折扣 / 价格 / 优惠必须从 <code>src/config/</code> 动态读取，<strong>不</strong>能 hardcode「70% OFF」之类字面量。2026-03-29 已全部清理。</p>
+
+  <h3>关键支付事件必须服务端追踪</h3>
+  <p><code>payment_success</code> / <code>payment_failed</code> 必须在 webhook 用 <code>posthog-node</code> 打，不能只靠前端 redirect 时打。</p>
+
+  <h3>SubscriptionsDrawer snapPoints 越界 = 98% 流失</h3>
+  <p>付费弹窗历史 bug。改 drawer 时确认 <code>snapPoints[index]</code> 不越界。</p>
+
+  <h2 id="push">⑥ 推送与召回</h2>
+
+  <h3>新用户角色为空时需 fallback</h3>
+  <p>角色为空 → 推送选不出对象 → 用户收不到。空角色 + 在线用户 + 角色数都需要降级路径。</p>
+
+  <h3>在线用户走 SSE 直推</h3>
+  <p>不要全部走 OneSignal，在线用户 SSE 直接推到 <code>/new-chat</code>，体验更好。</p>
+
+  <h3>推送系统 v2：频率分层</h3>
+  <p>2026-04-09 上线，日推送量降 60%。频率按用户活跃度分层 + 视频问句 + 首条文字优化。</p>
+
+  <h3>推送 Worker 是 95% LLM 消耗源</h3>
+  <p><code>generate.message.ts</code> 必须包 Langfuse trace（含 <code>flushAsync</code>）。否则成本归因不准。</p>
+
+  <h2 id="langfuse">⑦ Langfuse / LLM</h2>
+
+  <h3>所有退出路径都要 flushAsync</h3>
+  <p>正常结束和 catch 块都要 <code>await langfuse.flushAsync()</code>，否则数据丢失。</p>
+
+  <h3>区域端点 fallback 必须对齐</h3>
+  <p>US 区账号 fallback URL 必须是 <code>us.cloud.langfuse.com</code>，欧区地址返回 401。</p>
+
+  <h3>LLM 返回 JSON 需 strip 代码栅栏</h3>
+  <p>Opus 等模型返回 JSON 时可能带 <code>\`\`\`json</code> 包裹，直接 parse 抛异常。先剥 fence 再 parse。</p>
+
+  <h3>AI SDK v5 字段变化</h3>
+  <p><code>inputTokens</code> / <code>outputTokens</code> / <code>totalTokens</code> 替代旧的 <code>promptTokens</code> / <code>completionTokens</code>；<code>useChat onFinish</code> 用 <code>message</code> 不是 <code>responseMessage</code>。</p>
+
+  <h3>AI 模型必须分层使用</h3>
+  <p>降级模型不能比主模型贵。轻量任务用最便宜的模型（如 <code>x-ai/grok-4-fast</code>）。</p>
+
+  <h3>gemini-2.0-flash 已被 Google 封禁 NSFW</h3>
+  <p>2026-04-13 Google 以 ToS 违反封了。降级 / 轻量模型全部切到 <code>x-ai/grok-4-fast</code>。</p>
+
+  <h2 id="posthog">⑧ PostHog 埋点</h2>
+
+  <h3>登录 identify、退出 reset</h3>
+  <p>不做就数据永远匿名 + 跨用户污染。</p>
+
+  <h3>关键业务事件必须服务端追踪</h3>
+  <p><code>payment_success</code> 等转化事件必须在 webhook 用 <code>posthog-node</code> 打，前端只是兜底。</p>
+
+  <h3>HogQL 参数化在某些 deployment 失败</h3>
+  <p><code>{event:String}</code> 报错时改用白名单校验 + inline。</p>
+
+  <h2 id="sentry">⑨ Sentry 监控</h2>
+
+  <h3>三套 DSN 必须分清</h3>
+  <p>浏览器端 / Node 端 / Worker 端三套。混淆会导致事件归错项目。</p>
+
+  <h3>不需要的 dev 项目要删</h3>
+  <p>2026-04-07 删 dev 项目（9129 噪音 errors）。生产用 <code>javascript-nextjs</code>。注意 org slug 是 <code>softieai</code> 有 typo。</p>
+
+  <h3>客户端 Sentry 必须 build-args 注入</h3>
+  <p><code>sentry.client.config.ts</code> + <code>withSentryConfig</code> 包装，DSN 走 build args。少一步浏览器错误就监控不到。</p>
+
+  <h3>事件分类要做</h3>
+  <p>null guard / Android 守卫 / DB try-catch / 噪音过滤。否则 Issues by Frequency 全是噪音。</p>
+
+  <h2 id="flyio">⑩ Fly.io 部署</h2>
+
+  <h3>必须 --depot=false</h3>
+  <p>Depot 会让 internal 网络失败。</p>
+
+  <h3>fly scale vm 后必须验证生效</h3>
+  <p>命令可能不持久；事后 <code>fly status</code> 确认。</p>
+
+  <h3>同 app 多机型内存统计</h3>
+  <p>同 app 可有不同规格 machine。统计必须逐台求和，禁止 <code>machines[0] × count</code>。</p>
+
+  <h3>Docker 缓存必须 GHA cache</h3>
+  <p>BuildKit mount cache 在 CI 无效。用 <code>cache-from/cache-to: type=gha</code>。</p>
+
+  <h3>n8n 最低 512MB</h3>
+  <p>256MB 会 OOM 崩溃。</p>
+
+  <h2 id="lark">⑪ Lark 推送</h2>
+
+  <h3>必须用 interactive 卡片</h3>
+  <p>禁止纯文本 / post 格式。颜色按类型：indigo（技术）/ red（告警）/ green（成功）/ orange（注意）/ blue（信息）。</p>
+
+  <h3>禁止 Markdown 表格 / ASCII 图</h3>
+  <p>Lark 不渲染。结构化数据用 <code>column_set</code> 多列布局。</p>
+
+  <h3>不要反复测试推送</h3>
+  <p>用 <code>--dry-run</code> 验证；调通后只发一次。反复发会骚扰群成员。</p>
+
+  <h3>推送前必须验证 Webhook</h3>
+  <p>不要猜 Webhook 归属。先查记忆库 <code>reference_lark_webhooks.md</code>。</p>
+
+  <h3>Lark 域名必须用国际版</h3>
+  <p><code>tsgkcplyz3ky.sg.larksuite.com</code>，禁止 <code>feishu.cn</code>。</p>
+
+  <h2 id="nextjs">⑫ Next.js 行为</h2>
+
+  <h3>force-dynamic 也触发 no-store</h3>
+  <p>CDN 缓存必须在 Cloudflare 侧 override。</p>
+
+  <h3>根布局 headers() 级联影响所有子页面</h3>
+  <p>子页改无效，要从根布局改。</p>
+
+  <h3>beforeInteractive 在 App Router 组件不生效</h3>
+  <p>用原生 <code>&lt;script&gt;</code> 替代。</p>
+
+  <h2 id="perf">⑬ 性能</h2>
+
+  <h3>US 用户性能优化</h3>
+  <p>Fly.io 1GB RAM + PostHog autocapture off + DB pool 10 + 根布局去 <code>headers()</code>。</p>
+
+  <h3>Cloudflare CDN 缓存配置</h3>
+  <p>www.softie.ai 开橙云 + Cache Rule，匿名用户 TTFB 从 ~200ms 降到 ~30ms。</p>
+
+  <h3>UI 重构前先调研开源</h3>
+  <p>搜 GitHub 同类项目了解行业标准（Character Card V2、SillyTavern 等）再动手。</p>
+
+  <h3>Playwright 移动端截图</h3>
+  <p>viewport 360×640 + scaleFactor 3，别直接 1080×1920 会走桌面布局。</p>
+
+  <h2 id="process">⑭ 工作流程原则</h2>
+
+  <h3>改函数签名必须同步改测试</h3>
+  <p>否则 CI 静默失败阻塞部署。</p>
+
+  <h3>定义函数必须确认有调用点</h3>
+  <p>新增 helper / service 合并前必须 grep 至少一处 import，否则成 24h 死代码。<code>extractMemoryAnchors</code> 就是从定义到接入隔了 24h。</p>
+
+  <h3>改动前先验证生产行为</h3>
+  <p>不假设功能正常，先 curl / 浏览器确认现状再下手。</p>
+
+  <h3>加监控前先做重叠检查</h3>
+  <p>DB / Redis / API probe 几乎与 Sentry 冗余。先识别真正盲区再动手。</p>
+
+  <h3>生产观测改动遵循「最小足迹」</h3>
+  <p>独立脚本 + 只读 + <code>continue-on-error</code>，不动生产代码路径。</p>
+
+  <h3>Wiki 添加已有文档用 move_docs_to_wiki</h3>
+  <p><code>create node</code> 会创建空文档，不会引用已有的。</p>
+
+  <h3>Bug Hunting 方法论</h3>
+  <p>四模块并行审查 + 6 种高频 bug 模式清单（详见记忆库 <code>feedback_bug_hunting_methodology.md</code>）。</p>
+
+  <h3>UGC 默认强制私有</h3>
+  <p>Route A 决策 2026-04-11：API 忽略前端 <code>isPrivate</code>，UGC 角色一律 private；移除编辑 5 Sparks 费用；Profile 加 My Characters 入口。</p>
+
+  <h3>平台迁移清理必须三处同步</h3>
+  <p>仓库配置 + 控制台 GitHub 连接 + 旧平台独有功能替代，缺一会留影子部署。Vercel 那次就是没卸 GitHub App，2026-04 又意外部署了一份。</p>
+
+  <h3>英语优先</h3>
+  <p>目标美国市场。UI 不能有中文残留，包括占位文本、错误提示、空状态等。</p>
+
+  <h2>结尾：怎么用这一页</h2>
+  <p>这页不是用来一次读完的。建议：</p>
+  <ol>
+    <li>入职第一周快速扫一遍标题，建立直觉</li>
+    <li>每次遇到陌生场景，先回来用 Cmd+F 搜关键词</li>
+    <li>修完一个新坑，把它的根因和修法补到记忆库 <code>~/.claude/projects/-Users-gloom-softieweb/memory/</code>，下一个新人就少踩一个</li>
+  </ol>
+
+  <div class="pager">
+    <a href="/softie/payments-and-sparks">
+      <div class="dir">← 上一篇</div>
+      <div class="label">05 · 支付与 Sparks 经济</div>
+    </a>
+    <a class="next" href="/softie/">
+      <div class="dir">回到</div>
+      <div class="label">Softie 知识库首页</div>
+    </a>
+  </div>
+
+</div>
+</body>
+</html>
