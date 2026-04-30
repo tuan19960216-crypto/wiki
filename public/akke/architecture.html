@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 系统架构详解</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --accent-2: #60a5fa;
+    --accent-2-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; padding:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:16px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+  .container { max-width:1080px; margin:0 auto; padding:48px 24px 120px; }
+
+  .breadcrumb { font-size:13px; color:var(--text-muted); margin-bottom:24px; }
+  .breadcrumb a { color:var(--text-dim); text-decoration:none; }
+  .breadcrumb a:hover { color:var(--accent); }
+  .breadcrumb span { margin:0 8px; color:var(--border-strong); }
+
+  header.hero { padding:16px 0 40px; border-bottom:1px solid var(--border); margin-bottom:48px; }
+  .tag { display:inline-block; padding:4px 12px; border-radius:999px; background:var(--accent-soft); color:var(--accent); font-size:13px; font-weight:500; margin-bottom:16px; }
+  h1 { font-size:42px; font-weight:700; margin:0 0 14px; letter-spacing:-0.02em; line-height:1.2;
+    background:linear-gradient(135deg,#e4e7ed 30%,var(--accent) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { font-size:18px; color:var(--text-dim); margin:0 0 18px; max-width:720px; }
+  .meta { font-size:13px; color:var(--text-muted); }
+
+  h2 { font-size:24px; font-weight:700; margin:56px 0 16px; letter-spacing:-0.01em; }
+  h2:first-of-type { margin-top:0; }
+  h3 { font-size:17px; font-weight:600; margin:24px 0 8px; }
+  p { color:var(--text-dim); }
+  strong { color:var(--text); font-weight:600; }
+  code { background:var(--bg-deep); padding:1px 6px; border-radius:4px; font-size:0.88em; color:#c4b5fd;
+    font-family:"SF Mono",Menlo,Consolas,monospace; }
+
+  .card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:22px 24px; margin-bottom:14px; }
+  .card h3 { margin-top:0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  @media (max-width:860px) { .grid-3 { grid-template-columns:1fr; } }
+
+  table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+  th, td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+  th { color:var(--text-muted); font-weight:500; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; background:var(--bg-deep); }
+  td { color:var(--text-dim); }
+  td:first-child { color:var(--text); font-weight:500; white-space:nowrap; }
+
+  .lead { background:var(--bg-elevated); border-left:3px solid var(--accent); border-radius:4px; padding:14px 18px; margin:16px 0 24px; color:var(--text-dim); font-size:14.5px; }
+  .lead strong { color:var(--text); }
+
+  /* timeline */
+  .timeline { list-style:none; padding:0; margin:16px 0 0; }
+  .timeline li { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid var(--border); }
+  .timeline li:last-child { border-bottom:none; }
+  .ts { flex-shrink:0; width:90px; font-family:"SF Mono",Menlo,monospace; font-size:12px; color:var(--accent); padding-top:2px; font-weight:600; }
+  .body { flex:1; font-size:14px; }
+  .body strong { display:block; margin-bottom:2px; }
+  .body span { color:var(--text-dim); }
+
+  /* request-flow svg wrapper */
+  .flow { background:var(--bg-elevated); border:1px solid var(--border); border-radius:14px; padding:24px; margin:16px 0; }
+  .flow svg { width:100%; height:auto; }
+
+  footer { margin-top:80px; padding-top:24px; border-top:1px solid var(--border); color:var(--text-muted); font-size:13px; text-align:center; }
+  footer a { color:var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><span style="color:var(--text-dim);">系统架构详解</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">02 · ARCHITECTURE</span>
+    <h1>系统架构详解</h1>
+    <p class="subtitle">三段代码 + 一张共享数据库怎么变成一条流水线 — 部署、请求流、LLM 路由、API 地图、worker 模块。</p>
+    <div class="meta">📅 2026-05-01</div>
+  </header>
+
+  <h2>三段式部署</h2>
+  <p>三块独立部署的代码，没有消息总线、没有 RPC 框架；它们靠 Supabase 这张共享数据库交换状态。这是新人最常误解的地方 —— "Vercel 怎么通知 worker？" 答案是：<strong>不通知</strong>。Vercel 写一行进 <code>scrape_jobs(status=pending)</code>，worker 自己轮询读到再执行。</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>🖥️ Vercel · Next.js 16</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin:0 0 8px"><strong style="color:var(--accent)">仪表盘 + API + Cron</strong></p>
+      <p style="font-size:14px">App Router，<code>(dashboard)</code> 路由组承载所有运营页面，<code>/api/*</code> 是薄 API 层，<code>/api/cron/*</code> 是 Vercel Cron 触发器。鉴权用 Supabase SSR；<code>src/middleware.ts</code> 把未登录用户重定向到 <code>/login</code>，但 cron 路径绕过中间件改用 <code>CRON_SECRET</code> Bearer。</p>
+    </div>
+    <div class="card">
+      <h3>🗄️ Supabase Postgres</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin:0 0 8px"><strong style="color:var(--accent-2)">事实源 + Auth + RLS</strong></p>
+      <p style="font-size:14px">21 个 migration（<code>supabase/migrations/</code>）按编号顺序就是项目演化史。多租户隔离靠 <code>tenant_scope</code> RLS 政策，按 <code>app.accessible_org_ids()</code> 自动过滤。客户端走 <code>src/lib/supabase.ts</code> 的 <code>createServerClient</code>（SSR 带 cookie）；服务端跨租户工作才用 <code>createServiceClient</code>（绕 RLS）。</p>
+    </div>
+    <div class="card">
+      <h3>🤖 Fly.io Worker · Python</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin:0 0 8px"><strong style="color:var(--success)">FastAPI + Playwright (NRT)</strong></p>
+      <p style="font-size:14px">部署为 <code>akke-worker-prod</code>，1GB VM 只能开一个 Chromium。<code>worker/main.py</code> 装 routers；<code>worker/services/browser.py</code> 懒加载浏览器实例。所有 HTTP 路由用 <code>FLY_WORKER_SECRET</code> Bearer 守门。<code>worker/fly.toml</code> 决定镜像，但 deploy <strong>必须 <code>cd worker</code></strong> 否则 build context 1.9GB。</p>
+    </div>
+  </div>
+
+  <h2>端到端请求流</h2>
+  <p>从早上 9 点的第一次抓取到晚上 23 点的日报汇总，一天里 cron 顺序如下。</p>
+
+  <ul class="timeline">
+    <li>
+      <span class="ts">09:00</span>
+      <div class="body">
+        <strong>Vercel Cron <code>/api/cron/scrape</code> · 入队</strong>
+        <span>给每个 <code>source_accounts.is_active=true</code> 的号源写一行 <code>scrape_jobs(status=pending, job_type=scrape_source)</code>，立即返回 200。<strong>不阻塞</strong>。</span>
+      </div>
+    </li>
+    <li>
+      <span class="ts">09:00:30+</span>
+      <div class="body">
+        <strong>Worker 后台轮询出队</strong>
+        <span><code>worker/services/queue.py</code> 每 ~30s 扫一次 <code>pending</code>，挑一行执行：<code>discover_videos_from_profile</code> → <code>scrape_video_comments</code> → 写 <code>videos</code>/<code>comments</code> → 标 <code>completed</code>。失败累 <code>attempts</code>，到 <code>QUEUE_MAX_ATTEMPTS</code> 才放弃。</span>
+      </div>
+    </li>
+    <li>
+      <span class="ts">10:00</span>
+      <div class="body">
+        <strong>Vercel Cron <code>/api/cron/analyze</code> · LLM 评分</strong>
+        <span>抓 <code>intent_score IS NULL</code> 的评论分批喂 DeepSeek V3 → 写回 <code>intent_score</code>/<code>intent_label</code>。高意向（≥7）继续起草首发文案 → 写 <code>messages</code> + <code>message_queue(status=pending_approval)</code>。</span>
+      </div>
+    </li>
+    <li>
+      <span class="ts">10:30~</span>
+      <div class="body">
+        <strong>运营审核</strong>
+        <span>Operator 在 <code>/queue</code> 点通过 → <code>/api/messages/approve</code> → <code>message_queue.status=approved</code>。</span>
+      </div>
+    </li>
+    <li>
+      <span class="ts">*/5 min</span>
+      <div class="body">
+        <strong>Vercel Cron <code>/api/cron/send</code> · 批量调 worker</strong>
+        <span>每 5 分钟扫一次 <code>approved</code>，调 Fly worker <code>/send</code>，Playwright 驱动浏览器（或 iPhone WDA）发出 DM。<strong>必须解 protobuf 校验业务级 status_code</strong>，HTTP 200 不等于真投递。</span>
+      </div>
+    </li>
+    <li>
+      <span class="ts">12:00</span>
+      <div class="body">
+        <strong>Vercel Cron <code>/api/cron/check-replies</code> · 查回复</strong>
+        <span>worker 收件箱轮询，新对话写入 <code>messages</code>，<code>conversations.stage</code> 自动从 <code>ice_break</code> 推到 <code>nurture</code>。LLM 检测决策信号触发 <code>handed_off</code>。</span>
+      </div>
+    </li>
+    <li>
+      <span class="ts">23:00</span>
+      <div class="body">
+        <strong>Vercel Cron <code>/api/cron/daily-stats</code> · 出日报</strong>
+        <span>把当日发送量、回复率、转化率快照写进 <code>daily_stats</code>。</span>
+      </div>
+    </li>
+  </ul>
+
+  <div class="lead">
+    <strong>同步路径例外：</strong>UI 上"立即抓取"按钮调的是 <code>/scrape/source/{id}</code> —— 不入队，worker 内联跑出结果立即返回。给运营即时反馈用，不走 cron 异步管线。
+  </div>
+
+  <h2>LLM 层（双模型路由）</h2>
+  <p><code>src/lib/llm.ts</code> 是 provider-agnostic 包装器，能对接任何 OpenAI 兼容接口。<strong>2026-04-25 起按用途分流到两个模型</strong>：</p>
+
+  <table>
+    <thead><tr><th>用途</th><th>调用</th><th>当前模型</th><th>覆盖 env</th></tr></thead>
+    <tbody>
+      <tr><td>对话/人格</td><td><code>chatReply()</code></td><td><code>qwen/qwen3-235b-a22b</code></td><td><code>LLM_CHAT_MODEL</code></td></tr>
+      <tr><td>批量评分/工具调用</td><td><code>analyzeComments()</code> · <code>detectDecisionSignals()</code></td><td><code>deepseek/deepseek-chat-v3-0324</code></td><td><code>LLM_ANALYSIS_MODEL</code></td></tr>
+      <tr><td>全栈降级（应急）</td><td>全部</td><td>—</td><td><code>LLM_MODEL</code>（覆盖以上两个）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>关键导出</h3>
+  <table>
+    <thead><tr><th>函数</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>analyzeComments</code></td><td>批量意向评分 → <code>{id, score, label, keywords}[]</code></td></tr>
+      <tr><td><code>chatReply</code></td><td>按 stage 选系统提示词（<code>ice_break</code>/<code>nurture</code>/<code>decision</code>），中文人设小艾</td></tr>
+      <tr><td><code>detectDecisionSignals</code></td><td>检测客户表达决策意向（"加微信"/"约时间"），触发 handoff</td></tr>
+      <tr><td><code>extractLeakedToolCalls</code> · <code>sanitizeReply</code></td><td>清洗 DeepSeek V3 偶发把 <code>function&lt;｜tool▁sep｜&gt;NAME</code> 协议字符泄漏到正文</td></tr>
+    </tbody>
+  </table>
+
+  <h3>跨会话客户记忆</h3>
+  <p><code>src/lib/memory.ts</code> 浅合并所有 <code>(org_id, douyin_user_id)</code> 相同 conversation 的 <code>customer_profile</code> JSONB。注入到 prompt 时是<strong>自然语言段落</strong>而非 KV 表 —— 让模型自然引用，而不是进入"档案查询"模式。</p>
+
+  <h2>API 路由地图</h2>
+  <p>按业务域分组，全在 <code>src/app/api/</code>。中间件守 UI 路由；cron 路由用 <code>CRON_SECRET</code> Bearer 自守；worker 反向 Bearer 用 <code>FLY_WORKER_SECRET</code>。</p>
+
+  <table>
+    <thead><tr><th>分组</th><th>关键路由</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td>auth</td><td><code>/api/auth/*</code></td><td>Supabase SSR 鉴权回调</td></tr>
+      <tr><td>cron</td><td><code>/api/cron/{scrape,analyze,send,check-replies,daily-stats}</code></td><td>Vercel Cron 入口，全部 <code>vercel.json</code> 声明</td></tr>
+      <tr><td>accounts</td><td><code>/api/accounts/*</code> · <code>DELETE /api/accounts/[id]</code></td><td>抖音账号池管理；删除调 <code>delete_account_safe</code> RPC 自决策硬删 vs 归档</td></tr>
+      <tr><td>sources</td><td><code>/api/sources/*</code> · <code>POST /api/sources/import-batch</code></td><td>号源管理；批量导入走分享短链 302 解析</td></tr>
+      <tr><td>scrape</td><td><code>/api/scrape/jobs</code></td><td>异步抓取入队（Phase 1，2026-04-22 上线）</td></tr>
+      <tr><td>messages</td><td><code>/api/messages/approve</code> · <code>/api/messages/reject</code></td><td>人审闸门</td></tr>
+      <tr><td>knowledge</td><td><code>/api/knowledge/*</code></td><td>品牌话术 + 金牌对话样本管理</td></tr>
+      <tr><td>chat</td><td><code>/api/chat</code></td><td>会话回复（<code>chatReply</code> 入口）</td></tr>
+      <tr><td>handoffs</td><td><code>/api/handoffs/*</code></td><td>转交微信记录</td></tr>
+      <tr><td>invitations</td><td><code>/api/invitations/*</code></td><td>组织成员邀请</td></tr>
+      <tr><td>staff</td><td><code>/api/staff/*</code></td><td>Akke 内部团队管理面板</td></tr>
+      <tr><td>admin / brand / comments / stats</td><td>—</td><td>管理面板辅助、品牌档案、评论查询、统计快照</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Worker 内部模块</h2>
+  <p>FastAPI 路由声明在 <code>worker/main.py</code>，按职能拆到 <code>worker/routers/</code>。所有路由用 <code>utils/auth.py:verify_secret</code> 作为 FastAPI 依赖鉴权。</p>
+
+  <table>
+    <thead><tr><th>路由 / 模块</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>/scrape</code></td><td>抓单条视频评论</td></tr>
+      <tr><td><code>/scrape/discover</code></td><td>从博主主页或视频页发现关联视频</td></tr>
+      <tr><td><code>/scrape/source/{id}</code></td><td>同步触发某号源抓取（UI "立即抓取" 按钮）</td></tr>
+      <tr><td><code>/scrape/resolve</code></td><td>分享文案 → URL（302 跟随）</td></tr>
+      <tr><td><code>/scrape/resolve-share-batch</code></td><td>批量分享文案 → sec_uid（号源批量导入用）</td></tr>
+      <tr><td><code>/scrape/user-profile</code></td><td>抓抖音用户自填城市（高意向 enrich）</td></tr>
+      <tr><td><code>/send</code></td><td>DM 发送（已切到本地 Mac / iPhone WDA，Fly Web 路径废弃）</td></tr>
+      <tr><td><code>/queue/tick</code> · <code>/queue/stats</code></td><td>手动队列操作（运维用）</td></tr>
+      <tr><td><code>services/comment_api.py</code></td><td>f2 签名直调抖音 Web API（fast path，比 Playwright 快一个数量级）</td></tr>
+      <tr><td><code>services/browser.py</code></td><td>Chromium 单例懒加载（1GB VM 强制）</td></tr>
+      <tr><td><code>services/queue.py</code></td><td>背景轮询 <code>scrape_jobs</code></td></tr>
+      <tr><td><code>dm_ios_wda*.py</code></td><td>iPhone WDA 自动化抖音 app（V1.5 起）</td></tr>
+      <tr><td><code>dm_ios_wda_inbox_poll.py</code></td><td>收件箱轮询（双向跟进 Phase 1+2）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>数据 schema 速查</h2>
+  <p>21 个 migration 累计的 schema，按业务域分。完整 DDL 在 <code>supabase/migrations/</code>。</p>
+
+  <h3>身份与租户</h3>
+  <table>
+    <thead><tr><th>表</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>organizations</code></td><td>客户公司</td></tr>
+      <tr><td><code>user_org_memberships</code></td><td>用户 ↔ 组织映射 + 角色（Owner/Operator）</td></tr>
+      <tr><td><code>brand_profile</code></td><td>每个 org 一份：品牌话术、微信号、二维码、报价规则。<strong>2026-04-23 收紧为 per-org</strong>（之前是全局）。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>账号池</h3>
+  <table>
+    <thead><tr><th>表</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>accounts</code></td><td>抖音账号；<code>type='scraping' | 'messaging'</code> 区分；<code>org_id</code> NOT NULL（migration 014 起硬隔离）</td></tr>
+      <tr><td><code>source_accounts</code></td><td>号源 — 我们要持续抓哪些博主</td></tr>
+    </tbody>
+  </table>
+
+  <h3>采集管线</h3>
+  <table>
+    <thead><tr><th>表</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>videos</code></td><td>视频元数据 + 描述</td></tr>
+      <tr><td><code>comments</code></td><td>评论 + IP 属地（migration 019）+ 城市（migration 021）+ <code>intent_score</code>/<code>intent_label</code></td></tr>
+      <tr><td><code>scrape_jobs</code></td><td>异步抓取队列；<code>result</code> 列含进度（migration 009）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>对话管线</h3>
+  <table>
+    <thead><tr><th>表</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>conversations</code></td><td>抖音用户 ↔ 我方账号；<code>stage</code> 状态机（<code>ice_break → nurture → decision → handed_off → closed</code>）；<code>customer_profile</code> JSONB（自然语言客户记忆）</td></tr>
+      <tr><td><code>messages</code></td><td>所有发出 / 收到的消息原文。<strong><code>status</code> 只接受 <code>pending_approval</code>，写 <code>pending</code> 会触发 CHECK 报错。</strong></td></tr>
+      <tr><td><code>message_queue</code></td><td>人审闸门：<code>pending_approval / approved / rejected / sent</code>。<strong>没有 <code>content</code> 字段</strong>，内容写在 <code>messages</code>。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>知识库与统计</h3>
+  <table>
+    <thead><tr><th>表</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>knowledge_documents</code></td><td>客户录入的话术 / 报价 / 案例。<code>buildKnowledgeSection</code> 截取前 1500 字注入 prompt。</td></tr>
+      <tr><td><code>conversation_examples</code></td><td>金牌对话 few-shot</td></tr>
+      <tr><td><code>daily_stats</code></td><td>每日发送量 / 回复率 / 转化率快照</td></tr>
+    </tbody>
+  </table>
+
+  <div class="lead" style="margin-top:32px">
+    <strong>RLS 提醒：</strong>除 <code>followup_rules</code> / <code>knowledge_articles</code> / <code>scrape_keywords</code> 三张全局共享表外，所有业务表 RLS 政策都是 <code>org_id IN app.accessible_org_ids()</code>。改 schema 时不要漏给新表加这条政策。
+  </div>
+
+  <h2>本地开发</h2>
+  <p>5 个密钥配齐 + 跑 <code>npm run dev</code> 就能起。</p>
+
+  <table>
+    <thead><tr><th>位置</th><th>命令</th></tr></thead>
+    <tbody>
+      <tr><td>前端 dev</td><td><code>npm install &amp;&amp; npm run dev</code> → <code>localhost:3000/login</code></td></tr>
+      <tr><td>前端 lint / type</td><td><code>npm run lint</code> · <code>tsc --noEmit</code></td></tr>
+      <tr><td>健康体检</td><td><code>npm run test:all</code>（data audit + schema probe + LLM smoke）</td></tr>
+      <tr><td>worker dev</td><td><code>cd worker &amp;&amp; uvicorn main:app --reload --port 8000</code></td></tr>
+      <tr><td>worker deploy</td><td><code>cd worker &amp;&amp; fly deploy</code>（必须 cd 子目录）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>必需环境变量</h3>
+  <table>
+    <thead><tr><th>变量</th><th>谁要</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><code>NEXT_PUBLIC_SUPABASE_URL</code> · <code>_ANON_KEY</code></td><td>前端浏览器</td><td>Supabase 客户端</td></tr>
+      <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>仅 server 端</td><td>跨租户操作；<strong>不要 import 进 client component</strong></td></tr>
+      <tr><td><code>OPENROUTER_API_KEY</code> 或 <code>LLM_API_KEY</code></td><td>前端 server</td><td>LLM 网关</td></tr>
+      <tr><td><code>FLY_WORKER_URL</code> · <code>FLY_WORKER_SECRET</code></td><td>前后双方</td><td>Vercel ↔ worker 双向 Bearer</td></tr>
+      <tr><td><code>CRON_SECRET</code></td><td>Vercel cron 路由</td><td>Vercel 自动注入；cron 路径绕中间件靠它鉴权</td></tr>
+    </tbody>
+  </table>
+
+  <footer>
+    <a href="/akke/">← Akke 知识库首页</a> · 最后更新 2026-05-01
+  </footer>
+
+</div>
+</body>
+</html>

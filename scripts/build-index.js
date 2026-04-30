@@ -6,7 +6,7 @@ const publicDir = path.join(__dirname, '..', 'public');
 const PROJECTS = [
   { name: 'Vivi', tagline: 'Telegram 上的 AI 梦境社交 mini-app' },
   { name: 'Softie', tagline: 'AI 陪伴聊天 · 美国市场（含 Web + Android）', href: '/softie/' },
-  { name: 'Akke', tagline: '抖音全屋定制智能获客', href: '/akke/anti-risk-control' },
+  { name: 'Akke', tagline: '抖音全屋定制智能获客', href: '/akke/' },
 ];
 
 function getHtmlFiles(dir, base = '') {

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 踩坑速查</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --accent-2: #60a5fa;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; padding:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+
+  .wrap { display:grid; grid-template-columns:240px 1fr; max-width:1240px; margin:0 auto; min-height:100vh; }
+  aside.sidebar { position:sticky; top:0; height:100vh; overflow-y:auto;
+    padding:40px 24px 40px 32px; border-right:1px solid var(--border); background:var(--bg); }
+  .sidebar h4 { font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.16em;
+    text-transform:uppercase; margin:24px 0 8px; }
+  .sidebar h4:first-of-type { margin-top:0; }
+  .sidebar a { display:block; color:var(--text-dim); text-decoration:none; font-size:13.5px;
+    padding:5px 0; transition:color 0.15s ease; line-height:1.4; }
+  .sidebar a:hover { color:var(--accent); }
+  .sidebar .home { font-size:13px; color:var(--text-muted); margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+
+  main { padding:48px 56px 120px; max-width:880px; }
+  @media (max-width:900px) { .wrap { grid-template-columns:1fr; } aside.sidebar { display:none; } main { padding:32px 24px 80px; } }
+
+  .breadcrumb { font-size:13px; color:var(--text-muted); margin-bottom:24px; }
+  .breadcrumb a { color:var(--text-dim); text-decoration:none; }
+  .breadcrumb a:hover { color:var(--accent); }
+  .breadcrumb span { margin:0 8px; color:var(--border-strong); }
+
+  header.hero { padding:8px 0 36px; border-bottom:1px solid var(--border); margin-bottom:40px; }
+  .tag { display:inline-block; padding:4px 12px; border-radius:999px; background:var(--accent-soft); color:var(--accent); font-size:13px; font-weight:500; margin-bottom:14px; }
+  h1 { font-size:40px; font-weight:700; margin:0 0 14px; letter-spacing:-0.02em; line-height:1.2;
+    background:linear-gradient(135deg,#e4e7ed 30%,var(--accent) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { font-size:17px; color:var(--text-dim); margin:0 0 16px; max-width:680px; }
+  .meta { font-size:13px; color:var(--text-muted); }
+
+  section { scroll-margin-top:24px; margin-bottom:48px; }
+  h2 { font-size:22px; font-weight:700; margin:48px 0 16px; letter-spacing:-0.005em; }
+  h2:first-of-type { margin-top:0; }
+  p { color:var(--text-dim); }
+  code { background:var(--bg-deep); padding:1px 6px; border-radius:4px; font-size:0.88em; color:#c4b5fd; font-family:"SF Mono",Menlo,monospace; }
+  strong { color:var(--text); font-weight:600; }
+
+  .pit { background:var(--bg-elevated); border:1px solid var(--border); border-left:3px solid var(--danger); border-radius:8px; padding:14px 18px; margin-bottom:10px; }
+  .pit.warn { border-left-color:var(--warning); }
+  .pit.info { border-left-color:var(--accent-2); }
+  .pit.tip  { border-left-color:var(--success); }
+  .pit-title { font-weight:600; color:var(--text); font-size:14.5px; margin-bottom:4px; }
+  .pit-body { color:var(--text-dim); font-size:13.5px; line-height:1.6; }
+  .pit-body strong { color:var(--text); }
+
+  .legend { display:flex; gap:14px; flex-wrap:wrap; padding:14px 18px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:10px; margin-bottom:32px; font-size:13px; color:var(--text-dim); }
+  .legend span { display:flex; align-items:center; gap:6px; }
+  .legend .dot { width:8px; height:8px; border-radius:50%; }
+  .legend .dot.r { background:var(--danger); }
+  .legend .dot.y { background:var(--warning); }
+  .legend .dot.b { background:var(--accent-2); }
+  .legend .dot.g { background:var(--success); }
+
+  footer { margin-top:80px; padding-top:24px; border-top:1px solid var(--border); color:var(--text-muted); font-size:13px; text-align:center; }
+  footer a { color:var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <aside class="sidebar">
+    <div class="home"><a href="/akke/">← Akke 首页</a></div>
+    <h4>分类</h4>
+    <a href="#deploy">部署 / Vercel / Fly</a>
+    <a href="#code">编码 / 类型 / 验证</a>
+    <a href="#schema">Schema / 数据库</a>
+    <a href="#tenancy">多租户 / RLS</a>
+    <a href="#llm">LLM / Prompt</a>
+    <a href="#playwright">Playwright / 抖音</a>
+    <a href="#douyin-dm">抖音 DM 风控</a>
+    <a href="#network">网络 / VPN</a>
+    <a href="#git">Git / 协作流程</a>
+    <a href="#ux">产品 / UX</a>
+    <h4>资源</h4>
+    <a href="/akke/onboarding">新人完整指引</a>
+    <a href="/akke/architecture">系统架构详解</a>
+    <a href="/akke/anti-risk-control">防风控架构</a>
+  </aside>
+
+  <main>
+    <nav class="breadcrumb">
+      <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><span style="color:var(--text-dim);">踩坑速查</span>
+    </nav>
+
+    <header class="hero">
+      <span class="tag">04 · PITFALLS</span>
+      <h1>踩坑速查</h1>
+      <p class="subtitle">过去半年踩过的所有坑按主题分类。新人过一遍能省一周排错时间。每一条都对应一次真实事故。</p>
+      <div class="meta">📅 2026-05-01 · 来源 <code>docs/claude-memory/</code></div>
+    </header>
+
+    <div class="legend">
+      <span><span class="dot r"></span> 红 = 致命陷阱（数据丢 / 假成功 / 永封）</span>
+      <span><span class="dot y"></span> 黄 = 易翻车（构建失败 / 配置遗漏）</span>
+      <span><span class="dot b"></span> 蓝 = 概念坑（容易理解错）</span>
+      <span><span class="dot g"></span> 绿 = 经验法则（最佳实践）</span>
+    </div>
+
+    <!-- ════════════ 部署 ════════════ -->
+    <section id="deploy">
+      <h2>① 部署 / Vercel / Fly.io</h2>
+
+      <div class="pit warn">
+        <div class="pit-title">Fly worker 必须 <code>cd worker</code> 再 deploy</div>
+        <div class="pit-body"><code>fly deploy -c worker/fly.toml</code> 不会改 build context root；仓库根有 <code>node_modules</code> 和 <code>.next</code>，context 会炸到 1.9GB。<strong>解法：<code>cd worker && fly deploy</code></strong>。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">Vercel 环境变量末尾可能带 <code>\n</code> 导致 Bearer 401</div>
+        <div class="pit-body">worker → Vercel 鉴权 401 时，先 <code>vercel env pull</code> 检查末尾换行，删旧值重粘贴。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">Vercel Preview env 独立于 Production，模块级读取导致全 PR 红</div>
+        <div class="pit-body">LLM client 必须 lazy-init；PR Preview 全红先查模块顶层 env 读取 + Preview 环境变量是否缺失。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Vercel deployment protection 让 curl 验证失效</div>
+        <div class="pit-body">所有路径都 401 时，改用 <code>vercel inspect &lt;url&gt; --logs</code> grep <code>ƒ /api/...</code> 确认路由编译。</div>
+      </div>
+
+      <div class="pit tip">
+        <div class="pit-title">推 main 自动部署，但推完 ≠ 已部署</div>
+        <div class="pit-body">必须 <code>gh run list</code> 看 CI <code>success</code>，再 <code>curl</code> 生产 URL 验证文件包含改动。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Fly depot builder 挂时本地 venv fallback</div>
+        <div class="pit-body">deadline_exceeded 时 f2 fast path 可本地跑；必须从 DB 拉 cookie_data 注入；本地裸调抖音 200 空 body 需检查 cookie 有效性。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ 编码 ════════════ -->
+    <section id="code">
+      <h2>② 编码 / 类型安全 / 验证</h2>
+
+      <div class="pit">
+        <div class="pit-title"><code>next build</code> 通过 ≠ 运行时安全</div>
+        <div class="pit-body">Supabase <code>any</code> 返回让字段名 / id 类型错误静默通过编译。改 API 前先跑 <code>npm run test:all</code>。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title"><code>new Date(null)</code> 静默产生 1970 epoch</div>
+        <div class="pit-body">渲染出"1月1日 08:00"是定位信号；formatter 必须 <code>!d</code> + <code>isNaN</code> 双重守卫。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">Worker HTTP 200 + <code>success:false</code> 是陷阱</div>
+        <div class="pit-body">只判 <code>res.ok</code> 会把抖音发送失败当成功；<strong>必须同时检查 <code>data.success</code></strong>。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">API 契约漂移需双侧同步验证</div>
+        <div class="pit-body">前端改 payload 必须同时打开 worker 对照字段名；camelCase / snake_case / 缺字段只有两侧都看才能发现。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Next.js 16 <code>revalidateTag</code> 签名变更</div>
+        <div class="pit-body">必须 <code>revalidateTag(tag, "max")</code> 两参数，单参数 tsc 报错。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Server Component 里禁用 <code>next/dynamic ssr:false</code></div>
+        <div class="pit-body">SC 内直接 import 即可；<code>dynamic + ssr:false</code> 只能在 Client Component 里用。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">PostgREST embed 多 FK 必须显式 hint</div>
+        <div class="pit-body">加完 FK 立刻 grep 该表所有 embed 加 <code>!fk_name</code>；症状是 badge 有数但列表空。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">PostgREST <code>!inner</code> embed 返回数组即使是多对一 FK</div>
+        <div class="pit-body">TypeScript 类型推断为 Array，取值须 <code>Array.isArray(c.x) ? c.x[0] : c.x</code> 防御。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Python from-import 绑定不受 monkeypatch 影响</div>
+        <div class="pit-body">须对每个 from-import 调用方模块单独 <code>setattr</code>，conftest 单点 patch 不够。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">嵌套函数双重 hook 陷阱</div>
+        <div class="pit-body">内层 <code>except + return []</code> 让外层误判成功并覆盖 failure；内外层只允许一层记录同一信号。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ Schema ════════════ -->
+    <section id="schema">
+      <h2>③ Schema / 数据库</h2>
+
+      <div class="pit warn">
+        <div class="pit-title">migration 编号必须在写计划时就 <code>ls</code> 确认</div>
+        <div class="pit-body">并行功能可能占用同一编号；文件名与文件内注释必须一致，否则线上撞号。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title"><code>messages.status</code> CHECK 约束容易写错</div>
+        <div class="pit-body">只允许 <code>pending_approval</code>（不是 <code>pending</code>）；<code>message_queue</code> 没有 <code>content</code> 字段，先写 <code>messages</code> 再关联。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title"><code>conversations</code> INSERT 必须写 <code>douyin_user_id</code></div>
+        <div class="pit-body">漏传则 DM 永远发不出去，无报错静默标 failed；三字段缺一不可。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">schema 有列 ≠ 有写入路径</div>
+        <div class="pit-body">FK 列全仓 grep <code>\\s*[:=]</code> 若只命中 <code>select</code> 就是漏洞；2026-04-23 因此找出 <code>messaging_account_id</code> 定义多年从未被赋值。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Supabase Management API SQL 单引号转义</div>
+        <div class="pit-body"><code>curl -d</code> 含单引号须用 <code>$'...\\'...'</code> 形式，否则 shell 截断 JSON。</div>
+      </div>
+
+      <div class="pit tip">
+        <div class="pit-title">缺 API 时优先造 API，不要记手动 SQL playbook</div>
+        <div class="pit-body">补 API 封装业务逻辑，旧 SQL playbook 升级为"异常兜底"；典型案例：accounts 删除（DELETE <code>/api/accounts/[id]</code> 调 <code>delete_account_safe</code> RPC，2026-04-27 上线）。</div>
+      </div>
+
+      <div class="pit tip">
+        <div class="pit-title">supabase-js 多语句事务标准解法</div>
+        <div class="pit-body">SECURITY DEFINER 函数 + RPC：BEGIN/COMMIT 用 Postgres 函数封装，<code>supabase.rpc()</code> 调；<code>RETURN JSONB</code> 传业务错误码。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">supabase-py <code>nullsfirst=False</code> 不会真的生成 NULLS LAST</div>
+        <div class="pit-body">DESC 默认 NULLS FIRST，全部 NULL 行飘顶；必须显式 <code>.not_.is_('col', 'null')</code> 过滤；leads.ts 同坑。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title"><code>python | tail -25</code> 阻塞 stdout，监控文件永远 0 字节</div>
+        <div class="pit-body">用 <code>python -u | tee</code>；或等脚本结束再读；或直接查 DB 计数绕开 stdout 监控。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ 多租户 ════════════ -->
+    <section id="tenancy">
+      <h2>④ 多租户 / RLS</h2>
+
+      <div class="pit tip">
+        <div class="pit-title">三层防御分工</div>
+        <div class="pit-body">RLS 只做 org 隔离 / API guard 做角色差异 / UI 置灰是第三层；<strong>RLS 里不 JOIN role 表</strong>。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">预埋 <code>org_id</code> 列不等于数据正确关联</div>
+        <div class="pit-body">落地 RLS 前必须 SELECT 审计各表 <code>org_id</code> 分布，发现孤立 org 先清理再收紧政策。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">多租户收紧时必须全仓巡查 <code>[id]</code> DELETE/PATCH 路由</div>
+        <div class="pit-body">V1 单租户 handler 常把 auth 下沉 middleware；多租户下任何登录用户猜 UUID 即可删他 org 的行 — 知识库 DELETE 就这样裸奔过。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ LLM ════════════ -->
+    <section id="llm">
+      <h2>⑤ LLM / Prompt</h2>
+
+      <div class="pit">
+        <div class="pit-title">中文 system prompt 内层引号用「」不用 ASCII 双引号</div>
+        <div class="pit-body">外层 JS 字符串 + 内层 ASCII <code>"</code> 会截断字符串，build 才报错；默认用「」或 Unicode 弯引号。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">LLM 负向规则堆砌导致机器味</div>
+        <div class="pit-body">"绝不/严禁"规则 &gt;6 条让模型进 careful mode；修法：充实 PERSONA 素材 + few-shot 示范替代规则。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">few-shot 场景必须与实际调用场景严格一致</div>
+        <div class="pit-body">冷开场（无 user 先发言）vs 暖场回复是两套逻辑，写 few-shot 前先确认谁先说话。</div>
+      </div>
+
+      <div class="pit tip">
+        <div class="pit-title">LLM 上下文用自然语言而非 KV 格式</div>
+        <div class="pit-body">KV 格式让模型进"档案查询"模式；改自然语言句子输出更自然。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">DeepSeek V3 tool_call 协议字符泄漏到 content</div>
+        <div class="pit-body">content 里出现 <code>function&lt;｜tool▁sep｜&gt;NAME</code>，需 <code>extractLeakedToolCalls</code> 清洗；Qwen3 无此问题；2026-04-27 OpenRouter 多语言幻觉事件后分析路径全切 Qwen3。</div>
+      </div>
+
+      <div class="pit tip">
+        <div class="pit-title">LLM 结构化 JSON 输出 6 层防御</div>
+        <div class="pit-body">token 预算 / batch 上限 / 强制 1:1 / 多级 parser / raw 日志 / 模型选择 / cron 频率设计 —— 缺一就丢数。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">LLM 重写 DM 文案的两类质量陷阱</div>
+        <div class="pit-body">方括号表情代码 <code>[勾引]</code> 漏出 + 杜撰具体地址（成华区展厅）；prompt 层禁令 + <code>strip_bracket_emojis</code> 后处理兜底。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ Playwright / 抖音 ════════════ -->
+    <section id="playwright">
+      <h2>⑥ Playwright / 抖音抓取</h2>
+
+      <div class="pit">
+        <div class="pit-title">Playwright session 必须持久化 profile</div>
+        <div class="pit-body">用 <code>launch_persistent_context + user_data_dir</code>；别随手 close 丢 cookie；<strong>手机 app ≠ PC web session</strong>。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">Playwright <code>networkidle</code> 在 Supabase 实时页面超时</div>
+        <div class="pit-body">改用 <code>domcontentloaded</code> + <code>wait_for_timeout(2000~3000)</code>，Realtime WS 保活导致 networkidle 永不触发。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Playwright MCP <code>browser_run_code</code> 可获取 HttpOnly cookies</div>
+        <div class="pit-body"><code>document.cookie</code> 拿不到 HttpOnly 字段；必须用 <code>browser_run_code</code> 调 <code>page.context().cookies()</code>。</div>
+      </div>
+
+      <div class="pit tip">
+        <div class="pit-title">本地 Playwright MCP 是抖音 cookie 续期标准路径</div>
+        <div class="pit-body">Fly.io IP 被封，本地 Mac Playwright MCP 扫码不受限，是零成本续期方案（约每 15-30 天一次）。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">QR 图片必须跟随平台轮换周期持续刷新</div>
+        <div class="pit-body">扫码登录只截一次 QR 是定时炸弹；抖音 60s 轮换，前端必须每 poll 覆盖新图。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">worker 同步调用不适合 VPN 不稳定环境</div>
+        <div class="pit-body"><code>/scrape/source/{id}</code> 单条耗时 1-2 分钟，VPN 抖动必超时；批量触发走 cron/scrape 异步入队。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">Fly Tokyo IP 抖音用户查找路径全封</div>
+        <div class="pit-body">handle / 搜索 / profile API 全返回空或报错；<code>v.douyin.com</code> 302 跳转不受封锁是<strong>唯一绕过</strong>。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ 抖音 DM 风控 ════════════ -->
+    <section id="douyin-dm">
+      <h2>⑦ 抖音 DM 风控</h2>
+
+      <div class="pit warn">
+        <div class="pit-title">陌生人 DM 是 1 条/对/方向 永久配额</div>
+        <div class="pit-body">同一 sec_uid 招呼信息只能发 1 条 — 对方没回复 / 没互关之前再发都返 7462。<strong>规模触达只能扩号，单号扩不动</strong>。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">cmd:100 OK ≠ 真投递</div>
+        <div class="pit-body">必须 <code>blackboxprotobuf</code> 解 body.100.6 JSON 校验 <code>status_code==0</code>；7911=速率软封约 24h；22102+tip 空=账号观察期 24-72h 完全停止。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">send-loop 探针 cold-start 无效设计</div>
+        <div class="pit-body"><code>fetch_probe_target</code> 选 <code>sent_at</code> 最新 = 刚发未回复必 7462；正确选法：role=user 入站会话；0 条入站时用 <code>--skip-probe</code> fallback。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">抖音 DM 发送必须先暖场再跳 profile</div>
+        <div class="pit-body">cold context 直跳 profile 触发 CAPTCHA；必须先访问首页 feed 再跳目标页。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">"养关系"暖场序列必须走 Playwright，禁止 HTTP 直签</div>
+        <div class="pit-body">行为信号缺失 = 扣分大头；HTTP 直签互动行为会被行为序列模型识别；遇到"为省事 HTTP 直签互动"提案立刻拦截。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">抖音验证码中间页 vs 账号封号区分</div>
+        <div class="pit-body">captcha_markers / ban_keywords 双列表；验证码只 mark_failure 不 ban。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">抖音 Draft.js 输入框中 <code>\n</code> 直接触发 Enter=发送</div>
+        <div class="pit-body"><code>page.keyboard.type</code> 多段文案会在第 1 个 <code>\n</code> 处提前发送并消耗永久配额；必须 Shift+Enter 换行或合并段。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">WDA <code>send_keys</code> 多行文案被切成多条 DM</div>
+        <div class="pit-body">iOS App DM 输入框 Enter=Send；6 行被切 6 条，第 1 条吃配额、后 5 条吃风险分；解法 A 文案单行 + 解法 B sender collapse <code>\n</code> 兜底。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ 网络 ════════════ -->
+    <section id="network">
+      <h2>⑧ 网络 / VPN</h2>
+
+      <div class="pit info">
+        <div class="pit-title">macOS VPN TUN 环境下网络连接绕过</div>
+        <div class="pit-body"><code>pip</code> 用 <code>NO_PROXY="*"</code>；curl/API 用 <code>--resolve</code> + 现场 nslookup 取 IP（IP 会轮换）；DNS 正常但 TCP 超时即 TUN 问题。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">VPN 完全瞬断（instant reject）时不要继续试绕过</div>
+        <div class="pit-body">0-3ms connect failed 是路由 flap，<code>--resolve / NO_PROXY</code> 均无效；直接 <code>ScheduleWakeup 270s</code> 等路由恢复。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">macOS 磁盘满时 Bash 全面哑掉</div>
+        <div class="pit-body">ENOSPC 任何命令都静默失败；先让用户 <code>rm ~/.claude/projects/*/task-outputs/*</code>，不要反复试 Bash。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">fal.ai 免费账户 GCS 403 必须用 base64 绕过</div>
+        <div class="pit-body"><code>fal_client.encode_image()</code> 转 base64 传图，不要直接传文件路径。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ Git ════════════ -->
+    <section id="git">
+      <h2>⑨ Git / 协作流程</h2>
+
+      <div class="pit tip">
+        <div class="pit-title">开始编辑前必须确认 local 与 remote 同步</div>
+        <div class="pit-body">截图 UI 与 local 代码不一致时优先怀疑 local 落后远端，先 <code>git pull</code> 再动手。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title"><code>cherry-pick -x</code> 是 WIP 分支隔离单 commit 上 main 的干净做法</div>
+        <div class="pit-body">WIP 不能整体合并时从 <code>origin/main</code> 新建分支 cherry-pick -x 再快进 push。</div>
+      </div>
+
+      <div class="pit warn">
+        <div class="pit-title">并行 agent 活跃期 feature branch 会被静默切走</div>
+        <div class="pit-body">感知到并行活动立刻放弃 branch 直推 main，branch 在并行期比直推更危险。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">写 UI 操作指南前必须 grep 验证当前状态</div>
+        <div class="pit-body">凭 memory / spec 写指南必错；UI 会变而记忆不会自动更新。</div>
+      </div>
+
+      <div class="pit">
+        <div class="pit-title">spec 里"保留兼容 N 周"的代码必须主动清理</div>
+        <div class="pit-body">不主动回来删就永远是 dead code，新人 / curl / 旧脚本仍会误触。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">接 CI 前先把 <code>scripts/**</code> 加入 eslint ignore</div>
+        <div class="pit-body">一次性调试脚本默认堆 <code>any</code>；首次 lint CI 必踩；统一 ignore 不要 disable 满地撒。</div>
+      </div>
+    </section>
+
+    <!-- ════════════ UX ════════════ -->
+    <section id="ux">
+      <h2>⑩ 产品 / UX</h2>
+
+      <div class="pit warn">
+        <div class="pit-title">DB 实体不能让用户手动输入内部 ID</div>
+        <div class="pit-body">号源 / 账号 / 知识库等实体必须列表展示，绝不要求输入 sec_uid / UUID。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Lark 卡片风格偏好：简洁、优美、图表优先</div>
+        <div class="pit-body">≤300 字；<code>column_set</code> 做双列对比和 KPI 矩阵；<strong>严禁 ASCII 图 / Markdown 表</strong>；先问"像不像上线海报"。</div>
+      </div>
+
+      <div class="pit info">
+        <div class="pit-title">Akke 用 Lark 不是飞书</div>
+        <div class="pit-body">国际版 <code>larksuite.com</code>；措辞一律写 "Lark"，用户对这个区分敏感。</div>
+      </div>
+
+      <div class="pit tip">
+        <div class="pit-title">私信对话页只显示真实已投递 DM</div>
+        <div class="pit-body"><code>sent_at IS NOT NULL</code> 是规范过滤条件；草稿只属于消息审核流。</div>
+      </div>
+    </section>
+
+    <p style="margin-top:48px; font-size:13px; color:var(--text-muted); border-top:1px solid var(--border); padding-top:24px;">
+      想看完整列表？项目 <code>docs/claude-memory/MEMORY.md</code> 有 100+ 条按主题归类的记忆，每一条都对应一次真实事故 + 修法。本页是精选版。
+    </p>
+
+    <footer>
+      <a href="/akke/">← Akke 知识库首页</a> · 最后更新 2026-05-01
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>
