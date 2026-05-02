@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 外呼 + 企微多通道调研 · Akke</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --accent-2: #60a5fa;
+    --accent-2-soft: rgba(96, 165, 250, 0.12);
+    --accent-3: #34d399;
+    --accent-3-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+    --pink: #ec4899;
+    --pink-soft: rgba(236, 72, 153, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 56px 24px 120px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  header.hero { padding: 16px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 {
+    font-size: 44px; font-weight: 700; margin: 0 0 16px;
+    letter-spacing: -0.02em; line-height: 1.15;
+    background: linear-gradient(135deg, #e4e7ed 20%, var(--accent) 80%, var(--accent-2) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { font-size: 18px; color: var(--text-dim); margin: 0 0 24px; max-width: 760px; line-height: 1.55; }
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+  .hero-meta strong { color: var(--text-dim); font-weight: 500; }
+
+  h2 { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin: 56px 0 20px; }
+  h2 .ico { display: inline-block; margin-right: 6px; vertical-align: -2px; }
+  p.lead { margin: 0 0 16px; color: var(--text-dim); font-size: 14.5px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 0.88em; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  strong { color: var(--text); font-weight: 600; }
+
+  /* Facts */
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+  .fact { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 16px; }
+  .fact .ico { font-size: 18px; margin-bottom: 6px; display: block; }
+  .fact .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .fact .val { font-size: 16px; color: var(--text); font-weight: 600; }
+  .fact .sub { font-size: 12.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+  @media (max-width: 860px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Architecture diagram */
+  .arch-wrap { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin: 8px 0 0; }
+  .arch-wrap svg { width: 100%; height: auto; }
+
+  /* Channel cards */
+  .channels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .channels { grid-template-columns: 1fr; } }
+  .ch-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 22px 20px;
+    border-top: 3px solid var(--accent);
+  }
+  .ch-card:nth-child(2) { border-top-color: var(--accent-2); }
+  .ch-card:nth-child(3) { border-top-color: var(--accent-3); }
+  .ch-card .ch-ico { font-size: 28px; margin-bottom: 10px; display: block; }
+  .ch-card h3 { margin: 0 0 4px; font-size: 17px; font-weight: 600; }
+  .ch-card .role-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+  .ch-card ul { margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 13.5px; line-height: 1.7; }
+  .ch-card ul li { margin: 5px 0; }
+  .ch-card ul li strong { color: var(--text); }
+
+  /* Pillars */
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px;
+    border-left: 3px solid var(--accent);
+  }
+  .pillar:nth-child(2) { border-left-color: var(--accent-2); }
+  .pillar:nth-child(3) { border-left-color: var(--accent-3); }
+  .pillar:nth-child(4) { border-left-color: var(--warning); }
+  .pillar:nth-child(5) { border-left-color: var(--danger); }
+  .pillar:nth-child(6) { border-left-color: var(--pink); }
+  .pillar .p-ico { font-size: 22px; margin-bottom: 6px; display: block; }
+  .pillar h4 { margin: 0 0 8px; font-size: 16px; font-weight: 600; color: var(--text); }
+  .pillar p { margin: 0; font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+  .pillar p + p { margin-top: 8px; }
+
+  /* Matrix table */
+  .matrix-wrap { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 4px 0; overflow-x: auto; }
+  table.matrix { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.matrix th { text-align: left; padding: 14px 20px; color: var(--text-muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.matrix td { padding: 14px 20px; color: var(--text-dim); border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.matrix tr:last-child td { border-bottom: none; }
+  table.matrix td:first-child { color: var(--text); font-weight: 600; white-space: nowrap; }
+  table.matrix td .ico { margin-right: 6px; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+  .pill-ok { background: var(--accent-3-soft); color: var(--accent-3); }
+  .pill-warn { background: var(--warning-soft); color: var(--warning); }
+  .pill-bad { background: var(--danger-soft); color: var(--danger); }
+  .pill-info { background: var(--accent-2-soft); color: var(--accent-2); }
+
+  /* Stages timeline */
+  .stages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; position: relative; }
+  @media (max-width: 860px) { .stages { grid-template-columns: 1fr; } }
+  .stage {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px;
+    position: relative;
+  }
+  .stage::before {
+    content: attr(data-step);
+    position: absolute; top: -12px; left: 22px;
+    background: var(--bg); border: 1px solid var(--border-strong); border-radius: 999px;
+    padding: 2px 12px; font-size: 11px; font-weight: 600; color: var(--text-dim); letter-spacing: 0.1em;
+  }
+  .stage h4 { margin: 6px 0 4px; font-size: 16px; font-weight: 600; color: var(--text); }
+  .stage .stage-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+  .stage ul { margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 13.5px; line-height: 1.7; }
+
+  /* Code block */
+  .code-block { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13px; color: var(--text-dim); line-height: 1.7; overflow-x: auto; white-space: pre; }
+  .code-block .k { color: #c4b5fd; }
+  .code-block .c { color: var(--text-muted); font-style: italic; }
+  .code-block .s { color: #86efac; }
+
+  /* Decisions */
+  .decisions { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .decision {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px;
+    display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start;
+  }
+  .decision .num {
+    background: var(--accent-soft); color: var(--accent);
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .decision h4 { margin: 4px 0 6px; font-size: 15px; font-weight: 600; color: var(--text); }
+  .decision p { margin: 0; font-size: 13.5px; color: var(--text-dim); line-height: 1.65; }
+  .decision .options { margin-top: 8px; font-size: 13px; color: var(--text-muted); }
+  .decision .options strong { color: var(--text-dim); }
+
+  /* Honest stats grid */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .stats { grid-template-columns: 1fr; } }
+  .stat {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .stat .stat-ico { font-size: 18px; margin-bottom: 6px; display: block; }
+  .stat .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .stat .stat-val { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 6px; letter-spacing: -0.02em; }
+  .stat .stat-sub { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+
+  /* Callout */
+  .callout {
+    background: var(--warning-soft); border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 12px; padding: 16px 20px; margin: 24px 0;
+    font-size: 14px; color: var(--text-dim); line-height: 1.7;
+  }
+  .callout strong { color: var(--warning); }
+  .callout .c-ico { margin-right: 8px; font-size: 16px; }
+  .callout.danger { background: var(--danger-soft); border-color: rgba(248, 113, 113, 0.3); }
+  .callout.danger strong { color: var(--danger); }
+  .callout.ok { background: var(--accent-3-soft); border-color: rgba(52, 211, 153, 0.3); }
+  .callout.ok strong { color: var(--accent-3); }
+
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><span style="color: var(--text-dim);">外呼+企微调研</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">📞 调研笔记 · 2026-05-02</span>
+    <h1>AI 外呼 + 企微多通道<br>把销售名单跑成成交</h1>
+    <p class="subtitle">
+      新房开盘合规采集到的潜在客户名单（姓名 / 电话 / 楼盘 / 户型）—— 用 Claude 做大脑，AI 外呼 + 短信 + 企业微信三通道协同触达。本文整理可行性、合规边界、技术架构、关键决策点。
+    </p>
+    <div class="hero-meta">
+      <span><strong>📋 数据起点</strong> · 合规采集名单（含书面授权）</span>
+      <span><strong>🎯 目标</strong> · 邀约到店 · 加企微 · 推方案</span>
+      <span><strong>🤝 加好友通道</strong> · 企业微信（非个人微信）</span>
+    </div>
+  </header>
+
+  <h2><span class="ico">📊</span>调研快照</h2>
+  <div class="facts">
+    <div class="fact">
+      <span class="ico">📞</span>
+      <div class="label">触达通道</div>
+      <div class="val">3 条协同</div>
+      <div class="sub">AI 外呼 / SMS / 企微</div>
+    </div>
+    <div class="fact">
+      <span class="ico">🧠</span>
+      <div class="label">大脑</div>
+      <div class="val">Claude 4.x</div>
+      <div class="sub">Haiku 4.5 实时 · Sonnet 4.6 抽取</div>
+    </div>
+    <div class="fact">
+      <span class="ico">⚖️</span>
+      <div class="label">合规层</div>
+      <div class="val">全合规通道</div>
+      <div class="sub">企业资质 · 行业准入 · 双重存档</div>
+    </div>
+    <div class="fact">
+      <span class="ico">🚀</span>
+      <div class="label">最快试跑</div>
+      <div class="val">3 阶段推进</div>
+      <div class="sub">Stage 0/1/2 · 0~5 周可上线</div>
+    </div>
+  </div>
+
+  <h2><span class="ico">🌊</span>端到端流水线</h2>
+  <p class="lead">从合规名单到成交：3 条通道协同，Claude 在每一步做决策。</p>
+  <div class="arch-wrap">
+    <svg viewBox="0 0 920 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="外呼+企微多通道流水线">
+      <defs>
+        <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7384"/>
+        </marker>
+        <linearGradient id="gC1" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.12"/>
+        </linearGradient>
+        <linearGradient id="gC2" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.12"/>
+        </linearGradient>
+        <linearGradient id="gC3" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#34d399" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#34d399" stop-opacity="0.12"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Lead Source -->
+      <rect x="20" y="120" width="130" height="60" rx="10" fill="#141821" stroke="#9ba3b4" stroke-opacity="0.45"/>
+      <text x="85" y="148" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">📋 合规名单</text>
+      <text x="85" y="166" text-anchor="middle" fill="#9ba3b4" font-size="11">Claude 评分</text>
+
+      <!-- Channel 1: AI Call -->
+      <rect x="200" y="40" width="160" height="60" rx="10" fill="url(#gC1)" stroke="#60a5fa" stroke-opacity="0.45"/>
+      <text x="280" y="68" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">📞 ① AI 外呼</text>
+      <text x="280" y="86" text-anchor="middle" fill="#cbd5e1" font-size="11">Haiku 实时对话 · TTS 克隆</text>
+
+      <!-- Channel 2: SMS -->
+      <rect x="200" y="120" width="160" height="60" rx="10" fill="url(#gC2)" stroke="#8b5cf6" stroke-opacity="0.45"/>
+      <text x="280" y="148" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">💬 ② 短信跟进</text>
+      <text x="280" y="166" text-anchor="middle" fill="#cbd5e1" font-size="11">含活码/退订</text>
+
+      <!-- Channel 3: WeCom -->
+      <rect x="200" y="200" width="160" height="60" rx="10" fill="url(#gC3)" stroke="#34d399" stroke-opacity="0.45"/>
+      <text x="280" y="228" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">🤝 ③ 企微对话</text>
+      <text x="280" y="246" text-anchor="middle" fill="#cbd5e1" font-size="11">客户主动加 · AI 全自动</text>
+
+      <!-- Lead → 3 channels -->
+      <line x1="150" y1="135" x2="195" y2="70"  stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar2)"/>
+      <line x1="150" y1="150" x2="195" y2="150" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar2)"/>
+      <line x1="150" y1="165" x2="195" y2="230" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+      <!-- Channel hops -->
+      <path d="M 360 70 Q 440 70 440 150 L 200 150" fill="none" stroke="#fbbf24" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#ar2)"/>
+      <path d="M 360 150 Q 440 150 440 230 L 200 230" fill="none" stroke="#fbbf24" stroke-width="1.4" stroke-dasharray="3,3" marker-end="url(#ar2)"/>
+
+      <!-- Outcome boxes -->
+      <rect x="540" y="40" width="160" height="60" rx="10" fill="#141821" stroke="#34d399" stroke-opacity="0.45"/>
+      <text x="620" y="68" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">🏠 邀约到店</text>
+      <text x="620" y="86" text-anchor="middle" fill="#9ba3b4" font-size="11">线下成交</text>
+
+      <rect x="540" y="120" width="160" height="60" rx="10" fill="#141821" stroke="#34d399" stroke-opacity="0.45"/>
+      <text x="620" y="148" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">📐 方案推送</text>
+      <text x="620" y="166" text-anchor="middle" fill="#9ba3b4" font-size="11">3D 户型 · 报价</text>
+
+      <rect x="540" y="200" width="160" height="60" rx="10" fill="#141821" stroke="#34d399" stroke-opacity="0.45"/>
+      <text x="620" y="228" text-anchor="middle" fill="#e4e7ed" font-size="13" font-weight="600">👤 转人工</text>
+      <text x="620" y="246" text-anchor="middle" fill="#9ba3b4" font-size="11">销售真人接管</text>
+
+      <line x1="360" y1="70"  x2="535" y2="70"  stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar2)"/>
+      <line x1="360" y1="150" x2="535" y2="150" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar2)"/>
+      <line x1="360" y1="230" x2="535" y2="230" stroke="#6b7384" stroke-width="1.4" marker-end="url(#ar2)"/>
+
+      <!-- Claude orchestrator -->
+      <rect x="760" y="120" width="140" height="60" rx="10" fill="#1a1f2b" stroke="#8b5cf6" stroke-opacity="0.6"/>
+      <text x="830" y="148" text-anchor="middle" fill="#c4b5fd" font-size="13" font-weight="600">🧠 Claude 大脑</text>
+      <text x="830" y="166" text-anchor="middle" fill="#9ba3b4" font-size="11">所有 turn 决策</text>
+
+      <line x1="700" y1="70"  x2="760" y2="135" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2,2" marker-end="url(#ar2)"/>
+      <line x1="700" y1="150" x2="760" y2="150" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2,2" marker-end="url(#ar2)"/>
+      <line x1="700" y1="230" x2="760" y2="165" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2,2" marker-end="url(#ar2)"/>
+
+      <!-- Lane labels -->
+      <text x="200" y="30" fill="#60a5fa" font-size="10" font-weight="600" letter-spacing="2">三 通 道 协 同</text>
+      <text x="540" y="30" fill="#34d399" font-size="10" font-weight="600" letter-spacing="2">成 交 出 口</text>
+    </svg>
+  </div>
+
+  <h2><span class="ico">🧠</span>Claude 当大脑：分三层架构</h2>
+  <p class="lead">不要让 Claude 做所有事 —— 电话超时、API 重试、限速这些丢给 Python 才稳。Claude 只做"决策点"。</p>
+  <div class="channels">
+    <div class="ch-card">
+      <span class="ch-ico">🎯</span>
+      <h3>战略层</h3>
+      <div class="role-label">Claude 4.x</div>
+      <ul>
+        <li><strong>个性化脚本生成</strong>：按户型/楼盘/留资时段</li>
+        <li><strong>实时对话决策</strong>：外呼中、SMS 回复、企微回复</li>
+        <li><strong>意图理解</strong>：阶段判断 / 转人工信号</li>
+        <li><strong>结构化抽取</strong>：通话结束后家庭/预算/下一步</li>
+      </ul>
+    </div>
+    <div class="ch-card">
+      <span class="ch-ico">⚙️</span>
+      <h3>战术层</h3>
+      <div class="role-label">Python 规则引擎</div>
+      <ul>
+        <li><strong>节奏调度</strong>：cron + outreach_jobs 队列</li>
+        <li><strong>限速 / 上限 / DNC</strong>：硬约束本地兜底</li>
+        <li><strong>重试 / 超时 / 熔断</strong>：网络异常处理</li>
+        <li><strong>状态机</strong>：lead → call → sms → wecom 流转</li>
+      </ul>
+    </div>
+    <div class="ch-card">
+      <span class="ch-ico">🔌</span>
+      <h3>协议层</h3>
+      <div class="role-label">供应商 SDK</div>
+      <ul>
+        <li><strong>外呼</strong>：容联七陌 / 阿里云通信</li>
+        <li><strong>SMS</strong>：阿里云 / 腾讯云短信</li>
+        <li><strong>企微</strong>：客户联系 + 会话内容存档 API</li>
+        <li><strong>语音</strong>：阿里云流式 ASR + 豆包克隆 TTS</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="ico">🎙️</span>AI 外呼能不能像真人</h2>
+  <p class="lead">短诚实结论：3 分钟内目标导向短对话，<strong>七成普通用户 30 秒内分不出</strong>；超过 5 轮深聊或客户主动套话，识别率会跳到 70%+。装修场景目标是核实意向 + 邀约 + 推企微，1-3 轮就够。</p>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-ico">⏱️</span>
+      <div class="stat-label">单轮延迟目标</div>
+      <div class="stat-val">700-900 ms</div>
+      <div class="stat-sub">真人下限 ~500ms · 超 1.2s 必出戏</div>
+    </div>
+    <div class="stat">
+      <span class="stat-ico">🎭</span>
+      <div class="stat-label">30 秒识别率</div>
+      <div class="stat-val">25-35%</div>
+      <div class="stat-sub">普通用户 · 打过 AI 客服的群体 60-70%</div>
+    </div>
+    <div class="stat">
+      <span class="stat-ico">⏳</span>
+      <div class="stat-label">理想通话时长</div>
+      <div class="stat-val">90-120 s</div>
+      <div class="stat-sub">越短越像真人 · 真销售也不会聊 10 分钟</div>
+    </div>
+  </div>
+
+  <h2><span class="ico">🔧</span>做到接近真人 · 必打满四件事</h2>
+  <div class="pillars">
+    <div class="pillar">
+      <span class="p-ico">🎤</span>
+      <h4>① 音色克隆 · 不要用标准 TTS</h4>
+      <p>拿你销售团队某个真人录 30 分钟自然对话（不是念稿）→ 喂给豆包 / MiniMax Speech-02 做克隆。</p>
+      <p>标准 TTS 一开口就是"客服腔"，瞬间出戏；克隆后的音色 + 一点点不流畅感反而更像真人。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">🌊</span>
+      <h4>② 全链路流式 + 打断检测</h4>
+      <p>流式 ASR（讯飞/阿里）→ 流式 LLM（Claude Haiku 4.5 streaming）→ 流式 TTS。VAD 做客户打断：开口 200ms 内 AI 必须停说话。</p>
+      <p>不做流式的方案延迟普遍 2s+，必出戏。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">💭</span>
+      <h4>③ 填充词 + 思考停顿</h4>
+      <p>LLM 输出加"嗯""那个""我看一下啊"作为开头桥接，掩盖 LLM 推理那 500ms。</p>
+      <p>TTS 配置呼吸声、口水音、轻微语速波动。这一招最便宜也最有效。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">🔊</span>
+      <h4>④ 背景音注入</h4>
+      <p>真人电话有环境音（键盘声、远处人声、空调）；AI 通话太干净是识别信号。</p>
+      <p>注入轻量 office ambient noise（-30dB），听感立刻"真"。</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="c-ico">⚠️</span><strong>法规要诚实提一句：</strong>
+    深圳 2024 / 北京 2025 试点要求 AI 外呼<strong>开场必须主动告知"我是 AI 助手"</strong>。对合规授权留资的客户不告知一般不构成欺诈，但有灰度风险。建议首通含"我是 XX 楼盘的智能助理"（拟真度让步给合规），客户进入企微后可不再主动声明。
+  </div>
+
+  <h2><span class="ico">🤝</span>企业微信 · AI 控制多账号</h2>
+  <p class="lead">整体没问题 —— 企微"客户联系 + 会话内容存档"API 就是官方为多账号 AI 客服设计的。但有<strong>三类约束要分清</strong>。</p>
+
+  <div class="callout ok">
+    <span class="c-ico">✅</span><strong>技术层完全可行：</strong>
+    多账号横向扩，逻辑跟单账号一样。客户给员工 A 发消息 → 会话存档实时 webhook → Python 路由到员工 A 上下文 → Claude 生成回复（含员工 A 人设） → 应用消息 API 以员工 A 身份发回。客户看到的是"销售小王"在自然对话。
+  </div>
+
+  <h2><span class="ico">🚧</span>腾讯硬限制（API 层 · 不可绕）</h2>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th>约束</th>
+          <th>上限</th>
+          <th>影响 / 应对</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="ico">📤</span>主动给单客户群发</td>
+          <td><span class="pill pill-bad">每天 ≤1 条/号</span></td>
+          <td>批量推方案/活动要分天分时；不能绕，是 API 硬码</td>
+        </tr>
+        <tr>
+          <td><span class="ico">📥</span>被动回复（客户先发）</td>
+          <td><span class="pill pill-ok">无限制</span></td>
+          <td><strong>AI 全自动场景的主战场</strong> · 把客户引到主动发问</td>
+        </tr>
+        <tr>
+          <td><span class="ico">➕</span>主动加好友</td>
+          <td><span class="pill pill-warn">官方 ≤100/天/号 · 实操 ≤30</span></td>
+          <td>加完成功率随频率掉；优先让客户扫码主动加</td>
+        </tr>
+        <tr>
+          <td><span class="ico">👥</span>单员工号客户数</td>
+          <td><span class="pill pill-info">≤50000</span></td>
+          <td>通常用不到</td>
+        </tr>
+        <tr>
+          <td><span class="ico">📁</span>会话内容存档</td>
+          <td><span class="pill pill-warn">必须单独购买</span></td>
+          <td>~¥100/席位/年 · 不开就拿不到完整消息流，AI 客服必装</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="ico">⚠️</span>真实会踩的坑</h2>
+  <div class="pillars">
+    <div class="pillar">
+      <span class="p-ico">🪞</span>
+      <h4>① 100 个号同样话术会被截图比对识破</h4>
+      <p>每个员工号注入差异化 prompt（"小王偏理性，爱讲数据""小李偏感性，爱讲案例"），不能完全一样的开场白和结束语。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">🆘</span>
+      <h4>② "你是真人吗"必须立刻转人工</h4>
+      <p>Claude tool_use 加 <code>escalate_to_human(reason)</code>，命中关键词 ping 真销售。关键词：<code>真人/机器人/AI/是不是人/找经理</code>。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">📜</span>
+      <h4>③ 会话内容存档是合规必需</h4>
+      <p>监管要求企业对外部沟通存档可追溯，AI 客服更要存。没存档客户投诉时拿不出聊天记录是真问题。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">🔄</span>
+      <h4>④ 离职/调岗的客户继承</h4>
+      <p>企微"在职继承"和"离职继承"API 把客户转给新员工。Akke 这边要同步 <code>wecom_customers.assigned_employee</code>，否则 AI 会以错误人设回复。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">🏢</span>
+      <h4>⑤ 企微号不能跨企业互通</h4>
+      <p>一个客户被 A 公司员工加为外部联系人 ≠ B 公司能看到。多个 Akke 客户公司各自跑各自的企微号池，按 <code>org_id</code> 严格隔离。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">🚫</span>
+      <h4>⑥ 客户讨厌"被多号打标"</h4>
+      <p>同企业多个号给同一客户发消息会让客户觉得被打标。<strong>客户终身绑一个员工号</strong>，避免多 AI 抢回复，也方便客户记住"我对接的是小王"。</p>
+    </div>
+  </div>
+
+  <h2><span class="ico">📋</span>三通道资质要求矩阵</h2>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th>通道</th>
+          <th>测试阶段</th>
+          <th>生产阶段</th>
+          <th>审核周期</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="ico">📞</span>AI 外呼</td>
+          <td>营业执照 + ICP 备案 + 行业准入材料 + 话术审核</td>
+          <td>同左 + 号码池实名</td>
+          <td><span class="pill pill-bad">1-2 周</span></td>
+        </tr>
+        <tr>
+          <td><span class="ico">💬</span>SMS 营销</td>
+          <td>营业执照 + 营销签名（家装关键词限流）</td>
+          <td>同左 + 模板每条审核</td>
+          <td><span class="pill pill-warn">1-3 工作日</span></td>
+        </tr>
+        <tr>
+          <td><span class="ico">🤝</span>企业微信</td>
+          <td>营业执照 + 对公打款 ¥300/年认证</td>
+          <td>同左</td>
+          <td><span class="pill pill-ok">1-3 工作日</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <span class="c-ico">🚨</span><strong>装修/家居是高敏感行业：</strong>
+    阿里云通信、容联七陌、腾讯云对房地产/装修/教育历史投诉率高，准入要求 plus —— 提供客户授权来源的书面证据样本、话术初稿审核（每改一版要再审 3-5 天）、号码池可能限单号 ≤200 通/天（比通用行业砍一半）、投诉率红线 0.3‰（第一周通常人工抽听）。
+  </div>
+
+  <h2><span class="ico">🚀</span>三段式推进 · 0 到上线</h2>
+  <div class="stages">
+    <div class="stage" data-step="STAGE 0">
+      <h4>把架构跑通</h4>
+      <div class="stage-meta">⏱️ 1-2 周 · 0 资质</div>
+      <ul>
+        <li>Claude orchestration + Python worker + mock supplier</li>
+        <li>外呼"通"到团队自己手机（普通三方号）</li>
+        <li>SMS 沙箱或只发团队内部号</li>
+        <li>企微测试号（关联公司认证号）</li>
+        <li>验证状态机/限速/DNC/Claude 决策</li>
+      </ul>
+    </div>
+    <div class="stage" data-step="STAGE 1">
+      <h4>软通道先开</h4>
+      <div class="stage-meta">⏱️ 1-2 周 · 营业执照</div>
+      <ul>
+        <li>企微正式认证（最快）</li>
+        <li>SMS 通知类签名（比营销签名好开）</li>
+        <li>跑通"短信→企微"两段闭环</li>
+        <li>外呼暂缓，先验证下游转化</li>
+        <li>盲测：团队 10 人盲听 AI 外呼录音</li>
+      </ul>
+    </div>
+    <div class="stage" data-step="STAGE 2">
+      <h4>外呼准入</h4>
+      <div class="stage-meta">⏱️ 2-3 周 · 行业资质</div>
+      <ul>
+        <li>容联七陌或阿里云提交家装行业准入</li>
+        <li>授权样本 + 话术 + 投诉应急流程</li>
+        <li>白名单灰度 50 个号码</li>
+        <li>第一周人工抽听 + 投诉率监控</li>
+        <li>识别率 &lt;40% / 投诉率 &lt;0.3‰ 才放量</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="ico">🗄️</span>Akke 落地骨架</h2>
+  <p class="lead">基于现有 schema 的增量扩展，可以复用 message_queue 审核闸口、customer_profile 跨通道合并、stage machine。</p>
+  <div class="code-block"><span class="c">-- 数据层（增量）</span>
+<span class="k">accounts</span>.type IN (<span class="s">'scraping'</span>, <span class="s">'messaging'</span>, <span class="s">'wecom_employee'</span>)
+
+<span class="k">leads</span> (
+  org_id, name, phone, project, layout,
+  consent_source, consent_at, consent_proof_url,
+  dnc_at, dnc_reason
+)
+
+<span class="k">outreach_jobs</span> (lead_id, channel, status, attempts, scheduled_at, result_jsonb)
+<span class="k">call_records</span> (job_id, recording_url, transcript, claude_extracted_jsonb)
+
+<span class="k">wecom_employees</span> (account_id, external_userid, persona_jsonb,
+                  customer_capacity, daily_addfriend_used)
+
+<span class="k">wecom_customers</span> (external_userid, assigned_employee, last_active_at, ...)
+
+<span class="c">-- worker 路由（worker/routers/outreach.py）</span>
+POST /outreach/call/start    <span class="c"># 触发外呼</span>
+POST /outreach/call/turn     <span class="c"># 通话中 ASR → Claude → TTS（流式）</span>
+POST /outreach/call/end      <span class="c"># 结束后结构化抽取</span>
+POST /outreach/sms/send
+POST /outreach/wecom/invite
+POST /outreach/wecom/reply
+POST /webhook/&lt;provider&gt;     <span class="c"># 各供应商回调</span>
+
+<span class="c">-- LLM 层（src/lib/llm.ts）</span>
+chatReplyVoice()             <span class="c"># 走 Haiku 实时路径</span>
+extractCallSummary()         <span class="c"># Sonnet 结构化抽取</span></div>
+
+  <h2><span class="ico">🤔</span>关键决策点 · 待业务确认</h2>
+  <div class="decisions">
+    <div class="decision">
+      <div class="num">1</div>
+      <div>
+        <h4>外呼是先做"半 AI"还是直接全实时？</h4>
+        <p>影响开发周期和拟真度天花板。</p>
+        <div class="options"><strong>半 AI</strong>（1 周）：Claude 写脚本 + TTS 顺播，容联七陌"智能外呼"模式 · <strong>全实时</strong>（3-4 周）：Claude Haiku 实时对话，效果好但工程量大</div>
+      </div>
+    </div>
+    <div class="decision">
+      <div class="num">2</div>
+      <div>
+        <h4>企微选官方 API 直连还是接 SCRM？</h4>
+        <p>影响开发量和长期成本结构。</p>
+        <div class="options"><strong>API 直连</strong>：灵活但要自己做 SCRM 后台 · <strong>探马/微伴/EC</strong>：省 60% 工程量但每席位 ¥200-500/月</div>
+      </div>
+    </div>
+    <div class="decision">
+      <div class="num">3</div>
+      <div>
+        <h4>外呼供应商怎么选？</h4>
+        <p>决定整个延迟预算和号码池规模。</p>
+        <div class="options"><strong>容联七陌</strong>：最熟 AI 外呼 · <strong>阿里云通信</strong>：最便宜 · <strong>百度智能外呼</strong>：自带 LLM 但锁死他们模型，要避开</div>
+      </div>
+    </div>
+    <div class="decision">
+      <div class="num">4</div>
+      <div>
+        <h4>会话内容存档预算能批吗？</h4>
+        <p>~¥100/席位/年。这是技术前置条件，不开拿不到完整企微消息流。</p>
+        <div class="options">10 人 ¥1k/年 · 50 人 ¥5k/年 · 100 人 ¥1w/年</div>
+      </div>
+    </div>
+    <div class="decision">
+      <div class="num">5</div>
+      <div>
+        <h4>客户授权"书面证据"具体形式？</h4>
+        <p>外呼平台审核会要看样本，影响 Stage 2 准入审核能不能过。</p>
+        <div class="options">纸质留资单 · 电子签 · 勾选框留痕 · 售楼处摄像头同步录像</div>
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="ico">🛡️</span>必须装的"刹车"</h2>
+  <div class="pillars">
+    <div class="pillar">
+      <span class="p-ico">🚷</span>
+      <h4>DNC 黑名单</h4>
+      <p>任何通道收到"退订/勿扰/投诉/T"立刻全通道拉黑，永不复触。Python 战术层规则引擎硬实现，不交给 Claude 决策。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">📈</span>
+      <h4>接通率 / 投诉率监控</h4>
+      <p>运营商投诉率 &gt;0.3‰ 自动停号；外呼接通率 &lt;15% 说明名单或时段有问题。每天 cron 跑健康检查，超阈值告警。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">🚦</span>
+      <h4>per-号上限</h4>
+      <p>外呼 ≤300 通/天 · 企微主动加好友 ≤30/号/天 · SMS 同客户每周 ≤2 条。Python 战术层 token bucket 实现，超即拒。</p>
+    </div>
+    <div class="pillar">
+      <span class="p-ico">📱</span>
+      <h4>转人工 SLA</h4>
+      <p>客户问"找经理/真人吗" → tool_use 命中 → 5 分钟内必须真人接管。Lark 群 @ 销售 + 工单系统双通道告警。</p>
+    </div>
+  </div>
+
+  <footer>
+    AI 外呼 + 企微多通道调研 · 2026-05-02 · <a href="/akke/">← 返回 Akke 知识库</a>
+  </footer>
+
+</div>
+</body>
+</html>
