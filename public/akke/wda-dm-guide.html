@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 抖音 DM 发送 Onboarding（WDA + iPhone）</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-code: #1a1f2b;
+    --border: #242a38;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --info: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border); }
+
+  header.hero { padding: 32px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 16px; letter-spacing: -0.02em; line-height: 1.2; }
+  .subtitle { font-size: 18px; color: var(--text-dim); margin: 0 0 24px; }
+  .meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+  .meta span::before { content: ""; display: inline-block; width: 4px; height: 4px; background: var(--text-muted); border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+
+  h2 { font-size: 28px; font-weight: 700; margin: 56px 0 16px; letter-spacing: -0.01em; padding-top: 16px; }
+  h2 .num { display: inline-block; width: 36px; height: 36px; line-height: 36px; text-align: center; background: var(--accent); color: #fff; border-radius: 10px; font-size: 18px; margin-right: 12px; vertical-align: middle; }
+  h3 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; }
+  p { margin: 12px 0; color: var(--text-dim); }
+  p strong, li strong { color: var(--text); }
+
+  ol, ul { padding-left: 24px; color: var(--text-dim); }
+  ol li, ul li { margin: 10px 0; }
+
+  code { background: var(--bg-code); padding: 2px 6px; border-radius: 4px; font-size: 0.92em; color: var(--info); font-family: "SF Mono", "Monaco", Consolas, monospace; }
+  pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13.5px; line-height: 1.6; }
+
+  .alert { padding: 16px 20px; border-radius: 10px; margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .alert .icon { flex: 0 0 24px; font-size: 22px; line-height: 1; padding-top: 2px; }
+  .alert.warn { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); color: #fde68a; }
+  .alert.info { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.25); color: #bfdbfe; }
+  .alert.danger { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #fecaca; }
+  .alert.success { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); color: #bbf7d0; }
+  .alert strong { color: inherit; }
+
+  .step { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin: 16px 0; position: relative; }
+  .step .step-num { position: absolute; top: -14px; left: 24px; background: var(--accent); color: #fff; font-weight: 700; padding: 4px 12px; border-radius: 6px; font-size: 13px; }
+  .step h3 { margin-top: 8px; }
+
+  .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin: 32px 0; }
+  .toc-title { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .toc a { color: var(--text); text-decoration: none; display: block; padding: 6px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a:last-child { border-bottom: none; }
+
+  .check-list { list-style: none; padding: 0; }
+  .check-list li { padding: 8px 0 8px 32px; position: relative; color: var(--text); }
+  .check-list li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--success); font-weight: 700; font-size: 18px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; }
+  td { color: var(--text-dim); }
+  td strong { color: var(--text); }
+  td code { font-size: 12.5px; }
+
+  .invite-table th, .invite-table td { padding: 14px 16px; }
+  .invite-table .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
+  .invite-table .badge.must { background: rgba(248,113,113,0.15); color: #fecaca; }
+  .invite-table .badge.recommended { background: rgba(251,191,36,0.15); color: #fde68a; }
+  .invite-table .badge.optional { background: rgba(155,163,180,0.15); color: var(--text-dim); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  details { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px; margin: 12px 0; }
+  details summary { cursor: pointer; font-weight: 600; padding: 4px 0; color: var(--text); list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: "▶ "; color: var(--text-muted); margin-right: 4px; }
+  details[open] summary::before { content: "▼ "; }
+  details[open] summary { margin-bottom: 12px; }
+
+  .cheat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin: 24px 0; }
+  .cheat h3 { margin: 0 0 12px; font-size: 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .cheat pre { margin: 8px 0; }
+
+  .footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+  .footer a { color: var(--text-dim); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 30px; }
+    h2 { font-size: 22px; }
+    .container { padding: 32px 18px 80px; }
+    table, thead, tbody, th, td, tr { display: block; }
+    th { display: none; }
+    td { border: none; padding: 4px 0; }
+    .invite-table tr { border-bottom: 1px solid var(--border); padding: 12px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<nav class="breadcrumb">
+  <a href="/">upio.ai</a><span>/</span><a href="/akke">Akke</a><span>/</span><span style="color: var(--text-dim);">DM 发送 Onboarding</span>
+</nav>
+
+<header class="hero">
+  <span class="tag">团队内部 · 新人入职 · DM 发送链路</span>
+  <h1>抖音 DM 发送 Onboarding</h1>
+  <p class="subtitle">从 0 到自己跑通一条已审消息的全流程：环境搭建 + 日常 SOP + 故障排查 + 红线。预计 1.5 小时。</p>
+  <div class="meta">
+    <span>更新于 2026-05-06</span>
+    <span>路径：iPhone + WebDriverAgent + 抖音 App</span>
+    <span>团队内部使用，请勿外传</span>
+  </div>
+</header>
+
+<div class="alert info">
+  <span class="icon">📌</span>
+  <div>
+    <strong>这是给谁看的？</strong> 刚加入 Akke、需要承担"DM 审核 + 发送"工序的同事。读完后你能独立跑：从 Akke 后台审核已通过的 DM 草稿 → 在你的 Mac + iPhone 上把消息真的发出去。
+    <br><br>
+    <strong>读完前请准备：</strong>一台你自己的 Mac、一台 iPhone（13 / 14 / 15 / Pro 都行）、一根原装数据线、一个你自己的 Apple ID。
+  </div>
+</div>
+
+<div class="alert warn">
+  <span class="icon">🤖</span>
+  <div>
+    <strong>嫌看文档慢？</strong> 这份教程有一个对应的 <strong>"AI 代跑版"</strong> markdown 文件 —— 找现任 Owner 要 <code>akke-wda-dm-playbook.md</code>，把它喂给你 Mac 上的 Claude Code，AI 会带你逐步执行命令，遇到必须人做的环节会停下问你。<strong>推荐做法：先扫一遍本页心里有数 → 再开 Claude Code 喂 .md 实际操作。</strong>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">📖 目录</div>
+  <a href="#section-1">① 这条 DM 链路在干什么</a>
+  <a href="#section-2">② 邀请清单（找现任 Owner 拉你进哪些平台）</a>
+  <a href="#section-3">③ 硬件 + Apple ID 清单</a>
+  <a href="#section-4">④ 一次性环境搭建（A 主线 · 1.5 小时）</a>
+  <a href="#section-5">⑤ 日常开盘 SOP（B 主线 · 5 分钟）</a>
+  <a href="#section-6">⑥ 故障排查（按症状 → 修法）</a>
+  <a href="#section-7">⑦ 红线 · 不要踩</a>
+  <a href="#section-8">⑧ 一页速查卡</a>
+</div>
+
+<h2 id="section-1"><span class="num">1</span>这条 DM 链路在干什么</h2>
+
+<p>Akke 的 DM 发送是一条"先审后发"的流水线，<strong>你的工作发生在最后两环</strong>：</p>
+
+<pre><code>抓评论 → AI 评分 → AI 起草 DM
+   ↓
+你在 Akke 后台审核（通过 / 编辑 / 拒绝）  ← 你做这一步
+   ↓
+被通过的 DM 落入 Supabase message_queue 表（状态 approved）
+   ↓
+你 Mac 上跑 dm_send_v3.py 拉取 approved 行   ← 你做这一步
+   ↓
+脚本通过 WebDriverAgent 操控你的 iPhone 抖音 App 发送
+   ↓
+回写 sent / failed 状态</code></pre>
+
+<p>关键认知：</p>
+<ul>
+  <li><strong>没有"自动发不审"模式</strong>：所有出站 DM 必须先经过 Akke 后台人工通过。</li>
+  <li><strong>不走 Fly.io 服务器，走你的本地 Mac + iPhone</strong>：抖音对服务器 IP 做了封锁，只有真实手机 + 真实住宅 IP 能稳定投递。</li>
+  <li><strong>WebDriverAgent (WDA)</strong> 是一套苹果官方支持的 iOS 自动化框架，相当于"远程遥控你 iPhone 的抖音 App"，比模拟器或服务器风控宽松 10 倍。</li>
+</ul>
+
+<h2 id="section-2"><span class="num">2</span>邀请清单</h2>
+
+<p><strong>动手装环境前先把这些账号开好</strong>。所有邀请都找<strong>现任项目 Owner</strong>（在 Lark "Akke 智能获客系统群" 里 @ 一下即可）。</p>
+
+<table class="invite-table">
+  <thead>
+    <tr>
+      <th>平台</th>
+      <th>等级</th>
+      <th>用途</th>
+      <th>邀请方做什么</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Akke 应用账号</strong><br><code>akke.upio.ai</code></td>
+      <td><span class="badge must">必备</span></td>
+      <td>登录 dashboard 审核 DM 草稿、看 message_queue 状态</td>
+      <td>Owner 进 <code>/team</code> 邀请你的邮箱，给 <code>Operator</code> 角色</td>
+    </tr>
+    <tr>
+      <td><strong>worker .env</strong><br>（凭据文件）</td>
+      <td><span class="badge must">必备</span></td>
+      <td>本地 dm_send_v3 脚本访问 Supabase 取 approved 行需要这些密钥</td>
+      <td>Owner 通过 <strong>1Password / Lark 私密会话</strong>把 <code>SUPABASE_URL</code> / <code>SUPABASE_SERVICE_ROLE_KEY</code> / <code>FLY_WORKER_SECRET</code> 给你。<strong>不要发到群里。</strong></td>
+    </tr>
+    <tr>
+      <td><strong>GitHub 仓库</strong><br><code>akke</code></td>
+      <td><span class="badge must">必备</span></td>
+      <td>clone 项目代码（dm_send_v3.py 等脚本在这里）</td>
+      <td>Owner 在仓库 Settings → Collaborators 加你的 GitHub 账号</td>
+    </tr>
+    <tr>
+      <td><strong>Supabase 项目</strong><br><code>app.supabase.com</code></td>
+      <td><span class="badge recommended">强烈建议</span></td>
+      <td>出问题时直接查 SQL（如 message_queue 卡了哪条、conversations 状态机为啥不动）</td>
+      <td>Owner 进 Project Settings → Team 邀请你的邮箱</td>
+    </tr>
+    <tr>
+      <td><strong>Vercel 团队</strong><br><code>vercel.com</code></td>
+      <td><span class="badge optional">可选</span></td>
+      <td>看前端构建日志、Cron 执行历史。日常发 DM 用不到。</td>
+      <td>邀请 + 关键一步见下方警告框</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert warn">
+  <span class="icon">⚠️</span>
+  <div>
+    <strong>Vercel 邀请的隐藏坑（如果你需要这个权限）：</strong>
+    <br>
+    Vercel 邀请邮箱通过 ≠ 你 push 代码后 deploy 能通过。Vercel 校验的是 <strong>commit author 的 GitHub login</strong>，不是邮箱。
+    <br>
+    <strong>你需要做：</strong>登入 Vercel 后访问 <code>vercel.com/account/login-connections</code>，把你的 GitHub 账号绑定进去。否则你 push 后 Vercel 会拒绝部署，errorLink 是 <code>team-configuration</code>。
+  </div>
+</div>
+
+<div class="alert success">
+  <span class="icon">✅</span>
+  <div>
+    <strong>检查清单 —— 全打勾再继续：</strong>
+    <ul class="check-list" style="margin: 8px 0 0;">
+      <li>Akke 邮箱邀请已收 + 能登录 <code>akke.upio.ai</code></li>
+      <li>拿到 worker .env 内容（SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY / FLY_WORKER_SECRET）</li>
+      <li>GitHub 仓库已能访问 + 能 clone</li>
+      <li>（建议）Supabase 项目能登录</li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="section-3"><span class="num">3</span>硬件 + Apple ID 清单</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>项</th>
+      <th>要求</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Mac</strong></td>
+      <td>macOS 14+，建议 16GB 内存</td>
+      <td>跑 Xcode 编译 + Python WDA 客户端 + Akke worker。Intel / Apple Silicon 都行</td>
+    </tr>
+    <tr>
+      <td><strong>iPhone</strong></td>
+      <td>iPhone 12 及以上，iOS 17+</td>
+      <td>抖音 App 跑 WDA 自动化的真机。建议<strong>专门一台用于工作</strong>，不要混你日常生活用的</td>
+    </tr>
+    <tr>
+      <td><strong>数据线</strong></td>
+      <td>原装或 MFi 认证</td>
+      <td>USB 连接 Mac↔iPhone 全程要插着，不能拔</td>
+    </tr>
+    <tr>
+      <td><strong>Apple ID</strong></td>
+      <td>你<strong>自己的</strong> Apple ID（任何区都行）</td>
+      <td>用来在 Xcode 里登录 Personal Team（免费个人开发者）。不要用公司共享 ID</td>
+    </tr>
+    <tr>
+      <td><strong>抖音账号</strong></td>
+      <td>已登录 iPhone 抖音 App</td>
+      <td>Owner 给你分配一个工作号；自己日常号不要用来跑 Akke</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert info">
+  <span class="icon">💡</span>
+  <div>
+    <strong>Apple ID 个人开发者 vs 公司账号：</strong>我们用的是免费的 "Personal Team"（任何 Apple ID 默认都能开）。这有一个限制 —— <strong>编译的 WDA 证书只能用 7 天</strong>，过期后要重新 build & install 一次（约 5 分钟）。等团队规模大了再升级到付费 Apple Developer Program ($99/年，证书 1 年期）。
+  </div>
+</div>
+
+<h2 id="section-4"><span class="num">4</span>一次性环境搭建（A 主线）</h2>
+
+<p>下面 10 步是<strong>第一次开搞前要走一遍的</strong>，预计 1-1.5 小时（Xcode 下载占大头）。每步独立，做完一步打 ✓ 再下一步。</p>
+
+<div class="step">
+  <span class="step-num">第 1 步</span>
+  <h3>装 Xcode + 命令行工具</h3>
+  <p>Mac App Store 搜索 "Xcode" → 下载（约 12 GB，需要 1-2 小时网速看人）→ 装好后<strong>必须打开一次接受协议</strong>。</p>
+  <p>然后终端执行：</p>
+  <pre><code>xcode-select --install
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+xcode-select -p   # 输出 /Applications/Xcode.app/... 即就绪</code></pre>
+</div>
+
+<div class="step">
+  <span class="step-num">第 2 步</span>
+  <h3>Apple ID 登录 Xcode + 开 Personal Team</h3>
+  <ol>
+    <li>Xcode 打开 → 顶部菜单 <code>Xcode → Settings → Accounts</code> → 点 "+" 加你的 Apple ID</li>
+    <li>登录后会自动生成一个 "Personal Team"（团队 ID 是 10 位字符）</li>
+    <li>把<strong>团队 ID 记下来</strong>（后面 sed 改 bundle ID 时要用到）</li>
+  </ol>
+  <p>查 Team ID 的快捷方式：</p>
+  <pre><code>security find-certificate -a -p ~/Library/Keychains/login.keychain-db \
+  | openssl x509 -noout -subject 2>/dev/null \
+  | grep -o 'OU=[A-Z0-9]\{10\}' | head -1
+# 输出：OU=NQC9WL9445  ← Team ID 是 NQC9WL9445</code></pre>
+  <div class="alert warn">
+    <span class="icon">⚠️</span>
+    <div>Team ID 是证书的 <strong>OU 字段</strong>，不是 CN 括号里那串。容易混。</div>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-num">第 3 步</span>
+  <h3>clone WebDriverAgent 仓库 + 改 bundle ID</h3>
+  <pre><code>cd ~
+git clone https://github.com/appium/WebDriverAgent.git
+cd WebDriverAgent
+
+# 把 Facebook 默认 bundle ID 改成你自己的（用你名字的拼音/缩写）
+sed -i '' 's/com.facebook.WebDriverAgentRunner/com.<你名>.WebDriverAgentRunner/g' \
+  WebDriverAgent.xcodeproj/project.pbxproj</code></pre>
+  <p>把 <code>&lt;你名&gt;</code> 替换成英文小写名字（例：<code>com.kara.WebDriverAgentRunner</code>）。Personal Team 不能用别人占过的 bundle ID，<strong>必须改</strong>。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 4 步</span>
+  <h3>编译 WDA</h3>
+  <pre><code>cd ~/WebDriverAgent
+xcodebuild build-for-testing \
+  -project WebDriverAgent.xcodeproj \
+  -scheme WebDriverAgentRunner \
+  -destination 'generic/platform=iOS' \
+  CODE_SIGNING_ALLOWED=NO</code></pre>
+  <p>编译结果会在 <code>~/Library/Developer/Xcode/DerivedData/WebDriverAgent-*</code> 下。</p>
+  <p>构建后 <strong>xctestrun 文件里的 bundle ID 也要改一次</strong>：</p>
+  <pre><code>sed -i '' 's/com.facebook.WebDriverAgentRunner/com.<你名>.WebDriverAgentRunner/g' \
+  ~/Library/Developer/Xcode/DerivedData/WebDriverAgent-*/Build/Products/*.xctestrun</code></pre>
+  <details>
+    <summary>报 "iOS 26.4 Platform Support: not installed"？</summary>
+    <p>新 iOS 上常见。<strong>不影响编译</strong>，只要你加了 <code>CODE_SIGNING_ALLOWED=NO</code> 和 <code>generic/platform=iOS</code> 就能跳过 platform 检查继续。</p>
+  </details>
+</div>
+
+<div class="step">
+  <span class="step-num">第 5 步</span>
+  <h3>把 WDA 安装到 iPhone</h3>
+  <p>用数据线连上 iPhone（信任电脑），先取你的 UDID：</p>
+  <pre><code>system_profiler SPUSBDataType | grep -A 4 "iPhone" | grep "Serial Number"</code></pre>
+  <p>把 UDID 记下来（40 位字符），然后：</p>
+  <pre><code>UDID=00008110-001A44421447801E   # 换成你的
+
+# 找编译产物
+APP=$(find ~/Library/Developer/Xcode/DerivedData/WebDriverAgent-* \
+  -name "WebDriverAgentRunner-Runner.app" | head -1)
+
+# 安装
+xcrun devicectl device install app --device $UDID "$APP"</code></pre>
+</div>
+
+<div class="step">
+  <span class="step-num">第 6 步</span>
+  <h3>iPhone 上信任开发者证书</h3>
+  <p>iPhone 第一次跑 WDA 会弹 "Untrusted Developer"，必须手动信任：</p>
+  <ol>
+    <li>iPhone → <strong>设置 → 通用 → VPN 与设备管理</strong></li>
+    <li>找到 <strong>"开发者 App"</strong> 一栏 → 点你的 Apple ID</li>
+    <li>点 <strong>"信任 com.&lt;你名&gt;.WebDriverAgentRunner"</strong> → 弹窗再次确认 → 信任</li>
+  </ol>
+</div>
+
+<div class="step">
+  <span class="step-num">第 7 步</span>
+  <h3>iPhone 自动锁定改 "永不"</h3>
+  <p>iPhone → <strong>设置 → 显示与亮度 → 自动锁定 → 永不</strong>。</p>
+  <div class="alert danger">
+    <span class="icon">🔒</span>
+    <div><strong>这一步不能跳。</strong> Personal Team 没有解锁权限，屏幕一黑所有 WDA 命令会立即 timeout，发送任务直接挂掉。"永不"+ 把 iPhone 摆桌上是唯一可行方案。</div>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-num">第 8 步</span>
+  <h3>装 pymobiledevice3</h3>
+  <p>iOS 17+ 必须用 <code>pymobiledevice3</code>（旧的 <code>tidevice</code> 已经不能用了）：</p>
+  <pre><code>pip3 install --user 'pymobiledevice3>=9.12.0'
+pymobiledevice3 --version  # 验证装好</code></pre>
+</div>
+
+<div class="step">
+  <span class="step-num">第 9 步</span>
+  <h3>clone Akke 仓库 + 装依赖</h3>
+  <pre><code>cd ~
+git clone git@github.com:&lt;Akke 仓库地址&gt; Akke
+cd Akke/worker
+pip3 install -r requirements.txt
+playwright install chromium  # 备用，目前 DM 不走 playwright 但其他工具会用</code></pre>
+</div>
+
+<div class="step">
+  <span class="step-num">第 10 步</span>
+  <h3>把 .env 放到 worker 目录</h3>
+  <p>把现任 Owner 通过 1Password 给你的 worker .env 内容，保存到：</p>
+  <pre><code>~/Akke/worker/.env</code></pre>
+  <p>内容应该至少包含：</p>
+  <pre><code>SUPABASE_URL=https://&lt;xxx&gt;.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+FLY_WORKER_SECRET=&lt;长字符串&gt;</code></pre>
+  <div class="alert danger">
+    <span class="icon">🔐</span>
+    <div><code>SUPABASE_SERVICE_ROLE_KEY</code> 能绕过所有租户隔离访问全库数据。<strong>不要 commit、不要发群、不要截图分享。</strong></div>
+  </div>
+</div>
+
+<div class="alert success">
+  <span class="icon">🎉</span>
+  <div>
+    <strong>环境搭建完成。</strong>下一节是日常开盘 SOP（每天上工跑一遍即可）。
+  </div>
+</div>
+
+<h2 id="section-5"><span class="num">5</span>日常开盘 SOP（B 主线）</h2>
+
+<p>每天开始发 DM 之前跑下面 7 步，全程 5 分钟。</p>
+
+<div class="step">
+  <span class="step-num">第 1 步</span>
+  <h3>启动 RSD 隧道（需要 sudo）</h3>
+  <p><strong>开终端 1</strong>，跑：</p>
+  <pre><code>sudo pymobiledevice3 remote tunneld -d</code></pre>
+  <p>这条命令需要前台保持运行，<strong>不要关</strong>。让它一直跑。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 2 步</span>
+  <h3>取 RSD 隧道地址</h3>
+  <p><strong>新开终端 2</strong>：</p>
+  <pre><code>curl -s http://127.0.0.1:49151/ | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+v = list(d.values())[0]
+print(v['rsd_address'], v['rsd_port'])
+"</code></pre>
+  <p>会输出类似 <code>fd68:295b:b075::1 55320</code>（IPv6 地址 + 端口），<strong>抄下来</strong>。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 3 步</span>
+  <h3>启动 WDA xctest runner</h3>
+  <p><strong>终端 2</strong> 继续跑（替换上一步抄的地址 + 你自己的 bundle ID）：</p>
+  <pre><code>pymobiledevice3 developer dvt xcuitest \
+  --rsd fd68:295b:b075::1 55320 \
+  com.&lt;你名&gt;.WebDriverAgentRunner.xctrunner</code></pre>
+  <p><strong>注意：</strong>bundle ID 末尾 <code>.xctrunner</code> 是固定后缀，<strong>不能省</strong>。这个终端也要保持前台。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 4 步</span>
+  <h3>转发端口 8100</h3>
+  <p><strong>新开终端 3</strong>：</p>
+  <pre><code>pymobiledevice3 usbmux forward 8100 8100</code></pre>
+  <p>这条会把 iPhone 的 WDA 端口映射到 Mac 的 <code>localhost:8100</code>。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 5 步</span>
+  <h3>验活</h3>
+  <p><strong>新开终端 4</strong>：</p>
+  <pre><code>curl http://localhost:8100/status</code></pre>
+  <p>返回 JSON 含 <code>"sessionId"</code> 字段就 OK。如果 timeout 或 connection refused 跳第 6 节"故障排查"。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">第 6 步</span>
+  <h3>iPhone 端暖场</h3>
+  <ol>
+    <li><strong>解锁 iPhone</strong>，确保屏幕亮（设置过"永不"那一步保持）</li>
+    <li>打开抖音 App</li>
+    <li>切到 <strong>"我"</strong> 标签 → 这一步是必须的，cold context（直接跳搜索/发现）会触发风控验证码</li>
+    <li>返回首页推荐流停留 30 秒（看几条视频，给账号一个"今天活了"的信号）</li>
+  </ol>
+</div>
+
+<div class="step">
+  <span class="step-num">第 7 步</span>
+  <h3>跑 dm_send_v3</h3>
+  <p><strong>终端 4</strong>：</p>
+  <pre><code>cd ~/Akke/worker
+python3 dm_send_v3.py --max 5</code></pre>
+  <p><code>--max 5</code> 是<strong>本批最多发 5 条</strong>。新人头几次跑建议 <code>--max 3</code> 摸熟手感。</p>
+  <p>终端会打印每条候选的进度，类似：</p>
+  <pre><code>[1/5] 候选: 榴莲 (sec_uid: MS4w...) intent=95
+  → 暖场 OK
+  → 跳转 profile OK
+  → 点击私信 OK
+  → 输入文案 OK
+  → 发送 SENT ✓
+  间隔 120s（随机 90-180s）
+[2/5] ...</code></pre>
+  <div class="alert info">
+    <span class="icon">⏱️</span>
+    <div>
+      每条 DM 大约 30 秒，加上 90-180s 随机间隔，跑完 5 条 ≈ 12-18 分钟。<strong>跑的过程中 iPhone 必须保持解锁、不能切到其他 App</strong>。可以离开桌子，但别动机器。
+    </div>
+  </div>
+</div>
+
+<h3>收工</h3>
+<p>跑完后回各个终端按 <code>Ctrl+C</code>：终端 1 (tunneld) → 终端 2 (xcuitest) → 终端 3 (forward)。或者一把杀干净：</p>
+<pre><code>sudo pkill -f "remote tunneld"
+pkill -f xcuitest
+pkill -f "usbmux forward"</code></pre>
+
+<h2 id="section-6"><span class="num">6</span>故障排查</h2>
+
+<p>下面 8 类是已知坑。<strong>按症状对照修法</strong>。</p>
+
+<details>
+  <summary>1. <code>curl localhost:8100/status</code> timeout 或 connection refused</summary>
+  <p>三步链有一环挂了。<strong>按顺序检查</strong>：</p>
+  <ol>
+    <li>终端 1 (tunneld) 还在跑吗？没在跑重启它</li>
+    <li>终端 2 (xcuitest) 还在跑吗？挂了重启</li>
+    <li>终端 3 (forward) 还在跑吗？挂了重启</li>
+    <li>iPhone 的 USB 连接还在吗？拔了重插</li>
+  </ol>
+</details>
+
+<details>
+  <summary>2. 跑着跑着所有 WDA 命令都 timeout</summary>
+  <p>多半是 <strong>iPhone 屏幕黑了</strong>。Personal Team 没有解锁权限，屏幕一锁所有 XCTest 命令会立即挂起。</p>
+  <p><strong>修法：</strong></p>
+  <ul>
+    <li>立即解锁 iPhone（按下电源键 + Face ID / 输密码）</li>
+    <li>检查 <strong>设置 → 显示与亮度 → 自动锁定 = 永不</strong> —— 必须永不</li>
+    <li>重启 xcuitest（终端 2）</li>
+  </ul>
+</details>
+
+<details>
+  <summary>3. 跑了 1 小时左右开始报 "connection was invalidated"</summary>
+  <p>xcodebuild test runner 跑超过 ~1h 会被 testmanagerd 主动断连（与证书无关，是苹果内部超时）。</p>
+  <p><strong>修法：单批 ≤ 8 条 DM，超过拆成多次跑，每次重启 xcuitest 终端。</strong></p>
+</details>
+
+<details>
+  <summary>4. 一条文案被切成 5-6 条独立 DM 发出去了</summary>
+  <p>抖音 iOS App 的输入框（Draft.js）把每个换行符当 Enter（=立即发送）。如果 prompt 写出多段文案，<code>send_keys</code> 会触发风控且永久消耗对方配额。</p>
+  <p><strong>修法：</strong>用最新的 <code>dm_send_v3.py</code>（已加 <code>\n</code> 折叠安全网）。<strong>不要回退到 v1 / v2 版本。</strong></p>
+</details>
+
+<details>
+  <summary>5. 控制台报 status_code=7173</summary>
+  <p>对方关闭了陌生人私信。<strong>这是正常拦截</strong>，不是你的问题。脚本会自动 mark_failed，跳下一条。</p>
+</details>
+
+<details>
+  <summary>6. 控制台报 status_code=22102 或 7911</summary>
+  <p>账号触发风控（22102 是观察期，7911 是速率软封）。</p>
+  <p><strong>修法：</strong></p>
+  <ul>
+    <li>立即停用此账号 24-72 小时</li>
+    <li>切到另一个工作号（找 Owner 拿）</li>
+    <li><strong>不要硬重试</strong>：硬撞会让账号进入更严格的观察期</li>
+  </ul>
+</details>
+
+<details>
+  <summary>7. iPhone 弹出滑块 / 旋转图片验证码</summary>
+  <p>抖音偶尔抽查。脚本会等待，<strong>你手动滑一下完成验证</strong>，然后回到终端按回车继续。验证码本身不计风险分，正常通过即可。</p>
+</details>
+
+<details>
+  <summary>8. 证书过期 / 7 天后 WDA 装不上</summary>
+  <p>Personal Team 签名只有 7 天有效期。每周二（或者你自己定的时间）跑一次重签：</p>
+  <ol>
+    <li>重做<strong>第 4 步</strong> 编译</li>
+    <li>重做<strong>第 5 步</strong> 安装</li>
+    <li>iPhone 上重做<strong>第 6 步</strong> 信任证书</li>
+  </ol>
+  <p>大约 5 分钟。</p>
+</details>
+
+<h2 id="section-7"><span class="num">7</span>红线 · 不要踩</h2>
+
+<div class="alert danger">
+  <span class="icon">🚫</span>
+  <div>下面五条是过去半年实战踩出来的硬规则，<strong>每一条都对应至少一次账号被风控的事故</strong>。</div>
+</div>
+
+<ul class="check-list">
+  <li><strong>单号 ≤ 5 条 / 天</strong> —— 抖音陌生人 DM 是 "1 条 / 对 / 方向" 永久配额，对方未回复前你重发也只返 7462。规模触达只能扩号，不能压榨单号</li>
+  <li><strong>单批 ≤ 8 条</strong> —— xcodebuild test runner 跑 1h+ 会自动断连，超过就拆批</li>
+  <li><strong>多行文案禁忌</strong> —— prompt 写文案时坚持单段输出。<code>dm_send_v3.py</code> 加了 <code>\n</code> 折叠安全网兜底，但别故意去试</li>
+  <li><strong>不要在 iPhone 任务切换里"上滑杀掉" WDARunner App</strong> —— 它必须在后台保持运行，杀掉后 xcuitest 立即断连</li>
+  <li><strong>V1 内测期 ≤ 5 个抖音工作号</strong> —— 单 Mac + 单 iPhone 跑 5 个号已经接近物理上限。需要更大规模找 Owner 申请扩配置</li>
+</ul>
+
+<h2 id="section-8"><span class="num">8</span>一页速查卡</h2>
+
+<div class="cheat">
+  <h3>📋 日常开盘 5 分钟 · 抄了就能跑</h3>
+  <pre><code># 终端 1
+sudo pymobiledevice3 remote tunneld -d
+
+# 终端 2 — 取 RSD 地址
+curl -s http://127.0.0.1:49151/ | python3 -c "import sys,json;d=json.load(sys.stdin);v=list(d.values())[0];print(v['rsd_address'],v['rsd_port'])"
+
+# 终端 2 — 启 xctest（用上面输出的地址）
+pymobiledevice3 developer dvt xcuitest \
+  --rsd &lt;ip&gt; &lt;port&gt; com.&lt;你名&gt;.WebDriverAgentRunner.xctrunner
+
+# 终端 3
+pymobiledevice3 usbmux forward 8100 8100
+
+# 终端 4 — 验活
+curl http://localhost:8100/status
+
+# iPhone：解锁 → 抖音 App → 切「我」 → 回首页停 30s
+
+# 终端 4 — 发
+cd ~/Akke/worker && python3 dm_send_v3.py --max 5
+
+# 收工
+sudo pkill -f "remote tunneld"; pkill -f xcuitest; pkill -f "usbmux forward"</code></pre>
+</div>
+
+<div class="cheat">
+  <h3>🆘 错误码速查</h3>
+  <table>
+    <tr><td><code>7173</code></td><td>对方关私信，正常拦截，跳下一条</td></tr>
+    <tr><td><code>7462</code></td><td>同一对象已发过、对方未回复，配额用完</td></tr>
+    <tr><td><code>7911</code></td><td>账号速率软封，停用 24h</td></tr>
+    <tr><td><code>22102</code></td><td>账号观察期，停用 24-72h，换号</td></tr>
+    <tr><td>curl 8100 timeout</td><td>三步链断了一环，按"故障排查 1"重启</td></tr>
+    <tr><td>所有命令 timeout</td><td>iPhone 屏幕黑了，立即解锁</td></tr>
+    <tr><td>connection invalidated</td><td>WDA 跑超 1h，单批 ≤ 8 条 + 重启</td></tr>
+  </table>
+</div>
+
+<hr>
+
+<div class="footer">
+  <p>有问题？在 Lark "Akke 智能获客系统群" 里 @ Owner 或 @ Gloomberg。</p>
+  <p>本教程基于 Akke V1 内测期实战 14 发 12 中（85.7% 投递率）的经验沉淀，2026-04-29 ~ 2026-05-06 实测路径。</p>
+  <p><a href="/akke">← 返回 Akke 知识库</a> · <a href="/">← 返回 upio.ai</a></p>
+</div>
+
+</div>
+</body>
+</html>
