@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 知识库与提示词工程</title>
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #141821;
+  --bg-deep: #1a1f2b;
+  --border: #242a38;
+  --border-strong: #2f3646;
+  --text: #e4e7ed;
+  --text-dim: #9ba3b4;
+  --text-muted: #6b7384;
+  --accent: #8b5cf6;
+  --accent-soft: rgba(139, 92, 246, 0.15);
+  --accent-2: #60a5fa;
+  --accent-2-soft: rgba(96, 165, 250, 0.12);
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin:0; padding:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:16px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+.container { max-width:1080px; margin:0 auto; padding:48px 24px 120px; }
+.breadcrumb { font-size:13px; color:var(--text-muted); margin-bottom:24px; }
+.breadcrumb a { color:var(--text-dim); text-decoration:none; }
+.breadcrumb a:hover { color:var(--accent); }
+.breadcrumb span { margin:0 8px; color:var(--border-strong); }
+header.hero { padding:16px 0 40px; border-bottom:1px solid var(--border); margin-bottom:48px; }
+.tag { display:inline-block; padding:4px 12px; border-radius:999px; background:var(--accent-soft); color:var(--accent); font-size:13px; font-weight:500; margin-bottom:16px; }
+h1 { font-size:42px; font-weight:700; margin:0 0 14px; letter-spacing:-0.02em; line-height:1.2;
+  background:linear-gradient(135deg,#e4e7ed 30%,var(--accent) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.subtitle { font-size:18px; color:var(--text-dim); margin:0 0 18px; max-width:760px; }
+.meta { display:flex; gap:20px; flex-wrap:wrap; font-size:13px; color:var(--text-muted); }
+.meta strong { color:var(--text-dim); font-weight:500; }
+h2 { font-size:24px; font-weight:700; margin:56px 0 16px; letter-spacing:-0.01em; }
+h2:first-of-type { margin-top:0; }
+h3 { font-size:16px; font-weight:600; margin:18px 0 6px; }
+p { color:var(--text-dim); }
+strong { color:var(--text); font-weight:600; }
+code { background:var(--bg-deep); padding:1px 6px; border-radius:4px; font-size:0.88em; color:#c4b5fd;
+  font-family:"SF Mono",Menlo,Consolas,monospace; }
+.card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:20px 22px; margin-bottom:12px; }
+.card h3 { margin-top:0; }
+.grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+@media (max-width:860px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; } }
+.facts { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:24px 0 8px; }
+@media (max-width:860px) { .facts { grid-template-columns:repeat(2,1fr); } }
+.fact { background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:16px 18px; }
+.fact .label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
+.fact .val { font-size:22px; color:var(--text); font-weight:700; line-height:1.2; }
+.fact .sub { font-size:12px; color:var(--text-muted); margin-top:4px; }
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+th, td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+th { color:var(--text-muted); font-weight:500; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; background:var(--bg-deep); }
+td { color:var(--text-dim); }
+td:first-child { color:var(--text); font-weight:500; }
+.lead { background:var(--bg-elevated); border-left:3px solid var(--accent); border-radius:4px; padding:14px 18px; margin:16px 0 24px; color:var(--text-dim); font-size:14.5px; }
+.lead strong { color:var(--text); }
+.codeblk { background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin:12px 0;
+  font-family:"SF Mono",Menlo,monospace; font-size:13px; color:#e4e7ed; line-height:1.6;
+  white-space:pre; overflow-x:auto; }
+.timeline { list-style:none; padding:0; margin:16px 0 0; }
+.timeline li { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid var(--border); }
+.timeline li:last-child { border-bottom:none; }
+.ts { flex-shrink:0; width:104px; font-family:"SF Mono",Menlo,monospace; font-size:12px; color:var(--accent); padding-top:2px; font-weight:600; }
+.tbody { flex:1; font-size:14px; color:var(--text-dim); }
+.tbody strong { display:block; margin-bottom:2px; color:var(--text); }
+.pill { display:inline-block; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:600; letter-spacing:0.04em; }
+.pill.ok { background:var(--success-soft); color:var(--success); }
+.pill.warn { background:var(--warning-soft); color:var(--warning); }
+.pill.bad { background:var(--danger-soft); color:var(--danger); }
+.pill.info { background:var(--accent-2-soft); color:var(--accent-2); }
+footer { margin-top:80px; padding-top:24px; border-top:1px solid var(--border); color:var(--text-muted); font-size:13px; text-align:center; }
+footer a { color:var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><span style="color:var(--text-dim);">知识库与提示词工程</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">DEEP DIVE · LLM 上下文</span>
+    <h1>知识库与提示词工程</h1>
+    <p class="subtitle">把企业的产品、销售经验、客户画像结构化注入 LLM 上下文 —— 让 AI 像「记得朋友情况的同事」一样回答。</p>
+    <div class="meta"><span><strong>最后更新</strong> 2026-05-06</span><span><strong>数据来源</strong> Supabase · GitHub</span><span><strong>适用于</strong> 技术对接人 / 客户审计</span></div>
+  </header>
+
+<h2>四层上下文模型</h2>
+<div class="lead">把企业的产品、销售经验、客户画像 <strong>结构化注入</strong> LLM 上下文， 让 AI 像「记得朋友情况的同事」一样回答。system prompt 由四层有序拼接：<code>PERSONA + STYLE + MEMORY + KNOWLEDGE</code>。</div>
+  <div class="facts">
+    <div class="fact"><div class="label">knowledge_documents</div><div class="val">16</div><div class="sub">产品/定价/服务/FAQ/话术 5 类</div></div>
+    <div class="fact"><div class="label">conversation_examples</div><div class="val">18</div><div class="sub">金牌对话 · 5★ top-3 注入</div></div>
+    <div class="fact"><div class="label">conversations</div><div class="val">1418</div><div class="sub">客户画像覆盖 100%</div></div>
+    <div class="fact"><div class="label">comments / 高意向</div><div class="val">6707 / 1185</div><div class="sub">实时来自 Supabase · 17.7%</div></div>
+  </div>
+
+<h2>客户 Onboarding · 四类资料</h2>
+<div class="grid-4"><div class="card"><h3>① 业务知识</h3><p>历史成交对话 ≥ 50 条<br>品牌产品介绍 1 页<br>常见问题 FAQ 10-20 条</p></div>
+<div class="card"><h3>② 抖音资产</h3><p>采集账号矩阵 → <code>accounts</code><br>竞品 / 合作博主 → <code>source_accounts</code></p></div>
+<div class="card"><h3>③ 承接规则</h3><p>转人工触发关键词<br>销售对接微信号 + 二维码<br>审核负责人</p></div>
+<div class="card"><h3>④ 合规边界</h3><p>红线词 / 禁用词<br>语气风格偏好<br>AI 人设定位（公开 or 隐式）</p></div></div>
+<div class="lead"><strong>最小启动包：</strong>≥ 50 条历史成交对话 · 1 页产品介绍 · ≥ 1 个抖音主账号 · 1 名审核负责人。齐了才开始配账号 + 抓取 —— 不齐则 LLM 只能生成通用话术，意图打分和私信质量都会大幅下降。</div>
+<h2>知识库双表设计</h2>
+<div class="grid-2"><div class="card"><h3>knowledge_documents</h3><p>文档型知识：产品 / 定价 / 服务流程 / FAQ / 话术。<br>字段：<code>org_id · category · title · content · sort_order</code><br>embedding vector(1536) 注释行预留，pgvector 启用即接 RAG。</p></div>
+<div class="card"><h3>conversation_examples</h3><p>对话型训练数据：金牌成交对话。<br>字段：<code>org_id · stage · buyer_message · sales_reply · quality_score</code><br>5 ★ 永远在 top-3 · 1-3 ★ 仅当 5 ★ 不足时填位。</p></div></div>
+<p><strong>为什么不合表？</strong>文档与对话两类数据的结构和注入模式根本不同，合并会增加 SELECT 复杂度和 prompt 构造负担。embedding 列两表都已预留，pgvector 上线后取消注释即可，无需改 schema。</p>
+<h2>注入位置 · 1500 字预算</h2>
+<div class="codeblk">// src/lib/llm.ts (line 313)
+const base = `
+  ${PERSONA}\n\n
+  ${STYLE}\n\n
+  ${MEMORY}\n\n
+  ${nameLine}
+  ${profileLine}
+  ${knowledgeSection}
+`;</div>
+<div class="lead"><strong>KNOWLEDGE_QUOTA = 1500 字</strong>（3000 → 1500 砍半）· 每轮每分类最多 1 条。知识块过大会稀释 PERSONA 语气，输出趋向客服腔。如需更多召回，先上 pgvector 做相关性裁剪而非加大 budget。</div>
+<h2>金牌对话即训练 · 不需要 fine-tune</h2>
+<p><code>buildExampleBlock</code> 按当前对话 stage 拉对应金牌例子，<code>ORDER BY quality_score DESC LIMIT 3</code>，拼成 few-shot 示范注入 system prompt。目前生产库 18 条覆盖 3 个 stage，正在持续扩充。</p>
+<div class="codeblk">// stage = nurture · 5★ 成交单复用
+user:    我家 130 平想做整屋
+assistant: 130 平这个面积刚好够开放式厨房。
+         预算大概在哪个段？8-12 还是 12-15？
+
+user:    预算大概 15 万左右
+assistant: 15 万整屋够主材+柜体...</div>
+<h2>跨会话客户记忆 · memory.ts</h2>
+<p>按 <code>(org_id + douyin_user_id)</code> 跨会话 shallow merge <code>customer_profile</code> JSONB，<strong>best-effort</strong>（DB 错误返回 <code>{}</code> 不抛）。渲染为自然语言句子注入 system prompt。</p>
+<div class="grid-2"><div class="card"><h3>INPUT · customer_profile</h3><div class="codeblk" style="margin:0;">{ "area": 130, "city": "成都",
+  "budget": "15w",
+  "decision_maker": "太太" }</div></div>
+<div class="card"><h3>OUTPUT · 注入 prompt 的句子</h3><p style="color:var(--text);font-size:15px;line-height:1.7;">他家 130 平在成都，预算大概 15 万，太太主导。</p></div></div>
+<div class="lead"><strong>1418 / 1418 conversations 客户画像覆盖率 100%</strong> —— 跨会话沉淀已开始。扩展画像字段时同步更新 <code>formatCustomerProfile()</code> 的句法，不要回退到 KV 拼接。</div>
+<h2>反范例 · 为什么不能用「字段：值」？</h2>
+<div class="grid-2"><div class="card"><h3>✗ ANTI-PATTERN · KV 标签</h3><div class="codeblk" style="margin:8px 0;">面积：130
+城市：成都
+预算：15万</div><p>→ LLM 进入「档案查询」模式 → 输出客服腔：「您好，根据您的信息我们看到您 130 平 ...」</p></div>
+<div class="card"><h3>✓ PATTERN · 自然语言描述</h3><p style="color:var(--text);">他家 130 平在成都，预算大概 15 万，太太主导。</p><p style="margin-top:12px;">→ LLM 像「记得朋友情况」融入 → 输出自然：「上次说的 15 万够整屋主材，要不咱看下方案？」</p></div></div>
+<div class="lead"><strong>规律：</strong>给 LLM 注入的上下文越「人话」，输出越「人话」。<code>record_customer_info</code> 工具直接产出描述句，不是 KV。</div>
+<h2>PERSONA + STYLE · 从抽象到具体</h2>
+<div class="grid-2"><div class="card"><h3>PERSONA · 5+ 条具体素材</h3><div class="codeblk" style="margin:0;font-size:12px;">你叫小艾，32 岁，成都人，做全屋
+定制这行 8 年。
+门店导购出身 · 工厂参观过
+自家 89 平刚装完 · 橘猫小四
+嘴比同事甜 · 不喜欢报价绕弯</div></div>
+<div class="card"><h3>STYLE · 6 条硬底线（30 → 6）</h3><div class="codeblk" style="margin:0;font-size:12px;">1. 不报具体单价（用区间）
+2. 不杜撰门店地址
+3. 不主动暴露 AI 身份
+4. 不堆 emoji / 方括号表情
+5. 不超 70 字硬底
+6. 不替客户做决定</div></div></div>
+<div class="lead"><strong>负向规则越多 → 模型越像客服。</strong>"绝不/严禁" 堆得越多，模型进入 risk-avoidance 模式 —— 取消正常语气，反而更机器。比例参考：负向 ≤ 6 条 · PERSONA 具体素材 ≥ 5 条 · few-shot ≥ 3 组覆盖核心场景。</div>
+<h2>Prompt 优化七法 · 22 次 commit 沉淀</h2>
+<div class="grid-2"><div class="card"><h3>① 身份充实 &amp;gt; 负向规则</h3><p>PERSONA 写成真人 · STYLE 30 → 6 条。few-shot 替代规则。</p></div>
+<div class="card"><h3>② few-shot 场景必须一致</h3><p>冷开场 vs 暖场逻辑不同 · 3 archetype 各写一组（价格对比 / 装修焦虑 / 模糊探索）。</p></div>
+<div class="card"><h3>③ 上下文用自然语言</h3><p>KV 标签 → LLM 进档案查询模式。<code>record_customer_info</code> 工具直接产描述句。</p></div>
+<div class="card"><h3>④ 结构化输出六层防御</h3><p>token 预算 / batch 上限 / 1:1 强制 / 多级 parser / raw 日志 / 模型选择。</p></div>
+<div class="card"><h3>⑤ 中文 prompt 用「」</h3><p>外层 JS 字符串 + 内层 ASCII <code>"</code> 会截断。默认全角引号 <code>「」</code>。</p></div>
+<div class="card"><h3>⑥ 正面替代禁令</h3><p>只写禁令，模型会换词继续编。必须给出口（如「模糊邀约」「报区间」）。</p></div>
+<div class="card"><h3>⑦ 知识 ≤ 1500 字预算</h3><p>知识块过大稀释 PERSONA 语气 → 输出客服腔。先上 pgvector 做相关性裁剪。</p></div>
+<div class="card"><h3>LLM rewrite 双陷阱</h3><p>方括号表情 [勾引] 漏出 + 杜撰地址（成华区展厅）。prompt 层禁令 + <code>strip_bracket_emojis</code> 后处理兜底。</p></div></div>
+<h2>模型路由 · 各司其职</h2>
+<table><thead><tr><th>路径</th><th>模型</th><th>用途</th></tr></thead><tbody><tr><td>CHAT</td><td><code>qwen/qwen3-235b-a22b</code></td><td>chatReply / generateOpener · 人格、风格、记忆全注入</td></tr><tr><td>ANALYSIS</td><td><code>qwen/qwen3-235b-a22b</code></td><td>analyzeComments / detectDecisionSignals · 2026-04-27 全切 Qwen3</td></tr></tbody></table>
+<p><strong>工程指标（实测）：</strong></p>
+<table><thead><tr><th>指标</th><th>数值</th></tr></thead><tbody><tr><td>src/lib/llm.ts</td><td>1124 行</td></tr><tr><td>src/lib/memory.ts</td><td>68 行</td></tr><tr><td>LLM 相关 commits</td><td>52 个</td></tr><tr><td>近 3 周迭代</td><td>22 次</td></tr><tr><td>Supabase migrations</td><td>25 个</td></tr><tr><td>analyze cron 配置</td><td><code>*/15 * * * *</code> · batch 15 · max_tokens 8192 · budget 270s</td></tr></tbody></table>
+<h2>路线图 · Next up</h2>
+<div class="grid-2">
+<div class="card" style="margin:0;"><h3 style="margin-top:0;">pgvector 启用</h3><p style="margin:0;font-size:13px;">取消注释 <code>embedding vector(1536)</code> 列</p></div>
+<div class="card" style="margin:0;"><h3 style="margin-top:0;">RAG 检索替代全量注入</h3><p style="margin:0;font-size:13px;">按相关性召回 · 替代 1500 字定额预算</p></div>
+<div class="card" style="margin:0;"><h3 style="margin-top:0;">金牌对话扩充</h3><p style="margin:0;font-size:13px;">18 → 50+ · 用 V3 round 实战成功样本</p></div>
+<div class="card" style="margin:0;"><h3 style="margin-top:0;">ice_break prompt 升级</h3><p style="margin:0;font-size:13px;">chatReply 切 V3 4 段式 · 用最近 round 实战 few-shot</p></div>
+</div>
+
+  <footer>
+    Akke 知识库 · <a href="/akke/">← 返回项目首页</a> · <a href="/">upio.ai</a>
+  </footer>
+
+</div>
+</body>
+</html>

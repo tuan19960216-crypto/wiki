@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · DM 投递与引导加微技术方案</title>
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #141821;
+  --bg-deep: #1a1f2b;
+  --border: #242a38;
+  --border-strong: #2f3646;
+  --text: #e4e7ed;
+  --text-dim: #9ba3b4;
+  --text-muted: #6b7384;
+  --accent: #8b5cf6;
+  --accent-soft: rgba(139, 92, 246, 0.15);
+  --accent-2: #60a5fa;
+  --accent-2-soft: rgba(96, 165, 250, 0.12);
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin:0; padding:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:16px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+.container { max-width:1080px; margin:0 auto; padding:48px 24px 120px; }
+.breadcrumb { font-size:13px; color:var(--text-muted); margin-bottom:24px; }
+.breadcrumb a { color:var(--text-dim); text-decoration:none; }
+.breadcrumb a:hover { color:var(--accent); }
+.breadcrumb span { margin:0 8px; color:var(--border-strong); }
+header.hero { padding:16px 0 40px; border-bottom:1px solid var(--border); margin-bottom:48px; }
+.tag { display:inline-block; padding:4px 12px; border-radius:999px; background:var(--accent-soft); color:var(--accent); font-size:13px; font-weight:500; margin-bottom:16px; }
+h1 { font-size:42px; font-weight:700; margin:0 0 14px; letter-spacing:-0.02em; line-height:1.2;
+  background:linear-gradient(135deg,#e4e7ed 30%,var(--accent) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.subtitle { font-size:18px; color:var(--text-dim); margin:0 0 18px; max-width:760px; }
+.meta { display:flex; gap:20px; flex-wrap:wrap; font-size:13px; color:var(--text-muted); }
+.meta strong { color:var(--text-dim); font-weight:500; }
+h2 { font-size:24px; font-weight:700; margin:56px 0 16px; letter-spacing:-0.01em; }
+h2:first-of-type { margin-top:0; }
+h3 { font-size:16px; font-weight:600; margin:18px 0 6px; }
+p { color:var(--text-dim); }
+strong { color:var(--text); font-weight:600; }
+code { background:var(--bg-deep); padding:1px 6px; border-radius:4px; font-size:0.88em; color:#c4b5fd;
+  font-family:"SF Mono",Menlo,Consolas,monospace; }
+.card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:20px 22px; margin-bottom:12px; }
+.card h3 { margin-top:0; }
+.grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+@media (max-width:860px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; } }
+.facts { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:24px 0 8px; }
+@media (max-width:860px) { .facts { grid-template-columns:repeat(2,1fr); } }
+.fact { background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; padding:16px 18px; }
+.fact .label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
+.fact .val { font-size:22px; color:var(--text); font-weight:700; line-height:1.2; }
+.fact .sub { font-size:12px; color:var(--text-muted); margin-top:4px; }
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+th, td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+th { color:var(--text-muted); font-weight:500; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; background:var(--bg-deep); }
+td { color:var(--text-dim); }
+td:first-child { color:var(--text); font-weight:500; }
+.lead { background:var(--bg-elevated); border-left:3px solid var(--accent); border-radius:4px; padding:14px 18px; margin:16px 0 24px; color:var(--text-dim); font-size:14.5px; }
+.lead strong { color:var(--text); }
+.codeblk { background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin:12px 0;
+  font-family:"SF Mono",Menlo,monospace; font-size:13px; color:#e4e7ed; line-height:1.6;
+  white-space:pre; overflow-x:auto; }
+.timeline { list-style:none; padding:0; margin:16px 0 0; }
+.timeline li { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid var(--border); }
+.timeline li:last-child { border-bottom:none; }
+.ts { flex-shrink:0; width:104px; font-family:"SF Mono",Menlo,monospace; font-size:12px; color:var(--accent); padding-top:2px; font-weight:600; }
+.tbody { flex:1; font-size:14px; color:var(--text-dim); }
+.tbody strong { display:block; margin-bottom:2px; color:var(--text); }
+.pill { display:inline-block; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:600; letter-spacing:0.04em; }
+.pill.ok { background:var(--success-soft); color:var(--success); }
+.pill.warn { background:var(--warning-soft); color:var(--warning); }
+.pill.bad { background:var(--danger-soft); color:var(--danger); }
+.pill.info { background:var(--accent-2-soft); color:var(--accent-2); }
+footer { margin-top:80px; padding-top:24px; border-top:1px solid var(--border); color:var(--text-muted); font-size:13px; text-align:center; }
+footer a { color:var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><span style="color:var(--text-dim);">DM 投递与引导加微</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">DEEP DIVE · 触达</span>
+    <h1>DM 投递与引导加微</h1>
+    <p class="subtitle">从评论筛选、话术生成、WDA 真机投递到自动回复、决策阶段引导转微 —— AI 链路里「被人看见」的最后一公里。</p>
+    <div class="meta"><span><strong>最后更新</strong> 2026-05-06</span><span><strong>适用于</strong> 技术对接人 / 客户审计</span></div>
+  </header>
+
+<h2>五段闭环</h2>
+<div class="lead">从一条评论到一个加微好友，链路五段：<strong>筛选 → 话术 → 投递 → 回复 → 转微</strong>。前 4 步全自动化；第 5 步带人工护栏（Operator 在 dashboard 审稿后才发）。</div>
+  <div class="facts">
+    <div class="fact"><div class="label">V1 投递率</div><div class="val">85.7%</div><div class="sub">round 1+2 累计 14 发 12 中</div></div>
+    <div class="fact"><div class="label">Fast-flick</div><div class="val">9 / h</div><div class="sub">schema 跳风控单小时上限</div></div>
+    <div class="fact"><div class="label">话术模板</div><div class="val">V3 4 段</div><div class="sub">招呼 / 视频 / 地域 / 价格</div></div>
+    <div class="fact"><div class="label">ice_break</div><div class="val">1500 字</div><div class="sub">知识注入预算 · 砍半后稳定</div></div>
+  </div>
+
+<h2>意图筛选 · analyzeComments</h2>
+<p>评论批量送入 Qwen3-235b-a22b：输出 <code>intent_score</code> 0-100 + <code>intent_label</code>，高意向的同步调 <code>generateOpener</code> 直出首条 DM 草稿，并调 worker <code>enrichCommentCity</code> 推断城市。</p>
+<div class="codeblk">// src/app/api/cron/analyze/route.ts
+max_tokens   = 8192        // 50 条会撞 4k 截断
+batch_size   = 15          // 504 阈值经验值
+schedule     = */15 * * * *  // 96 calls/day
+budget_loop  = 270 s        // 单次榨干 pending</div>
+<p><strong>2026-04-27 cron 大修战果（4 层并发 bug 修复）：</strong></p>
+<table><thead><tr><th>指标</th><th>修复前 → 修复后</th></tr></thead><tbody><tr><td>积压清空</td><td>1822 条 / 74 min</td></tr><tr><td>高意向总数</td><td>39 → 456</td></tr><tr><td>待审核私信</td><td>0 → 429</td></tr><tr><td>今日高意向</td><td>0 → 282</td></tr></tbody></table>
+<h2>四道前置闸 · 高意向不等于该发</h2>
+<div class="grid-4"><div class="card"><h3>① 同行剔除</h3><p>昵称含「定制 / 工厂 / 源头 / 批发 / 招商 / 加盟 / 官方号」等 7 类关键词全部排除。失败案例：「长春豪格家居有限公司官方号」intent=95，靠人工兜底剔除。</p></div>
+<div class="card"><h3>② 新鲜度过滤</h3><p>评论 <code>created_at &lt; NOW − 7d</code> 全部剔除，无视 intent 多高。实测旧评论 4 条 → 0 条投递成功。</p></div>
+<div class="card"><h3>③ per-pair 配额</h3><p>排除 <code>message_queue</code> 已有 sent / sending / approved 的 sec_uid。重发返 7462 永久作废 sec_uid。</p></div>
+<div class="card"><h3>④ 24h 软上限</h3><p>单 messaging_account 24h 内已 sent &lt; 12 才允许新批次。超过约 20 条触发 silent drop。</p></div></div>
+<div class="lead"><strong>排序规则：</strong><code>ORDER BY intent_score DESC, comment_time DESC</code> —— intent 高 + 评论新鲜双指标，单一指标会把 1 周前的 100 分排在 1 天前的 95 分前面，误伤窗口期。</div>
+<h2>话术 V3 · 4 段式单行模板</h2>
+<div class="codeblk">[招呼][昵称][哥/姐] [视频细节挂钩+评论 callback]。[IP 属地]这边[业务覆盖]。[价格区间][反问]</div>
+<div class="grid-2"><div class="card"><h3>① 招呼 + 昵称 + 哥/姐</h3><p>10 个招呼词全异 · 性别由 f2 <code>user.gender</code> 推断 · 0/未知时按昵称特征兜底。</p></div>
+<div class="card"><h3>② 视频挂钩 + 评论 callback</h3><p><code>videos.description</code> 命中率 60% · 降级用评论关键词挂钩 · 严禁杜撰视频内容。</p></div>
+<div class="card"><h3>③ IP 属地 + 业务接住</h3><p>f2 <code>user.ip_location</code> 命中率 93% · 讲业务覆盖能力，不讲气候/民俗。</p></div>
+<div class="card"><h3>④ 价格区间 + 反问</h3><p>区间不报具体单价（6-10w / 8-12w / 15-20w）· 反问落到客户当下决策（推翻 vs 改局部 / 新房 vs 二装）。</p></div></div>
+<div class="lead"><strong>硬约束（不可破）：</strong>单行无 <code>\n</code> · 5 维度散度对照 · 不报具体地址 · 不报具体单价 · 不杜撰视频细节。<br>WDA <code>send_keys</code> 遇到 <code>\n</code> 会拆成 N 条独立 DM —— 已永久作废过 1 个 sec_uid，sender 加自动折叠安全网。</div>
+<h2>投递通道演进</h2>
+<ul class="timeline"><li><span class="ts">2026-04-26</span><div class="tbody"><strong>Web · Playwright（已废弃）</strong><span>Fly Tokyo + sender.py · 7911 速率封 + 22102 观察期 · 单次成功率 &lt; 50%。</span></div></li><li><span class="ts">2026-04-28</span><div class="tbody"><strong>Computer Use + iPhone Mirroring</strong><span>Anthropic CU + 镜像 · 真实设备指纹 · 但 API 延迟 + 成本不可控，POC 后转向 WDA。</span></div></li><li><span class="ts">2026-04-29</span><div class="tbody"><strong>WebDriverAgent · 真机控制</strong><span><strong class="pill ok">DELIVERED</strong> WDA 直查 UI 元素 XML · 每条 DM &lt; 30s · 成本 0 · 投递率 85.7%（V1 round 1+2）。</span></div></li></ul>
+<p><strong>WDA 投递架构：</strong></p>
+<div class="codeblk">message_queue (Supabase, approved 行)
+       ↓ scheduled_for ASC
+dm_queue_helper.py (claim → mark sending)
+       ↓
+dm_send_v3.py (fast-flick 预热 → schema deeplink)
+       ↓
+WDA · localhost:8100 (tap / send_keys / source XML)
+       ↓
+iPhone 抖音 App → mark_sent / mark_failed</div>
+<table><thead><tr><th>配置项</th><th>数值</th></tr></thead><tbody><tr><td>设备</td><td>iPhone 13 Pro · iOS 26.3.1</td></tr><tr><td>签名</td><td>Personal Team · 7d 证书边界</td></tr><tr><td>桥接</td><td>pymobiledevice3 9.12+（RSD QUIC 隧道）</td></tr><tr><td>Bundle ID</td><td><code>com.kara.WebDriverAgentRunner</code></td></tr></tbody></table>
+<h2>风控信号矩阵</h2>
+<table><thead><tr><th>状态码</th><th>含义</th><th>处置</th></tr></thead><tbody><tr><td><strong>7173</strong></td><td>对方关闭陌生人私信</td><td><span class="pill bad">永久 mark_failed</span></td></tr><tr><td><strong>7462</strong></td><td>per-pair 1 条配额已用完</td><td><span class="pill bad">永久 mark_failed</span></td></tr><tr><td><strong>7911</strong></td><td>短期 burst 限频</td><td><span class="pill warn">全队列暂停 12-24h</span></td></tr><tr><td><strong>22102</strong></td><td>账号观察期</td><td><span class="pill warn">整号停发 72h</span></td></tr><tr><td><strong>silent</strong></td><td>input 清空但 bubble 不出现</td><td><span class="pill info">本号 24h 软上限到了</span></td></tr></tbody></table>
+<p><strong>三层节流：</strong></p>
+<table><thead><tr><th>层</th><th>限制</th><th>数值</th></tr></thead><tbody><tr><td>L1</td><td>每条间隔</td><td>90 ~ 180 s 随机</td></tr><tr><td>L2</td><td>单小时</td><td>≤ 9 条（fast-flick 上限）</td></tr><tr><td>L3</td><td>单号 24h</td><td>≤ 15 条（留 5 条余量）</td></tr></tbody></table>
+<div class="lead"><strong>2026-05-05 突破：</strong>fast-flick feed 预热绕过 schema deeplink 风控 —— schema 跳之前模拟真人侧边快滑 feed 3 次（duration ≤ 0.15s），可避开抖音 automation 识别。实战 18 条 batch · 15 SENT · 3 隐私（83.3%）。</div>
+<h2>双向闭环 · 收件箱轮询</h2>
+<p>WDA 主动轮询「消息」Tab，把对方回复镜像回 Supabase，Operator 在 dashboard 看到回复后点「生成回复」走 chatReply → 审批 → sender 投递。</p>
+<p><code>conversations.stage</code> 五态状态机：</p>
+<div class="codeblk">ice_break  →  nurture  →  decision  →  handed_off  →  closed
+  入队首次     收到回复升        检测决策信号       转交微信       关闭</div>
+<table><thead><tr><th>Phase</th><th>状态</th><th>说明</th></tr></thead><tbody><tr><td>Phase 1+2</td><td><span class="pill ok">DELIVERED</span></td><td>wda_helpers + dm_ios_wda_inbox_poll.py 已 ship</td></tr><tr><td>Phase 3</td><td><span class="pill warn">PENDING</span></td><td>LLM 自动回复 — 等 nickname 反查防错号</td></tr><tr><td>Phase 4</td><td><span class="pill warn">PENDING</span></td><td>decision 切换 — 同上链路依赖 Phase 3</td></tr></tbody></table>
+<h2>微信引导 · decision 阶段</h2>
+<p>每个 org 在 <code>brand_profile</code> 里独立持有 <code>wechat_id</code> + <code>wechat_qr_url</code>。<code>chatReply</code> 在 decision 阶段注入引导块：</p>
+<div class="grid-2"><div class="card"><h3>配置了 wechat_id</h3><p>system prompt 注入：「客户高意向时，自然地告知微信号「{wechatId}」，引导加微深聊」。</p></div>
+<div class="card"><h3>未配置 wechat_id</h3><p>system prompt 注入：「严禁编造任何微信号，客户问加微信时只能说『请留下联系方式，设计师会主动联系您』」。<strong>这条护栏极关键</strong> —— 没有它 LLM 在 decision 阶段大概率会自行脑补一个微信号。</p></div></div>
+
+  <footer>
+    Akke 知识库 · <a href="/akke/">← 返回项目首页</a> · <a href="/">upio.ai</a>
+  </footer>
+
+</div>
+</body>
+</html>
