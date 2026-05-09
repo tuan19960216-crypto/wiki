@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 用 Claude Code 控制 Langfuse（Prompt 协作指南）</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-code: #1a1f2b;
+    --border: #242a38;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --info: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border); }
+
+  header.hero { padding: 32px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 16px; letter-spacing: -0.02em; line-height: 1.2; }
+  .subtitle { font-size: 18px; color: var(--text-dim); margin: 0 0 24px; }
+  .meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+  .meta span::before { content: ""; display: inline-block; width: 4px; height: 4px; background: var(--text-muted); border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+
+  h2 { font-size: 28px; font-weight: 700; margin: 56px 0 16px; letter-spacing: -0.01em; padding-top: 16px; }
+  h2 .num { display: inline-block; width: 36px; height: 36px; line-height: 36px; text-align: center; background: var(--accent); color: #fff; border-radius: 10px; font-size: 18px; margin-right: 12px; vertical-align: middle; }
+  h3 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; }
+  p { margin: 12px 0; color: var(--text-dim); }
+  p strong, li strong { color: var(--text); }
+
+  ol, ul { padding-left: 24px; color: var(--text-dim); }
+  ol li, ul li { margin: 10px 0; }
+
+  code { background: var(--bg-code); padding: 2px 6px; border-radius: 4px; font-size: 0.92em; color: var(--info); font-family: "SF Mono", "Monaco", Consolas, monospace; }
+  pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13.5px; line-height: 1.6; }
+
+  .alert { padding: 16px 20px; border-radius: 10px; margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .alert .icon { flex: 0 0 24px; font-size: 22px; line-height: 1; padding-top: 2px; }
+  .alert.warn { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); color: #fde68a; }
+  .alert.info { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.25); color: #bfdbfe; }
+  .alert.danger { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #fecaca; }
+  .alert.success { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); color: #bbf7d0; }
+  .alert strong { color: inherit; }
+
+  .step { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin: 16px 0; position: relative; }
+  .step .step-num { position: absolute; top: -14px; left: 24px; background: var(--accent); color: #fff; font-weight: 700; padding: 4px 12px; border-radius: 6px; font-size: 13px; }
+  .step h3 { margin-top: 8px; }
+
+  .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin: 32px 0; }
+  .toc-title { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .toc a { color: var(--text); text-decoration: none; display: block; padding: 6px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a:last-child { border-bottom: none; }
+
+  .check-list { list-style: none; padding: 0; }
+  .check-list li { padding: 8px 0 8px 32px; position: relative; color: var(--text); }
+  .check-list li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--success); font-weight: 700; font-size: 18px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; }
+  td { color: var(--text-dim); }
+  td strong { color: var(--text); }
+  td code { font-size: 12.5px; }
+
+  .role-table .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
+  .role-table .badge.must { background: rgba(248,113,113,0.15); color: #fecaca; }
+  .role-table .badge.recommended { background: rgba(52,211,153,0.15); color: #bbf7d0; }
+  .role-table .badge.ok { background: rgba(96,165,250,0.15); color: #bfdbfe; }
+  .role-table .badge.no { background: rgba(155,163,180,0.15); color: var(--text-dim); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  details { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px; margin: 12px 0; }
+  details summary { cursor: pointer; font-weight: 600; padding: 4px 0; color: var(--text); list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: "▶ "; color: var(--text-muted); margin-right: 4px; }
+  details[open] summary::before { content: "▼ "; }
+  details[open] summary { margin-bottom: 12px; }
+
+  .cheat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin: 24px 0; }
+  .cheat h3 { margin: 0 0 12px; font-size: 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .cheat pre { margin: 8px 0; }
+
+  .footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 14px; }
+  .footer a { color: var(--text-dim); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 30px; }
+    h2 { font-size: 22px; }
+    .container { padding: 32px 18px 80px; }
+    table, thead, tbody, th, td, tr { display: block; }
+    th { display: none; }
+    td { border: none; padding: 4px 0; }
+    .role-table tr { border-bottom: 1px solid var(--border); padding: 12px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<nav class="breadcrumb">
+  <a href="/">upio.ai</a><span>/</span><a href="/akke">Akke</a><span>/</span><span style="color: var(--text-dim);">用 Claude Code 控制 Langfuse</span>
+</nav>
+
+<header class="hero">
+  <span class="tag">团队内部 · Prompt 协作 · MCP</span>
+  <h1>用 Claude Code 控制 Langfuse</h1>
+  <p class="subtitle">在你自己的 Mac 上跑 Claude Code，直接对话操作 Akke 线上 prompt：查看、改稿、发新 version、灰度、回滚——不用 clone Akke 仓库，也不用 dashboard 点点点。</p>
+  <div class="meta">
+    <span>更新于 2026-05-09</span>
+    <span>路径：Claude Code + Langfuse 官方 MCP</span>
+    <span>预计 15 分钟接入</span>
+  </div>
+</header>
+
+<div class="alert info">
+  <span class="icon">📌</span>
+  <div>
+    <strong>这是给谁看的？</strong> 已经被加进 Akke Langfuse 项目（<code>akke-prod</code>）、要直接编辑线上 prompt 的同事（PM / 文案运营）。读完后你能在自己 Mac 的 Claude Code 里说「列出 prompt」「把这段存为新 version」「转 production 标签」，全程自然语言对话。
+    <br><br>
+    <strong>读完前请准备：</strong>一台已装好 Claude Code 的 Mac（<code>claude --version</code> 能输出版本号即可）、Langfuse 邀请邮件已接受能登录 <code>jp.cloud.langfuse.com</code>。
+  </div>
+</div>
+
+<div class="alert warn">
+  <span class="icon">🤖</span>
+  <div>
+    <strong>为什么要用 MCP 而不只在 dashboard 改？</strong> dashboard 改 prompt 是手动复制粘贴；MCP 让 Claude Code 直接调 Langfuse API，你能用一句中文完成「拉旧版 + 改三处 + 存新版 + 打 staging + 跑两条样本验证 + 转 production」全链路。最大的好处是协作留痕——每次改稿都有 Claude Code 会话作为上下文，比聊天里干说"我改了 A 和 B"清晰得多。
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-title">📖 目录</div>
+  <a href="#section-1">① 这条链路在干什么</a>
+  <a href="#section-2">② 一次性接入（5 步约 15 分钟）</a>
+  <a href="#section-3">③ 5 个可用工具</a>
+  <a href="#section-4">④ 日常 SOP（改一次 prompt 的标准动作）</a>
+  <a href="#section-5">⑤ 常用对话模板（直接复制）</a>
+  <a href="#section-6">⑥ 故障排查</a>
+  <a href="#section-7">⑦ 红线 · 不要踩</a>
+  <a href="#section-8">⑧ 一页速查卡</a>
+</div>
+
+<h2 id="section-1"><span class="num">1</span>这条链路在干什么</h2>
+
+<p>Akke 的 LLM 调用（评论意向分析、DM 文案、反向钩评）都通过一个叫 <strong>Langfuse</strong> 的 SaaS 做两件事：</p>
+
+<ul>
+  <li><strong>Observability</strong>：每条 LLM 调用都被记录成 trace，包括输入、输出、耗时、成本，dashboard 可查</li>
+  <li><strong>Prompt 管理</strong>：把 prompt 文案从代码里抽出来托管，PM 改稿不用工程师改代码、不用重新部署</li>
+</ul>
+
+<p>本文档只讲第二件事 —— 你怎么用 Claude Code 操作 prompt。</p>
+
+<pre><code>你在 Claude Code 说「列出所有 prompt」
+   ↓
+Claude Code 调用 mcp__langfuse__listPrompts 工具
+   ↓
+工具向 jp.cloud.langfuse.com/api/public/mcp 发请求（带你的 BasicAuth）
+   ↓
+Langfuse 返回 prompt 列表
+   ↓
+Claude Code 把结果翻译成中文回你
+
+————————————————————————
+
+你在 dashboard 看到的 prompt v3
+        =
+Akke 代码里实际命中的 prompt v3
+        =
+Claude Code 通过 MCP 拿到的 prompt v3
+（同一份数据的三种界面）</code></pre>
+
+<p>关键认知：</p>
+<ul>
+  <li><strong>Prompt 是带版本的</strong>：每次保存生成新 version（v1 → v2 → v3...），<strong>老版本永不删</strong>，回滚只是把 <code>production</code> 这个标签转过去</li>
+  <li><strong>Akke 代码 fetch 的是带 <code>production</code> 标签的版本</strong>，不是最新版本</li>
+  <li><strong>30 秒缓存</strong>：你转完 production 标签后，生产环境最多 30 秒内全部命中新 prompt，不需要任何代码部署</li>
+  <li><strong>有 fallback 兜底</strong>：即使 Langfuse 整个挂了，Akke 代码里还存着 prompt 的硬编码副本，业务不会因 Langfuse 故障停摆</li>
+</ul>
+
+<h2 id="section-2"><span class="num">2</span>一次性接入</h2>
+
+<div class="step">
+  <span class="step-num">STEP 1</span>
+  <h3>登录 Langfuse 拿你自己的 API Key</h3>
+  <p>打开 <a href="https://jp.cloud.langfuse.com" style="color: var(--accent);">https://jp.cloud.langfuse.com</a>（注意是 <code>jp.</code> 子域，日本机房），左上角切到 <strong>akke-prod</strong> 项目。</p>
+  <p>然后 <strong>Settings（齿轮图标）→ API Keys → Create new API keys</strong>，会弹出一对：</p>
+  <pre><code>Public Key:  pk-lf-xxxxxxxx
+Secret Key:  sk-lf-xxxxxxxx   ← 只显示一次，立刻复制存到 1Password</code></pre>
+  <div class="alert danger" style="margin-top: 16px;">
+    <span class="icon">🚫</span>
+    <div><strong>不要找 Owner 要他的 key 共用。</strong>你建你自己的，操作日志才能追到具体是谁干的；事故复盘也好定位。</div>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-num">STEP 2</span>
+  <h3>把两段 key 拼成 BasicAuth token（base64）</h3>
+  <p>在 Mac 终端跑（把两个 <code>pk-lf-xxx</code> / <code>sk-lf-xxx</code> 替换成你自己的）：</p>
+  <pre><code>echo -n "pk-lf-xxx:sk-lf-xxx" | base64</code></pre>
+  <p>会输出一串字符如 <code>cGstbGYteHh4OnNrLWxmLXh4eA==</code>，这就是 BasicAuth token，下一步要用。</p>
+  <div class="alert info" style="margin-top: 16px;">
+    <span class="icon">💡</span>
+    <div><strong>为什么是 base64？</strong>HTTP BasicAuth 标准要求把 <code>用户名:密码</code> 用 base64 编码后塞进 Authorization 头。这不是加密，只是编码——所以这串字符仍然要严格保密，等价于明文 key。</div>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-num">STEP 3</span>
+  <h3>一行命令注册 MCP 到 Claude Code</h3>
+  <p>在 Mac 终端跑（把 <code>YOUR_BASE64_TOKEN</code> 换成上一步的输出）：</p>
+  <pre><code>claude mcp add --transport http langfuse https://jp.cloud.langfuse.com/api/public/mcp \
+  --header "Authorization: Basic YOUR_BASE64_TOKEN"</code></pre>
+  <p>成功的话会输出类似 <code>Added MCP server "langfuse"</code>。</p>
+  <div class="alert warn" style="margin-top: 16px;">
+    <span class="icon">⚠️</span>
+    <div>
+      <strong>必须是 <code>jp.cloud.langfuse.com</code></strong>。Langfuse 有三个区独立部署，写错会全 401：
+      <ul style="margin-top: 8px;">
+        <li>EU: <code>cloud.langfuse.com</code> ❌ 不是 Akke 用的</li>
+        <li>US: <code>us.cloud.langfuse.com</code> ❌ 不是 Akke 用的</li>
+        <li>Japan: <code>jp.cloud.langfuse.com</code> ✅ Akke 在这</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-num">STEP 4</span>
+  <h3>验证装上了</h3>
+  <p>开一个新的 Claude Code 会话（任意目录都行，不需要 cd 到 Akke 仓库），输入：</p>
+  <pre><code>列一下 Langfuse 里现有的 prompt 和它们的最新 version</code></pre>
+  <p>预期 Claude Code 会调用 <code>mcp__langfuse__listPrompts</code> 工具，返回至少这一条：</p>
+  <ul>
+    <li><code>comment.reverse-comment-system</code>（v1，标签 <code>production</code>）</li>
+  </ul>
+  <p>如果看到了 prompt 列表 = 接入成功，可以开始日常使用。如果报错看 <a href="#section-6">第 ⑥ 章 故障排查</a>。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">STEP 5</span>
+  <h3>（可选）确认你在 dashboard 也有相应权限</h3>
+  <p>MCP 用的 API key 决定了你能改什么：</p>
+  <ul>
+    <li>Project-level <strong>OWNER</strong> / <strong>ADMIN</strong> / <strong>MEMBER</strong> ：能 create/update prompt + 打 label（包括 production），<strong>这是日常协作所需的最低权限</strong></li>
+    <li>Project-level <strong>VIEWER</strong>：只读，create/update 会 403</li>
+  </ul>
+  <p>如果你 dashboard 显示是 VIEWER，去找现任 Owner 改成 MEMBER 即可。</p>
+</div>
+
+<h2 id="section-3"><span class="num">3</span>5 个可用工具</h2>
+
+<p>Langfuse 官方 MCP server 当前只暴露 <strong>5 个</strong> prompt 相关工具，scope 故意做窄了避免误删生产数据。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>工具名</th>
+      <th>用途</th>
+      <th>触发关键词举例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>listPrompts</code></td>
+      <td>列出项目所有 prompt + 最新 version + 标签</td>
+      <td>"列出/有哪些/盘点 prompt"</td>
+    </tr>
+    <tr>
+      <td><code>getPrompt</code></td>
+      <td>拿某个 prompt 的具体内容（指定 version 或标签）</td>
+      <td>"把 X 当前 production 拉出来给我看"</td>
+    </tr>
+    <tr>
+      <td><code>createTextPrompt</code></td>
+      <td>新建文本类 prompt，或为已存在的 prompt 创建新 version</td>
+      <td>"把这段存为 X 的新 version"</td>
+    </tr>
+    <tr>
+      <td><code>createChatPrompt</code></td>
+      <td>同上，但是多轮对话格式（system + user + assistant 数组）</td>
+      <td>"把这套对话样本存为 X 的新 version"</td>
+    </tr>
+    <tr>
+      <td><code>updatePromptLabels</code></td>
+      <td>把标签（如 <code>production</code> / <code>staging</code>）转移到指定 version</td>
+      <td>"把 production 转到 v3"、"回滚到 v2"</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert info">
+  <span class="icon">💡</span>
+  <div>
+    <strong>没有"删除 prompt"工具是好事。</strong>真要删只能去 dashboard 手动删，多一道关卡防止把生产配置误删。版本永远是单调递增的（v1 → v2 → v3...），删除一个 prompt 也不会回收 version 编号。
+  </div>
+</div>
+
+<h2 id="section-4"><span class="num">4</span>日常 SOP</h2>
+
+<p>下面这 6 步是改一次 prompt 的标准动作，<strong>每一步都直接对 Claude Code 说中文，不需要写代码</strong>。</p>
+
+<div class="step">
+  <span class="step-num">SOP 1</span>
+  <h3>拉当前 production 版本</h3>
+  <p>对 Claude Code 说：</p>
+  <pre><code>把 comment.reverse-comment-system 当前 production version 的内容拉出来给我看</code></pre>
+  <p>Claude Code 会调 <code>getPrompt</code>，把全文 + 占位符 + 当前 version 号贴出来。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">SOP 2</span>
+  <h3>描述你要改什么（自然语言即可）</h3>
+  <p>不需要自己写完整新版本。可以直接说：</p>
+  <pre><code>把第三段「角色锁定」里"自建房 / 地基"那一段扩展成 5 个具体场景，
+其他保持不变。给我新版本预览，我确认后再上传。</code></pre>
+  <p>Claude Code 会把改好的全文贴给你预览。<strong>你点头之前不要让它直接 create</strong>。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">SOP 3</span>
+  <h3>存为新 version（先打 staging，不要直接打 production）</h3>
+  <p>预览没问题后，对 Claude Code 说：</p>
+  <pre><code>把这版存为 comment.reverse-comment-system 的新 version，标签打 staging。
+不要碰 production 标签。</code></pre>
+  <p>Claude Code 会调 <code>createTextPrompt</code>，返回新 version 号（比如 v3），并确认 <code>staging</code> 标签已打上、<code>production</code> 仍在 v2。</p>
+  <div class="alert warn" style="margin-top: 16px;">
+    <span class="icon">⚠️</span>
+    <div>
+      <strong>占位符（<code>{{xxx}}</code>）必须保留全部原有名字。</strong>当前 reverse-comment 用了这 4 个，删任何一个会让代码端 compile 出空字段：
+      <ul style="margin-top: 8px;">
+        <li><code>{{sourceCommentText}}</code></li>
+        <li><code>{{targetVideoTitle}}</code></li>
+        <li><code>{{skeletonBlock}}</code></li>
+        <li><code>{{noTitleClause}}</code></li>
+      </ul>
+      改稿时让 Claude Code「保持占位符不变」，验证一下输出里这 4 个字符串都还在。
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-num">SOP 4</span>
+  <h3>用 staging 跑两条样本验证</h3>
+  <p>找现任工程师在测试环境临时把 fetch 标签从 <code>production</code> 切成 <code>staging</code>，跑 2-3 条真实评论看输出，或者直接拿这条 prompt 喂给 Claude Code 自己模拟跑：</p>
+  <pre><code>用刚存的 staging 版本，模拟跑一条样本：
+sourceCommentText="想问下你家的实木衣柜板材是哪种"
+targetVideoTitle="衣帽间收纳改造"
+skeletonBlock=（任意一种骨架文本）
+noTitleClause=""
+看输出符不符合预期。</code></pre>
+</div>
+
+<div class="step">
+  <span class="step-num">SOP 5</span>
+  <h3>一键上线（转 production 标签）</h3>
+  <p>验证通过后：</p>
+  <pre><code>把 comment.reverse-comment-system 的 production 标签从 v2 转到 v3</code></pre>
+  <p>Claude Code 调 <code>updatePromptLabels</code>，瞬间完成。<strong>30 秒内</strong>生产环境全部命中新 prompt。</p>
+</div>
+
+<div class="step">
+  <span class="step-num">SOP 6</span>
+  <h3>出问题 → 回滚（同样一句话）</h3>
+  <p>如果上线后发现新版有问题（比如同行触发率涨了 / 输出变怪）：</p>
+  <pre><code>把 comment.reverse-comment-system 的 production 标签转回 v2</code></pre>
+  <p>30 秒内复原。<strong>这就是无缝回滚机制 ——</strong>没有"撤销发布"按钮，但因为老版本永不删，转标签就够了。</p>
+</div>
+
+<h2 id="section-5"><span class="num">5</span>常用对话模板</h2>
+
+<p>直接复制贴给 Claude Code，把尖括号里的内容换成你的：</p>
+
+<div class="cheat">
+  <h3>📦 盘点 / 查询</h3>
+  <pre><code>列出 Langfuse 里所有 prompt，按最近改动时间排序
+
+把 &lt;prompt-name&gt; 当前 production version 拉出来全文给我
+
+把 &lt;prompt-name&gt; 的 v1 和 v2 内容做个 diff，告诉我改了什么</code></pre>
+</div>
+
+<div class="cheat">
+  <h3>✏️ 改稿 / 上线</h3>
+  <pre><code>基于 &lt;prompt-name&gt; 的当前 production 版本，做以下修改：
+  1. &lt;改动 1&gt;
+  2. &lt;改动 2&gt;
+保持所有占位符不变。给我预览，确认后存为新 version 并打 staging 标签。
+
+把刚存的 v&lt;N&gt; 的 production 标签转过去，把 staging 标签清掉</code></pre>
+</div>
+
+<div class="cheat">
+  <h3>🔙 回滚 / 紧急</h3>
+  <pre><code>把 &lt;prompt-name&gt; 的 production 标签从 v&lt;X&gt; 回滚到 v&lt;Y&gt;
+
+列出 &lt;prompt-name&gt; 所有历史 version 的最早 100 字预览，帮我找一个看起来正常的版本回滚到</code></pre>
+</div>
+
+<div class="cheat">
+  <h3>🧪 试跑 / 验证</h3>
+  <pre><code>用 &lt;prompt-name&gt; 的 staging 版本，模拟跑下面这组输入，看输出是否符合「30-80 字 / 中文 / 钩私信」要求：
+&lt;粘贴一组真实输入&gt;</code></pre>
+</div>
+
+<h2 id="section-6"><span class="num">6</span>故障排查</h2>
+
+<details>
+<summary>装完 MCP，问 Claude Code "列出 prompt" 它说没有 langfuse 工具</summary>
+<ol>
+  <li>退出当前会话重开（MCP 装在某些版本下需要重启 Claude Code）</li>
+  <li>跑 <code>claude mcp list</code>，确认 <code>langfuse</code> 在列表里且 status 是 <code>✓ connected</code></li>
+  <li>不在 → 重新跑第 ② 章 STEP 3，仔细核对 URL 的 <code>jp.</code> 子域</li>
+  <li>在但 status 红 → 大概率是 base64 拼错，重新跑第 ② 章 STEP 2</li>
+</ol>
+</details>
+
+<details>
+<summary>调用工具时报 401 Unauthorized</summary>
+<ol>
+  <li>API key 过期/被撤销 → dashboard 重新建一对，重跑 STEP 2 / 3</li>
+  <li>在错误的 Langfuse 区域 → 确认 URL 是 <code>jp.cloud.langfuse.com</code>，不是 <code>cloud.langfuse.com</code> 或 <code>us.cloud.langfuse.com</code></li>
+  <li>base64 编码时把回车一起 base64 了 → 必须用 <code>echo -n</code>（带 -n 不输出换行），不能用普通 <code>echo</code></li>
+</ol>
+</details>
+
+<details>
+<summary>调用 createTextPrompt 报 403 Forbidden</summary>
+<p>你在 project 里只有 VIEWER 权限。dashboard → akke-prod → Settings → Members 找你的条目，让 Owner 改成 MEMBER 或 ADMIN。</p>
+</details>
+
+<details>
+<summary>转完 production 标签 30 秒了，生产怎么还是老 prompt？</summary>
+<ol>
+  <li>30 秒是单台 Vercel function 实例的缓存上限。如果 Akke 流量低、function 实例可能存活几分钟没收新流量自然不刷新</li>
+  <li>等下一次 cron 触发（如 <code>/api/cron/analyze</code> */15min）就会用新 prompt</li>
+  <li>急着验证 → 找工程师在 Vercel dashboard 重新部署一次（强制冷启动）</li>
+</ol>
+</details>
+
+<details>
+<summary>不小心把 production 标签转到了一个有 bug 的 version</summary>
+<p>不要慌。立刻说「把 &lt;prompt-name&gt; 的 production 标签转回 v&lt;上一个正常版本&gt;」即可。30 秒内复原。如果你不记得上一个版本号，让 Claude Code 列出所有 version + 时间顺序帮你定位。</p>
+</details>
+
+<details>
+<summary>占位符（{{xxx}}）改没了 / 改名了 → 生产 prompt 输出乱套</summary>
+<p>Akke 代码端用占位符名字注入数据，名字对不上 Claude 收到的 prompt 就会出现 <code>{{sourceCommentText}}</code> 字面字符串、或者关键字段为空。立刻回滚到上一个 version。下次让 Claude Code 改稿时明确说"保留所有 <code>{{xxx}}</code> 名字不变"。</p>
+</details>
+
+<h2 id="section-7"><span class="num">7</span>红线 · 不要踩</h2>
+
+<div class="alert danger">
+  <span class="icon">🚫</span>
+  <div>
+    <strong>1. 不要把 API key 共用 / 提交到 git / 截图发群</strong><br>
+    Secret Key 等价于密码。漏了立刻去 dashboard <strong>Revoke</strong> 这对 key 重新建。
+  </div>
+</div>
+
+<div class="alert danger">
+  <span class="icon">🚫</span>
+  <div>
+    <strong>2. 不要直接给新 version 打 production 标签跳过 staging</strong><br>
+    新 prompt 30 秒内打到所有线上请求。先 staging → 至少跑 2-3 条样本 → 再转 production，别图省事。
+  </div>
+</div>
+
+<div class="alert danger">
+  <span class="icon">🚫</span>
+  <div>
+    <strong>3. 不要删占位符 / 改占位符名字</strong><br>
+    <code>{{sourceCommentText}}</code> 这种是代码注入数据的接口，删一个 = 那个字段在 prompt 里彻底消失，输出会乱掉。改稿前先记下当前 prompt 用了哪几个占位符，改完检查是不是都还在。
+  </div>
+</div>
+
+<div class="alert danger">
+  <span class="icon">🚫</span>
+  <div>
+    <strong>4. 不要在 prompt 里写客户隐私 / API key / 内部 ID</strong><br>
+    Langfuse Cloud 是 SaaS，prompt 内容会持久化在 Langfuse 服务器（日本机房）。任何 Akke 客户姓名、抖音 sec_uid、内部 org_id 都不要写进 prompt 文本——这些用占位符在调用时注入。
+  </div>
+</div>
+
+<div class="alert danger">
+  <span class="icon">🚫</span>
+  <div>
+    <strong>5. 不要新建 prompt 不打招呼</strong><br>
+    新建一个 prompt 在 Langfuse 里很容易（一句话搞定），但代码端不会自动 fetch 没注册的 prompt，得工程师改 <code>src/lib/llm.ts</code> 配 fallback。要新建之前在 Lark 群里说一声让工程师配套上。
+  </div>
+</div>
+
+<h2 id="section-8"><span class="num">8</span>一页速查卡</h2>
+
+<div class="cheat">
+  <h3>🔧 一次性安装</h3>
+  <pre><code># 1. dashboard 拿 key（akke-prod → Settings → API Keys）
+# 2. 终端 base64
+echo -n "pk-lf-xxx:sk-lf-xxx" | base64
+# 3. 终端注册 MCP
+claude mcp add --transport http langfuse https://jp.cloud.langfuse.com/api/public/mcp \
+  --header "Authorization: Basic &lt;上一步输出&gt;"
+# 4. 重开 Claude Code 会话验证
+# 在 Claude Code 里说："列出 Langfuse 所有 prompt"</code></pre>
+</div>
+
+<div class="cheat">
+  <h3>📋 改一次 prompt 的 6 步</h3>
+  <ol>
+    <li>"把 <code>&lt;name&gt;</code> 当前 production 拉出来"</li>
+    <li>描述要改什么 → Claude Code 给预览</li>
+    <li>"存为新 version，打 staging"</li>
+    <li>跑 2-3 条样本验证</li>
+    <li>"把 production 标签转到 v<code>&lt;N&gt;</code>"</li>
+    <li>出问题 → "production 转回 v<code>&lt;N-1&gt;</code>"</li>
+  </ol>
+</div>
+
+<div class="cheat">
+  <h3>📚 关键事实</h3>
+  <ul>
+    <li>Langfuse 区域：<strong>jp.cloud.langfuse.com</strong>（日本，不是 EU/US）</li>
+    <li>项目：<strong>akke-prod</strong></li>
+    <li>当前在线 prompt：<code>comment.reverse-comment-system</code>（v1）</li>
+    <li>占位符（reverse-comment）：<code>sourceCommentText</code> / <code>targetVideoTitle</code> / <code>skeletonBlock</code> / <code>noTitleClause</code></li>
+    <li>生产生效延迟：<strong>≤ 30 秒</strong></li>
+    <li>fallback 兜底：<code>src/lib/reverseComment.ts:REVERSE_COMMENT_SYSTEM_FALLBACK</code></li>
+    <li>MCP 工具：<strong>5 个</strong>（list / get / createText / createChat / updateLabels）</li>
+    <li>权限：project-level <strong>MEMBER</strong> 起步即可改 prompt</li>
+  </ul>
+</div>
+
+<hr>
+
+<div class="footer">
+  <p>📅 文档维护：本页跟随 Akke 项目同步更新。Langfuse Cloud 区域、项目名、当前在线 prompt 列表如果变动请同步改这里。</p>
+  <p>📂 仓库定位：<a href="https://github.com/upioai/wiki">upioai/wiki</a> · <code>public/akke/langfuse-mcp.html</code></p>
+  <p>🔗 相关阅读：<a href="/akke/prompt-engineering">知识库与提示词工程</a> · <a href="/akke/architecture">系统架构详解</a> · <a href="/akke/onboarding">新人完整指引</a></p>
+  <p>⚙️ 内部记忆参考：<code>docs/claude-memory/reference_akke_langfuse_setup.md</code>（Akke 仓库内）</p>
+</div>
+
+</div>
+</body>
+</html>
