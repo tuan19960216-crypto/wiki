@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 用户案例 · 草莓圣戴女士（湖北 / 美的508）</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 24px 120px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  header.hero { padding: 8px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 40px; display: flex; gap: 28px; align-items: center; }
+  .hero-avatar { width: 96px; height: 96px; border-radius: 50%; border: 2px solid var(--border-strong); flex-shrink: 0; background: var(--bg-elevated); object-fit: cover; }
+  .hero-text { flex: 1; min-width: 0; }
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; letter-spacing: 0.02em; }
+  .tag.accent { background: var(--accent-soft); color: var(--accent); }
+  .tag.info { background: var(--info-soft); color: var(--info); }
+  .tag.success { background: var(--success-soft); color: var(--success); }
+  .tag.warning { background: var(--warning-soft); color: var(--warning); }
+  .tag.muted { background: rgba(155,163,180,0.1); color: var(--text-dim); }
+  h1 { font-size: 36px; font-weight: 700; margin: 0 0 8px; letter-spacing: -0.01em; line-height: 1.2; }
+  .subtitle { font-size: 16px; color: var(--text-dim); margin: 0; }
+  .hero-link { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--info); text-decoration: none; }
+  .hero-link:hover { text-decoration: underline; }
+
+  h2 { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin: 48px 0 16px; }
+  h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 16px 0 8px; }
+  p { margin: 8px 0; color: var(--text-dim); }
+  code { background: var(--bg-deep); padding: 2px 6px; border-radius: 4px; font-size: 0.86em; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  /* Quick facts grid */
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 4px 0 8px; }
+  .fact { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .fact .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .fact .val { font-size: 17px; color: var(--text); font-weight: 600; }
+  .fact .sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.45; }
+  @media (max-width: 720px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Comment card (the trigger) */
+  .comment-card {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 8px 0;
+  }
+  .comment-card .quote { font-size: 22px; font-weight: 600; color: var(--text); margin: 0 0 16px; line-height: 1.4; }
+  .comment-card .quote::before { content: "“"; color: var(--accent); font-size: 32px; margin-right: 6px; vertical-align: -6px; }
+  .comment-card .quote::after { content: "”"; color: var(--accent); font-size: 32px; margin-left: 6px; vertical-align: -6px; }
+  .comment-meta { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 28px; font-size: 13.5px; }
+  .comment-meta .row { display: flex; gap: 10px; }
+  .comment-meta .row .k { color: var(--text-muted); flex: 0 0 84px; }
+  .comment-meta .row .v { color: var(--text); }
+  @media (max-width: 600px) { .comment-meta { grid-template-columns: 1fr; } }
+
+  /* LLM scoring */
+  .score-row { display: flex; align-items: center; gap: 16px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin: 14px 0 0; }
+  .score-row .score-num { font-size: 32px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .score-row .score-num small { font-size: 14px; color: var(--text-muted); font-weight: 400; }
+  .score-row .score-meta { flex: 1; }
+  .score-row .score-meta .label-line { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+  .score-row .score-meta .label-line strong { color: var(--text); }
+  .score-row .score-meta .reason { font-size: 13px; color: var(--text-dim); }
+
+  /* Video source */
+  .src-card {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px;
+  }
+  .src-card .src-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .src-card h3 { margin: 0 0 6px; }
+  .src-card .src-tag { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--info-soft); color: var(--info); font-size: 12px; margin-top: 4px; }
+  .src-card .src-links { margin-top: 12px; display: flex; gap: 14px; font-size: 13px; flex-wrap: wrap; }
+  .src-card .src-links a { color: var(--info); text-decoration: none; }
+  .src-card .src-links a:hover { text-decoration: underline; }
+
+  /* Timeline */
+  .timeline { position: relative; margin: 12px 0 0; padding-left: 28px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 22px; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -27px; top: 8px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--text-muted);
+  }
+  .tl-item.act-comment::before { border-color: var(--info); background: var(--info-soft); }
+  .tl-item.act-ai-draft::before { border-color: var(--accent); background: var(--accent-soft); }
+  .tl-item.act-send::before { border-color: var(--success); background: var(--success-soft); }
+  .tl-item.act-reply::before { border-color: var(--warning); background: var(--warning-soft); }
+  .tl-time { font-size: 12px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.02em; margin-bottom: 4px; }
+  .tl-time .utc { color: var(--text-muted); margin-left: 8px; font-weight: 400; }
+  .tl-actor { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; font-weight: 500; }
+  .tl-actor.akke { color: var(--accent); }
+  .tl-actor.customer { color: var(--warning); }
+  .tl-bubble {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 16px; font-size: 15px; color: var(--text); line-height: 1.6;
+  }
+  .tl-bubble.akke { border-left: 3px solid var(--accent); }
+  .tl-bubble.customer { border-left: 3px solid var(--warning); background: rgba(251,191,36,0.04); }
+  .tl-bubble.system { font-size: 13px; color: var(--text-dim); background: transparent; border: 1px dashed var(--border); }
+  .tl-note { margin-top: 6px; font-size: 12.5px; color: var(--text-muted); }
+
+  /* System data */
+  .sys-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 600px) { .sys-grid { grid-template-columns: 1fr; } }
+  .sys-block { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; }
+  .sys-block .sys-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .sys-block dl { margin: 0; display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; font-size: 13px; }
+  .sys-block dt { color: var(--text-muted); }
+  .sys-block dd { color: var(--text); margin: 0; word-break: break-all; }
+  .sys-block dd code { font-size: 11.5px; }
+
+  /* Recap */
+  .recap { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .recap ul { margin: 0; padding-left: 20px; }
+  .recap li { color: var(--text-dim); margin: 8px 0; }
+  .recap li strong { color: var(--text); }
+
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><a href="/akke/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">草莓圣戴女士</span>
+  </nav>
+
+  <header class="hero">
+    <img class="hero-avatar"
+         src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_owgs9ofAfYM6FjofGEQCKvLO3AARVAeIIfHAF7.jpeg?from=2064092626"
+         alt="草莓圣戴女士 头像"
+         referrerpolicy="no-referrer"
+         loading="lazy">
+    <div class="hero-text">
+      <div class="tag-row">
+        <span class="tag accent">高意向 · 78</span>
+        <span class="tag info">产品咨询</span>
+        <span class="tag success">湖北 · 现役装修</span>
+        <span class="tag muted">ice_break</span>
+      </div>
+      <h1>草莓圣戴女士</h1>
+      <p class="subtitle">湖北客户 · 评论问「美的 508 行不行呀」触发 · 双消息触达后客户主动补充户型信息</p>
+      <a class="hero-link" href="https://www.douyin.com/user/MS4wLjABAAAAGEZExNBvXlz740RFpikOJURE6cykfH_rABlwn7SclFo" target="_blank" rel="noopener noreferrer">
+        🔗 抖音个人主页（在新标签页打开）
+      </a>
+    </div>
+  </header>
+
+  <h2>核心指标</h2>
+  <div class="facts">
+    <div class="fact">
+      <div class="label">意向评分</div>
+      <div class="val">78 / 100</div>
+      <div class="sub">DeepSeek V3 Flash 评分 · 高意向门槛 70</div>
+    </div>
+    <div class="fact">
+      <div class="label">IP 属地</div>
+      <div class="val">湖北</div>
+      <div class="sub">评论 API 返回值 · 招呼文案已用此地域</div>
+    </div>
+    <div class="fact">
+      <div class="label">评论类型</div>
+      <div class="val">product</div>
+      <div class="sub">问型号是否合适 → 产品型咨询</div>
+    </div>
+    <div class="fact">
+      <div class="label">触达状态</div>
+      <div class="val">已二轮对话</div>
+      <div class="sub">2 条 DM 发出 · 客户主动 2 条回复</div>
+    </div>
+  </div>
+
+  <h2>触发评论 · 这就是一切的起点</h2>
+  <div class="comment-card">
+    <p class="quote">美的508行不行呀</p>
+    <div class="comment-meta">
+      <div class="row"><span class="k">评论时间</span><span class="v">2026-05-09 11:04（北京时间）</span></div>
+      <div class="row"><span class="k">评论者</span><span class="v">草莓圣戴女士</span></div>
+      <div class="row"><span class="k">IP 属地</span><span class="v">湖北</span></div>
+      <div class="row"><span class="k">关键词</span><span class="v"><code>美的508</code></span></div>
+    </div>
+    <div class="score-row">
+      <div class="score-num">78<small>/100</small></div>
+      <div class="score-meta">
+        <div class="label-line">LLM 标签：<strong style="color: var(--accent);">高意向</strong> · 类型：<strong>product</strong> · 具体度：<strong>medium</strong> · 新鲜度：<strong>active</strong></div>
+        <div class="reason">评分理由：产品型·中等·进行中（问具体型号 + 表达犹豫，说明正在选购阶段）</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>评论来源 · 我们抓的视频</h2>
+  <div class="src-card">
+    <div class="src-label">SOURCE_ACCOUNT</div>
+    <h3>嘉伟室内设计</h3>
+    <span class="src-tag">现代极简 · 大宅设计</span>
+    <p style="margin-top: 12px; font-size: 13.5px;">该号源由 Akke 客户主动添加至号源池，每天定时抓取最新视频与评论。本条评论挂在该号源下的某条视频上。</p>
+    <div class="src-links">
+      <a href="https://www.douyin.com/video/7632545007186021684" target="_blank" rel="noopener noreferrer">📹 评论所在视频 →</a>
+      <a href="https://www.douyin.com/user/MS4wLjABAAAAf0DOza8R8TjSoBQ_Rqlgu1urQDgu1EmIYmJTWj-50_M" target="_blank" rel="noopener noreferrer">👤 号源主页 →</a>
+    </div>
+  </div>
+
+  <h2>触达时间线 · 从评论到二轮对话</h2>
+  <div class="timeline">
+
+    <div class="tl-item act-comment">
+      <div class="tl-time">2026-05-09 11:04 <span class="utc">(UTC 03:04)</span></div>
+      <div class="tl-actor customer">草莓圣戴女士 评论</div>
+      <div class="tl-bubble customer">美的508行不行呀</div>
+      <div class="tl-note">该评论被抓取并入库为 <code>comments.id=8f68d549...8bf7</code></div>
+    </div>
+
+    <div class="tl-item act-ai-draft">
+      <div class="tl-time">2026-05-09 20:02 <span class="utc">(UTC 12:02)</span></div>
+      <div class="tl-actor akke">Akke 系统</div>
+      <div class="tl-bubble system">
+        分析 cron 命中 · 评分 78（高意向）· 创建 conversation（stage = <code>ice_break</code>）· AI 起草首发文案，<code>message_queue</code> 状态 <code>pending_approval</code>。
+      </div>
+    </div>
+
+    <div class="tl-item act-send">
+      <div class="tl-time">2026-05-11 14:08 <span class="utc">(UTC 06:08)</span></div>
+      <div class="tl-actor akke">小艾（Akke AI · 账号「零星」发出）</div>
+      <div class="tl-bubble akke">草莓圣戴女士，508 这型号近期问的人多，源头工厂直供的价格对比建材市场更优，湖北我接过几单类似选型，美的 508 风冷双变频日常够用，你家厨房预留尺寸多大，橱柜定了没？</div>
+      <div class="tl-note">📐 V3 四段式定型：招呼+哥姐 → 视频细节（508 型号）→ 地域接业务（湖北） → 价格区间反问（厨房尺寸 + 橱柜）。客户端 DM 气泡显示时间 15:25。</div>
+    </div>
+
+    <div class="tl-item act-reply">
+      <div class="tl-time">2026-05-11 下午 <span class="utc">(客户端时间 · iPhone 截图所见)</span></div>
+      <div class="tl-actor customer">草莓圣戴女士 回复</div>
+      <div class="tl-bubble customer">我没有做嵌入</div>
+      <div class="tl-bubble customer" style="margin-top: 8px;">放客厅里</div>
+      <div class="tl-note">⚡ 主动补充户型信息（冰箱客厅放、非嵌入式安装）— 这是高意向的强信号：客户在主动给条件。</div>
+    </div>
+
+    <div class="tl-item act-send">
+      <div class="tl-time">2026-05-11 16:39 <span class="utc">(UTC 08:39)</span></div>
+      <div class="tl-actor akke">小艾（Akke AI · 跟进二轮）</div>
+      <div class="tl-bubble akke">客厅放冰箱也挺多人这样，做整面包柜就能整起来。源头工厂直供对比门店至少省 4 成，本月活动名额还剩几个，留个v发你几张实拍型号 + 活动价单。</div>
+      <div class="tl-note">🎯 接住客户给的条件：客厅放 → 做整面包柜把空间收齐；锚价格优势（省 4 成）+ 制造名额紧张感 + 反向要联系方式推往加微环节。</div>
+    </div>
+
+  </div>
+
+  <h2>系统快照 · 这条记录在 Akke 里长什么样</h2>
+  <div class="sys-grid">
+    <div class="sys-block">
+      <div class="sys-title">CONVERSATION</div>
+      <dl>
+        <dt>id</dt><dd><code>f928bfed-d396-4cc7-87f6-0c5167dfccbe</code></dd>
+        <dt>stage</dt><dd><code>ice_break</code></dd>
+        <dt>created_at</dt><dd>2026-05-09 20:02 CST</dt>
+        <dt>触发评论</dt><dd><code>8f68d549...8bf7</code></dd>
+      </dl>
+    </div>
+    <div class="sys-block">
+      <div class="sys-title">CUSTOMER</div>
+      <dl>
+        <dt>抖音昵称</dt><dd>草莓圣戴女士</dd>
+        <dt>sec_uid</dt><dd><code>MS4wLjABAAAAGEZExN…SclFo</code></dd>
+        <dt>IP 属地</dt><dd>湖北</dd>
+        <dt>头像</dt><dd>已缓存</dd>
+      </dl>
+    </div>
+    <div class="sys-block">
+      <div class="sys-title">COMMENT</div>
+      <dl>
+        <dt>intent_score</dt><dd>78</dd>
+        <dt>intent_label</dt><dd>高意向</dd>
+        <dt>comment_type</dt><dd>product · 问型号行不行→product</dd>
+        <dt>specificity</dt><dd>medium</dd>
+        <dt>freshness</dt><dd>active</dd>
+      </dl>
+    </div>
+    <div class="sys-block">
+      <div class="sys-title">DELIVERY</div>
+      <dl>
+        <dt>发送账号</dt><dd>零星（messaging）</dd>
+        <dt>通道</dt><dd>iPhone WDA · 真机</dd>
+        <dt>DM 数</dt><dd>2 条已送达</dd>
+        <dt>客户回复</dt><dd>2 条已接收</dd>
+      </dl>
+    </div>
+  </div>
+
+  <h2>复盘要点 · 这条线索教会我们的</h2>
+  <div class="recap">
+    <ul>
+      <li><strong>评论里就有产品型号 → 直接复述</strong>。「508 这型号近期问的人多」让客户一眼觉得你听懂了，比泛聊「全屋定制」更落地。</li>
+      <li><strong>IP 属地是免费的破冰利器</strong>。「湖北我接过几单类似选型」一句话拉近距离 — 数据本来就在评论 API 里，不用反问。</li>
+      <li><strong>反问要给条件而不是「价格多少」</strong>。「你家厨房预留尺寸多大，橱柜定了没？」让客户主动 disclose 户型 — 她真的回了「我没有做嵌入 / 放客厅里」，把户型信息送到我们手上。</li>
+      <li><strong>第二轮要承接客户给的条件</strong>。客户说「放客厅」我们立刻接「做整面包柜把空间收齐」— 没有把对话拉回我们想说的，而是顺着客户的现实推方案。</li>
+      <li><strong>加微锚点放第二轮，不放第一轮</strong>。先让客户 disclose，再用「留个v发实拍型号 + 活动价单」把信任额度兑现成微信号，不会被当成营销号一眼拒。</li>
+    </ul>
+  </div>
+
+  <footer>
+    Akke 用户案例 · 草莓圣戴女士 · 数据快照 2026-05-11 · <a href="/akke/cases/">← 返回案例库</a> · <a href="/akke/">Akke 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>

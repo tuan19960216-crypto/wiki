@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 用户案例库</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --warning: #fbbf24;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 56px 24px 120px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 {
+    font-size: 42px; font-weight: 700; margin: 0 0 14px;
+    letter-spacing: -0.02em; line-height: 1.15;
+    background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 80%, var(--info) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 720px; line-height: 1.55; }
+
+  h2 { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin: 48px 0 16px; }
+
+  .cases { display: grid; gap: 14px; }
+  .case-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 24px;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.15s, transform 0.15s, background 0.15s;
+    display: flex; gap: 18px; align-items: flex-start;
+  }
+  .case-card:hover { border-color: var(--accent); background: var(--bg-deep); transform: translateY(-1px); }
+  .case-avatar { width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--border-strong); flex-shrink: 0; background: var(--bg-deep); object-fit: cover; }
+  .case-body { flex: 1; min-width: 0; }
+  .case-tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .case-tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 500; }
+  .case-tag.accent { background: var(--accent-soft); color: var(--accent); }
+  .case-tag.info { background: var(--info-soft); color: var(--info); }
+  .case-tag.muted { background: rgba(155,163,180,0.1); color: var(--text-dim); }
+  .case-card h3 { margin: 0 0 4px; font-size: 18px; font-weight: 600; color: var(--text); }
+  .case-card .quote { font-size: 14px; color: var(--text-dim); margin: 6px 0 8px; line-height: 1.5; }
+  .case-card .quote::before { content: "“"; color: var(--accent); margin-right: 2px; }
+  .case-card .quote::after { content: "”"; color: var(--accent); margin-left: 2px; }
+  .case-card .meta { display: flex; gap: 14px; font-size: 12.5px; color: var(--text-muted); flex-wrap: wrap; }
+  .case-card .meta strong { color: var(--text-dim); font-weight: 500; }
+
+  .empty {
+    background: var(--bg-elevated); border: 1px dashed var(--border-strong);
+    border-radius: 12px; padding: 24px;
+    color: var(--text-muted); font-size: 14px; text-align: center;
+  }
+
+  .note {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--info);
+    border-radius: 10px; padding: 16px 20px; font-size: 14px; color: var(--text-dim); margin: 20px 0 0;
+  }
+  .note strong { color: var(--text); }
+
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><span style="color: var(--text-dim);">用户案例</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">CASE STUDIES · 用户案例库</span>
+    <h1>每一条评论<br>背后都是一个具体的人</h1>
+    <p class="subtitle">
+      这里收录 Akke 触达过的每位高意向客户的完整链路：他们看的视频、留下的评论、我们发出的招呼、他们的回复、以及触达背后的复盘要点。一个案例 = 一个真实的客户旅程。
+    </p>
+  </header>
+
+  <h2>已归档案例</h2>
+  <div class="cases">
+
+    <a class="case-card" href="/akke/cases/strawberry-shengdai">
+      <img class="case-avatar"
+           src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_owgs9ofAfYM6FjofGEQCKvLO3AARVAeIIfHAF7.jpeg?from=2064092626"
+           alt="草莓圣戴女士"
+           referrerpolicy="no-referrer"
+           loading="lazy">
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向 78</span>
+          <span class="case-tag info">产品咨询</span>
+          <span class="case-tag muted">湖北</span>
+        </div>
+        <h3>草莓圣戴女士</h3>
+        <p class="quote">美的508行不行呀</p>
+        <div class="meta">
+          <span><strong>评论日</strong> 2026-05-09</span>
+          <span><strong>触达</strong> 2 轮 DM · 客户主动 2 条回复</span>
+          <span><strong>号源</strong> 嘉伟室内设计</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <h2>说明</h2>
+  <div class="note">
+    <strong>这个案例库给谁看？</strong>给我们自己、给客户老板、给新加入的运营。<br>
+    每页保留：抓到的评论原文、LLM 评分细节、我们发出的 DM 全文、客户回复、复盘要点。<strong>系统里所有可追溯的真实数据。</strong>
+    <br><br>
+    <strong>新案例怎么进来？</strong>选一条已发起对话的高意向 leads，跑「调出客户全部数据」流程，生成一个新 HTML 加进上面的列表即可。
+  </div>
+
+  <footer>
+    Akke 用户案例库 · <a href="/akke/">← 返回 Akke 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>
