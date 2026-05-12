@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 用户案例 · 追颖 · 一条评论的旅程</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --customer: #fbbf24;
+    --customer-soft: rgba(251, 191, 36, 0.08);
+    --akke: #8b5cf6;
+    --akke-soft: rgba(139, 92, 246, 0.10);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  /* HERO ============================================ */
+  header.hero { padding: 24px 0 40px; margin-bottom: 16px; text-align: center; }
+  .hero-avatar {
+    width: 112px; height: 112px; border-radius: 50%;
+    border: 3px solid var(--border-strong); background: var(--bg-elevated); object-fit: cover;
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.06);
+    margin-bottom: 22px;
+  }
+  .hero-eyebrow {
+    font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 44px; font-weight: 700; margin: 0 0 14px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .hero-tagline {
+    font-size: 18px; color: var(--text-dim); margin: 0 auto 18px; max-width: 600px; line-height: 1.5;
+  }
+  .hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .chip.purple { background: var(--accent-soft); color: var(--accent); }
+  .chip.blue { background: var(--info-soft); color: var(--info); }
+  .chip.amber { background: var(--customer-soft); color: var(--customer); }
+  .chip.green { background: var(--success-soft); color: var(--success); }
+  .hero-profile {
+    display: inline-block; margin-top: 18px; font-size: 13px; color: var(--info); text-decoration: none;
+    border-bottom: 1px dashed currentColor; padding-bottom: 1px;
+  }
+  .hero-profile:hover { color: var(--accent); }
+
+  /* JOURNEY MAP STRIP =============================== */
+  .journey-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 32px 0 24px;
+    padding: 16px 20px; background: var(--bg-elevated);
+    border: 1px solid var(--border); border-radius: 14px;
+  }
+  .js-step { text-align: center; position: relative; }
+  .js-step .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-deep); color: var(--text-muted);
+    border: 1.5px solid var(--border-strong);
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+  }
+  .js-step.done .num { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .js-step.now .num { background: var(--customer-soft); color: var(--customer); border-color: var(--customer); }
+  .js-step .lbl { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+  .js-step.done .lbl, .js-step.now .lbl { color: var(--text-dim); }
+  .js-step::after {
+    content: ""; position: absolute; top: 14px; right: -3px; width: 6px; height: 2px; background: var(--border-strong);
+  }
+  .js-step:last-child::after { display: none; }
+  @media (max-width: 720px) {
+    .journey-strip { grid-template-columns: repeat(4, 1fr); }
+    .js-step .lbl { font-size: 10px; }
+  }
+
+  /* ACT BLOCKS ====================================== */
+  .act { margin: 64px 0 0; }
+  .act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .act-no {
+    font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .act h2 {
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.25;
+  }
+  .act-lede {
+    font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px;
+    border-left: 2px solid var(--border-strong); padding-left: 14px;
+  }
+  .act-lede em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  /* GENERIC PANEL =================================== */
+  .panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px; margin: 0;
+  }
+  .panel.tight { padding: 16px 20px; }
+
+  /* COMMENT BUBBLE (Act 1) ========================== */
+  .comment-wrap { display: flex; gap: 14px; align-items: flex-start; }
+  .comment-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; background: var(--bg-deep); object-fit: cover; border: 1px solid var(--border); }
+  .comment-body { flex: 1; min-width: 0; }
+  .comment-author { font-size: 13px; color: var(--text-dim); font-weight: 500; margin-bottom: 4px; }
+  .comment-author .loc { color: var(--text-muted); font-weight: 400; margin-left: 8px; font-size: 12px; }
+  .comment-text {
+    font-size: 22px; color: var(--text); font-weight: 600; line-height: 1.45;
+    padding: 6px 0 4px;
+  }
+  .comment-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .comment-source-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12.5px; color: var(--info); text-decoration: none; padding-top: 12px; border-top: 1px solid var(--border); width: 100%; }
+  .comment-source-link:hover { color: var(--accent); }
+
+  /* PROFILE INFER PANEL ============================== */
+  .profile-panel {
+    background: linear-gradient(135deg, rgba(96,165,250,0.05), rgba(139,92,246,0.04));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px;
+  }
+  .profile-panel .pp-eyebrow { font-size: 11px; color: var(--info); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  .profile-panel h3 { font-size: 18px; margin: 0 0 14px; color: var(--text); font-weight: 600; }
+  .profile-panel ul { margin: 0; padding-left: 18px; }
+  .profile-panel li { font-size: 14.5px; color: var(--text-dim); margin-bottom: 8px; line-height: 1.6; }
+  .profile-panel li strong { color: var(--text); font-weight: 600; }
+  .profile-panel .pp-note { margin-top: 14px; font-size: 12px; color: var(--text-muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 10px; }
+
+  /* AI READS THE COMMENT (Act 2) ===================== */
+  .scoring {
+    display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: center;
+  }
+  .scoring .score-bar {
+    background: var(--bg-deep); border-radius: 12px; padding: 18px 16px; text-align: center; border: 1px solid var(--border);
+  }
+  .scoring .score-num { font-size: 44px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .scoring .score-num small { font-size: 16px; color: var(--text-muted); font-weight: 400; }
+  .scoring .score-label { font-size: 12px; color: var(--accent); margin-top: 6px; letter-spacing: 0.06em; font-weight: 600; }
+  .scoring .score-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .scoring .score-reasoning { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+  .scoring .score-reasoning strong { color: var(--text); }
+  @media (max-width: 560px) { .scoring { grid-template-columns: 1fr; } }
+
+  /* DM bubble (Act 3 & 5) =========================== */
+  .dm {
+    display: flex; gap: 12px; margin-top: 6px;
+  }
+  .dm.from-akke { justify-content: flex-end; }
+  .dm-bubble {
+    max-width: 78%;
+    padding: 14px 18px; border-radius: 16px;
+    font-size: 15.5px; line-height: 1.55; color: var(--text);
+    position: relative;
+  }
+  .dm.from-akke .dm-bubble {
+    background: linear-gradient(135deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .dm.from-customer .dm-bubble {
+    background: var(--bg-deep);
+    border: 1px solid var(--border-strong);
+    border-bottom-left-radius: 4px;
+  }
+  .dm-meta {
+    font-size: 11.5px; color: var(--text-muted); margin-top: 6px;
+    display: flex; gap: 10px;
+  }
+  .dm.from-akke .dm-meta { justify-content: flex-end; }
+
+  /* Annotation under DM */
+  .annotation {
+    margin: 12px 0 0; padding: 12px 16px;
+    background: rgba(139, 92, 246, 0.04);
+    border-left: 2px solid var(--accent);
+    border-radius: 8px;
+    font-size: 13.5px; color: var(--text-dim); line-height: 1.6;
+  }
+  .annotation .a-title { color: var(--accent); font-weight: 600; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .annotation strong { color: var(--text); }
+
+  /* Highlight breakdown (Act 3 specifically) ======= */
+  .breakdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+  .breakdown .bd-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .breakdown .bd-num { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.04em; }
+  .breakdown .bd-title { font-size: 12.5px; color: var(--text); font-weight: 600; margin: 2px 0 4px; }
+  .breakdown .bd-quote { font-size: 12px; color: var(--text-muted); line-height: 1.45; font-style: italic; }
+  @media (max-width: 700px) { .breakdown { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Delivery details (Act 4) ======================= */
+  .delivery-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .delivery-row .dr-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .delivery-row .dr-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .delivery-row .dr-val { font-size: 14.5px; color: var(--text); font-weight: 600; }
+  .delivery-row .dr-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+  @media (max-width: 600px) { .delivery-row { grid-template-columns: 1fr; } }
+
+  /* Dual channel diagram ============================ */
+  .channel-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .channel-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .channel-card.primary { border-left: 3px solid var(--accent); }
+  .channel-card.secondary { border-left: 3px solid var(--customer); }
+  .channel-card .cc-tag { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+  .channel-card.primary .cc-tag { color: var(--accent); }
+  .channel-card.secondary .cc-tag { color: var(--customer); }
+  .channel-card h4 { margin: 0 0 6px; font-size: 15px; color: var(--text); font-weight: 600; }
+  .channel-card p { margin: 0; font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+  .channel-card .cc-status { display: inline-block; margin-top: 8px; font-size: 11.5px; padding: 2px 8px; border-radius: 999px; }
+  .channel-card.primary .cc-status { background: var(--info-soft); color: var(--info); }
+  .channel-card.secondary .cc-status { background: var(--success-soft); color: var(--success); }
+  @media (max-width: 600px) { .channel-pair { grid-template-columns: 1fr; } }
+
+  /* Comment-reply block (Act 5) ===================== */
+  .replies-thread { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .rt-row { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .rt-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .rt-row:first-child { padding-top: 0; }
+  .rt-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-deep); border: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: var(--text-dim); overflow: hidden; }
+  .rt-body { flex: 1; min-width: 0; }
+  .rt-author { font-size: 13px; color: var(--text-dim); font-weight: 600; margin-bottom: 3px; display: flex; gap: 8px; align-items: center; }
+  .rt-author .tag-akke { font-size: 10.5px; padding: 1px 7px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .rt-author .tag-author { font-size: 10.5px; padding: 1px 7px; border-radius: 999px; background: rgba(220,38,38,0.15); color: #f87171; font-weight: 600; }
+  .rt-text { font-size: 15px; color: var(--text); line-height: 1.55; }
+  .rt-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
+  .rt-reply { margin-left: 48px; padding-top: 12px; }
+
+  /* Signal callout =================================== */
+  .signal {
+    background: var(--customer-soft); border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 12px; padding: 16px 20px; margin-top: 16px;
+    font-size: 14px; color: #fde68a;
+  }
+  .signal-title { color: var(--customer); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .signal strong { color: #fef3c7; }
+
+  /* Current status (Act 7) ========================== */
+  .status-card {
+    background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(96,165,250,0.06));
+    border: 1px solid rgba(52,211,153,0.25);
+    border-radius: 14px; padding: 22px 26px;
+    display: flex; gap: 18px; align-items: center;
+  }
+  .status-pulse {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--success);
+    box-shadow: 0 0 0 6px rgba(52,211,153,0.18);
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 6px rgba(52,211,153,0.18); }
+    50% { box-shadow: 0 0 0 10px rgba(52,211,153,0.05); }
+  }
+  .status-text strong { color: var(--text); }
+  .status-text { color: var(--text-dim); font-size: 14.5px; line-height: 1.55; }
+
+  /* Lessons (复盘) ================================ */
+  .lessons { display: grid; gap: 12px; }
+  .lesson {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start;
+  }
+  .lesson-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lesson-body strong { color: var(--text); }
+  .lesson-body { color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+
+  /* System snapshot (footer-ish) =================== */
+  .snapshot {
+    margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border);
+  }
+  .snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+  .snap-grid dl { margin: 0; display: grid; grid-template-columns: 100px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .snap-grid dt { color: var(--text-muted); }
+  .snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+  .snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><a href="/akke/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">追颖</span>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <img class="hero-avatar"
+         src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_oIBIxJYeIHeDMWjIkGFGeCQ2fDALAAEAApHgQN.jpeg?from=2064092626"
+         alt="追颖 头像"
+         referrerpolicy="no-referrer"
+         loading="lazy">
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #002</div>
+    <h1>追颖的 80 平<br>装修翻车账本</h1>
+    <p class="hero-tagline">
+      她在安徽。她刚跑完一轮全屋定制，从预算 12 万落到 18 万。<br>
+      她在嘉伟室内设计的视频底下打了一句<em>「80 平 12 万预算，整欧派全屋定制，最后大概 18 万落地」</em> — Akke 在这 22 个字里看见了一个真业主。
+    </p>
+    <div class="hero-chips">
+      <span class="chip purple">高意向 · 评分 95</span>
+      <span class="chip blue">已完成 / 复盘期</span>
+      <span class="chip amber">安徽 · 全屋定制</span>
+      <span class="chip green">双通道触达 · 已捕获回应</span>
+    </div>
+    <br>
+    <a class="hero-profile" href="https://www.douyin.com/user/MS4wLjABAAAALkLUaAlBJe-W5tad4F4zu-Xy3jkWB880NVLOe1amNjobmscUwjky6l6M1JwCv9zJ" target="_blank" rel="noopener noreferrer">
+      → 抖音个人主页
+    </a>
+  </header>
+
+  <!-- ============ JOURNEY MAP STRIP ============ -->
+  <div class="journey-strip" aria-label="用户旅程进度">
+    <div class="js-step done"><div class="num">1</div><div class="lbl">刷视频</div></div>
+    <div class="js-step done"><div class="num">2</div><div class="lbl">留评论</div></div>
+    <div class="js-step done"><div class="num">3</div><div class="lbl">AI 评分</div></div>
+    <div class="js-step done"><div class="num">4</div><div class="lbl">起草破冰</div></div>
+    <div class="js-step done"><div class="num">5</div><div class="lbl">DM 触达</div></div>
+    <div class="js-step done"><div class="num">6</div><div class="lbl">客户回应</div></div>
+    <div class="js-step now"><div class="num">7</div><div class="lbl">跟进 / 加微</div></div>
+  </div>
+
+  <!-- ============ ACT 1 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 起点</span>
+      <span class="act-time">2026-05-03　13:23 CST</span>
+    </div>
+    <h2>她留下了一条带数字的评论</h2>
+    <p class="act-lede">
+      在<em>嘉伟室内设计</em>（号源池里的一位走「装修知识」路线的内容创作者）的某条视频底下，追颖打了 22 个字。这 22 个字之所以重要，因为她在<em>预算、品牌、落地价</em>三件事上同时给出了具体数字 — 这是装修评论里最稀缺、最难伪造的高意向信号组合。
+    </p>
+    <div class="panel">
+      <div class="comment-wrap">
+        <img class="comment-avatar"
+             src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_oIBIxJYeIHeDMWjIkGFGeCQ2fDALAAEAApHgQN.jpeg?from=2064092626"
+             alt="追颖"
+             referrerpolicy="no-referrer"
+             loading="lazy">
+        <div class="comment-body">
+          <div class="comment-author">追颖 <span class="loc">📍 安徽</span></div>
+          <div class="comment-text">80平12万预算，整欧派全屋定制，最后大概18万落地</div>
+          <div class="comment-meta">2026-05-03 13:23 · 评论于「嘉伟室内设计」的视频</div>
+        </div>
+      </div>
+      <a class="comment-source-link" href="https://www.douyin.com/video/7628961309380435444" target="_blank" rel="noopener noreferrer">
+        📹 评论所在视频（在抖音打开）
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ ACT 2 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 被看见</span>
+      <span class="act-time">2026-05-04　23:34 CST · 评分 cron 命中</span>
+    </div>
+    <h2>系统给她打了 95 分</h2>
+    <p class="act-lede">
+      Akke 的分析 cron 每天把新评论批量喂给 LLM 评分。模型看到三件事：<em>她有具体预算</em>、<em>她有具体品牌</em>、<em>她有具体落地价</em> — 三轴齐发，越过 70 的高意向门槛足足 25 分，<strong>直接拍到 95</strong>。系统自动创建 conversation，状态 <code>ice_break</code>。
+    </p>
+    <div class="panel">
+      <div class="scoring">
+        <div class="score-bar">
+          <div class="score-num">95<small>/100</small></div>
+          <div class="score-label">高意向</div>
+        </div>
+        <div>
+          <div class="score-tags">
+            <span class="chip purple">keyword · 欧派</span>
+            <span class="chip blue">keyword · 全屋定制</span>
+            <span class="chip amber">预算 · 12-18 万</span>
+            <span class="chip green">已完成 · 有真实经验</span>
+          </div>
+          <div class="score-reasoning">
+            <strong>评分理由：</strong>具体数字 · 具体品牌 · 真实落地。<br>
+            <span style="color: var(--text-muted);">「80 平」= 户型尺寸，「12 万预算」= 预算锚点，「整欧派全屋定制」= 品牌选择，「18 万落地」= 真实超预算事实。模型在一句话里同时识别到 4 项强信号 — 这种密度的具体性几乎不可能是路人观望，是<strong>真业主在复盘自己的决策</strong>。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROFILE INFER ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">主页画像 · 她是谁</span>
+      <span class="act-time">基于评论池 + 公开主页推断</span>
+    </div>
+    <h2>抖音主页给我们的额外线索</h2>
+    <p class="act-lede">
+      Akke 不只看评论 — 一旦评分超过阈值，系统会反查这位评论者的<em>抖音公开主页</em>和<em>其他评论历史</em>，把她拼成一个画像。下面是我们从公开信号里能推断的事，每一条都标了证据来源，避免凭空猜测。
+    </p>
+    <div class="profile-panel">
+      <div class="pp-eyebrow">PROFILE INFERENCE · 追颖</div>
+      <h3>她大概率是一位刚装完房子的女性业主</h3>
+      <ul>
+        <li><strong>IP 属地稳定在安徽。</strong>她在不同时间、不同视频下留的评论都显示安徽 — 不是出差路人。</li>
+        <li><strong>她不是「问价者」，是「分享者」。</strong>她在评论里直接给出预算 12 万、落地 18 万、品牌欧派 — 这是<em>已经走过流程的人</em>才会有的具体数字。问价者通常只会说"求报价"，不会说"超了 6 万"。</li>
+        <li><strong>她自己也发视频，并有粉丝互动。</strong>她以「作者」身份回复了陌生人的提问（截图里的回复来自她自己的视频底下），说明她有一定的内容输出节奏 — 哪怕只是装修日常或生活分享。</li>
+        <li><strong>她愿意复盘，乐于交流。</strong>她那条 22 个字的评论本身就是一次"主动 disclose"。这种性格的 lead，<em>follow-up 触达成本极低</em>，不需要硬推。</li>
+      </ul>
+      <div class="pp-note">
+        以上推断来自 douyinpic 头像 CDN、comments 表里她的 IP / 时间分布、以及社交画面里她作为「作者」标签出现的事实。Akke 不会读取或储存她的私人通讯录、定位、联系方式 — 只用她<em>主动公开</em>的内容来理解她是谁。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACT 3 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 第一句话</span>
+      <span class="act-time">2026-05-05　21:40 CST · 由账号「哈哈哈」发出</span>
+    </div>
+    <h2>Akke 拟了一段「装修同行式」破冰</h2>
+    <p class="act-lede">
+      因为她不是问产品的客户而是<em>复盘自己经历的业主</em>，破冰文案的策略也跟着调整 — 不能装作"我是来卖货的"，而要打成<em>"我也懂这条路、我也能接这种活"</em>的同行口吻。一条好的破冰要做四件事：复述昵称、复述她说的数字、绑住 IP 属地、用反问把对话推回到她的具体场景。
+    </p>
+    <div class="dm from-akke">
+      <div class="dm-bubble">你好追颖姐 那期品牌买与不买列得真细 80 平欧派从 12 落到 18 你这水分摸得很清。安徽这边整屋项目我们做过 货也走得通。80 平整屋全包7-11w段是合理位 你家这次想推翻重做还是改局部？</div>
+    </div>
+    <div class="dm-meta" style="justify-content: flex-end;">📱 系统记录 sent_at 21:40:53 CST · status = sent</div>
+
+    <div class="breakdown">
+      <div class="bd-item">
+        <div class="bd-num">① 招呼</div>
+        <div class="bd-title">复述昵称 + 尊称</div>
+        <div class="bd-quote">「追颖姐」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">② 视频细节</div>
+        <div class="bd-title">复述她的数字</div>
+        <div class="bd-quote">「80 平欧派从 12 落到 18」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">③ 地域接业务</div>
+        <div class="bd-title">绑 IP 属地</div>
+        <div class="bd-quote">「安徽这边整屋项目我们做过」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">④ 反问</div>
+        <div class="bd-title">逼她给场景</div>
+        <div class="bd-quote">「推翻重做还是改局部？」</div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="a-title">破冰文案 V3 · 四段式定型</div>
+      这四段是 Akke ice_break 阶段所有破冰文案的标准结构 — <strong>不结束在客气话，而是结束在问题上</strong>。本案的关键点在于：<strong>第二句没有问她"什么品牌"，而是直接说出来「80 平欧派从 12 落到 18」</strong>。同样的信息，<em>复述</em>比<em>提问</em>有效得多 — 她会感觉"对面是看完我评论的人"，不是在群发模板。
+    </div>
+  </section>
+
+  <!-- ============ ACT 4 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 04 · 触达路径</span>
+      <span class="act-time">双通道并行 · DM + 反向评论</span>
+    </div>
+    <h2>不是一条路 — 是两条路同时推进</h2>
+    <p class="act-lede">
+      抖音对陌生人 DM 风控极严，<em>单一通道触达失败率高</em>。追颖这条 lead 的 follow-up 策略走的是<em>双通道并行</em>：一边由 messaging 号池发私信，一边由<em>反向评论</em>账号到她自己的视频下留言，提高被看见的概率。两条路同时活着，哪条先有响应就接哪条。
+    </p>
+    <div class="channel-pair">
+      <div class="channel-card primary">
+        <div class="cc-tag">通道 A · 私信 DM</div>
+        <h4>账号「哈哈哈」 · messaging 号池</h4>
+        <p>2026-05-05 21:40 CST 通过本地真机自动化（系统记录 status = sent）发出。陌生人 DM 进入她的「消息请求」文件夹，未必立即被看见，DB 暂无她的 DM 回复入库。</p>
+        <span class="cc-status">⏳ DM 已发出 · 暂无回复</span>
+      </div>
+      <div class="channel-card secondary">
+        <div class="cc-tag">通道 B · 反向评论</div>
+        <h4>账号「小星定制」 · 业主语气评论</h4>
+        <p>2026-05-11 在追颖<em>自己的视频底下</em>用"姐妹也在选全屋定制 / 我家也卡在预算上"的同侪口吻评论，引导她以「作者」身份回复 — 这个通道<em>无需她加好友、无需她翻消息请求</em>。</p>
+        <span class="cc-status">✓ 已触发回复</span>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="a-title">为什么要两条腿走路</div>
+      DM 通道的成本是「她需要打开消息请求」；反向评论通道的成本是「她在自己作品下看到留言提醒」。<strong>装修类业主对自家视频下的留言提醒非常敏感</strong> — 因为那是她的"主场"。先在评论区暖场，再用 DM 接力，转化路径短得多。
+    </div>
+  </section>
+
+  <!-- ============ ACT 5 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 05 · 她回应了</span>
+      <span class="act-time">2026-05-11　20:55 CST · 反向评论通道</span>
+    </div>
+    <h2>她在评论区给了我们一段真实复盘</h2>
+    <p class="act-lede">
+      追颖没回 DM — 她回的是评论。在她自己视频的评论区，看见小星定制的留言后，她以<em>「作者」</em>身份回复了一段非常具体的复盘：拿时间和精力换了价格优势。这句话的价值不在长短，而在<em>她真的在分享经验，不是在敷衍陌生人</em>。
+    </p>
+
+    <div class="replies-thread">
+      <div class="rt-row">
+        <div class="rt-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">星</div>
+        <div class="rt-body">
+          <div class="rt-author">小星定制 <span class="tag-akke">Akke 反向评论</span></div>
+          <div class="rt-text">我也在选全屋定制！姐妹说的 80 平从 12 万超到 18 万真的太戳我了，我家也卡在预算上。视频里整体布局看着挺合理的，后来怎么控制住的呀？</div>
+          <div class="rt-meta">📍 浙江 · 评论于 2026-05-11</div>
+        </div>
+      </div>
+      <div class="rt-row rt-reply">
+        <div class="rt-avatar">
+          <img src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_oIBIxJYeIHeDMWjIkGFGeCQ2fDALAAEAApHgQN.jpeg?from=2064092626"
+               alt="追颖" referrerpolicy="no-referrer" loading="lazy"
+               style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="rt-body">
+          <div class="rt-author">追颖 <span class="tag-author">作者</span></div>
+          <div class="rt-text">拿时间和精力换的，到处跑装修公司全屋定制，各种材料，多家对比，定了哪家慢慢跟他谈价格</div>
+          <div class="rt-meta">📍 安徽 · 2026-05-11 20:55</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal">
+      <div class="signal-title">⚡ 高意向强信号</div>
+      <strong>「跑装修公司 / 各种材料 / 多家对比 / 谈价格」</strong> — 这 4 个词每一个都对应一个我们能<em>立刻接住的服务点</em>：跑工厂 = 我们做源头供货 / 各种材料 = 我们有全品类样板 / 多家对比 = 我们出对比方案 / 谈价格 = 我们有底价空间。她在用 25 个字告诉我们她的<strong>真实痛点</strong>是「太费时间」。下一句话只要说"安徽这边我们能帮你省掉跑材料市场这一段"，方向就对了。
+    </div>
+  </section>
+
+  <!-- ============ ACT 7 / NOW ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 07 · 现在</span>
+      <span class="act-time">stage = ice_break · 等运营按 V3 跟进文案接续</span>
+    </div>
+    <h2>评论区已升温，下一步把她切回 DM 私聊</h2>
+    <div class="status-card">
+      <div class="status-pulse"></div>
+      <div class="status-text">
+        <strong>对话还在 ice_break 阶段 · 反向评论通道已破冰，但 DM 通道还没被她翻牌。</strong><br>
+        下一步动作：基于她的"跑装修公司太累"这句话，<em>用一条 DM 跟进</em>把对话从公开评论区拉回私聊（公开聊天容易被同行截胡），主张「源头工厂 + 整套对比方案，省你跑材料市场那一段」。一旦她在 DM 里回应，就触发 stage = nurture，进入加微环节。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">复盘 · 这条线索教会我们的</span>
+    </div>
+    <h2>5 个可复用的话术原则</h2>
+    <div class="lessons">
+      <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>评论里有数字 → 100% 复述。</strong>「80 平 / 12 万 / 18 万 / 欧派」四项数字她已经送到嘴边，复述一次比任何问句都让她相信"对面在认真看"。模板：<em>"那条 X 你写的 Y 我看到了"</em>。</div></div>
+      <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>对「已经走过流程」的客户，要做同行不要做销售。</strong>她不需要被推销欧派、被科普全屋定制 — 她已经走过一遍了。<em>"安徽我们做过、货也走得通"</em>这种平视语气比"我们是行业领先"更对她的胃口。</div></div>
+      <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>陌生人 DM 必须配反向评论二路并行。</strong>抖音的"消息请求"文件夹是 DM 触达率的最大杀手。在<em>她自己作品下</em>留一条同侪语气的评论，是绕过这道墙的最便宜方法。她为自己的内容守门，几乎一定会看到。</div></div>
+      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>「时间换价格」这句话比意向分还值钱。</strong>追颖回复"拿时间和精力换的"这句话点破了她的真实成本结构 — 她不是要更便宜，她是要<em>更省事</em>。把接下来所有跟进话术的重心从"省钱"切换到"省时间"，转化路径会缩一半。</div></div>
+      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>公开评论暖场 → 私聊接力，不要在评论区谈合作。</strong>评论区是开放阵地，同行刷到就抢。只在评论区做信任建立，<em>价格 / 方案 / 加微</em>这些动作必须切到 DM 完成。下一条 DM 的开场可以是"那条评论的回复我看到了"。</div></div>
+    </div>
+  </section>
+
+  <!-- ============ SYSTEM SNAPSHOT ============ -->
+  <section class="snapshot">
+    <div class="snapshot-title">SYSTEM SNAPSHOT · 这条记录在 Akke 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>conversation</dt><dd><code>4a39f826-392f-…-f3bd8ea9e815</code></dd>
+        <dt>stage</dt><dd><code>ice_break</code></dd>
+        <dt>created_at</dt><dd>2026-05-04 23:34 CST</dd>
+        <dt>触发评论</dt><dd><code>a3aa1057-…-7e139be0c876</code></dd>
+      </dl>
+      <dl>
+        <dt>抖音昵称</dt><dd>追颖</dd>
+        <dt>sec_uid</dt><dd><code>MS4wLjABAAAALkLUaAlBJe-W5tad4F4zu-Xy3jkWB880NVLOe1amNjobmscUwjky6l6M1JwCv9zJ</code></dd>
+        <dt>IP 属地</dt><dd>安徽</dd>
+        <dt>头像</dt><dd>已缓存</dd>
+      </dl>
+      <dl>
+        <dt>intent_score</dt><dd>95 / 100</dd>
+        <dt>intent_label</dt><dd>高意向</dd>
+        <dt>触发关键词</dt><dd>欧派 · 全屋定制</dd>
+        <dt>号源</dt><dd>嘉伟室内设计 · 知识号</dd>
+      </dl>
+      <dl>
+        <dt>发送账号</dt><dd>哈哈哈（messaging · cooling）</dd>
+        <dt>DM 通道</dt><dd>本地真机自动化</dd>
+        <dt>反向通道</dt><dd>小星定制 · 评论区</dd>
+        <dt>客户回复</dt><dd>1 条（评论区 · 截图取证）</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Akke 用户案例 · 追颖 · 数据快照 2026-05-12 · <a href="/akke/cases/">← 返回案例库</a> · <a href="/akke/">Akke 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>
