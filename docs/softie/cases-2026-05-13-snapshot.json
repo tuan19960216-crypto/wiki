@@ -1,0 +1,1057 @@
+[
+  {
+    "slug": "case-01-524c7b0c",
+    "userIdShort": "524c7b0c",
+    "score": 833,
+    "cohort": {
+      "userId": "vjJynjY9lqfVrjZM9E0qmvmgidMcmnn8",
+      "paymentStartCount": 12,
+      "planViewCount": 2,
+      "drawerOpenCount": 23,
+      "paywallShownCount": 29,
+      "totalEvents": 212,
+      "firstSeen": "2026-05-09T08:05:15.132000Z",
+      "lastSeen": "2026-05-09T11:03:39.720000Z",
+      "intentScore": 833
+    },
+    "profile": {
+      "userId": "524c7b0c-5d84-4b88-90d6-a1425d547ca1",
+      "userIdShort": "524c7b0c",
+      "email": "lsholloway27@gmail.com",
+      "country": null,
+      "registeredAt": "2026-05-09T08:05:10.953Z",
+      "accountAgeDays": 3,
+      "messagesSentTotal": 40,
+      "charactersChatted": 6,
+      "sparksBalance": 40,
+      "sparksSpentTotal": 0,
+      "lastActiveAt": "2026-05-09 10:54:21.801",
+      "hasActiveSubscription": false,
+      "posthogDistinctId": "vjJynjY9lqfVrjZM9E0qmvmgidMcmnn8"
+    },
+    "envelope": {
+      "device": "Desktop",
+      "os": "Windows",
+      "browser": "Microsoft Edge",
+      "country": "United Kingdom",
+      "city": "Glasgow",
+      "initialReferrer": "www.bing.com",
+      "utmSource": null,
+      "utmCampaign": null,
+      "firstSeen": "2026-05-09T08:05:15.132000Z",
+      "lastSeen": "2026-05-09T11:03:39.720000Z"
+    },
+    "narrative": {
+      "tagline": "他三次打开支付页面、两次选择支付方式，却始终在最后一步前退场，像在门口反复试钥匙却不敢转动。",
+      "intentSummary": "用户从 Bing 搜索进入 Softie.ai，在注册当天就与角色 Tiffany Blake 展开密集对话，触发视频里程碑后立即尝试解锁媒体内容，表现出对角色视觉内容的强烈兴趣。随后他浏览多个女性角色，反复触发 Sparks 不足的支付拦截，三次进入支付流程并选择支付方式，但每次都在几秒内离开页面，未完成任何一笔交易。核心意图是解锁角色的私密媒体内容，卡在支付决策的最后一步。",
+      "acts": [
+        {
+          "title": "搜索着陆，直奔 Tiffany Blake",
+          "timeLabel": "2026-05-09 08:05:15 - 08:05:38 UTC",
+          "lede": "用户通过 Bing 搜索进入 Softie.ai 首页，仅停留 21 秒便点击角色 Tiffany Blake，随后立即开始新对话。从 $identify 到 chat_start 仅用 23 秒，显示出极强的目的性——他不是来随便逛逛，而是带着明确角色偏好来的。",
+          "bullets": [
+            "08:05:15 触发 $identify 着陆首页，08:05:36 即点击 Tiffany Blake 角色卡片",
+            "08:05:38 发起 chat_start，从角色点击到开聊仅 2 秒，几乎零犹豫",
+            "设备为 Windows Desktop + Edge 浏览器，英国格拉斯哥用户"
+          ]
+        },
+        {
+          "title": "密集对话，触发视频里程碑",
+          "timeLabel": "2026-05-09 08:05:46 - 08:08:22 UTC",
+          "lede": "用户在 2 分 36 秒内发送了 7 条消息，收到 7 条回复，对话节奏紧凑。08:08:21 触发 video_milestone_triggered 事件，表明对话深度已达到系统设定的视频解锁节点，角色自动发送了视频内容。用户立即在 08:08:29 继续发送消息，说明视频内容增强了他的参与度。",
+          "bullets": [
+            "08:05:46 发送首条消息，到 08:08:29 共发送 7 条消息，平均间隔约 23 秒",
+            "08:08:21 触发 video_milestone_triggered，角色自动推送视频内容",
+            "视频触发后仅 7 秒，用户继续发送消息，参与度未衰减"
+          ]
+        },
+        {
+          "title": "首次解锁媒体，触发支付拦截",
+          "timeLabel": "2026-05-09 08:09:04 - 08:09:06 UTC",
+          "lede": "用户在 08:09:04 尝试解锁媒体内容（media_unlock_attempt），2 秒后成功解锁（media_unlock_success）。这可能是使用初始免费 Sparks 完成的。但仅 39 秒后，系统在 08:09:45 触发 page_explore，暗示用户可能开始寻找更多可解锁内容。",
+          "bullets": [
+            "08:09:04 media_unlock_attempt → 08:09:06 media_unlock_success，解锁耗时仅 2 秒",
+            "解锁成功后 39 秒出现 page_explore 事件，用户可能在探索更多媒体选项",
+            "此时用户 Sparks 余额仍充足，未触发支付拦截"
+          ]
+        },
+        {
+          "title": "Sparks 耗尽，撞上付费墙",
+          "timeLabel": "2026-05-09 10:33:57 - 10:34:27 UTC",
+          "lede": "约 2.5 小时后用户返回，系统在 10:33:57 同时触发 timed_paywall_shown 和 subscription_drawer_open，表明免费额度已耗尽。用户浏览了两个订阅计划（10:34:09 和 10:34:10 两次 subscription_plan_view），但仅停留 30 秒便离开付费抽屉，转向 Discover 页面浏览其他角色。",
+          "bullets": [
+            "10:33:57 同时触发 timed_paywall_shown + subscription_drawer_open，免费额度耗尽",
+            "10:34:09 和 10:34:10 连续两次 subscription_plan_view，用户比较了方案",
+            "10:34:27 离开付费抽屉，跳转到 /discover 页面，未完成支付"
+          ]
+        },
+        {
+          "title": "三度进入支付流程，始终在最后一步退场",
+          "timeLabel": "2026-05-09 10:57:24 - 11:02:18 UTC",
+          "lede": "用户浏览 Seraphina Grace 后迅速返回 Tiffany Blake，再次尝试解锁媒体时触发 Sparks 不足拦截。在接下来的 4 分钟内，他三次触发 payment_intercept_trigger，两次完整进入 payment_process_start → payment_method_select 流程，但每次都在选择支付方式后 3-5 秒内 $pageleave。最后一次甚至触发了 retention_modal_shown 挽留弹窗，用户接受后再次进入支付流程，依然在 payment_method_select 后离开。",
+          "bullets": [
+            "10:58:40 第一次 payment_intercept_trigger → 10:59:03 payment_process_start → 10:59:04 payment_method_select → 10:59:07 $pageleave（支付页停留仅 3 秒）",
+            "10:59:49 第二次 payment_intercept_trigger → 11:00:01 retention_modal_accepted → 11:00:02 payment_process_start → 11:00:05 payment_method_select",
+            "11:01:43 第三次 payment_intercept_trigger，在 Lila Marlow 角色对话中触发，11:01:55 retention_modal_dismissed 用户主动关闭挽留弹窗",
+            "三次支付拦截中，用户两次选择支付方式但从未完成最终确认"
+          ]
+        },
+        {
+          "title": "徘徊于多个角色，最终沉默离开",
+          "timeLabel": "2026-05-09 11:01:17 - 11:03:39 UTC",
+          "lede": "在 Tiffany Blake 支付失败后，用户转向 Lila Marlow 角色，连续两次成功解锁媒体（11:01:23 和 11:01:31），但随即再次触发支付拦截。用户这次主动关闭了挽留弹窗（retention_modal_dismissed），随后页面跳转至另一个角色 6b2a1fbd 的聊天页面，但立即触发 $pageleave，整个会话在 11:03:39 结束，此后 7 天内再无活动记录。",
+          "bullets": [
+            "11:01:17 启动 Lila Marlow 新对话，11:01:21 和 11:01:30 两次成功解锁媒体",
+            "11:01:55 用户主动 dismiss 挽留弹窗，与之前接受形成对比——耐心在消耗",
+            "11:03:39 最后一次 $pageleave，此后日志中无任何后续活动"
+          ]
+        }
+      ],
+      "keySignals": [
+        "4 分钟内 3 次 payment_intercept_trigger，均以 $pageleave 结束",
+        "2 次完整 payment_process_start → payment_method_select 流程，每次支付页停留 ≤5 秒",
+        "首次对话 2 分 36 秒内发送 7 条消息并触发视频里程碑，参与深度高",
+        "retention_modal 首次 accepted 后仍放弃支付，第二次直接 dismissed"
+      ],
+      "lessons": [
+        {
+          "headline": "支付页跳出率 100%",
+          "body": "用户两次进入 payment_method_select 后均在 5 秒内离开，需检查支付页加载速度、UI 清晰度和支付方式覆盖（英国用户可能偏好特定本地支付方式）。"
+        },
+        {
+          "headline": "视频里程碑是强转化信号",
+          "body": "video_milestone_triggered 后用户立即尝试解锁更多媒体，应将此事件作为付费墙触发的最佳时机，而非等到 Sparks 自然耗尽。"
+        },
+        {
+          "headline": "挽留弹窗效果递减",
+          "body": "首次 retention_modal_accepted 后用户仍放弃支付，第二次直接 dismissed。弹窗内容需差异化，第二次可提供限时折扣或额外 Sparks 激励。"
+        },
+        {
+          "headline": "角色浏览行为揭示付费意图",
+          "body": "用户在支付失败后浏览多个女性角色并尝试解锁媒体，说明付费意愿真实存在，但可能在价格或支付方式上有未解决的顾虑。"
+        }
+      ],
+      "stuckStage": "payment",
+      "oneLine": "英国格拉斯哥用户通过 Bing 搜索进入，首日与 Tiffany Blake 深度对话触发视频里程碑，Sparks 耗尽后 4 分钟内三次进入支付流程并选择支付方式，但每次在最后确认前 5 秒内离开，最终沉默流失。"
+    },
+    "clarityUrl": "https://clarity.microsoft.com/projects",
+    "eventCount": 212
+  },
+  {
+    "slug": "case-02-3cc52876",
+    "userIdShort": "3cc52876",
+    "score": 786.8,
+    "cohort": {
+      "userId": "O8tDetM0xQmlugDcdbZlhx1qIguvDH17",
+      "paymentStartCount": 14,
+      "planViewCount": 0,
+      "drawerOpenCount": 7,
+      "paywallShownCount": 8,
+      "totalEvents": 179,
+      "firstSeen": "2026-05-06T05:21:06.013000Z",
+      "lastSeen": "2026-05-12T02:43:39.394000Z",
+      "intentScore": 786.8
+    },
+    "profile": {
+      "userId": "3cc52876-62c3-42cb-9ff7-fc64794881fe",
+      "userIdShort": "3cc52876",
+      "email": "thomashert76@gmail.com",
+      "country": null,
+      "registeredAt": "2026-05-06T05:21:06.015Z",
+      "accountAgeDays": 6,
+      "messagesSentTotal": 45,
+      "charactersChatted": 5,
+      "sparksBalance": 100,
+      "sparksSpentTotal": 0,
+      "lastActiveAt": "2026-05-12 02:53:00.173",
+      "hasActiveSubscription": false,
+      "posthogDistinctId": "O8tDetM0xQmlugDcdbZlhx1qIguvDH17"
+    },
+    "envelope": {
+      "device": "Desktop",
+      "os": "Windows",
+      "browser": "Chrome",
+      "country": "United States",
+      "city": "Lakewood",
+      "initialReferrer": "search.yahoo.com",
+      "utmSource": null,
+      "utmCampaign": null,
+      "firstSeen": "2026-05-06T05:21:06.013000Z",
+      "lastSeen": "2026-05-12T02:43:39.394000Z"
+    },
+    "narrative": {
+      "tagline": "他在 6 天内 5 次打开付费抽屉、3 次选中支付方式，却始终没按下确认键",
+      "intentSummary": "用户从 Yahoo 搜索进入 Softie.ai，首日密集浏览 5 个角色但未发一条消息，却在角色创建页触发了付费墙并启动支付流程。5 天后回归，终于与 Lily Carter 进行了 2 轮对话，随后在 Dailan 角色上反复触发支付拦截、多次打开订阅抽屉、选中支付方式又取消，最终离场。核心意图是体验角色对话与创建，但被付费墙和 Sparks 门控反复打断，支付决策在最后一步反复徘徊。",
+      "acts": [
+        {
+          "title": "着陆：快速穿梭 5 个角色，零对话",
+          "timeLabel": "2026-05-06 05:21:06 - 05:23:07 UTC",
+          "lede": "用户通过 search.yahoo.com 进入首页，仅停留 42 秒即跳转到 Lily Carter 的新聊天页。在随后 1 分 28 秒内，连续打开 Dailan、Alex Fit 两个角色的聊天页，并在 Alex Fit 页面上触发 page_explore 后立即离开。全程未发送任何消息，chat_message_send 事件为零。",
+          "bullets": [
+            "从首页到首个角色 Lily Carter 仅用 43 秒，路径为 $identify → page_explore×3 → $pageleave → 新聊天页",
+            "2 分钟内启动 3 个 chat_start（Lily Carter、Dailan、Alex Fit），但无任何 chat_message_send",
+            "在 Alex Fit 页面停留 17 秒后离开，15 分钟后才重新打开同一角色页"
+          ]
+        },
+        {
+          "title": "创建角色时撞上付费墙，首次支付尝试中断",
+          "timeLabel": "2026-05-06 05:38:02 - 05:48:46 UTC",
+          "lede": "用户重新打开 Alex Fit 后，又启动了 Anna Li 角色，随后进入 /create 页面。在创建页停留约 6 分钟后，timed_paywall_shown 和 subscription_drawer_open 同时触发，用户进入支付流程：payment_process_start 连续触发 2 次，payment_method_select 触发 1 次，但随后页面离开。30 秒后用户返回 /create 页，短暂停留 15 秒再次离开，未完成支付。",
+          "bullets": [
+            "在 /create 页停留 6 分 23 秒后触发 timed_paywall_shown，说明创建角色需要付费",
+            "支付流程在 2 秒内密集触发：payment_process_start×2 → payment_method_select → page_explore → $pageleave",
+            "整个支付尝试从抽屉打开到离开仅 21 秒，无 payment_success 事件"
+          ]
+        },
+        {
+          "title": "5 天后回归，终于开口说了第一句话",
+          "timeLabel": "2026-05-11 11:07:33 - 2026-05-12 00:09:20 UTC",
+          "lede": "用户 5 天后通过直接 URL 进入 Alex Fit 聊天页，次日凌晨又访问了 Isabella Hart 角色页并触发 retention_modal_shown。在 Isabella Hart 页面上连续 3 次 page_explore 后离开，仍未发送消息。retention_modal 的出现说明系统已将其识别为有流失风险的用户。",
+          "bullets": [
+            "5 天沉默期后首动作是直接访问 Alex Fit 聊天页（$pageview），非首页进入",
+            "retention_modal_shown 在 Isabella Hart 页触发，用户 17 秒内 3 次 page_explore 后离开",
+            "至此累计 5 个角色、0 条消息，Sparks 余额仍为 100"
+          ]
+        },
+        {
+          "title": "与 Lily Carter 完成 2 轮对话，随即撞上 Dailan 的 Spa",
+          "timeLabel": "2026-05-12 02:41:42 - 02:42:51 UTC",
+          "lede": "用户再次打开 Alex Fit 和 Isabella Hart 后，第三次进入 Lily Carter 聊天页，这次终于发送了消息：chat_message_send 和 chat_message_receive 各触发 2 次，间隔分别为 1 秒和 10 秒，说明对话流畅。随后切换到 Dailan 角色，仅 20 秒后即触发 payment_intercept_trigger、subscription_drawer_open 和 sparks_gate_shown 三连击。",
+          "bullets": [
+            "与 Lily Carter 的 2 轮对话是用户 6 天内仅有的消息交互，发生在凌晨 2:42",
+            "切换到 Dailan 后 20 秒即触发支付拦截，说明该角色或功能需要 Sparks/订阅",
+            "sparks_gate_shown 与 subscription_drawer_open 同时出现，用户被双重付费提示夹击"
+          ]
+        },
+        {
+          "title": "支付流程反复启动与取消，6 秒内 4 次 payment_process_sta",
+          "timeLabel": "2026-05-12 02:42:51 - 02:43:12 UTC",
+          "lede": "在 Dailan 页面触发 Sparks 门控后，retention_modal_shown 弹出并被用户接受（retention_modal_accepted 连续触发 4 次），随即进入极度混乱的支付循环：payment_process_start 在 1 秒内触发 6 次，payment_method_select 触发 4 次，其间夹杂 2 次 payment_cancel。整个过程仅持续 14 秒，最终以 $pageleave 结束。",
+          "bullets": [
+            "retention_modal_accepted 在 2 秒内触发 4 次，可能存在 UI 重复提交或用户反复点击",
+            "payment_process_start 在 02:43:03 单秒内触发 5 次，payment_method_select 在 02:43:05 单秒内触发 4 次",
+            "2 次 payment_cancel 均发生在 02:43:05，与 payment_method_select 交织，用户在选择支付方式后立即取消"
+          ]
+        },
+        {
+          "title": "重返 Dailan 再次撞墙，最终沉默离场",
+          "timeLabel": "2026-05-12 02:43:18 - 02:43:39 UTC",
+          "lede": "离开仅 6 秒后，用户通过 $pageview 和 chat_start 重新进入 Dailan 聊天页。13 秒后再次触发 payment_intercept_trigger、subscription_drawer_open 和 sparks_gate_shown。用户在页面上停留 8 秒后执行 page_explore 并离开，无后续事件。6 天旅程以零付费、零 Sparks 消耗结束。",
+          "bullets": [
+            "第二次进入 Dailan 仅 13 秒即再次触发完整付费拦截链",
+            "从 sparks_gate_shown 到 $pageleave 仅 8 秒，用户放弃尝试",
+            "全程累计：45 条消息（含系统消息）、5 个角色、2 次支付尝试、0 次成功转化"
+          ]
+        }
+      ],
+      "keySignals": [
+        "6 天内 2 次进入支付流程，共 8 次 payment_process_start、5 次 payment_method_select、2 次 payment_cancel",
+        "前 5 天零对话，第 6 天凌晨 2:42 才发出首条消息，与 Lily Carter 完成 2 轮对话",
+        "retention_modal 被触发 2 次、接受 4 次，用户有留存意愿但付费环节反复卡顿",
+        "Dailan 角色两次触发 sparks_gate_shown + subscription_drawer_open 组合，是核心摩擦点"
+      ],
+      "lessons": [
+        {
+          "headline": "支付流程重复触发需排查",
+          "body": "payment_process_start 单秒内触发 5 次、retention_modal_accepted 2 秒内 4 次，大概率是前端重复提交或事件重复上报，需检查按钮防抖和事件去重逻辑。"
+        },
+        {
+          "headline": "Sparks 门控与付费抽屉叠加体验差",
+          "body": "sparks_gate_shown 和 subscription_drawer_open 同时弹出，用户面对双重付费提示，建议分步引导：先解释 Sparks 不足，再提供订阅方案。"
+        },
+        {
+          "headline": "首日沉默期过长，激活节奏缺失",
+          "body": "用户首日浏览 5 个角色但零对话，5 天后才发首条消息。应在用户 chat_start 后 30 秒内无消息时触发引导提示或示例对话。"
+        },
+        {
+          "headline": "支付取消后无挽留或降级方案",
+          "body": "用户 2 次 payment_cancel 后直接离场，无任何挽留弹窗或免费 Sparks 赠送。可在取消时触发 retention_modal 或提供有限免费体验。"
+        }
+      ],
+      "stuckStage": "payment",
+      "oneLine": "Yahoo 搜索进入的美国用户，6 天内浏览 5 个角色仅与 Lily Carter 对话 2 轮，在 Dailan 角色上被 Sparks 门控拦截后，支付流程反复启动取消 8 次，最终未付费离场。"
+    },
+    "clarityUrl": "https://clarity.microsoft.com/projects",
+    "eventCount": 179
+  },
+  {
+    "slug": "case-03-5d18e46d",
+    "userIdShort": "5d18e46d",
+    "score": 686.8,
+    "cohort": {
+      "userId": "KPo4a4tpbgGn1xgjnOt67ov2oAwIioEp",
+      "paymentStartCount": 12,
+      "planViewCount": 0,
+      "drawerOpenCount": 7,
+      "paywallShownCount": 10,
+      "totalEvents": 159,
+      "firstSeen": "2026-05-11T12:37:45.357000Z",
+      "lastSeen": "2026-05-11T12:59:04.360000Z",
+      "intentScore": 686.8
+    },
+    "profile": {
+      "userId": "5d18e46d-2bbe-4c78-bf24-521ebc74b3f6",
+      "userIdShort": "5d18e46d",
+      "email": "ethan23@gmail.com",
+      "country": null,
+      "registeredAt": "2026-05-11T12:37:40.412Z",
+      "accountAgeDays": 1,
+      "messagesSentTotal": 48,
+      "charactersChatted": 6,
+      "sparksBalance": 10,
+      "sparksSpentTotal": 0,
+      "lastActiveAt": "2026-05-11 13:06:38.448",
+      "hasActiveSubscription": false,
+      "posthogDistinctId": "KPo4a4tpbgGn1xgjnOt67ov2oAwIioEp"
+    },
+    "envelope": {
+      "device": "Desktop",
+      "os": "Windows",
+      "browser": "Microsoft Edge",
+      "country": "Uganda",
+      "city": "Kampala",
+      "initialReferrer": "www.bing.com",
+      "utmSource": null,
+      "utmCampaign": null,
+      "firstSeen": "2026-05-11T12:37:45.357000Z",
+      "lastSeen": "2026-05-11T12:59:04.360000Z"
+    },
+    "narrative": {
+      "tagline": "他 19 分钟连开 6 个角色，撞了 5 次付费墙，最后在注册框前退场",
+      "intentSummary": "用户从 Bing 搜索着陆，在 19 分钟内密集探索了 6 个 AI 角色，发送了至少 7 条消息，并两次成功解锁媒体内容。他对角色互动有强烈兴趣，但每次深入对话或尝试解锁内容时都撞上 Sparks 付费墙。他反复打开订阅抽屉、查看 Sparks 页面，却始终未完成支付，最终在触发注册/登录弹窗并遭遇验证错误后离开。核心卡点在于：付费意愿被频繁的付费拦截消耗，且注册流程的摩擦成为最后一根稻草。",
+      "acts": [
+        {
+          "title": "着陆即开聊，3 分钟试水 Iris",
+          "timeLabel": "2026-05-11 12:37:45 - 12:38:23 UTC",
+          "lede": "用户通过 Bing 搜索进入 Softie.ai 首页，仅 3 秒后便点击角色 Iris Lin 并立即开始聊天。他在 5 秒内发送了第一条消息并收到回复，整个交互流畅迅速。但对话仅持续 28 秒，他便通过 page_explore 事件离开聊天页，表明这次互动未形成深度粘性，更像是一次快速的功能试探。",
+          "bullets": [
+            "从 $identify 到 character_click 仅间隔 3 秒，决策速度极快。",
+            "chat_start 到 chat_message_send 仅 3 秒，说明他清楚自己要做什么。",
+            "收到回复后仅 28 秒即触发 page_explore 离开，首段对话深度不足。"
+          ]
+        },
+        {
+          "title": "角色跳转与首次媒体解锁",
+          "timeLabel": "2026-05-11 12:38:24 - 12:39:58 UTC",
+          "lede": "离开 Iris 后，用户几乎瞬间进入 Elowen Starshade 的聊天页，但未发消息，12 秒后便跳转到 Anna Li。在 Anna Li 的对话中，他发送消息并收到回复，紧接着触发了 media_unlock_attempt 并成功解锁（media_unlock_success），这是本次会话中第一个明确的深度互动信号。解锁后他再次回到 Elowen，但仍未发消息，仅停留 4 秒便通过 page_explore 离开。",
+          "bullets": [
+            "在 Anna Li 处完成 send→receive→media_unlock_attempt→media_unlock_success 的完整链路，耗时仅 6 秒。",
+            "media_unlock_success 说明他消耗了免费 Sparks 或使用了初始额度，体验到了核心价值。",
+            "两次进入 Elowen 聊天页均未发消息，行为表现为‘浏览式挑选’而非‘沉浸式对话’。"
+          ]
+        },
+        {
+          "title": "与 Riley 深度对话，连撞两次付费墙",
+          "timeLabel": "2026-05-11 12:39:59 - 12:55:27 UTC",
+          "lede": "用户进入 Riley Carter 聊天页后行为模式突变：他在 2 分 19 秒内连续发送了 5 条消息并收到 3 条回复，互动密度远超之前所有角色。但在发送第 5 条消息后，他触发了 media_unlock_attempt（无后续成功事件），紧接着在 12:52:44 跳回 Elowen 并立即触发 payment_intercept_trigger、subscription_drawer_open 和 sparks_gate_shown 三连事件。他关闭 retention_modal 后，又回到 Riley 继续发送消息，但再次触发完全相同的付费拦截三连事件，并再次关闭 retention_modal。",
+          "bullets": [
+            "与 Riley 的对话中 send 事件达 5 次，占全程消息量的 70% 以上，是唯一深度投入的角色。",
+            "media_unlock_attempt 出现在 12:42:18，但无对应的 success 事件，可能因 Sparks 不足被拦截。",
+            "在 Elowen 和 Riley 两处各触发一次 payment_intercept_trigger + subscription_drawer_open + sparks_gate_shown 组合，间隔仅 2 分 16 秒。",
+            "两次 retention_modal_shown 均被 dismiss，未转化为任何支付行为。"
+          ]
+        },
+        {
+          "title": "查看 Sparks 页与最后一轮角色浏览",
+          "timeLabel": "2026-05-11 12:55:46 - 12:57:33 UTC",
+          "lede": "在 Riley 处第二次撞墙后，用户进入 charlette 聊天页，但未发任何消息，而是直接访问了 Sparks 页面（sparks_page_view 触发两次），说明他在主动了解付费机制。随后他返回首页，再次点击最初的角色 Iris Lin 并进入聊天页。这一行为表明他在付费决策前试图回到起点重新评估，或寻找无需付费即可继续的路径。",
+          "bullets": [
+            "在 charlette 处触发第三次 payment_intercept_trigger + subscription_drawer_open + sparks_gate_shown 组合，但依然未转化。",
+            "sparks_page_view 在 21 秒内触发两次，显示他在认真查看 Sparks 定价或额度信息。",
+            "回到首页后选择最初互动的 Iris Lin，行为上构成一个‘探索-受阻-回归原点’的闭环。"
+          ]
+        },
+        {
+          "title": "注册尝试失败，最终退场",
+          "timeLabel": "2026-05-11 12:57:49 - 12:59:04 UTC",
+          "lede": "在 Iris Lin 聊天页，用户触发了 auth_modal_open，随后进行 auth_submit_attempt，但立即收到 auth_error。他修正邮箱输入（auth_email_entered）后，系统弹出 exit_retention_shown 挽留弹窗，但他仍通过 page_explore 离开页面，全程无后续事件。注册/登录环节的摩擦成为压垮骆驼的最后一根稻草——一个已经撞了 5 次付费墙、查看了 Sparks 页面的高意向用户，在身份验证这一步流失了。",
+          "bullets": [
+            "auth_submit_attempt 到 auth_error 仅 2 秒，错误反馈极快但打断了注册流程。",
+            "auth_email_entered 说明他尝试修正，但 exit_retention_shown 紧随其后，表明他选择了放弃。",
+            "整个会话以 $pageleave 结束，无任何 return 事件，首日留存就此终止。"
+          ]
+        }
+      ],
+      "keySignals": [
+        "19 分钟内触发 5 次 payment_intercept_trigger，每次均未转化",
+        "与 Riley Carter 单角色发送 5 条消息，占全程消息量的 70%+",
+        "sparks_page_view 触发 2 次，表明主动了解付费但未下单",
+        "auth_error 紧接 auth_submit_attempt，注册摩擦导致最终流失"
+      ],
+      "lessons": [
+        {
+          "headline": "付费拦截频率过高",
+          "body": "用户在 19 分钟内撞墙 5 次，每次都被 subscription_drawer 和 sparks_gate 打断。建议对首日新用户降低拦截频率，或提供更长的免费体验窗口，避免在探索期过度摩擦。"
+        },
+        {
+          "headline": "注册流程需无缝化",
+          "body": "auth_error 直接导致用户退场。应排查该错误的具体原因（如邮箱格式、OAuth 失败），并在挽留弹窗中提供跳过注册继续聊的选项，降低流失率。"
+        },
+        {
+          "headline": "Sparks 页面缺乏转化引导",
+          "body": "用户两次查看 Sparks 页面却未购买，说明页面信息或 CTA 不够有说服力。可增加‘首充优惠’或‘免费 Sparks 获取方式’来降低首次付费心理门槛。"
+        },
+        {
+          "headline": "高互动角色应设付费触发点",
+          "body": "用户在 Riley 处深度对话后才触发付费拦截，时机合理但未转化。可在深度互动后弹出限时优惠或‘解锁更多对话’的个性化 offer，而非通用 Sparks 墙。"
+        }
+      ],
+      "stuckStage": "paywall",
+      "oneLine": "乌干达用户从 Bing 着陆，19 分钟内连聊 6 个角色、撞墙 5 次、查看 Sparks 页 2 次，最终因注册错误退场，是典型的‘高意向被付费摩擦耗尽’案例。"
+    },
+    "clarityUrl": "https://clarity.microsoft.com/projects",
+    "eventCount": 159
+  },
+  {
+    "slug": "case-04-4ce30167",
+    "userIdShort": "4ce30167",
+    "score": 565,
+    "cohort": {
+      "userId": "z9HZDsMu0MGEvFILuy5Wd5agIIbrcHrr",
+      "paymentStartCount": 9,
+      "planViewCount": 0,
+      "drawerOpenCount": 11,
+      "paywallShownCount": 10,
+      "totalEvents": 316,
+      "firstSeen": "2026-05-07T06:21:52.110000Z",
+      "lastSeen": "2026-05-11T07:53:16.522000Z",
+      "intentScore": 565
+    },
+    "profile": {
+      "userId": "4ce30167-def2-473b-a1a4-f675e6849f95",
+      "userIdShort": "4ce30167",
+      "email": "softieaiorg@gmail.com",
+      "country": null,
+      "registeredAt": "2025-07-04T09:21:38.314Z",
+      "accountAgeDays": 312,
+      "messagesSentTotal": 458,
+      "charactersChatted": 132,
+      "sparksBalance": 0,
+      "sparksSpentTotal": 0,
+      "lastActiveAt": "2026-05-12 13:33:51.942",
+      "hasActiveSubscription": false,
+      "posthogDistinctId": "z9HZDsMu0MGEvFILuy5Wd5agIIbrcHrr"
+    },
+    "envelope": {
+      "device": "Desktop",
+      "os": "Mac OS X",
+      "browser": "Safari",
+      "country": "United States",
+      "city": "Los Angeles",
+      "initialReferrer": "$direct",
+      "utmSource": "email",
+      "utmCampaign": "pending_offer_may",
+      "firstSeen": "2026-05-07T06:21:52.110000Z",
+      "lastSeen": "2026-05-11T07:53:16.522000Z"
+    },
+    "narrative": {
+      "tagline": "他在订阅页反复进出 30 次，却始终没按下「确认支付」，像在店门口徘徊了一整个周末",
+      "intentSummary": "用户 4ce30167 是一名注册 312 天、累计发消息 458 条的重度老用户，Sparks 余额已耗尽。7 天内他 3 次从首页进入订阅页，其中一次在聊天中触发 Sparks 门禁后立即启动支付流程并选择了支付方式，但随即离开。其余时间他在订阅页反复浏览、离开、再回来，却从未完成交易。核心诉求是获得付费能力以继续与角色 Lilith Moran 聊天，卡点很可能在最终支付确认环节。",
+      "acts": [
+        {
+          "title": "首页直达订阅页，6 秒后离开",
+          "timeLabel": "2026-05-07 06:21:52 - 06:22:07 UTC",
+          "lede": "用户从首页进入，仅 6 秒后触发 payment_process_start 进入 /subscriptions 页面，但 4 秒后即 pageleave。紧接着 5 秒后又通过 pageview 回到同一订阅页，并触发 $set。整个过程在 15 秒内完成，显示他目标明确但决策犹豫。",
+          "bullets": [
+            "06:21:52 进入首页，6 秒后直接跳转 /subscriptions?from=%2F",
+            "06:22:02 触发 pageleave，仅停留 4 秒",
+            "06:22:07 再次 pageview 回到订阅页，触发 $set"
+          ]
+        },
+        {
+          "title": "开聊 Lilith Moran 后撞上 Sparks 门禁",
+          "timeLabel": "2026-05-07 06:22:09 - 06:22:43 UTC",
+          "lede": "用户返回首页后立即触发 page_explore，8 秒后启动与 Lilith Moran 的新聊天。聊天开始仅 2 秒，subscription_drawer_open 和 sparks_gate_shown 同时触发，表明他因 Sparks 不足被拦截。他随即点击 sparks_gate_cta_click，触发 payment_process_start（连续两次），并在 3 秒后选择支付方式 payment_method_select，但紧接着 pageleave。",
+          "bullets": [
+            "06:22:17 启动 chat_start，角色 Lilith Moran",
+            "06:22:19 同时触发 subscription_drawer_open 和 sparks_gate_shown",
+            "06:22:24 点击 sparks_gate_cta_click，连续两次 payment_process_start",
+            "06:22:27 执行 payment_method_select 后立即 pageleave"
+          ]
+        },
+        {
+          "title": "支付方式选择后放弃，在聊天页徘徊",
+          "timeLabel": "2026-05-07 06:22:30 - 06:23:00 UTC",
+          "lede": "离开后仅 3 秒，用户再次 pageview 回到聊天页，触发 $set 和第二次 chat_start（同一角色）。6 秒后再次 subscription_drawer_open 和 sparks_gate_shown，但他这次没有点击 CTA，而是在聊天页连续触发 3 次 page_explore 后离开。",
+          "bullets": [
+            "06:22:30 再次 pageview 聊天页并 chat_start",
+            "06:22:35 再次触发 subscription_drawer_open 和 sparks_gate_shown",
+            "06:22:43 至 06:23:00 连续 3 次 page_explore 后 pageleave"
+          ]
+        },
+        {
+          "title": "返回首页浏览发现页，随后沉默 3 天",
+          "timeLabel": "2026-05-07 06:24:40 - 06:24:54 UTC",
+          "lede": "离开聊天页约 1 分 40 秒后，用户回到首页并触发 pageview 和 $set，随后在首页和 /discover 页面各触发 page_explore，共 4 次浏览行为。之后整整 3 天没有任何事件记录。",
+          "bullets": [
+            "06:24:40 回到首页，触发 pageview 和 $set",
+            "06:24:43 至 06:24:48 在首页 2 次 page_explore",
+            "06:24:54 进入 /discover 页面 page_explore",
+            "此后 3 天无任何事件"
+          ]
+        },
+        {
+          "title": "订阅页反复进出，持续 3 小时 23 分钟",
+          "timeLabel": "2026-05-10 07:47:13 - 11:13:43 UTC",
+          "lede": "3 天后用户从 Google Play 下载页来源进入订阅页，在约 3.5 小时内触发 16 次 page_explore、3 次 pageview、3 次 pageleave 和 2 次 $set，但没有任何 payment_process_start 或支付相关动作。他在同一页面反复浏览、离开、再回来，最长连续停留约 90 秒，最短仅 2 秒。",
+          "bullets": [
+            "07:47:13 首次进入，来源 /download/googleplay",
+            "07:47:13 至 07:48:56 共 11 次 page_explore",
+            "11:10:12 再次进入，11:10:14 pageleave 后立即 $set",
+            "11:10:41 再次 pageview，11:13:43 最终 pageleave"
+          ]
+        },
+        {
+          "title": "周末再次尝试，仍止步于订阅页浏览",
+          "timeLabel": "2026-05-11 02:14:59 - 07:53:16 UTC",
+          "lede": "次日凌晨用户再次从首页进入，触发 payment_process_start 进入订阅页，4 秒后 pageleave，随后又 pageview 回来。在订阅页触发 8 次 page_explore 后离开。18 分钟后再次回到首页，仅 17 秒后进入订阅页并立即离开。当天晚些时候，他访问了 /admin/characters 页面并停留约 50 分钟，可能是创作者功能探索。",
+          "bullets": [
+            "02:15:17 触发 payment_process_start，4 秒后 pageleave",
+            "02:15:25 再次 pageview 订阅页，02:15:36 至 02:17:21 共 8 次 page_explore",
+            "02:34:00 回到首页，02:34:17 进入订阅页后立即 pageleave",
+            "07:03:48 进入 /admin/characters，停留约 50 分钟"
+          ]
+        }
+      ],
+      "keySignals": [
+        "7 天内 3 次 payment_process_start，其中一次走到 payment_method_select 后放弃",
+        "在 /subscriptions 页面累计触发 page_explore 超过 30 次",
+        "Sparks 余额为 0 且触发 sparks_gate_shown 后立即启动支付流程",
+        "注册 312 天、累计 458 条消息的重度用户，但累计消费金额为 0"
+      ],
+      "lessons": [
+        {
+          "headline": "支付方式选择后流失",
+          "body": "用户在 payment_method_select 后 0 秒即离开，可能不支持他偏好的支付方式或对支付安全性有顾虑。检查 Safari 端支付选项的展示与流畅度。"
+        },
+        {
+          "headline": "Sparks 门禁触发率高但转化低",
+          "body": "sparks_gate_shown 后用户立即点击 CTA 并启动支付，说明付费意愿强，但最终未完成。可在门禁页增加限时优惠或低门槛首充选项。"
+        },
+        {
+          "headline": "订阅页反复浏览无进展",
+          "body": "用户在订阅页累计 30+ 次 page_explore 却无支付动作，可能对套餐内容或价格有疑虑。考虑在页面增加 FAQ 或社交证明。"
+        },
+        {
+          "headline": "老用户零付费的激活机会",
+          "body": "注册 312 天、458 条消息却零消费，说明产品价值已被认可但付费转化断层。可针对此类用户设计「感谢长期支持」专属折扣。"
+        }
+      ],
+      "stuckStage": "payment",
+      "oneLine": "重度老用户 Sparks 耗尽后多次启动支付流程甚至选择了支付方式，却在最终确认前反复徘徊 30 余次，始终未完成付费。"
+    },
+    "clarityUrl": "https://clarity.microsoft.com/projects",
+    "eventCount": 316
+  },
+  {
+    "slug": "case-07-ae7b718a",
+    "userIdShort": "ae7b718a",
+    "score": 225,
+    "cohort": {
+      "userId": "xe6863fCkgVoip7Cv1RGeObTsoRLRmhJ",
+      "paymentStartCount": 4,
+      "planViewCount": 0,
+      "drawerOpenCount": 1,
+      "paywallShownCount": 4,
+      "totalEvents": 60,
+      "firstSeen": "2026-05-08T02:51:37.883000Z",
+      "lastSeen": "2026-05-08T02:58:48.372000Z",
+      "intentScore": 225
+    },
+    "profile": {
+      "userId": "ae7b718a-3cde-473b-911d-168bad21a891",
+      "userIdShort": "ae7b718a",
+      "email": "borrero.johnny6306@gmail.com",
+      "country": null,
+      "registeredAt": "2026-05-08T02:51:34.376Z",
+      "accountAgeDays": 4,
+      "messagesSentTotal": 32,
+      "charactersChatted": 6,
+      "sparksBalance": 60,
+      "sparksSpentTotal": 0,
+      "lastActiveAt": "2026-05-08 03:09:25.785",
+      "hasActiveSubscription": false,
+      "posthogDistinctId": "xe6863fCkgVoip7Cv1RGeObTsoRLRmhJ"
+    },
+    "envelope": {
+      "device": "Mobile",
+      "os": "Android",
+      "browser": "Chrome",
+      "country": "United States",
+      "city": "Medina",
+      "initialReferrer": "m.facebook.com",
+      "utmSource": "fb",
+      "utmCampaign": "120244431244610494",
+      "firstSeen": "2026-05-08T02:51:37.883000Z",
+      "lastSeen": "2026-05-08T02:58:48.372000Z"
+    },
+    "narrative": {
+      "tagline": "他 4 分钟连开 7 个角色，却在付费抽屉打开后 3 秒就逃离了现场",
+      "intentSummary": "用户 ae7b718a 从 Facebook 广告进入 Softie.ai，在 4 分钟内密集浏览并开启了 7 个不同角色（Alex Fit、Mia Carter、Samira Al-Nour、Elowen Starshade、Lena Marrow、Bella Hartley、Valentina Cross），表现出强烈的探索和尝鲜意图。仅在 Alex Fit 和 Valentina Cross 两个角色中进行了深度对话，并在 Valentina Cross 的聊天中触发了 3 次媒体解锁、2 次付费拦截和 3 次支付流程启动。用户在支付方式选择页面短暂停留后立即离开，最终未完成任何付费，累计消费金额为 0。核心卡点在于从 Sparks Gate 到支付方式选择之间的转化断裂。",
+      "acts": [
+        {
+          "title": "Facebook 广告着陆，直奔第一个角色",
+          "timeLabel": "2026-05-08 02:51:37 - 02:51:51 UTC",
+          "lede": "用户通过 m.facebook.com 的 campaign=120244431244610494 进入 Softie.ai 首页，14 秒内就点击了角色 Alex Fit 并启动了聊天。这是典型的广告导流高意向行为——用户不是来浏览首页的，而是带着明确目的直接进入互动。",
+          "bullets": [
+            "从 $identify 到 character_click 仅间隔 14 秒，几乎零犹豫",
+            "首次 chat_start 触发后立即在同一角色上再次触发 chat_start（02:51:53），可能是页面加载或用户重复点击",
+            "设备为 Android + Chrome 移动端，符合 Facebook 广告投放的美国移动用户画像"
+          ]
+        },
+        {
+          "title": "与 Alex Fit 深度对话，触发视频里程碑",
+          "timeLabel": "2026-05-08 02:51:53 - 02:53:54 UTC",
+          "lede": "用户在 Alex Fit 角色中进行了 5 轮完整对话（5 次 send、5 次 receive），对话节奏紧凑，最后一条 receive 消息触发了 video_milestone_triggered 事件。这表明角色互动设计成功推动了用户深入参与，视频里程碑的触发说明用户已经达到了预设的互动深度阈值。",
+          "bullets": [
+            "5 轮对话在 2 分钟内完成，平均每轮约 24 秒，互动密度高",
+            "video_milestone_triggered 在 02:53:53 触发，紧接着又收到一条角色消息，体验流畅",
+            "用户在此角色中未触发任何付费相关事件，说明免费体验阶段足以满足初期互动需求"
+          ]
+        },
+        {
+          "title": "4 分钟连开 6 个新角色，快速筛选偏好",
+          "timeLabel": "2026-05-08 02:54:04 - 02:56:03 UTC",
+          "lede": "用户离开 Alex Fit 后进入 page_explore，随后在 2 分钟内连续启动了 Mia Carter、Samira Al-Nour、Elowen Starshade、重返 Alex Fit、Lena Marrow、Bella Hartley 共 6 个角色的聊天，但均未发送任何消息。最后点击 Valentina Cross 并立即开始对话。这是典型的「角色筛选」行为——用户在寻找最能满足其偏好的角色。",
+          "bullets": [
+            "从 02:54:12 到 02:55:09，57 秒内启动 5 个新角色聊天，每个仅停留数秒",
+            "重返 Alex Fit 一次（02:54:47），但未继续对话，说明在对比选择",
+            "Valentina Cross 是第 7 个被点击的角色，也是用户最终选择深入互动的第二个角色"
+          ]
+        },
+        {
+          "title": "与 Valentina Cross 深入互动，连续解锁媒体内容",
+          "timeLabel": "2026-05-08 02:56:03 - 02:57:35 UTC",
+          "lede": "用户在 Valentina Cross 角色中发送了 4 条消息，期间触发了 2 次 media_unlock_attempt 和 2 次 media_unlock_success，说明角色回复中包含了可解锁的媒体内容（图片/视频），且用户成功使用了 Sparks 余额进行解锁。此时用户累计消息数达到 32 条，Sparks 余额为 60。",
+          "bullets": [
+            "第 1 次媒体解锁发生在 02:57:10，紧随第 4 条消息发送后 15 秒",
+            "第 2 次媒体解锁发生在 02:57:34，距上次解锁仅 24 秒，解锁意愿强烈",
+            "两次 media_unlock_success 表明 Sparks 消耗流程正常，用户对解锁内容有明确需求"
+          ]
+        },
+        {
+          "title": "付费拦截触发，支付流程启动后 3 秒退场",
+          "timeLabel": "2026-05-08 02:57:53 - 02:58:12 UTC",
+          "lede": "在第 5 条消息发送后，系统触发了 payment_intercept_trigger，随后 subscription_drawer_open 和 sparks_gate_shown 同时弹出。7 秒后 retention_modal_shown 出现，用户接受了 retention_modal（retention_modal_accepted），触发了 payment_process_start（重复触发 4 次）。用户在 payment_method_select 事件后立即离开页面（$pageleave），整个过程从付费拦截到退场仅 19 秒。",
+          "bullets": [
+            "payment_intercept_trigger → subscription_drawer_open → sparks_gate_shown 三连发，付费压力集中",
+            "retention_modal_accepted 被触发 2 次（02:58:09 和 02:58:10），payment_process_start 被触发 4 次，存在事件重复或用户反复尝试",
+            "payment_method_select 出现在 02:58:12，同一秒内发生 page_explore 和 $pageleave，用户在支付方式选择界面停留不到 1 秒即放弃"
+          ]
+        },
+        {
+          "title": "付费失败后徘徊，重返聊天但未再尝试付费",
+          "timeLabel": "2026-05-08 02:58:12 - 02:58:48 UTC",
+          "lede": "用户离开支付页面后，系统记录了 $set 和 $pageview，随后自动返回 Valentina Cross 聊天界面（chat_start 再次触发）。用户发送了 1 条消息并进行了第 3 次媒体解锁（成功），但之后迅速浏览了首页和聊天列表页，最终在 02:58:48 离开。整个 session 持续约 7 分钟，未再触发任何付费事件。",
+          "bullets": [
+            "付费失败后用户仍发送了 1 条消息并成功解锁媒体，说明产品价值仍然吸引用户",
+            "第 3 次 media_unlock_success 发生在 02:58:39，距支付放弃仅 27 秒，用户继续消耗 Sparks",
+            "最终在 /chats 页面离开，可能是查看历史记录后退出，未再次进入付费流程"
+          ]
+        }
+      ],
+      "keySignals": [
+        "4 分钟内启动 7 个角色聊天，探索意图极强但仅深度对话 2 个",
+        "payment_process_start 在 3 秒内重复触发 4 次，支付意愿强烈但流程受阻",
+        "3 次 media_unlock_success 全部成功，Sparks 消耗正常但未触发充值",
+        "从 sparks_gate_shown 到 $pageleave 仅 19 秒，付费转化窗口极短"
+      ],
+      "lessons": [
+        {
+          "headline": "付费拦截时机过早",
+          "body": "用户在 Valentina Cross 仅发送 5 条消息即触发付费拦截，此时互动深度尚浅。建议延长免费体验轮次或根据互动深度动态触发付费门，避免过早打断沉浸体验。"
+        },
+        {
+          "headline": "支付流程重复触发混乱",
+          "body": "payment_process_start 在 2 秒内触发 4 次、retention_modal_accepted 触发 2 次，可能是前端事件重复上报或用户反复点击。需排查支付按钮的防抖逻辑，避免用户困惑。"
+        },
+        {
+          "headline": "支付方式选择页是最大流失点",
+          "body": "用户在 payment_method_select 后不到 1 秒即离开，说明支付方式页面设计或加载速度存在问题。建议优化移动端支付页面加载速度，减少支付方式选项或提供默认选择。"
+        },
+        {
+          "headline": "Sparks 消耗未转化为充值动力",
+          "body": "用户成功解锁 3 次媒体内容，Sparks 余额 60 仍有余量，但未触发充值行为。可在 Sparks 余额不足时提前展示充值入口，而非等到付费拦截时才一次性弹出。"
+        }
+      ],
+      "stuckStage": "payment",
+      "oneLine": "美国 Android 用户从 Facebook 广告进入，4 分钟探索 7 个角色后与 Valentina Cross 深度互动，连续解锁 3 次媒体内容，但在支付方式选择页面停留不足 1 秒即流失，累计消费 0 元。"
+    },
+    "clarityUrl": "https://clarity.microsoft.com/projects",
+    "eventCount": 60
+  },
+  {
+    "slug": "case-08-b8e4ae80",
+    "userIdShort": "b8e4ae80",
+    "score": 224.6,
+    "cohort": {
+      "userId": "NefYjtTHRupyinSjEiwVDjpmkS5eNLnn",
+      "paymentStartCount": 4,
+      "planViewCount": 0,
+      "drawerOpenCount": 2,
+      "paywallShownCount": 2,
+      "totalEvents": 53,
+      "firstSeen": "2026-05-06T08:01:22.434000Z",
+      "lastSeen": "2026-05-06T08:23:57.601000Z",
+      "intentScore": 224.6
+    },
+    "profile": {
+      "userId": "b8e4ae80-17c0-45f9-ac2b-3661ff9edb2e",
+      "userIdShort": "b8e4ae80",
+      "email": "jadynkaran1@gmail.com",
+      "country": null,
+      "registeredAt": "2026-05-06T08:01:22.255Z",
+      "accountAgeDays": 6,
+      "messagesSentTotal": 28,
+      "charactersChatted": 5,
+      "sparksBalance": 100,
+      "sparksSpentTotal": 0,
+      "lastActiveAt": "2026-05-06 08:06:14.855",
+      "hasActiveSubscription": false,
+      "posthogDistinctId": "NefYjtTHRupyinSjEiwVDjpmkS5eNLnn"
+    },
+    "envelope": {
+      "device": "Desktop",
+      "os": "Windows",
+      "browser": "Chrome",
+      "country": "United States",
+      "city": "Summerville",
+      "initialReferrer": "search.yahoo.com",
+      "utmSource": null,
+      "utmCampaign": null,
+      "firstSeen": "2026-05-06T08:01:22.434000Z",
+      "lastSeen": "2026-05-06T08:23:57.601000Z"
+    },
+    "narrative": {
+      "tagline": "他在 4 分钟内连开 5 个角色，却在第一次付费拦截时反复启动支付 4 次后消失。",
+      "intentSummary": "用户从 Yahoo 搜索进入 Softie.ai，注册后立即表现出强烈的探索和互动意图。他在 4 分钟内浏览了 5 个不同角色，并与其中名为 Alex Fit 的角色进行了 9 轮对话。当对话达到付费门槛时，系统触发了支付拦截。用户表现出极高的付费意愿，在 10 秒内连续 4 次点击启动支付流程并选择了支付方式，但最终未完成交易，随后在页面停留 18 分钟后离开。",
+      "acts": [
+        {
+          "title": "着陆即开聊，锁定 Alex Fit",
+          "timeLabel": "2026-05-06 08:01:22 - 08:02:00 UTC",
+          "lede": "用户通过 Yahoo 搜索进入 Softie.ai，系统立即为其生成了一个与 Alex Fit 的新聊天。用户在 5 秒内发送了第一条消息，并在收到回复后 11 秒内再次发送消息，表明其互动意图明确且投入度高。",
+          "bullets": [
+            "08:01:22 进入 Alex Fit 聊天页面，仅 6 秒后发送首条消息。",
+            "首轮对话节奏极快：发送消息后 11 秒收到回复，再 11 秒后发送第二条消息。",
+            "此阶段用户未探索其他页面，专注与 Alex Fit 进行 1 对 1 互动。"
+          ]
+        },
+        {
+          "title": "快速浏览角色库，探索替代选项",
+          "timeLabel": "2026-05-06 08:02:02 - 08:02:51 UTC",
+          "lede": "在与 Alex Fit 完成两轮对话后，用户突然中断，在 49 秒内连续开启了与 Elena Moore、Lilith Moran、Valentina Cross 三个新角色的聊天，但未发送任何消息。这像是一次快速的角色“选购”，最终用户又回到了 Alex Fit。",
+          "bullets": [
+            "08:02:02 开启 Elena Moore 聊天，21 秒后切换至 Lilith Moran。",
+            "08:02:39 开启 Valentina Cross 聊天，12 秒后重新开启 Alex Fit 聊天。",
+            "对 3 个新角色均只触发 chat_start，无任何消息发送，属纯浏览行为。"
+          ]
+        },
+        {
+          "title": "深度互动触发视频里程碑与付费拦截",
+          "timeLabel": "2026-05-06 08:02:51 - 08:05:27 UTC",
+          "lede": "用户返回 Alex Fit 后，在 2 分 36 秒内连续发送了 7 条消息，进行了高密度的对话。互动在 08:04:33 触发了 video_milestone_triggered 事件，表明对话深度达到了预设的激励节点。紧接着，在用户发送第 9 条消息后，系统于 08:05:27 同时触发了 payment_intercept_trigger、subscription_drawer_open 和 sparks_gate_shown，正式将用户推向付费墙。",
+          "bullets": [
+            "返回 Alex Fit 后，消息发送频率极高，平均每 22 秒发送一条。",
+            "08:04:33 触发 video_milestone_triggered，暗示对话内容可能达到特定亲密或剧情节点。",
+            "08:05:27 三条付费相关事件同时触发，标志着免费体验的硬性终止。"
+          ]
+        },
+        {
+          "title": "支付流程反复启动，10 秒内 4 次尝试",
+          "timeLabel": "2026-05-06 08:05:27 - 08:05:37 UTC",
+          "lede": "面对付费拦截，用户反应迅速且激烈。在 retention_modal_shown 后仅 3 秒，他就点击了 retention_modal_accepted。随后在 08:05:34 到 08:05:36 的 2 秒内，payment_process_start 事件被记录了 4 次，并在 08:05:37 触发了 payment_method_select。这描绘了一个用户在支付页面反复点击、可能遇到表单错误或犹豫的画面。",
+          "bullets": [
+            "08:05:31 retention_modal_shown，3 秒后用户即接受并进入支付流程。",
+            "08:05:34 至 08:05:36，payment_process_start 密集触发 4 次，存在重复点击或页面刷新。",
+            "08:05:37 触发 payment_method_select，表明用户已进展到选择支付方式这一步。"
+          ]
+        },
+        {
+          "title": "支付失败后徘徊，最终沉默离开",
+          "timeLabel": "2026-05-06 08:05:37 - 08:23:57 UTC",
+          "lede": "在选择支付方式后，支付流程中断。用户于 08:05:37 触发了 page_explore 和 $pageleave，但又在 6 秒后通过 $pageview 重新进入 Alex Fit 的聊天。在接下来的 18 分钟里，他再次浏览了 Seraphina Vale 和 Valentina Cross 两个角色，并两次触发 page_explore，最终于 08:23:57 离开页面，未再返回。",
+          "bullets": [
+            "08:05:37 触发 $pageleave 后，08:05:43 又通过 $pageview 返回，显示其犹豫心态。",
+            "返回后未继续支付，而是开启 Seraphina Vale 和再次开启 Valentina Cross 的聊天。",
+            "08:15:44 再次遇到 timed_paywall_shown，但无后续支付行为，最终于 08:23:57 离开。"
+          ]
+        }
+      ],
+      "keySignals": [
+        "4 分钟内浏览 5 个不同角色，但仅与第一个角色 Alex Fit 深度互动。",
+        "对话 2 分 36 秒内触发 video_milestone_triggered，显示内容深度。",
+        "10 秒内 payment_process_start 事件触发 4 次，支付意愿极强但流程受阻。",
+        "支付失败后仍在页面徘徊 18 分钟并浏览新角色，最终未转化。"
+      ],
+      "lessons": [
+        {
+          "headline": "支付流程存在严重摩擦",
+          "body": "payment_process_start 在 2 秒内触发 4 次，强烈暗示支付按钮无响应或页面报错。需立即排查此环节的前端逻辑与错误处理。"
+        },
+        {
+          "headline": "付费拦截时机精准",
+          "body": "在 video_milestone_triggered 后仅 54 秒触发付费，且用户立即尝试支付，证明当前的付费墙位置能有效捕捉高意图用户。"
+        },
+        {
+          "headline": "探索行为是付费前兆",
+          "body": "用户在深度互动前会快速浏览多个角色。可在用户连续开启 2-3 个角色后，主动推送高互动率的角色推荐，加速其进入深度对话。"
+        },
+        {
+          "headline": "支付失败后缺乏挽回",
+          "body": "用户支付失败后仍在站内停留 18 分钟，期间仅展示了 timed_paywall_shown。应在此窗口期触发主动挽回机制，如提供限时折扣或引导至客服。"
+        }
+      ],
+      "stuckStage": "payment",
+      "oneLine": "用户从 Yahoo 搜索进入，4 分钟内浏览 5 个角色并与 Alex Fit 深度互动触发付费，在 10 秒内 4 次尝试启动支付并选择方式后失败，徘徊 18 分钟离开，是高意向支付流程受阻的典型案例。"
+    },
+    "clarityUrl": "https://clarity.microsoft.com/projects",
+    "eventCount": 53
+  },
+  {
+    "slug": "case-09-fd61abe2",
+    "userIdShort": "fd61abe2",
+    "score": 169.4,
+    "cohort": {
+      "userId": "PCDC3YN-OOcvERKfk6lI1_kKeG4py62w",
+      "paymentStartCount": 2,
+      "planViewCount": 0,
+      "drawerOpenCount": 5,
+      "paywallShownCount": 7,
+      "totalEvents": 152,
+      "firstSeen": "2026-05-06T01:27:32.049000Z",
+      "lastSeen": "2026-05-06T21:12:27.159000Z",
+      "intentScore": 169.4
+    },
+    "profile": {
+      "userId": "fd61abe2-68ae-4ade-b27b-4855db163e94",
+      "userIdShort": "fd61abe2",
+      "email": "toni.aixendri@gmail.com",
+      "country": null,
+      "registeredAt": "2026-05-04T19:20:12.282Z",
+      "accountAgeDays": 7,
+      "messagesSentTotal": 41,
+      "charactersChatted": 8,
+      "sparksBalance": 30,
+      "sparksSpentTotal": 0,
+      "lastActiveAt": "2026-05-06 21:10:32.714",
+      "hasActiveSubscription": false,
+      "posthogDistinctId": "PCDC3YN-OOcvERKfk6lI1_kKeG4py62w"
+    },
+    "envelope": {
+      "device": "Mobile",
+      "os": "Android",
+      "browser": "Chrome",
+      "country": "Spain",
+      "city": "L'Hospitalet de Llobregat",
+      "initialReferrer": "$direct",
+      "utmSource": null,
+      "utmCampaign": null,
+      "firstSeen": "2026-05-06T01:27:32.049000Z",
+      "lastSeen": "2026-05-06T21:12:27.159000Z"
+    },
+    "narrative": {
+      "tagline": "他在深夜反复打开同一个角色 8 次，4 次解锁媒体、3 次撞上 Sparks 门禁，最后在手机和电脑之间来回切换，还是没付钱。",
+      "intentSummary": "用户 fd61abe2 在 7 天内通过 Android Chrome 直接访问 Softie.ai，累计发起 41 条消息、接触 8 个角色。他对 Savannah Hart 表现出强烈偏好——在首次会话中连续 4 次成功解锁媒体内容，并在次日回访时再次打开该角色。当系统弹出 Sparks 余额不足的门禁和订阅抽屉时，他多次查看但未完成支付，甚至在手机和桌面端之间切换尝试，最终仍停留在免费层。核心卡点在于：有明确的媒体消费意愿和重复使用行为，但在付费墙前反复徘徊。",
+      "acts": [
+        {
+          "title": "深夜着陆，快速浏览 5 个角色",
+          "timeLabel": "2026-05-06 01:27 - 01:29 UTC",
+          "lede": "用户于凌晨 1:27 通过直接访问着陆首页，仅 8 秒后即发起第一个聊天，对象为 Iris Lin。随后在 1 分 18 秒内连续打开 Valentina Cross、Scarlett Vale、Elyra Snowbelle 和 Savannah Hart，共 5 个角色。期间触发一次 page_explore 事件，表明他在浏览推荐列表。节奏极快，平均每个角色停留不足 20 秒，处于典型的「尝鲜浏览」模式。",
+          "bullets": [
+            "从着陆到第一个 chat_start 仅 8 秒，几乎零犹豫",
+            "1 分 18 秒内连续打开 5 个角色：Iris Lin → Valentina Cross → Scarlett Vale → Elyra Snowbelle → Savannah Hart",
+            "在 Scarlett Vale 之前触发了 page_explore，说明他通过探索页而非首页直接选择角色"
+          ]
+        },
+        {
+          "title": "锁定 Savannah Hart，密集解锁媒体",
+          "timeLabel": "2026-05-06 01:29 - 01:30 UTC",
+          "lede": "在快速浏览后，用户停留在 Savannah Hart 的聊天中。从 01:29:08 到 01:29:38 的 30 秒内，他连续触发 3 次 media_unlock_attempt 且全部成功（media_unlock_success），随后查看角色详情页（character_profile_view），又返回聊天发送了一条消息（chat_message_send）并收到回复（chat_message_receive），紧接着第 4 次尝试解锁媒体并成功。这是整个 7 天日志中唯一有实际对话和媒体消费的深度互动段落。",
+          "bullets": [
+            "30 秒内 3 次 media_unlock_attempt → media_unlock_success，成功率 100%",
+            "解锁后主动查看 Savannah Hart 的角色详情页，行为意图明确",
+            "发送 1 条消息并收到回复后，立即进行第 4 次媒体解锁",
+            "此时段是唯一出现 chat_message_send 和 chat_message_receive 的时刻"
+          ]
+        },
+        {
+          "title": "次日回访，重复打开全部角色",
+          "timeLabel": "2026-05-06 21:05 - 21:09 UTC",
+          "lede": "约 19.5 小时后，用户再次访问首页。在 4 分钟内按几乎相同的顺序重新打开前一天的所有 8 个角色：Raven Stone、Julia Hart、Tiffany Blake、Savannah Hart、Valentina Cross、Scarlett Vale、Elyra Snowbelle、Iris Lin，其中 Valentina Cross 和 Savannah Hart 各被打开 2 次。这次没有任何 chat_message_send 或 media_unlock 事件，纯粹是「重新检查」这些角色。",
+          "bullets": [
+            "4 分钟内发起 10 次 chat_start，覆盖全部 8 个已知角色",
+            "Savannah Hart 和 Valentina Cross 各被重复打开 2 次",
+            "没有任何消息发送或媒体解锁行为，与首次访问形成鲜明对比",
+            "新增 3 个角色：Raven Stone、Julia Hart、Tiffany Blake"
+          ]
+        },
+        {
+          "title": "撞上付费墙，在手机和电脑间挣扎",
+          "timeLabel": "2026-05-06 21:09 - 21:12 UTC",
+          "lede": "在重复打开所有角色后，用户进入个人资料页（/profile），触发 subscription_drawer_open 和 retention_modal_shown，表明他查看了订阅方案。随后返回 Savannah Hart 聊天时，系统弹出 payment_intercept_trigger、subscription_drawer_open 和 sparks_gate_shown——他的 Sparks 余额不足以继续。在接下来 2 分钟内，他在 Mobile 和 Desktop 之间切换 3 次，每次都重新打开 Savannah Hart 并再次触发 sparks_gate_shown，但始终未进入支付流程。",
+          "bullets": [
+            "在 /profile 页触发 subscription_drawer_open 和 retention_modal_shown，主动查看付费选项",
+            "返回 Savannah Hart 后立即触发 payment_intercept_trigger + sparks_gate_shown",
+            "2 分钟内 Mobile ↔ Desktop 切换 3 次，每次都在 Savannah Hart 聊天中撞上 sparks_gate_shown",
+            "最终在 21:12:27 以 Mobile 端 chat_start Savannah Hart 结束，未完成任何支付"
+          ]
+        },
+        {
+          "title": "尝试创建角色，浅尝辄止",
+          "timeLabel": "2026-05-06 01:39 - 01:40 UTC",
+          "lede": "在首次会话末尾，用户访问了 /discover?view=my（查看「我的」内容）和 /create 页面，但仅在 /create 停留 2 秒即离开（$pageleave），随后返回首页。这表明他对创建自定义角色有短暂兴趣，但未实际执行任何创建动作。",
+          "bullets": [
+            "访问 /discover?view=my 查看个人相关内容",
+            "进入 /create 页面仅 2 秒即离开，未触发任何创建事件",
+            "这是整个日志中唯一一次访问创建页面的记录"
+          ]
+        }
+      ],
+      "keySignals": [
+        "首次会话 30 秒内完成 4 次 media_unlock_success，媒体消费意愿极强",
+        "Savannah Hart 被打开 8 次，是唯一有 chat_message_send 的角色",
+        "24 小时内 2 次触发 sparks_gate_shown + subscription_drawer_open 但支付转化率为 0",
+        "在付费墙前 Mobile ↔ Desktop 切换 3 次，疑似寻找更低价格或更好体验"
+      ],
+      "lessons": [
+        {
+          "headline": "媒体解锁是强转化信号",
+          "body": "用户在首次会话中 4 次解锁媒体且全部成功，应立即触发限时优惠或 Sparks 奖励，趁热打铁引导付费。"
+        },
+        {
+          "headline": "Sparks 门禁后缺少引导",
+          "body": "用户 3 次撞上 sparks_gate_shown 但未进入支付，说明门禁只拦截未转化。应在门禁上直接展示「最划算的 Sparks 包」或一键订阅入口。"
+        },
+        {
+          "headline": "跨设备切换是求助信号",
+          "body": "用户在付费墙前反复切换手机和电脑，可能以为桌面端价格不同或支付更便捷。应在切换时弹出「价格一致，手机也能付」的 reassurance。"
+        },
+        {
+          "headline": "回访用户需要「继续聊」入口",
+          "body": "次日回访时用户重新打开所有角色而非直接继续 Savannah Hart 对话，说明缺少「继续上次聊天」的快捷入口，增加了操作摩擦。"
+        }
+      ],
+      "stuckStage": "paywall",
+      "oneLine": "西班牙深夜用户，首次访问即与 Savannah Hart 深度互动并解锁 4 次媒体，次日回访时撞上 Sparks 门禁，在手机和电脑间反复切换 3 次仍放弃付费，是高意向但付费摩擦过大的典型。"
+    },
+    "clarityUrl": "https://clarity.microsoft.com/projects",
+    "eventCount": 152
+  },
+  {
+    "slug": "case-10-f94938a7",
+    "userIdShort": "f94938a7",
+    "score": 157.4,
+    "cohort": {
+      "userId": "pl8Spe4aDW3kkYcjysZfKf8EDifPJOx6",
+      "paymentStartCount": 2,
+      "planViewCount": 0,
+      "drawerOpenCount": 5,
+      "paywallShownCount": 8,
+      "totalEvents": 82,
+      "firstSeen": "2026-05-09T11:54:45.966000Z",
+      "lastSeen": "2026-05-09T12:13:57.475000Z",
+      "intentScore": 157.4
+    },
+    "profile": {
+      "userId": "f94938a7-e728-4b35-84c0-77d1419ca911",
+      "userIdShort": "f94938a7",
+      "email": "ireneviegas36@gmail.com",
+      "country": null,
+      "registeredAt": "2026-05-09T11:53:50.084Z",
+      "accountAgeDays": 3,
+      "messagesSentTotal": 29,
+      "charactersChatted": 5,
+      "sparksBalance": 50,
+      "sparksSpentTotal": 0,
+      "lastActiveAt": "2026-05-09 12:10:25.053",
+      "hasActiveSubscription": false,
+      "posthogDistinctId": "pl8Spe4aDW3kkYcjysZfKf8EDifPJOx6"
+    },
+    "envelope": {
+      "device": "Mobile",
+      "os": "Android",
+      "browser": "Chrome",
+      "country": "Brazil",
+      "city": "Itambé",
+      "initialReferrer": "$direct",
+      "utmSource": null,
+      "utmCampaign": null,
+      "firstSeen": "2026-05-09T11:54:45.966000Z",
+      "lastSeen": "2026-05-09T12:13:57.475000Z"
+    },
+    "narrative": {
+      "tagline": "他接受了挽留弹窗、点了 7 次支付方式，却在 20 分钟内一分钱都没花出去",
+      "intentSummary": "用户从巴西直接访问，注册仅 3 天，对角色 Iris Lin 表现出强烈偏好，在 20 分钟内发送多条消息并触发视频里程碑与两次媒体解锁。系统弹出 Sparks 不足的付费拦截后，他接受了挽留优惠并多次进入支付流程，反复选择支付方式，但始终未完成交易。12 分钟后他再次返回，继续尝试解锁 Iris Lin 的媒体，并试探了 Rem 和 Riley Vega，同样被付费墙挡住，最终放弃。",
+      "acts": [
+        {
+          "title": "着陆即选中 Iris Lin，秒开对话",
+          "timeLabel": "2026-05-09 11:54:45 - 11:54:56 UTC",
+          "lede": "用户通过直接访问进入 Softie.ai，在首页仅停留 9 秒便点击角色 Iris Lin，随即开始新对话。从 $identify 到 chat_start 仅用 11 秒，没有任何犹豫或浏览其他角色，目标极其明确。",
+          "bullets": [
+            "11:54:45 触发 $identify，当前页为 /chats，表明可能已有账号或会话残留。",
+            "11:54:48 进入首页 page_explore，仅 6 秒后点击 Iris Lin（character_click）。",
+            "11:54:56 发起 chat_start，进入 /new-chat/ 页面，全程无其他角色探索。"
+          ]
+        },
+        {
+          "title": "高强度聊天，触发视频里程碑并解锁媒体",
+          "timeLabel": "2026-05-09 11:54:56 - 11:58:24 UTC",
+          "lede": "用户在 3 分半内发送了 8 条消息（chat_message_send），并收到对应回复。系统在 11:56:58 触发 video_milestone_triggered，表明对话深度已满足视频解锁条件。随后用户两次尝试媒体解锁（media_unlock_attempt）均成功（media_unlock_success），说明他正在积极消费角色提供的多媒体内容。",
+          "bullets": [
+            "首条消息在 chat_start 后 17 秒发出，节奏紧凑，无冷场。",
+            "11:56:58 的 video_milestone_triggered 与紧随其后的 chat_message_receive 暗示视频与对话联动。",
+            "两次 media_unlock_success（11:58:24 和 11:59:16）之间用户仍在持续发消息，沉浸度极高。"
+          ]
+        },
+        {
+          "title": "撞上付费墙，接受挽留但支付流程反复跳转",
+          "timeLabel": "2026-05-09 11:58:37 - 12:00:02 UTC",
+          "lede": "用户返回首页后短暂尝试角色 Rem（chat_start 后 6 秒即放弃），重新打开 Iris Lin 对话并再次解锁媒体。紧接着系统在 11:59:52 触发 payment_intercept_trigger，弹出订阅抽屉和 Sparks 不足提示，随后展示 retention_modal。用户于 11:59:58 接受挽留优惠，随即进入支付流程，但 payment_process_start 和 payment_method_select 在 4 秒内密集触发 7 次以上，页面在 /chats 和 / 之间反复跳转，最终在 12:00:02 触发 $pageleave 离开。",
+          "bullets": [
+            "retention_modal_accepted 后立即出现两次 payment_process_start（同一秒），说明系统可能重复发起支付。",
+            "payment_method_select 在 12:00:00 至 12:00:02 间出现 7 次，且伴随多次 page_explore，支付界面极不稳定。",
+            "用户在支付方式选择阶段反复横跳，却从未触发 payment_success 或类似完成事件。"
+          ]
+        },
+        {
+          "title": "12 分钟后回归，再次被付费墙挡住并放弃",
+          "timeLabel": "2026-05-09 12:12:19 - 12:13:57 UTC",
+          "lede": "用户离开 12 分钟后重新打开首页，再次进入 Iris Lin 对话并立即尝试媒体解锁（成功）。系统再次弹出支付拦截、订阅抽屉和 Sparks 提示，但这次 retention_modal 在 12:12:58 被 dismissed。用户仍不死心，又两次重新开始 Iris Lin 对话，均触发相同的付费拦截。最后他尝试角色 Riley Vega，同样在 17 秒后撞上付费墙，事件流在此终止，无后续支付或聊天行为。",
+          "bullets": [
+            "12:12:35 的 media_unlock_attempt 和 success 表明用户回归后第一件事仍是解锁 Iris Lin 的内容。",
+            "retention_modal_dismissed 与首次的 accepted 形成对比，用户可能对优惠失去耐心或认为已领取过。",
+            "对 Riley Vega 的 chat_start 到 payment_intercept_trigger 仅 17 秒，说明付费墙在对话开始后立即触发，体验断裂。"
+          ]
+        }
+      ],
+      "keySignals": [
+        "20 分钟内 7 次 payment_method_select 但零转化",
+        "retention_modal 首次 accepted 后仍支付失败，二次直接 dismissed",
+        "对 Iris Lin 发起 5 次 chat_start，占全部角色互动的 83%",
+        "两次 media_unlock_success 证明内容消费意愿强烈，但付费流程中断体验"
+      ],
+      "lessons": [
+        {
+          "headline": "支付方式选择页崩溃",
+          "body": "payment_method_select 在 2 秒内触发 7 次且伴随页面反复跳转，需排查巴西本地支付渠道兼容性与移动端支付 UI 稳定性。"
+        },
+        {
+          "headline": "挽留优惠未闭环",
+          "body": "用户接受 retention_modal 后仍未能完成支付，应检查优惠券发放逻辑，并在支付中断后通过邮件或站内信推送未完成订单提醒。"
+        },
+        {
+          "headline": "付费墙触发过早",
+          "body": "Riley Vega 对话仅 17 秒即弹出支付拦截，用户尚未体验角色价值即被要求付费，可考虑延长免费互动轮次或提供 Sparks 试用包。"
+        },
+        {
+          "headline": "高意向用户沉默召回",
+          "body": "用户离开 12 分钟后自行返回，说明需求真实存在。可针对此类“支付流程中断后回访”用户设计限时折扣或客服介入机制。"
+        }
+      ],
+      "stuckStage": "payment",
+      "oneLine": "巴西用户 f94938a7 对角色 Iris Lin 高度沉迷，20 分钟内触发视频里程碑并解锁媒体，却在接受挽留优惠后于支付方式选择页反复跳转 7 次，最终未完成支付，12 分钟后回归仍被付费墙挡住而流失。"
+    },
+    "clarityUrl": "https://clarity.microsoft.com/projects",
+    "eventCount": 82
+  }
+]

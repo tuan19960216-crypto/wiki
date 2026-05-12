@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softie · 高意向潜在付费用户案例库</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  header.hero { padding: 16px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 {
+    font-size: 42px; font-weight: 700; margin: 0 0 14px;
+    letter-spacing: -0.02em; line-height: 1.15;
+    background: linear-gradient(135deg, #e4e7ed 30%, var(--accent) 80%, var(--info) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { font-size: 17px; color: var(--text-dim); margin: 0; max-width: 720px; line-height: 1.55; }
+  h2 { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin: 48px 0 16px; }
+  .cases { display: grid; gap: 14px; }
+  .case-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 24px;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.15s, transform 0.15s, background 0.15s;
+    display: flex; gap: 18px; align-items: flex-start;
+  }
+  .case-card:hover { border-color: var(--accent); background: var(--bg-deep); transform: translateY(-1px); }
+  .case-avatar-anon { width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--bg-deep); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: "SF Mono", Menlo, Consolas, monospace; color: var(--accent); font-size: 14px; font-weight: 700; letter-spacing: 1px; }
+  .case-body { flex: 1; min-width: 0; }
+  .case-tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .case-tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 500; }
+  .case-tag.accent { background: var(--accent-soft); color: var(--accent); }
+  .case-tag.info { background: var(--info-soft); color: var(--info); }
+  .case-tag.muted { background: rgba(155,163,180,0.1); color: var(--text-dim); }
+  .case-tag.amber { background: var(--warning-soft); color: var(--warning); }
+  .case-tag.red { background: var(--danger-soft); color: var(--danger); }
+  .case-card h3 { margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--text); }
+  .case-card .quote { font-size: 14px; color: var(--text-dim); margin: 6px 0 8px; line-height: 1.5; }
+  .case-card .quote::before { content: "“"; color: var(--accent); margin-right: 2px; }
+  .case-card .quote::after { content: "”"; color: var(--accent); margin-left: 2px; }
+  .case-card .meta { display: flex; gap: 14px; font-size: 12.5px; color: var(--text-muted); flex-wrap: wrap; }
+  .case-card .meta strong { color: var(--text-dim); font-weight: 500; }
+  .note { background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--info); border-radius: 10px; padding: 16px 20px; font-size: 14px; color: var(--text-dim); margin: 20px 0 0; }
+  .note strong { color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/softie/">Softie</a><span>/</span><span style="color: var(--text-dim);">用户案例</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">CASE STUDIES · 高意向潜在付费用户</span>
+    <h1>10 个差一步就付款的<br>真实用户</h1>
+    <p class="subtitle">
+      这里收录过去 7 天里 PostHog 抓到的、有最强付费意向但未完成支付的 10 个用户。每个案例 = 一份事件流真实重现，附 LLM 行为解读 + 可执行的运营建议。匿名展示，不带任何 PII。
+    </p>
+  </header>
+
+  <h2>已归档案例</h2>
+  <div class="cases">
+
+    <a class="case-card" href="/softie/cases/case-01-524c7b0c">
+      <div class="case-avatar-anon">524C</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag red">卡在 · payment</span>
+          <span class="case-tag muted">United Kingdom / Glasgow</span>
+          <span class="case-tag info">Desktop</span>
+        </div>
+        <h3>案例 #001 · 524c7b0c</h3>
+        <p class="quote">他三次打开支付页面、两次选择支付方式，却始终在最后一步前退场，像在门口反复试钥匙却不敢转动。</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 40 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-02-3cc52876">
+      <div class="case-avatar-anon">3CC5</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag red">卡在 · payment</span>
+          <span class="case-tag muted">United States / Lakewood</span>
+          <span class="case-tag info">Desktop</span>
+        </div>
+        <h3>案例 #002 · 3cc52876</h3>
+        <p class="quote">他在 6 天内 5 次打开付费抽屉、3 次选中支付方式，却始终没按下确认键</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 45 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-03-5d18e46d">
+      <div class="case-avatar-anon">5D18</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag amber">卡在 · paywall</span>
+          <span class="case-tag muted">Uganda / Kampala</span>
+          <span class="case-tag info">Desktop</span>
+        </div>
+        <h3>案例 #003 · 5d18e46d</h3>
+        <p class="quote">他 19 分钟连开 6 个角色，撞了 5 次付费墙，最后在注册框前退场</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 48 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-04-4ce30167">
+      <div class="case-avatar-anon">4CE3</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag red">卡在 · payment</span>
+          <span class="case-tag muted">United States / Los Angeles</span>
+          <span class="case-tag info">Desktop</span>
+        </div>
+        <h3>案例 #004 · 4ce30167</h3>
+        <p class="quote">他在订阅页反复进出 30 次，却始终没按下「确认支付」，像在店门口徘徊了一整个周末</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 458 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-05-4d692b00">
+      <div class="case-avatar-anon">4D69</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag amber">卡在 · paywall</span>
+          <span class="case-tag muted">United States / Franklin</span>
+          <span class="case-tag info">Mobile</span>
+        </div>
+        <h3>案例 #005 · 4d692b00</h3>
+        <p class="quote">他在 25 分钟内速览 6 个角色，两次撞上付费墙，两次推开挽留弹窗，最终零消费离场</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 34 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-06-7b58cfbe">
+      <div class="case-avatar-anon">7B58</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag red">卡在 · payment</span>
+          <span class="case-tag muted">Netherlands / Bilthoven</span>
+          <span class="case-tag info">Desktop</span>
+        </div>
+        <h3>案例 #006 · 7b58cfbe</h3>
+        <p class="quote">他为 Alex Fit 连发 9 条消息，却在付费墙前反复横跳，两次接受优惠又两次放弃支付</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 36 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-07-ae7b718a">
+      <div class="case-avatar-anon">AE7B</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag red">卡在 · payment</span>
+          <span class="case-tag muted">United States / Medina</span>
+          <span class="case-tag info">Mobile</span>
+        </div>
+        <h3>案例 #007 · ae7b718a</h3>
+        <p class="quote">他 4 分钟连开 7 个角色，却在付费抽屉打开后 3 秒就逃离了现场</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 32 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-08-b8e4ae80">
+      <div class="case-avatar-anon">B8E4</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag red">卡在 · payment</span>
+          <span class="case-tag muted">United States / Summerville</span>
+          <span class="case-tag info">Desktop</span>
+        </div>
+        <h3>案例 #008 · b8e4ae80</h3>
+        <p class="quote">他在 4 分钟内连开 5 个角色，却在第一次付费拦截时反复启动支付 4 次后消失。</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 28 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-09-fd61abe2">
+      <div class="case-avatar-anon">FD61</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag amber">卡在 · paywall</span>
+          <span class="case-tag muted">Spain / L&amp;#39;Hospitalet de Llobregat</span>
+          <span class="case-tag info">Mobile</span>
+        </div>
+        <h3>案例 #009 · fd61abe2</h3>
+        <p class="quote">他在深夜反复打开同一个角色 8 次，4 次解锁媒体、3 次撞上 Sparks 门禁，最后在手机和电脑之间来回切换，还是没付钱。</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 41 条消息</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/softie/cases/case-10-f94938a7">
+      <div class="case-avatar-anon">F949</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag accent">高意向</span>
+          <span class="case-tag red">卡在 · payment</span>
+          <span class="case-tag muted">Brazil / Itambé</span>
+          <span class="case-tag info">Mobile</span>
+        </div>
+        <h3>案例 #010 · f94938a7</h3>
+        <p class="quote">他接受了挽留弹窗、点了 7 次支付方式，却在 20 分钟内一分钱都没花出去</p>
+        <div class="meta">
+          <span><strong>意向</strong> 0× 点付款 · 0× 开 Drawer</span>
+          <span><strong>使用</strong> 29 条消息</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <h2>说明</h2>
+  <div class="note">
+    <strong>这个案例库给谁看？</strong>给我们自己、给增长团队、给运营。<br>
+    每页保留：用户脱敏档案、7 天事件时间线、LLM 解读 + 行动建议、设备/地区/来源画像、Clarity 录屏链接（如可用）。<strong>系统里所有可追溯的真实数据。</strong>
+    <br><br>
+    <strong>Cohort 定义：</strong>过去 7 天触发 <code>payment_process_start</code> ≥1 / <code>subscription_plan_view</code> ≥2 / <code>subscription_drawer_open</code> ≥3 / paywall_shown ≥5 任一条件，且 7 天内无 <code>payment_success</code> 的非内部账号。按事件加权排序取 Top 10。
+    <br><br>
+    <strong>数据快照</strong>：2026-05-13 01:20:34 CST（北京时间）
+  </div>
+
+  <footer>
+    Softie 用户案例库 · <a href="/softie/">← 返回 Softie 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>

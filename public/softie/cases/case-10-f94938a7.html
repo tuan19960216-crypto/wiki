@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softie · 用户案例 · f94938a7 · 他接受了挽留弹窗、点了 7 次支付方式，却在 20 分钟内一分钱都没花出去</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  header.hero { padding: 24px 0 40px; margin-bottom: 16px; text-align: center; }
+  .hero-avatar-anon {
+    width: 112px; height: 112px; border-radius: 50%;
+    border: 3px solid var(--border-strong); background: var(--bg-elevated);
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.06);
+    margin: 0 auto 22px; display: flex; align-items: center; justify-content: center;
+    font-family: "SF Mono", Menlo, Consolas, monospace; color: var(--accent); font-size: 28px; font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .hero-eyebrow { font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 38px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; }
+  .hero-tagline { font-size: 17px; color: var(--text-dim); margin: 0 auto 18px; max-width: 640px; line-height: 1.55; }
+  .hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .chip.purple { background: var(--accent-soft); color: var(--accent); }
+  .chip.blue { background: var(--info-soft); color: var(--info); }
+  .chip.amber { background: var(--warning-soft); color: var(--warning); }
+  .chip.green { background: var(--success-soft); color: var(--success); }
+  .chip.red { background: var(--danger-soft); color: var(--danger); }
+  .chip.muted { background: rgba(155,163,180,0.1); color: var(--text-dim); }
+
+  .journey-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 32px 0 24px;
+    padding: 16px 20px; background: var(--bg-elevated);
+    border: 1px solid var(--border); border-radius: 14px;
+  }
+  .js-step { text-align: center; position: relative; }
+  .js-step .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-deep); color: var(--text-muted);
+    border: 1.5px solid var(--border-strong);
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+  }
+  .js-step.done .num { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .js-step.now .num { background: var(--warning-soft); color: var(--warning); border-color: var(--warning); }
+  .js-step .lbl { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+  .js-step.done .lbl, .js-step.now .lbl { color: var(--text-dim); }
+  .js-step::after { content: ""; position: absolute; top: 14px; right: -3px; width: 6px; height: 2px; background: var(--border-strong); }
+  .js-step:last-child::after { display: none; }
+  @media (max-width: 720px) { .journey-strip { grid-template-columns: repeat(4, 1fr); } }
+
+  .intent-panel {
+    background: linear-gradient(135deg, rgba(96,165,250,0.05), rgba(139,92,246,0.04));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; margin: 32px 0;
+  }
+  .intent-panel .ip-eyebrow { font-size: 11px; color: var(--info); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  .intent-panel h3 { font-size: 18px; margin: 0 0 10px; color: var(--text); font-weight: 600; }
+  .intent-panel p { font-size: 15px; color: var(--text-dim); margin: 0; line-height: 1.65; }
+
+  .act { margin: 56px 0 0; }
+  .act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .act h2 { font-size: 24px; font-weight: 700; color: var(--text); margin: 0 0 8px; letter-spacing: -0.01em; line-height: 1.25; }
+  .act-lede { font-size: 15px; color: var(--text-dim); margin: 0 0 18px; border-left: 2px solid var(--border-strong); padding-left: 14px; line-height: 1.65; }
+  .act-lede em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  .panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 18px 22px; }
+  .panel ul { margin: 0; padding-left: 20px; }
+  .panel li { font-size: 14.5px; color: var(--text-dim); margin-bottom: 6px; line-height: 1.65; }
+  .panel li strong { color: var(--text); font-weight: 600; }
+  .panel li code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  .signals {
+    background: var(--warning-soft); border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 12px; padding: 16px 20px; margin: 16px 0;
+  }
+  .signals-title { color: var(--warning); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .signals ul { margin: 0; padding-left: 18px; }
+  .signals li { font-size: 14px; color: #fde68a; margin-bottom: 4px; line-height: 1.55; }
+  .signals li strong { color: #fef3c7; }
+
+  .timeline { margin-top: 16px; }
+  .tl-row {
+    display: grid; grid-template-columns: 120px 1fr;
+    gap: 14px; padding: 8px 0;
+    border-top: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .tl-row:first-child { border-top: none; }
+  .tl-time { font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tl-event { font-size: 13.5px; color: var(--text); }
+  .tl-event code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tl-event .props { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .lessons { display: grid; gap: 12px; margin-top: 14px; }
+  .lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+  .lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .lesson-body strong { color: var(--text); }
+  .lesson-body { color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+  .lesson-body .head { color: var(--text); font-weight: 600; margin-right: 4px; }
+
+  .snapshot { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border); }
+  .snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+  .snap-grid dl { margin: 0; display: grid; grid-template-columns: 100px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .snap-grid dt { color: var(--text-muted); }
+  .snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+  .snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+  .external-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; padding: 6px 12px;
+    background: var(--info-soft); color: var(--info); border-radius: 8px;
+    text-decoration: none; font-size: 13px;
+  }
+  .external-link:hover { background: rgba(96,165,250,0.2); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/softie/">Softie</a><span>/</span><a href="/softie/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">f94938a7</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-avatar-anon" aria-label="匿名用户头像">F949</div>
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #010</div>
+    <h1>他接受了挽留弹窗、点了 7 次支付方式，却在 20 分钟内一分钱都没花出去</h1>
+    <p class="hero-tagline">用户从巴西直接访问，注册仅 3 天，对角色 Iris Lin 表现出强烈偏好，在 20 分钟内发送多条消息并触发视频里程碑与两次媒体解锁。系统弹出 Sparks 不足的付费拦截后，他接受了挽留优惠并多次进入支付流程，反复选择支付方式，但始终未完成交易。12 分钟后他再次返回，继续尝试解锁 Iris Lin 的媒体，并试探了 Rem 和 Riley Vega，同样被付费墙挡住，最终放弃。</p>
+    <div class="hero-chips">
+      <span class="chip purple">高意向 · 评分 75</span>
+      <span class="chip red">卡在 · payment</span>
+      <span class="chip blue">Mobile · Android</span>
+    </div>
+  </header>
+
+  <div class="journey-strip" aria-label="用户旅程进度">
+      <div class="js-step done"><div class="num">1</div><div class="lbl">着陆</div></div>
+      <div class="js-step "><div class="num">2</div><div class="lbl">注册</div></div>
+      <div class="js-step done"><div class="num">3</div><div class="lbl">开聊</div></div>
+      <div class="js-step done"><div class="num">4</div><div class="lbl">撞墙</div></div>
+      <div class="js-step done"><div class="num">5</div><div class="lbl">开 Drawer</div></div>
+      <div class="js-step "><div class="num">6</div><div class="lbl">看套餐</div></div>
+      <div class="js-step now"><div class="num">7</div><div class="lbl">点付款</div></div>
+  </div>
+
+  <div class="intent-panel">
+    <div class="ip-eyebrow">INTENT FINGERPRINT · 意向画像</div>
+    <h3>过去 7 天，他/她离付款只差一步</h3>
+    <p>用户从巴西直接访问，注册仅 3 天，对角色 Iris Lin 表现出强烈偏好，在 20 分钟内发送多条消息并触发视频里程碑与两次媒体解锁。系统弹出 Sparks 不足的付费拦截后，他接受了挽留优惠并多次进入支付流程，反复选择支付方式，但始终未完成交易。12 分钟后他再次返回，继续尝试解锁 Iris Lin 的媒体，并试探了 Rem 和 Riley Vega，同样被付费墙挡住，最终放弃。</p>
+  </div>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 着陆即选中 Iris Lin，秒开对话</span>
+      <span class="act-time">2026-05-09 11:54:45 - 11:54:56 UTC</span>
+    </div>
+    <h2>着陆即选中 Iris Lin，秒开对话</h2>
+    <p class="act-lede">用户通过直接访问进入 Softie.ai，在首页仅停留 9 秒便点击角色 Iris Lin，随即开始新对话。从 $identify 到 chat_start 仅用 11 秒，没有任何犹豫或浏览其他角色，目标极其明确。</p>
+    <div class="panel">
+      <ul>
+        <li>11:54:45 触发 $identify，当前页为 /chats，表明可能已有账号或会话残留。</li>
+        <li>11:54:48 进入首页 page_explore，仅 6 秒后点击 Iris Lin（character_click）。</li>
+        <li>11:54:56 发起 chat_start，进入 /new-chat/ 页面，全程无其他角色探索。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 高强度聊天，触发视频里程碑并解锁媒体</span>
+      <span class="act-time">2026-05-09 11:54:56 - 11:58:24 UTC</span>
+    </div>
+    <h2>高强度聊天，触发视频里程碑并解锁媒体</h2>
+    <p class="act-lede">用户在 3 分半内发送了 8 条消息（chat_message_send），并收到对应回复。系统在 11:56:58 触发 video_milestone_triggered，表明对话深度已满足视频解锁条件。随后用户两次尝试媒体解锁（media_unlock_attempt）均成功（media_unlock_success），说明他正在积极消费角色提供的多媒体内容。</p>
+    <div class="panel">
+      <ul>
+        <li>首条消息在 chat_start 后 17 秒发出，节奏紧凑，无冷场。</li>
+        <li>11:56:58 的 video_milestone_triggered 与紧随其后的 chat_message_receive 暗示视频与对话联动。</li>
+        <li>两次 media_unlock_success（11:58:24 和 11:59:16）之间用户仍在持续发消息，沉浸度极高。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 撞上付费墙，接受挽留但支付流程反复跳转</span>
+      <span class="act-time">2026-05-09 11:58:37 - 12:00:02 UTC</span>
+    </div>
+    <h2>撞上付费墙，接受挽留但支付流程反复跳转</h2>
+    <p class="act-lede">用户返回首页后短暂尝试角色 Rem（chat_start 后 6 秒即放弃），重新打开 Iris Lin 对话并再次解锁媒体。紧接着系统在 11:59:52 触发 payment_intercept_trigger，弹出订阅抽屉和 Sparks 不足提示，随后展示 retention_modal。用户于 11:59:58 接受挽留优惠，随即进入支付流程，但 payment_process_start 和 payment_method_select 在 4 秒内密集触发 7 次以上，页面在 /chats 和 / 之间反复跳转，最终在 12:00:02 触发 $pageleave 离开。</p>
+    <div class="panel">
+      <ul>
+        <li>retention_modal_accepted 后立即出现两次 payment_process_start（同一秒），说明系统可能重复发起支付。</li>
+        <li>payment_method_select 在 12:00:00 至 12:00:02 间出现 7 次，且伴随多次 page_explore，支付界面极不稳定。</li>
+        <li>用户在支付方式选择阶段反复横跳，却从未触发 payment_success 或类似完成事件。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 04 · 12 分钟后回归，再次被付费墙挡住并放弃</span>
+      <span class="act-time">2026-05-09 12:12:19 - 12:13:57 UTC</span>
+    </div>
+    <h2>12 分钟后回归，再次被付费墙挡住并放弃</h2>
+    <p class="act-lede">用户离开 12 分钟后重新打开首页，再次进入 Iris Lin 对话并立即尝试媒体解锁（成功）。系统再次弹出支付拦截、订阅抽屉和 Sparks 提示，但这次 retention_modal 在 12:12:58 被 dismissed。用户仍不死心，又两次重新开始 Iris Lin 对话，均触发相同的付费拦截。最后他尝试角色 Riley Vega，同样在 17 秒后撞上付费墙，事件流在此终止，无后续支付或聊天行为。</p>
+    <div class="panel">
+      <ul>
+        <li>12:12:35 的 media_unlock_attempt 和 success 表明用户回归后第一件事仍是解锁 Iris Lin 的内容。</li>
+        <li>retention_modal_dismissed 与首次的 accepted 形成对比，用户可能对优惠失去耐心或认为已领取过。</li>
+        <li>对 Riley Vega 的 chat_start 到 payment_intercept_trigger 仅 17 秒，说明付费墙在对话开始后立即触发，体验断裂。</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="signals">
+    <div class="signals-title">⚡ 关键信号</div>
+    <ul>
+      <li>20 分钟内 7 次 payment_method_select 但零转化</li>
+      <li>retention_modal 首次 accepted 后仍支付失败，二次直接 dismissed</li>
+      <li>对 Iris Lin 发起 5 次 chat_start，占全部角色互动的 83%</li>
+      <li>两次 media_unlock_success 证明内容消费意愿强烈，但付费流程中断体验</li>
+    </ul>
+  </div>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">复盘 · 这个案例教会我们的</span></div>
+    <h2>4 条可执行建议</h2>
+    <div class="lessons">
+      <div class="lesson">
+        <div class="lesson-num">1</div>
+        <div class="lesson-body"><span class="head">支付方式选择页崩溃。</span>payment_method_select 在 2 秒内触发 7 次且伴随页面反复跳转，需排查巴西本地支付渠道兼容性与移动端支付 UI 稳定性。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">2</div>
+        <div class="lesson-body"><span class="head">挽留优惠未闭环。</span>用户接受 retention_modal 后仍未能完成支付，应检查优惠券发放逻辑，并在支付中断后通过邮件或站内信推送未完成订单提醒。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">3</div>
+        <div class="lesson-body"><span class="head">付费墙触发过早。</span>Riley Vega 对话仅 17 秒即弹出支付拦截，用户尚未体验角色价值即被要求付费，可考虑延长免费互动轮次或提供 Sparks 试用包。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">4</div>
+        <div class="lesson-body"><span class="head">高意向用户沉默召回。</span>用户离开 12 分钟后自行返回，说明需求真实存在。可针对此类“支付流程中断后回访”用户设计限时折扣或客服介入机制。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">事实清单 · 关键事件时间线</span>
+      <span class="act-time">来源: PostHog · 7 天窗口</span>
+    </div>
+    <h2>24 个核心事件（按时间升序）</h2>
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:54:56</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:58:22</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:58:24</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:58:49</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Rem</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:58:55</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:59:15</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:59:16</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:59:31</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:59:52</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:59:53</div>
+        <div class="tl-event"><code>sparks_gate_shown</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:59:58</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 11:59:58</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:12:21</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:12:21</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:12:33</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:12:35</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:12:37</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:12:45</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:12:51</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:12:51</div>
+        <div class="tl-event"><code>sparks_gate_shown</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:13:01</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:13:13</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:13:13</div>
+        <div class="tl-event"><code>sparks_gate_shown</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-09 12:13:24</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+    </div>
+    <a class="external-link" href="https://clarity.microsoft.com/projects" target="_blank" rel="noopener noreferrer">🎬 Clarity 录屏（模糊匹配，命中率 ~60%）</a>
+  </section>
+
+  <section class="snapshot">
+    <div class="snapshot-title">DATA SNAPSHOT · 这条记录在 Softie 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>user_id</dt><dd><code>f94938a7…</code></dd>
+        <dt>注册</dt><dd>2026-05-09（3 天前）</dd>
+        <dt>累计消息</dt><dd>29</dd>
+        <dt>角色数</dt><dd>5</dd>
+      </dl>
+      <dl>
+        <dt>Sparks 余额</dt><dd>50</dd>
+        <dt>累计消费</dt><dd>$0</dd>
+        <dt>当前订阅</dt><dd>无</dd>
+        <dt>最后活跃</dt><dd>2026-05-09T04:10:25</dd>
+      </dl>
+      <dl>
+        <dt>设备</dt><dd>Mobile · Android</dd>
+        <dt>浏览器</dt><dd>Chrome</dd>
+        <dt>国家</dt><dd>Brazil / Itambé</dd>
+        <dt>来源</dt><dd>$direct</dd>
+      </dl>
+      <dl>
+        <dt>意向类型</dt><dd>payment</dd>
+        <dt>事件总数</dt><dd>82（7 天）</dd>
+        <dt>首次活跃</dt><dd>2026-05-09T11:54:45</dd>
+        <dt>UTM</dt><dd>- · -</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Softie 用户案例 · f94938a7 · 数据快照 2026-05-13 01:06:24 CST · <a href="/softie/cases/">← 返回案例库</a> · <a href="/softie/">Softie 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>

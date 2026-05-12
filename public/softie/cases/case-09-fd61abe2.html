@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softie · 用户案例 · fd61abe2 · 他在深夜反复打开同一个角色 8 次，4 次解锁媒体、3 次撞上 Sparks 门禁，最后在手机和电脑之间来回切换，还是没付钱。</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  header.hero { padding: 24px 0 40px; margin-bottom: 16px; text-align: center; }
+  .hero-avatar-anon {
+    width: 112px; height: 112px; border-radius: 50%;
+    border: 3px solid var(--border-strong); background: var(--bg-elevated);
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.06);
+    margin: 0 auto 22px; display: flex; align-items: center; justify-content: center;
+    font-family: "SF Mono", Menlo, Consolas, monospace; color: var(--accent); font-size: 28px; font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .hero-eyebrow { font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 38px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; }
+  .hero-tagline { font-size: 17px; color: var(--text-dim); margin: 0 auto 18px; max-width: 640px; line-height: 1.55; }
+  .hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .chip.purple { background: var(--accent-soft); color: var(--accent); }
+  .chip.blue { background: var(--info-soft); color: var(--info); }
+  .chip.amber { background: var(--warning-soft); color: var(--warning); }
+  .chip.green { background: var(--success-soft); color: var(--success); }
+  .chip.red { background: var(--danger-soft); color: var(--danger); }
+  .chip.muted { background: rgba(155,163,180,0.1); color: var(--text-dim); }
+
+  .journey-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 32px 0 24px;
+    padding: 16px 20px; background: var(--bg-elevated);
+    border: 1px solid var(--border); border-radius: 14px;
+  }
+  .js-step { text-align: center; position: relative; }
+  .js-step .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-deep); color: var(--text-muted);
+    border: 1.5px solid var(--border-strong);
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+  }
+  .js-step.done .num { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .js-step.now .num { background: var(--warning-soft); color: var(--warning); border-color: var(--warning); }
+  .js-step .lbl { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+  .js-step.done .lbl, .js-step.now .lbl { color: var(--text-dim); }
+  .js-step::after { content: ""; position: absolute; top: 14px; right: -3px; width: 6px; height: 2px; background: var(--border-strong); }
+  .js-step:last-child::after { display: none; }
+  @media (max-width: 720px) { .journey-strip { grid-template-columns: repeat(4, 1fr); } }
+
+  .intent-panel {
+    background: linear-gradient(135deg, rgba(96,165,250,0.05), rgba(139,92,246,0.04));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; margin: 32px 0;
+  }
+  .intent-panel .ip-eyebrow { font-size: 11px; color: var(--info); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  .intent-panel h3 { font-size: 18px; margin: 0 0 10px; color: var(--text); font-weight: 600; }
+  .intent-panel p { font-size: 15px; color: var(--text-dim); margin: 0; line-height: 1.65; }
+
+  .act { margin: 56px 0 0; }
+  .act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .act h2 { font-size: 24px; font-weight: 700; color: var(--text); margin: 0 0 8px; letter-spacing: -0.01em; line-height: 1.25; }
+  .act-lede { font-size: 15px; color: var(--text-dim); margin: 0 0 18px; border-left: 2px solid var(--border-strong); padding-left: 14px; line-height: 1.65; }
+  .act-lede em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  .panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 18px 22px; }
+  .panel ul { margin: 0; padding-left: 20px; }
+  .panel li { font-size: 14.5px; color: var(--text-dim); margin-bottom: 6px; line-height: 1.65; }
+  .panel li strong { color: var(--text); font-weight: 600; }
+  .panel li code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  .signals {
+    background: var(--warning-soft); border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 12px; padding: 16px 20px; margin: 16px 0;
+  }
+  .signals-title { color: var(--warning); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .signals ul { margin: 0; padding-left: 18px; }
+  .signals li { font-size: 14px; color: #fde68a; margin-bottom: 4px; line-height: 1.55; }
+  .signals li strong { color: #fef3c7; }
+
+  .timeline { margin-top: 16px; }
+  .tl-row {
+    display: grid; grid-template-columns: 120px 1fr;
+    gap: 14px; padding: 8px 0;
+    border-top: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .tl-row:first-child { border-top: none; }
+  .tl-time { font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tl-event { font-size: 13.5px; color: var(--text); }
+  .tl-event code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tl-event .props { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .lessons { display: grid; gap: 12px; margin-top: 14px; }
+  .lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+  .lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .lesson-body strong { color: var(--text); }
+  .lesson-body { color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+  .lesson-body .head { color: var(--text); font-weight: 600; margin-right: 4px; }
+
+  .snapshot { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border); }
+  .snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+  .snap-grid dl { margin: 0; display: grid; grid-template-columns: 100px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .snap-grid dt { color: var(--text-muted); }
+  .snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+  .snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+  .external-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; padding: 6px 12px;
+    background: var(--info-soft); color: var(--info); border-radius: 8px;
+    text-decoration: none; font-size: 13px;
+  }
+  .external-link:hover { background: rgba(96,165,250,0.2); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/softie/">Softie</a><span>/</span><a href="/softie/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">fd61abe2</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-avatar-anon" aria-label="匿名用户头像">FD61</div>
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #009</div>
+    <h1>他在深夜反复打开同一个角色 8 次，4 次解锁媒体、3 次撞上 Sparks 门禁，最后在手机和电脑之间来回切换，还是没付钱。</h1>
+    <p class="hero-tagline">用户 fd61abe2 在 7 天内通过 Android Chrome 直接访问 Softie.ai，累计发起 41 条消息、接触 8 个角色。他对 Savannah Hart 表现出强烈偏好——在首次会话中连续 4 次成功解锁媒体内容，并在次日回访时再次打开该角色。当系统弹出 Sparks 余额不足的门禁和订阅抽屉时，他多次查看但未完成支付，甚至在手机和桌面端之间切换尝试，最终仍停留在免费层。核心卡点在于：有明确的媒体消费意愿和重复使用行为，但在付费墙前反复徘徊。</p>
+    <div class="hero-chips">
+      <span class="chip purple">高意向 · 评分 87</span>
+      <span class="chip amber">卡在 · paywall</span>
+      <span class="chip blue">Mobile · Android</span>
+    </div>
+  </header>
+
+  <div class="journey-strip" aria-label="用户旅程进度">
+      <div class="js-step done"><div class="num">1</div><div class="lbl">着陆</div></div>
+      <div class="js-step "><div class="num">2</div><div class="lbl">注册</div></div>
+      <div class="js-step done"><div class="num">3</div><div class="lbl">开聊</div></div>
+      <div class="js-step now"><div class="num">4</div><div class="lbl">撞墙</div></div>
+      <div class="js-step done"><div class="num">5</div><div class="lbl">开 Drawer</div></div>
+      <div class="js-step "><div class="num">6</div><div class="lbl">看套餐</div></div>
+      <div class="js-step done"><div class="num">7</div><div class="lbl">点付款</div></div>
+  </div>
+
+  <div class="intent-panel">
+    <div class="ip-eyebrow">INTENT FINGERPRINT · 意向画像</div>
+    <h3>过去 7 天，他/她离付款只差一步</h3>
+    <p>用户 fd61abe2 在 7 天内通过 Android Chrome 直接访问 Softie.ai，累计发起 41 条消息、接触 8 个角色。他对 Savannah Hart 表现出强烈偏好——在首次会话中连续 4 次成功解锁媒体内容，并在次日回访时再次打开该角色。当系统弹出 Sparks 余额不足的门禁和订阅抽屉时，他多次查看但未完成支付，甚至在手机和桌面端之间切换尝试，最终仍停留在免费层。核心卡点在于：有明确的媒体消费意愿和重复使用行为，但在付费墙前反复徘徊。</p>
+  </div>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 深夜着陆，快速浏览 5 个角色</span>
+      <span class="act-time">2026-05-06 01:27 - 01:29 UTC</span>
+    </div>
+    <h2>深夜着陆，快速浏览 5 个角色</h2>
+    <p class="act-lede">用户于凌晨 1:27 通过直接访问着陆首页，仅 8 秒后即发起第一个聊天，对象为 Iris Lin。随后在 1 分 18 秒内连续打开 Valentina Cross、Scarlett Vale、Elyra Snowbelle 和 Savannah Hart，共 5 个角色。期间触发一次 page_explore 事件，表明他在浏览推荐列表。节奏极快，平均每个角色停留不足 20 秒，处于典型的「尝鲜浏览」模式。</p>
+    <div class="panel">
+      <ul>
+        <li>从着陆到第一个 chat_start 仅 8 秒，几乎零犹豫</li>
+        <li>1 分 18 秒内连续打开 5 个角色：Iris Lin → Valentina Cross → Scarlett Vale → Elyra Snowbelle → Savannah Hart</li>
+        <li>在 Scarlett Vale 之前触发了 page_explore，说明他通过探索页而非首页直接选择角色</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 锁定 Savannah Hart，密集解锁媒体</span>
+      <span class="act-time">2026-05-06 01:29 - 01:30 UTC</span>
+    </div>
+    <h2>锁定 Savannah Hart，密集解锁媒体</h2>
+    <p class="act-lede">在快速浏览后，用户停留在 Savannah Hart 的聊天中。从 01:29:08 到 01:29:38 的 30 秒内，他连续触发 3 次 media_unlock_attempt 且全部成功（media_unlock_success），随后查看角色详情页（character_profile_view），又返回聊天发送了一条消息（chat_message_send）并收到回复（chat_message_receive），紧接着第 4 次尝试解锁媒体并成功。这是整个 7 天日志中唯一有实际对话和媒体消费的深度互动段落。</p>
+    <div class="panel">
+      <ul>
+        <li>30 秒内 3 次 media_unlock_attempt → media_unlock_success，成功率 100%</li>
+        <li>解锁后主动查看 Savannah Hart 的角色详情页，行为意图明确</li>
+        <li>发送 1 条消息并收到回复后，立即进行第 4 次媒体解锁</li>
+        <li>此时段是唯一出现 chat_message_send 和 chat_message_receive 的时刻</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 次日回访，重复打开全部角色</span>
+      <span class="act-time">2026-05-06 21:05 - 21:09 UTC</span>
+    </div>
+    <h2>次日回访，重复打开全部角色</h2>
+    <p class="act-lede">约 19.5 小时后，用户再次访问首页。在 4 分钟内按几乎相同的顺序重新打开前一天的所有 8 个角色：Raven Stone、Julia Hart、Tiffany Blake、Savannah Hart、Valentina Cross、Scarlett Vale、Elyra Snowbelle、Iris Lin，其中 Valentina Cross 和 Savannah Hart 各被打开 2 次。这次没有任何 chat_message_send 或 media_unlock 事件，纯粹是「重新检查」这些角色。</p>
+    <div class="panel">
+      <ul>
+        <li>4 分钟内发起 10 次 chat_start，覆盖全部 8 个已知角色</li>
+        <li>Savannah Hart 和 Valentina Cross 各被重复打开 2 次</li>
+        <li>没有任何消息发送或媒体解锁行为，与首次访问形成鲜明对比</li>
+        <li>新增 3 个角色：Raven Stone、Julia Hart、Tiffany Blake</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 04 · 撞上付费墙，在手机和电脑间挣扎</span>
+      <span class="act-time">2026-05-06 21:09 - 21:12 UTC</span>
+    </div>
+    <h2>撞上付费墙，在手机和电脑间挣扎</h2>
+    <p class="act-lede">在重复打开所有角色后，用户进入个人资料页（/profile），触发 subscription_drawer_open 和 retention_modal_shown，表明他查看了订阅方案。随后返回 Savannah Hart 聊天时，系统弹出 payment_intercept_trigger、subscription_drawer_open 和 sparks_gate_shown——他的 Sparks 余额不足以继续。在接下来 2 分钟内，他在 Mobile 和 Desktop 之间切换 3 次，每次都重新打开 Savannah Hart 并再次触发 sparks_gate_shown，但始终未进入支付流程。</p>
+    <div class="panel">
+      <ul>
+        <li>在 /profile 页触发 subscription_drawer_open 和 retention_modal_shown，主动查看付费选项</li>
+        <li>返回 Savannah Hart 后立即触发 payment_intercept_trigger + sparks_gate_shown</li>
+        <li>2 分钟内 Mobile ↔ Desktop 切换 3 次，每次都在 Savannah Hart 聊天中撞上 sparks_gate_shown</li>
+        <li>最终在 21:12:27 以 Mobile 端 chat_start Savannah Hart 结束，未完成任何支付</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 05 · 尝试创建角色，浅尝辄止</span>
+      <span class="act-time">2026-05-06 01:39 - 01:40 UTC</span>
+    </div>
+    <h2>尝试创建角色，浅尝辄止</h2>
+    <p class="act-lede">在首次会话末尾，用户访问了 /discover?view=my（查看「我的」内容）和 /create 页面，但仅在 /create 停留 2 秒即离开（$pageleave），随后返回首页。这表明他对创建自定义角色有短暂兴趣，但未实际执行任何创建动作。</p>
+    <div class="panel">
+      <ul>
+        <li>访问 /discover?view=my 查看个人相关内容</li>
+        <li>进入 /create 页面仅 2 秒即离开，未触发任何创建事件</li>
+        <li>这是整个日志中唯一一次访问创建页面的记录</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="signals">
+    <div class="signals-title">⚡ 关键信号</div>
+    <ul>
+      <li>首次会话 30 秒内完成 4 次 media_unlock_success，媒体消费意愿极强</li>
+      <li>Savannah Hart 被打开 8 次，是唯一有 chat_message_send 的角色</li>
+      <li>24 小时内 2 次触发 sparks_gate_shown + subscription_drawer_open 但支付转化率为 0</li>
+      <li>在付费墙前 Mobile ↔ Desktop 切换 3 次，疑似寻找更低价格或更好体验</li>
+    </ul>
+  </div>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">复盘 · 这个案例教会我们的</span></div>
+    <h2>4 条可执行建议</h2>
+    <div class="lessons">
+      <div class="lesson">
+        <div class="lesson-num">1</div>
+        <div class="lesson-body"><span class="head">媒体解锁是强转化信号。</span>用户在首次会话中 4 次解锁媒体且全部成功，应立即触发限时优惠或 Sparks 奖励，趁热打铁引导付费。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">2</div>
+        <div class="lesson-body"><span class="head">Sparks 门禁后缺少引导。</span>用户 3 次撞上 sparks_gate_shown 但未进入支付，说明门禁只拦截未转化。应在门禁上直接展示「最划算的 Sparks 包」或一键订阅入口。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">3</div>
+        <div class="lesson-body"><span class="head">跨设备切换是求助信号。</span>用户在付费墙前反复切换手机和电脑，可能以为桌面端价格不同或支付更便捷。应在切换时弹出「价格一致，手机也能付」的 reassurance。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">4</div>
+        <div class="lesson-body"><span class="head">回访用户需要「继续聊」入口。</span>次日回访时用户重新打开所有角色而非直接继续 Savannah Hart 对话，说明缺少「继续上次聊天」的快捷入口，增加了操作摩擦。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">事实清单 · 关键事件时间线</span>
+      <span class="act-time">来源: PostHog · 7 天窗口</span>
+    </div>
+    <h2>24 个核心事件（按时间升序）</h2>
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:27:32</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:27:40</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:28:07</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Valentina Cross</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:28:29</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Scarlett Vale</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:28:46</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Elyra Snowbelle</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:28:58</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Savannah Hart</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:29:08</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:29:10</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:29:26</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:29:28</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:29:36</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:29:38</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:29:53</div>
+        <div class="tl-event"><code>character_profile_view</code><div class="props">character_name=Savannah Hart</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:29:56</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Savannah Hart</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:30:10</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:30:11</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:30:39</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Raven Stone</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:30:47</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Valentina Cross</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:30:51</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Valentina Cross</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:31:24</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Savannah Hart</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:31:31</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:31:31</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:32:18</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-06 01:32:22</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+    </div>
+    <a class="external-link" href="https://clarity.microsoft.com/projects" target="_blank" rel="noopener noreferrer">🎬 Clarity 录屏（模糊匹配，命中率 ~60%）</a>
+  </section>
+
+  <section class="snapshot">
+    <div class="snapshot-title">DATA SNAPSHOT · 这条记录在 Softie 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>user_id</dt><dd><code>fd61abe2…</code></dd>
+        <dt>注册</dt><dd>2026-05-04（7 天前）</dd>
+        <dt>累计消息</dt><dd>41</dd>
+        <dt>角色数</dt><dd>8</dd>
+      </dl>
+      <dl>
+        <dt>Sparks 余额</dt><dd>30</dd>
+        <dt>累计消费</dt><dd>$0</dd>
+        <dt>当前订阅</dt><dd>无</dd>
+        <dt>最后活跃</dt><dd>2026-05-06T13:10:32</dd>
+      </dl>
+      <dl>
+        <dt>设备</dt><dd>Mobile · Android</dd>
+        <dt>浏览器</dt><dd>Chrome</dd>
+        <dt>国家</dt><dd>Spain / L&#39;Hospitalet de Llobregat</dd>
+        <dt>来源</dt><dd>$direct</dd>
+      </dl>
+      <dl>
+        <dt>意向类型</dt><dd>paywall</dd>
+        <dt>事件总数</dt><dd>152（7 天）</dd>
+        <dt>首次活跃</dt><dd>2026-05-06T01:27:32</dd>
+        <dt>UTM</dt><dd>- · -</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Softie 用户案例 · fd61abe2 · 数据快照 2026-05-13 01:04:56 CST · <a href="/softie/cases/">← 返回案例库</a> · <a href="/softie/">Softie 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>

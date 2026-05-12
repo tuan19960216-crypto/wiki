@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softie · 用户案例 · ae7b718a · 他 4 分钟连开 7 个角色，却在付费抽屉打开后 3 秒就逃离了现场</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  header.hero { padding: 24px 0 40px; margin-bottom: 16px; text-align: center; }
+  .hero-avatar-anon {
+    width: 112px; height: 112px; border-radius: 50%;
+    border: 3px solid var(--border-strong); background: var(--bg-elevated);
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.06);
+    margin: 0 auto 22px; display: flex; align-items: center; justify-content: center;
+    font-family: "SF Mono", Menlo, Consolas, monospace; color: var(--accent); font-size: 28px; font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .hero-eyebrow { font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 38px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; }
+  .hero-tagline { font-size: 17px; color: var(--text-dim); margin: 0 auto 18px; max-width: 640px; line-height: 1.55; }
+  .hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .chip.purple { background: var(--accent-soft); color: var(--accent); }
+  .chip.blue { background: var(--info-soft); color: var(--info); }
+  .chip.amber { background: var(--warning-soft); color: var(--warning); }
+  .chip.green { background: var(--success-soft); color: var(--success); }
+  .chip.red { background: var(--danger-soft); color: var(--danger); }
+  .chip.muted { background: rgba(155,163,180,0.1); color: var(--text-dim); }
+
+  .journey-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 32px 0 24px;
+    padding: 16px 20px; background: var(--bg-elevated);
+    border: 1px solid var(--border); border-radius: 14px;
+  }
+  .js-step { text-align: center; position: relative; }
+  .js-step .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-deep); color: var(--text-muted);
+    border: 1.5px solid var(--border-strong);
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+  }
+  .js-step.done .num { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .js-step.now .num { background: var(--warning-soft); color: var(--warning); border-color: var(--warning); }
+  .js-step .lbl { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+  .js-step.done .lbl, .js-step.now .lbl { color: var(--text-dim); }
+  .js-step::after { content: ""; position: absolute; top: 14px; right: -3px; width: 6px; height: 2px; background: var(--border-strong); }
+  .js-step:last-child::after { display: none; }
+  @media (max-width: 720px) { .journey-strip { grid-template-columns: repeat(4, 1fr); } }
+
+  .intent-panel {
+    background: linear-gradient(135deg, rgba(96,165,250,0.05), rgba(139,92,246,0.04));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; margin: 32px 0;
+  }
+  .intent-panel .ip-eyebrow { font-size: 11px; color: var(--info); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  .intent-panel h3 { font-size: 18px; margin: 0 0 10px; color: var(--text); font-weight: 600; }
+  .intent-panel p { font-size: 15px; color: var(--text-dim); margin: 0; line-height: 1.65; }
+
+  .act { margin: 56px 0 0; }
+  .act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .act h2 { font-size: 24px; font-weight: 700; color: var(--text); margin: 0 0 8px; letter-spacing: -0.01em; line-height: 1.25; }
+  .act-lede { font-size: 15px; color: var(--text-dim); margin: 0 0 18px; border-left: 2px solid var(--border-strong); padding-left: 14px; line-height: 1.65; }
+  .act-lede em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  .panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 18px 22px; }
+  .panel ul { margin: 0; padding-left: 20px; }
+  .panel li { font-size: 14.5px; color: var(--text-dim); margin-bottom: 6px; line-height: 1.65; }
+  .panel li strong { color: var(--text); font-weight: 600; }
+  .panel li code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  .signals {
+    background: var(--warning-soft); border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 12px; padding: 16px 20px; margin: 16px 0;
+  }
+  .signals-title { color: var(--warning); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .signals ul { margin: 0; padding-left: 18px; }
+  .signals li { font-size: 14px; color: #fde68a; margin-bottom: 4px; line-height: 1.55; }
+  .signals li strong { color: #fef3c7; }
+
+  .timeline { margin-top: 16px; }
+  .tl-row {
+    display: grid; grid-template-columns: 120px 1fr;
+    gap: 14px; padding: 8px 0;
+    border-top: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .tl-row:first-child { border-top: none; }
+  .tl-time { font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tl-event { font-size: 13.5px; color: var(--text); }
+  .tl-event code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tl-event .props { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .lessons { display: grid; gap: 12px; margin-top: 14px; }
+  .lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+  .lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .lesson-body strong { color: var(--text); }
+  .lesson-body { color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+  .lesson-body .head { color: var(--text); font-weight: 600; margin-right: 4px; }
+
+  .snapshot { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border); }
+  .snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+  .snap-grid dl { margin: 0; display: grid; grid-template-columns: 100px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .snap-grid dt { color: var(--text-muted); }
+  .snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+  .snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+  .external-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; padding: 6px 12px;
+    background: var(--info-soft); color: var(--info); border-radius: 8px;
+    text-decoration: none; font-size: 13px;
+  }
+  .external-link:hover { background: rgba(96,165,250,0.2); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/softie/">Softie</a><span>/</span><a href="/softie/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">ae7b718a</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-avatar-anon" aria-label="匿名用户头像">AE7B</div>
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #007</div>
+    <h1>他 4 分钟连开 7 个角色，却在付费抽屉打开后 3 秒就逃离了现场</h1>
+    <p class="hero-tagline">用户 ae7b718a 从 Facebook 广告进入 Softie.ai，在 4 分钟内密集浏览并开启了 7 个不同角色（Alex Fit、Mia Carter、Samira Al-Nour、Elowen Starshade、Lena Marrow、Bella Hartley、Valentina Cross），表现出强烈的探索和尝鲜意图。仅在 Alex Fit 和 Valentina Cross 两个角色中进行了深度对话，并在 Valentina Cross 的聊天中触发了 3 次媒体解锁、2 次付费拦截和 3 次支付流程启动。用户在支付方式选择页面短暂停留后立即离开，最终未完成任何付费，累计消费金额为 0。核心卡点在于从 Sparks Gate 到支付方式选择之间的转化断裂。</p>
+    <div class="hero-chips">
+      <span class="chip purple">高意向 · 评分 78</span>
+      <span class="chip red">卡在 · payment</span>
+      <span class="chip blue">Mobile · Android</span>
+    </div>
+  </header>
+
+  <div class="journey-strip" aria-label="用户旅程进度">
+      <div class="js-step done"><div class="num">1</div><div class="lbl">着陆</div></div>
+      <div class="js-step "><div class="num">2</div><div class="lbl">注册</div></div>
+      <div class="js-step done"><div class="num">3</div><div class="lbl">开聊</div></div>
+      <div class="js-step done"><div class="num">4</div><div class="lbl">撞墙</div></div>
+      <div class="js-step done"><div class="num">5</div><div class="lbl">开 Drawer</div></div>
+      <div class="js-step "><div class="num">6</div><div class="lbl">看套餐</div></div>
+      <div class="js-step now"><div class="num">7</div><div class="lbl">点付款</div></div>
+  </div>
+
+  <div class="intent-panel">
+    <div class="ip-eyebrow">INTENT FINGERPRINT · 意向画像</div>
+    <h3>过去 7 天，他/她离付款只差一步</h3>
+    <p>用户 ae7b718a 从 Facebook 广告进入 Softie.ai，在 4 分钟内密集浏览并开启了 7 个不同角色（Alex Fit、Mia Carter、Samira Al-Nour、Elowen Starshade、Lena Marrow、Bella Hartley、Valentina Cross），表现出强烈的探索和尝鲜意图。仅在 Alex Fit 和 Valentina Cross 两个角色中进行了深度对话，并在 Valentina Cross 的聊天中触发了 3 次媒体解锁、2 次付费拦截和 3 次支付流程启动。用户在支付方式选择页面短暂停留后立即离开，最终未完成任何付费，累计消费金额为 0。核心卡点在于从 Sparks Gate 到支付方式选择之间的转化断裂。</p>
+  </div>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · Facebook 广告着陆，直奔第一个角色</span>
+      <span class="act-time">2026-05-08 02:51:37 - 02:51:51 UTC</span>
+    </div>
+    <h2>Facebook 广告着陆，直奔第一个角色</h2>
+    <p class="act-lede">用户通过 m.facebook.com 的 campaign=120244431244610494 进入 Softie.ai 首页，14 秒内就点击了角色 Alex Fit 并启动了聊天。这是典型的广告导流高意向行为——用户不是来浏览首页的，而是带着明确目的直接进入互动。</p>
+    <div class="panel">
+      <ul>
+        <li>从 $identify 到 character_click 仅间隔 14 秒，几乎零犹豫</li>
+        <li>首次 chat_start 触发后立即在同一角色上再次触发 chat_start（02:51:53），可能是页面加载或用户重复点击</li>
+        <li>设备为 Android + Chrome 移动端，符合 Facebook 广告投放的美国移动用户画像</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 与 Alex Fit 深度对话，触发视频里程碑</span>
+      <span class="act-time">2026-05-08 02:51:53 - 02:53:54 UTC</span>
+    </div>
+    <h2>与 Alex Fit 深度对话，触发视频里程碑</h2>
+    <p class="act-lede">用户在 Alex Fit 角色中进行了 5 轮完整对话（5 次 send、5 次 receive），对话节奏紧凑，最后一条 receive 消息触发了 video_milestone_triggered 事件。这表明角色互动设计成功推动了用户深入参与，视频里程碑的触发说明用户已经达到了预设的互动深度阈值。</p>
+    <div class="panel">
+      <ul>
+        <li>5 轮对话在 2 分钟内完成，平均每轮约 24 秒，互动密度高</li>
+        <li>video_milestone_triggered 在 02:53:53 触发，紧接着又收到一条角色消息，体验流畅</li>
+        <li>用户在此角色中未触发任何付费相关事件，说明免费体验阶段足以满足初期互动需求</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 4 分钟连开 6 个新角色，快速筛选偏好</span>
+      <span class="act-time">2026-05-08 02:54:04 - 02:56:03 UTC</span>
+    </div>
+    <h2>4 分钟连开 6 个新角色，快速筛选偏好</h2>
+    <p class="act-lede">用户离开 Alex Fit 后进入 page_explore，随后在 2 分钟内连续启动了 Mia Carter、Samira Al-Nour、Elowen Starshade、重返 Alex Fit、Lena Marrow、Bella Hartley 共 6 个角色的聊天，但均未发送任何消息。最后点击 Valentina Cross 并立即开始对话。这是典型的「角色筛选」行为——用户在寻找最能满足其偏好的角色。</p>
+    <div class="panel">
+      <ul>
+        <li>从 02:54:12 到 02:55:09，57 秒内启动 5 个新角色聊天，每个仅停留数秒</li>
+        <li>重返 Alex Fit 一次（02:54:47），但未继续对话，说明在对比选择</li>
+        <li>Valentina Cross 是第 7 个被点击的角色，也是用户最终选择深入互动的第二个角色</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 04 · 与 Valentina Cross 深入互动，连续解锁媒体内容</span>
+      <span class="act-time">2026-05-08 02:56:03 - 02:57:35 UTC</span>
+    </div>
+    <h2>与 Valentina Cross 深入互动，连续解锁媒体内容</h2>
+    <p class="act-lede">用户在 Valentina Cross 角色中发送了 4 条消息，期间触发了 2 次 media_unlock_attempt 和 2 次 media_unlock_success，说明角色回复中包含了可解锁的媒体内容（图片/视频），且用户成功使用了 Sparks 余额进行解锁。此时用户累计消息数达到 32 条，Sparks 余额为 60。</p>
+    <div class="panel">
+      <ul>
+        <li>第 1 次媒体解锁发生在 02:57:10，紧随第 4 条消息发送后 15 秒</li>
+        <li>第 2 次媒体解锁发生在 02:57:34，距上次解锁仅 24 秒，解锁意愿强烈</li>
+        <li>两次 media_unlock_success 表明 Sparks 消耗流程正常，用户对解锁内容有明确需求</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 05 · 付费拦截触发，支付流程启动后 3 秒退场</span>
+      <span class="act-time">2026-05-08 02:57:53 - 02:58:12 UTC</span>
+    </div>
+    <h2>付费拦截触发，支付流程启动后 3 秒退场</h2>
+    <p class="act-lede">在第 5 条消息发送后，系统触发了 payment_intercept_trigger，随后 subscription_drawer_open 和 sparks_gate_shown 同时弹出。7 秒后 retention_modal_shown 出现，用户接受了 retention_modal（retention_modal_accepted），触发了 payment_process_start（重复触发 4 次）。用户在 payment_method_select 事件后立即离开页面（$pageleave），整个过程从付费拦截到退场仅 19 秒。</p>
+    <div class="panel">
+      <ul>
+        <li>payment_intercept_trigger → subscription_drawer_open → sparks_gate_shown 三连发，付费压力集中</li>
+        <li>retention_modal_accepted 被触发 2 次（02:58:09 和 02:58:10），payment_process_start 被触发 4 次，存在事件重复或用户反复尝试</li>
+        <li>payment_method_select 出现在 02:58:12，同一秒内发生 page_explore 和 $pageleave，用户在支付方式选择界面停留不到 1 秒即放弃</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 06 · 付费失败后徘徊，重返聊天但未再尝试付费</span>
+      <span class="act-time">2026-05-08 02:58:12 - 02:58:48 UTC</span>
+    </div>
+    <h2>付费失败后徘徊，重返聊天但未再尝试付费</h2>
+    <p class="act-lede">用户离开支付页面后，系统记录了 $set 和 $pageview，随后自动返回 Valentina Cross 聊天界面（chat_start 再次触发）。用户发送了 1 条消息并进行了第 3 次媒体解锁（成功），但之后迅速浏览了首页和聊天列表页，最终在 02:58:48 离开。整个 session 持续约 7 分钟，未再触发任何付费事件。</p>
+    <div class="panel">
+      <ul>
+        <li>付费失败后用户仍发送了 1 条消息并成功解锁媒体，说明产品价值仍然吸引用户</li>
+        <li>第 3 次 media_unlock_success 发生在 02:58:39，距支付放弃仅 27 秒，用户继续消耗 Sparks</li>
+        <li>最终在 /chats 页面离开，可能是查看历史记录后退出，未再次进入付费流程</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="signals">
+    <div class="signals-title">⚡ 关键信号</div>
+    <ul>
+      <li>4 分钟内启动 7 个角色聊天，探索意图极强但仅深度对话 2 个</li>
+      <li>payment_process_start 在 3 秒内重复触发 4 次，支付意愿强烈但流程受阻</li>
+      <li>3 次 media_unlock_success 全部成功，Sparks 消耗正常但未触发充值</li>
+      <li>从 sparks_gate_shown 到 $pageleave 仅 19 秒，付费转化窗口极短</li>
+    </ul>
+  </div>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">复盘 · 这个案例教会我们的</span></div>
+    <h2>4 条可执行建议</h2>
+    <div class="lessons">
+      <div class="lesson">
+        <div class="lesson-num">1</div>
+        <div class="lesson-body"><span class="head">付费拦截时机过早。</span>用户在 Valentina Cross 仅发送 5 条消息即触发付费拦截，此时互动深度尚浅。建议延长免费体验轮次或根据互动深度动态触发付费门，避免过早打断沉浸体验。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">2</div>
+        <div class="lesson-body"><span class="head">支付流程重复触发混乱。</span>payment_process_start 在 2 秒内触发 4 次、retention_modal_accepted 触发 2 次，可能是前端事件重复上报或用户反复点击。需排查支付按钮的防抖逻辑，避免用户困惑。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">3</div>
+        <div class="lesson-body"><span class="head">支付方式选择页是最大流失点。</span>用户在 payment_method_select 后不到 1 秒即离开，说明支付方式页面设计或加载速度存在问题。建议优化移动端支付页面加载速度，减少支付方式选项或提供默认选择。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">4</div>
+        <div class="lesson-body"><span class="head">Sparks 消耗未转化为充值动力。</span>用户成功解锁 3 次媒体内容，Sparks 余额 60 仍有余量，但未触发充值行为。可在 Sparks 余额不足时提前展示充值入口，而非等到付费拦截时才一次性弹出。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">事实清单 · 关键事件时间线</span>
+      <span class="act-time">来源: PostHog · 7 天窗口</span>
+    </div>
+    <h2>23 个核心事件（按时间升序）</h2>
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:51:51</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Alex Fit</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:51:53</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Alex Fit</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:54:12</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Mia Carter</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:54:31</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Samira Al-Nour</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:54:38</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Elowen Starshade</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:54:47</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Alex Fit</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:54:57</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Lena Marrow</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:55:09</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Bella Hartley</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:56:03</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Valentina Cross</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:57:10</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:57:12</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:57:34</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:57:35</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:57:53</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:57:53</div>
+        <div class="tl-event"><code>sparks_gate_shown</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:58:09</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:58:09</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:58:10</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:58:10</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:58:15</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:58:15</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Valentina Cross</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:58:38</div>
+        <div class="tl-event"><code>media_unlock_attempt</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 02:58:39</div>
+        <div class="tl-event"><code>media_unlock_success</code></div>
+      </div>
+    </div>
+    <a class="external-link" href="https://clarity.microsoft.com/projects" target="_blank" rel="noopener noreferrer">🎬 Clarity 录屏（模糊匹配，命中率 ~60%）</a>
+  </section>
+
+  <section class="snapshot">
+    <div class="snapshot-title">DATA SNAPSHOT · 这条记录在 Softie 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>user_id</dt><dd><code>ae7b718a…</code></dd>
+        <dt>注册</dt><dd>2026-05-08（4 天前）</dd>
+        <dt>累计消息</dt><dd>32</dd>
+        <dt>角色数</dt><dd>6</dd>
+      </dl>
+      <dl>
+        <dt>Sparks 余额</dt><dd>60</dd>
+        <dt>累计消费</dt><dd>$0</dd>
+        <dt>当前订阅</dt><dd>无</dd>
+        <dt>最后活跃</dt><dd>2026-05-07T19:09:25</dd>
+      </dl>
+      <dl>
+        <dt>设备</dt><dd>Mobile · Android</dd>
+        <dt>浏览器</dt><dd>Chrome</dd>
+        <dt>国家</dt><dd>United States / Medina</dd>
+        <dt>来源</dt><dd>m.facebook.com</dd>
+      </dl>
+      <dl>
+        <dt>意向类型</dt><dd>payment</dd>
+        <dt>事件总数</dt><dd>60（7 天）</dd>
+        <dt>首次活跃</dt><dd>2026-05-08T02:51:37</dd>
+        <dt>UTM</dt><dd>fb · 120244431244610494</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Softie 用户案例 · ae7b718a · 数据快照 2026-05-13 01:03:21 CST · <a href="/softie/cases/">← 返回案例库</a> · <a href="/softie/">Softie 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>

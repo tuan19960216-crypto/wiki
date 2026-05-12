@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Softie · 用户案例 · 4ce30167 · 他在订阅页反复进出 30 次，却始终没按下「确认支付」，像在店门口徘徊了一整个周末</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  header.hero { padding: 24px 0 40px; margin-bottom: 16px; text-align: center; }
+  .hero-avatar-anon {
+    width: 112px; height: 112px; border-radius: 50%;
+    border: 3px solid var(--border-strong); background: var(--bg-elevated);
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.06);
+    margin: 0 auto 22px; display: flex; align-items: center; justify-content: center;
+    font-family: "SF Mono", Menlo, Consolas, monospace; color: var(--accent); font-size: 28px; font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .hero-eyebrow { font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 38px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.2; }
+  .hero-tagline { font-size: 17px; color: var(--text-dim); margin: 0 auto 18px; max-width: 640px; line-height: 1.55; }
+  .hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .chip.purple { background: var(--accent-soft); color: var(--accent); }
+  .chip.blue { background: var(--info-soft); color: var(--info); }
+  .chip.amber { background: var(--warning-soft); color: var(--warning); }
+  .chip.green { background: var(--success-soft); color: var(--success); }
+  .chip.red { background: var(--danger-soft); color: var(--danger); }
+  .chip.muted { background: rgba(155,163,180,0.1); color: var(--text-dim); }
+
+  .journey-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 32px 0 24px;
+    padding: 16px 20px; background: var(--bg-elevated);
+    border: 1px solid var(--border); border-radius: 14px;
+  }
+  .js-step { text-align: center; position: relative; }
+  .js-step .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-deep); color: var(--text-muted);
+    border: 1.5px solid var(--border-strong);
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+  }
+  .js-step.done .num { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .js-step.now .num { background: var(--warning-soft); color: var(--warning); border-color: var(--warning); }
+  .js-step .lbl { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+  .js-step.done .lbl, .js-step.now .lbl { color: var(--text-dim); }
+  .js-step::after { content: ""; position: absolute; top: 14px; right: -3px; width: 6px; height: 2px; background: var(--border-strong); }
+  .js-step:last-child::after { display: none; }
+  @media (max-width: 720px) { .journey-strip { grid-template-columns: repeat(4, 1fr); } }
+
+  .intent-panel {
+    background: linear-gradient(135deg, rgba(96,165,250,0.05), rgba(139,92,246,0.04));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; margin: 32px 0;
+  }
+  .intent-panel .ip-eyebrow { font-size: 11px; color: var(--info); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  .intent-panel h3 { font-size: 18px; margin: 0 0 10px; color: var(--text); font-weight: 600; }
+  .intent-panel p { font-size: 15px; color: var(--text-dim); margin: 0; line-height: 1.65; }
+
+  .act { margin: 56px 0 0; }
+  .act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .act h2 { font-size: 24px; font-weight: 700; color: var(--text); margin: 0 0 8px; letter-spacing: -0.01em; line-height: 1.25; }
+  .act-lede { font-size: 15px; color: var(--text-dim); margin: 0 0 18px; border-left: 2px solid var(--border-strong); padding-left: 14px; line-height: 1.65; }
+  .act-lede em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  .panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 18px 22px; }
+  .panel ul { margin: 0; padding-left: 20px; }
+  .panel li { font-size: 14.5px; color: var(--text-dim); margin-bottom: 6px; line-height: 1.65; }
+  .panel li strong { color: var(--text); font-weight: 600; }
+  .panel li code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  .signals {
+    background: var(--warning-soft); border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 12px; padding: 16px 20px; margin: 16px 0;
+  }
+  .signals-title { color: var(--warning); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .signals ul { margin: 0; padding-left: 18px; }
+  .signals li { font-size: 14px; color: #fde68a; margin-bottom: 4px; line-height: 1.55; }
+  .signals li strong { color: #fef3c7; }
+
+  .timeline { margin-top: 16px; }
+  .tl-row {
+    display: grid; grid-template-columns: 120px 1fr;
+    gap: 14px; padding: 8px 0;
+    border-top: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .tl-row:first-child { border-top: none; }
+  .tl-time { font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tl-event { font-size: 13.5px; color: var(--text); }
+  .tl-event code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tl-event .props { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .lessons { display: grid; gap: 12px; margin-top: 14px; }
+  .lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+  .lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .lesson-body strong { color: var(--text); }
+  .lesson-body { color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+  .lesson-body .head { color: var(--text); font-weight: 600; margin-right: 4px; }
+
+  .snapshot { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border); }
+  .snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+  .snap-grid dl { margin: 0; display: grid; grid-template-columns: 100px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .snap-grid dt { color: var(--text-muted); }
+  .snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+  .snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+  .external-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; padding: 6px 12px;
+    background: var(--info-soft); color: var(--info); border-radius: 8px;
+    text-decoration: none; font-size: 13px;
+  }
+  .external-link:hover { background: rgba(96,165,250,0.2); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/softie/">Softie</a><span>/</span><a href="/softie/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">4ce30167</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-avatar-anon" aria-label="匿名用户头像">4CE3</div>
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #004</div>
+    <h1>他在订阅页反复进出 30 次，却始终没按下「确认支付」，像在店门口徘徊了一整个周末</h1>
+    <p class="hero-tagline">用户 4ce30167 是一名注册 312 天、累计发消息 458 条的重度老用户，Sparks 余额已耗尽。7 天内他 3 次从首页进入订阅页，其中一次在聊天中触发 Sparks 门禁后立即启动支付流程并选择了支付方式，但随即离开。其余时间他在订阅页反复浏览、离开、再回来，却从未完成交易。核心诉求是获得付费能力以继续与角色 Lilith Moran 聊天，卡点很可能在最终支付确认环节。</p>
+    <div class="hero-chips">
+      <span class="chip purple">高意向 · 评分 99</span>
+      <span class="chip red">卡在 · payment</span>
+      <span class="chip blue">Desktop · Mac OS X</span>
+    </div>
+  </header>
+
+  <div class="journey-strip" aria-label="用户旅程进度">
+      <div class="js-step done"><div class="num">1</div><div class="lbl">着陆</div></div>
+      <div class="js-step done"><div class="num">2</div><div class="lbl">注册</div></div>
+      <div class="js-step done"><div class="num">3</div><div class="lbl">开聊</div></div>
+      <div class="js-step done"><div class="num">4</div><div class="lbl">撞墙</div></div>
+      <div class="js-step done"><div class="num">5</div><div class="lbl">开 Drawer</div></div>
+      <div class="js-step "><div class="num">6</div><div class="lbl">看套餐</div></div>
+      <div class="js-step now"><div class="num">7</div><div class="lbl">点付款</div></div>
+  </div>
+
+  <div class="intent-panel">
+    <div class="ip-eyebrow">INTENT FINGERPRINT · 意向画像</div>
+    <h3>过去 7 天，他/她离付款只差一步</h3>
+    <p>用户 4ce30167 是一名注册 312 天、累计发消息 458 条的重度老用户，Sparks 余额已耗尽。7 天内他 3 次从首页进入订阅页，其中一次在聊天中触发 Sparks 门禁后立即启动支付流程并选择了支付方式，但随即离开。其余时间他在订阅页反复浏览、离开、再回来，却从未完成交易。核心诉求是获得付费能力以继续与角色 Lilith Moran 聊天，卡点很可能在最终支付确认环节。</p>
+  </div>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 首页直达订阅页，6 秒后离开</span>
+      <span class="act-time">2026-05-07 06:21:52 - 06:22:07 UTC</span>
+    </div>
+    <h2>首页直达订阅页，6 秒后离开</h2>
+    <p class="act-lede">用户从首页进入，仅 6 秒后触发 payment_process_start 进入 /subscriptions 页面，但 4 秒后即 pageleave。紧接着 5 秒后又通过 pageview 回到同一订阅页，并触发 $set。整个过程在 15 秒内完成，显示他目标明确但决策犹豫。</p>
+    <div class="panel">
+      <ul>
+        <li>06:21:52 进入首页，6 秒后直接跳转 /subscriptions?from=%2F</li>
+        <li>06:22:02 触发 pageleave，仅停留 4 秒</li>
+        <li>06:22:07 再次 pageview 回到订阅页，触发 $set</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 开聊 Lilith Moran 后撞上 Sparks 门禁</span>
+      <span class="act-time">2026-05-07 06:22:09 - 06:22:43 UTC</span>
+    </div>
+    <h2>开聊 Lilith Moran 后撞上 Sparks 门禁</h2>
+    <p class="act-lede">用户返回首页后立即触发 page_explore，8 秒后启动与 Lilith Moran 的新聊天。聊天开始仅 2 秒，subscription_drawer_open 和 sparks_gate_shown 同时触发，表明他因 Sparks 不足被拦截。他随即点击 sparks_gate_cta_click，触发 payment_process_start（连续两次），并在 3 秒后选择支付方式 payment_method_select，但紧接着 pageleave。</p>
+    <div class="panel">
+      <ul>
+        <li>06:22:17 启动 chat_start，角色 Lilith Moran</li>
+        <li>06:22:19 同时触发 subscription_drawer_open 和 sparks_gate_shown</li>
+        <li>06:22:24 点击 sparks_gate_cta_click，连续两次 payment_process_start</li>
+        <li>06:22:27 执行 payment_method_select 后立即 pageleave</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 支付方式选择后放弃，在聊天页徘徊</span>
+      <span class="act-time">2026-05-07 06:22:30 - 06:23:00 UTC</span>
+    </div>
+    <h2>支付方式选择后放弃，在聊天页徘徊</h2>
+    <p class="act-lede">离开后仅 3 秒，用户再次 pageview 回到聊天页，触发 $set 和第二次 chat_start（同一角色）。6 秒后再次 subscription_drawer_open 和 sparks_gate_shown，但他这次没有点击 CTA，而是在聊天页连续触发 3 次 page_explore 后离开。</p>
+    <div class="panel">
+      <ul>
+        <li>06:22:30 再次 pageview 聊天页并 chat_start</li>
+        <li>06:22:35 再次触发 subscription_drawer_open 和 sparks_gate_shown</li>
+        <li>06:22:43 至 06:23:00 连续 3 次 page_explore 后 pageleave</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 04 · 返回首页浏览发现页，随后沉默 3 天</span>
+      <span class="act-time">2026-05-07 06:24:40 - 06:24:54 UTC</span>
+    </div>
+    <h2>返回首页浏览发现页，随后沉默 3 天</h2>
+    <p class="act-lede">离开聊天页约 1 分 40 秒后，用户回到首页并触发 pageview 和 $set，随后在首页和 /discover 页面各触发 page_explore，共 4 次浏览行为。之后整整 3 天没有任何事件记录。</p>
+    <div class="panel">
+      <ul>
+        <li>06:24:40 回到首页，触发 pageview 和 $set</li>
+        <li>06:24:43 至 06:24:48 在首页 2 次 page_explore</li>
+        <li>06:24:54 进入 /discover 页面 page_explore</li>
+        <li>此后 3 天无任何事件</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 05 · 订阅页反复进出，持续 3 小时 23 分钟</span>
+      <span class="act-time">2026-05-10 07:47:13 - 11:13:43 UTC</span>
+    </div>
+    <h2>订阅页反复进出，持续 3 小时 23 分钟</h2>
+    <p class="act-lede">3 天后用户从 Google Play 下载页来源进入订阅页，在约 3.5 小时内触发 16 次 page_explore、3 次 pageview、3 次 pageleave 和 2 次 $set，但没有任何 payment_process_start 或支付相关动作。他在同一页面反复浏览、离开、再回来，最长连续停留约 90 秒，最短仅 2 秒。</p>
+    <div class="panel">
+      <ul>
+        <li>07:47:13 首次进入，来源 /download/googleplay</li>
+        <li>07:47:13 至 07:48:56 共 11 次 page_explore</li>
+        <li>11:10:12 再次进入，11:10:14 pageleave 后立即 $set</li>
+        <li>11:10:41 再次 pageview，11:13:43 最终 pageleave</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 06 · 周末再次尝试，仍止步于订阅页浏览</span>
+      <span class="act-time">2026-05-11 02:14:59 - 07:53:16 UTC</span>
+    </div>
+    <h2>周末再次尝试，仍止步于订阅页浏览</h2>
+    <p class="act-lede">次日凌晨用户再次从首页进入，触发 payment_process_start 进入订阅页，4 秒后 pageleave，随后又 pageview 回来。在订阅页触发 8 次 page_explore 后离开。18 分钟后再次回到首页，仅 17 秒后进入订阅页并立即离开。当天晚些时候，他访问了 /admin/characters 页面并停留约 50 分钟，可能是创作者功能探索。</p>
+    <div class="panel">
+      <ul>
+        <li>02:15:17 触发 payment_process_start，4 秒后 pageleave</li>
+        <li>02:15:25 再次 pageview 订阅页，02:15:36 至 02:17:21 共 8 次 page_explore</li>
+        <li>02:34:00 回到首页，02:34:17 进入订阅页后立即 pageleave</li>
+        <li>07:03:48 进入 /admin/characters，停留约 50 分钟</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="signals">
+    <div class="signals-title">⚡ 关键信号</div>
+    <ul>
+      <li>7 天内 3 次 payment_process_start，其中一次走到 payment_method_select 后放弃</li>
+      <li>在 /subscriptions 页面累计触发 page_explore 超过 30 次</li>
+      <li>Sparks 余额为 0 且触发 sparks_gate_shown 后立即启动支付流程</li>
+      <li>注册 312 天、累计 458 条消息的重度用户，但累计消费金额为 0</li>
+    </ul>
+  </div>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">复盘 · 这个案例教会我们的</span></div>
+    <h2>4 条可执行建议</h2>
+    <div class="lessons">
+      <div class="lesson">
+        <div class="lesson-num">1</div>
+        <div class="lesson-body"><span class="head">支付方式选择后流失。</span>用户在 payment_method_select 后 0 秒即离开，可能不支持他偏好的支付方式或对支付安全性有顾虑。检查 Safari 端支付选项的展示与流畅度。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">2</div>
+        <div class="lesson-body"><span class="head">Sparks 门禁触发率高但转化低。</span>sparks_gate_shown 后用户立即点击 CTA 并启动支付，说明付费意愿强，但最终未完成。可在门禁页增加限时优惠或低门槛首充选项。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">3</div>
+        <div class="lesson-body"><span class="head">订阅页反复浏览无进展。</span>用户在订阅页累计 30+ 次 page_explore 却无支付动作，可能对套餐内容或价格有疑虑。考虑在页面增加 FAQ 或社交证明。</div>
+      </div>
+      <div class="lesson">
+        <div class="lesson-num">4</div>
+        <div class="lesson-body"><span class="head">老用户零付费的激活机会。</span>注册 312 天、458 条消息却零消费，说明产品价值已被认可但付费转化断层。可针对此类用户设计「感谢长期支持」专属折扣。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">事实清单 · 关键事件时间线</span>
+      <span class="act-time">来源: PostHog · 7 天窗口</span>
+    </div>
+    <h2>24 个核心事件（按时间升序）</h2>
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:21:52</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:21:58</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:07</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:17</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Lilith Moran</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:19</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:19</div>
+        <div class="tl-event"><code>sparks_gate_shown</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:24</div>
+        <div class="tl-event"><code>sparks_gate_cta_click</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:24</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:24</div>
+        <div class="tl-event"><code>payment_process_start</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:30</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:31</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Lilith Moran</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:35</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:22:35</div>
+        <div class="tl-event"><code>sparks_gate_shown</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:24:40</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:34:40</div>
+        <div class="tl-event"><code>timed_paywall_shown</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 06:34:40</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 07:35:31</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 10:47:44</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 11:45:26</div>
+        <div class="tl-event"><code>timed_paywall_shown</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 11:45:26</div>
+        <div class="tl-event"><code>subscription_drawer_open</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-07 13:53:20</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 03:02:56</div>
+        <div class="tl-event"><code>chat_start</code><div class="props">character_name=Iris Lin</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 03:03:16</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-time">2026-05-08 03:03:35</div>
+        <div class="tl-event"><code>$pageview</code></div>
+      </div>
+    </div>
+    <a class="external-link" href="https://clarity.microsoft.com/projects" target="_blank" rel="noopener noreferrer">🎬 Clarity 录屏（模糊匹配，命中率 ~60%）</a>
+  </section>
+
+  <section class="snapshot">
+    <div class="snapshot-title">DATA SNAPSHOT · 这条记录在 Softie 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>user_id</dt><dd><code>4ce30167…</code></dd>
+        <dt>注册</dt><dd>2025-07-04（312 天前）</dd>
+        <dt>累计消息</dt><dd>458</dd>
+        <dt>角色数</dt><dd>132</dd>
+      </dl>
+      <dl>
+        <dt>Sparks 余额</dt><dd>0</dd>
+        <dt>累计消费</dt><dd>$0</dd>
+        <dt>当前订阅</dt><dd>无</dd>
+        <dt>最后活跃</dt><dd>2026-05-12T05:33:51</dd>
+      </dl>
+      <dl>
+        <dt>设备</dt><dd>Desktop · Mac OS X</dd>
+        <dt>浏览器</dt><dd>Safari</dd>
+        <dt>国家</dt><dd>United States / Los Angeles</dd>
+        <dt>来源</dt><dd>$direct</dd>
+      </dl>
+      <dl>
+        <dt>意向类型</dt><dd>payment</dd>
+        <dt>事件总数</dt><dd>316（7 天）</dd>
+        <dt>首次活跃</dt><dd>2026-05-07T06:21:52</dd>
+        <dt>UTM</dt><dd>email · pending_offer_may</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Softie 用户案例 · 4ce30167 · 数据快照 2026-05-13 00:55:40 CST · <a href="/softie/cases/">← 返回案例库</a> · <a href="/softie/">Softie 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>
