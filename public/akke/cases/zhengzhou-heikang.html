@@ -343,6 +343,76 @@
   }
   .msg-ref:hover { background: var(--accent); color: #fff; }
 
+  /* Region granularity analysis ============== */
+  .region-panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px;
+  }
+  .region-panel .rp-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .region-panel .rp-head h3 {
+    margin: 0; font-size: 17px; font-weight: 700; color: var(--text);
+  }
+  .region-panel .rp-head .rp-sub {
+    font-size: 12px; color: var(--text-muted);
+  }
+  .region-layers {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin-bottom: 16px;
+  }
+  .region-layer {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .region-layer .rl-label {
+    font-size: 10.5px; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .region-layer .rl-val {
+    font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .region-layer .rl-val .null { color: var(--text-muted); font-weight: 400; font-size: 14px; font-style: italic; }
+  .region-layer .rl-source {
+    font-size: 11px; color: var(--text-muted); line-height: 1.4;
+  }
+  .region-layer .rl-source code {
+    background: var(--bg); padding: 1px 5px; border-radius: 3px;
+    font-size: 10px; font-family: "SF Mono", Menlo, Consolas, monospace; color: #c4b5fd;
+  }
+  @media (max-width: 640px) { .region-layers { grid-template-columns: 1fr; } }
+
+  .region-usage {
+    display: grid; gap: 10px;
+  }
+  .region-usage .ru-row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 14px; align-items: start;
+    padding: 12px 14px;
+    background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .region-usage .ru-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 4px 0; text-align: center; border-radius: 6px;
+    line-height: 1.1;
+  }
+  .region-usage .ru-tag.province { background: var(--info-soft); color: var(--info); }
+  .region-usage .ru-tag.city { background: var(--success-soft); color: var(--success); }
+  .region-usage .ru-body { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .region-usage .ru-body strong { color: var(--text); }
+  .region-usage .ru-body .ru-quote {
+    display: inline-block;
+    background: var(--bg-elevated); padding: 2px 8px; border-radius: 4px;
+    font-size: 12.5px; color: var(--text);
+    border-left: 2px solid var(--accent); margin: 2px 0;
+  }
+  @media (max-width: 600px) {
+    .region-usage .ru-row { grid-template-columns: 1fr; gap: 6px; }
+    .region-usage .ru-tag { text-align: left; padding: 3px 8px; display: inline-block; }
+  }
+
   /* Mock QR placeholder bubble */
   .qr-placeholder {
     display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
@@ -676,6 +746,58 @@
       <a class="comment-source-link" href="https://www.douyin.com/video/7633278236234911003" target="_blank" rel="noopener noreferrer">
         📹 评论所在视频（在抖音打开）
       </a>
+    </div>
+
+    <!-- 地区粒度分析 · ACT 01 子模块 -->
+    <div class="region-panel" style="margin-top: 18px;">
+      <div class="rp-head">
+        <h3>📍 地区粒度 · 同条对话里两层信号都用上了</h3>
+        <span class="rp-sub">省级回退 + 市级 micro-context</span>
+      </div>
+
+      <div class="region-layers">
+        <div class="region-layer">
+          <div class="rl-label">省 · IP 属地</div>
+          <div class="rl-val">河南</div>
+          <div class="rl-source">来源 <code>comments.ip_location</code> · 抖音 IP 反查，可能偶尔漫游波动</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">市 · 自报现居</div>
+          <div class="rl-val">郑州</div>
+          <div class="rl-source">来源 <code>comments.city</code> · f2 USER_DETAIL 客户在抖音 profile 自填，长期稳定</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">号源服务市</div>
+          <div class="rl-val">全国</div>
+          <div class="rl-source">来源 <code>source_accounts.city</code> · 海哥讲装修是跨地域知识号，不参与同城判定 → <code>is_same_city = null</code></div>
+        </div>
+      </div>
+
+      <div class="region-usage">
+        <div class="ru-row">
+          <div class="ru-tag province">省级</div>
+          <div class="ru-body">
+            <strong>破冰话术用省级回退</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br>
+            <span class="ru-quote">河南客户最近都问防潮怎么处理</span><br>
+            <span style="color: var(--text-muted); font-size: 12px;">破冰时机谨慎，"同省客户"是低风险的归属感建立 —— 即使客户 IP 偶尔漂移，省级仍稳。如果只有 ip_location 没有 city，就只走这一层。</span>
+          </div>
+        </div>
+        <div class="ru-row">
+          <div class="ru-tag city">市级</div>
+          <div class="ru-body">
+            <strong>跟进 micro-context 用市级</strong> · 见 <a href="#msg-4" class="msg-ref">#4</a><br>
+            <span class="ru-quote">郑州这阵子白天晒晚上凉</span><br>
+            <span style="color: var(--text-muted); font-size: 12px;">第二天跟进时，LLM 已从 user profile 拿到「郑州」，立刻把<strong>城市级天气环境</strong>编进话术 —— 这种细节远比"河南天气"更真。客户读到这句会判断「这不是群发文案」，工艺接受度随之上升。</span>
+          </div>
+        </div>
+        <div class="ru-row">
+          <div class="ru-tag city">市级</div>
+          <div class="ru-body">
+            <strong>未触发同城徽章</strong> · 因为 <code>source_accounts.city = 全国</code> 不参与判定<br>
+            <span style="color: var(--text-muted); font-size: 12px;">同城判定规则（见 supabase migration <code>20260512173500</code>）要求两边 city 都不为空且号源市 ≠ "全国" —— 跨地域知识号天然无法触发。如果客户来自<strong>本地装修工厂号</strong>（如「成都某全屋定制」）的评论区，且自报市也是成都，<code>is_same_city = true</code>，hero 会多一个绿色「同城」chip。</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
