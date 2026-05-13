@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivi · 案例 #004 · 第一天订阅 · 第 8 天 image 报错</title>
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #141821;
+  --bg-deep: #1a1f2b;
+  --border: #242a38;
+  --border-strong: #2f3646;
+  --text: #e4e7ed;
+  --text-dim: #9ba3b4;
+  --text-muted: #6b7384;
+  --accent: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.15);
+  --accent-2: #22d3ee;
+  --accent-2-soft: rgba(34, 211, 238, 0.12);
+  --accent-3: #f472b6;
+  --accent-3-soft: rgba(244, 114, 182, 0.12);
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 16px; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+
+.breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+/* HERO */
+header.hero { padding: 24px 0 36px; margin-bottom: 16px; text-align: center; }
+.hero-eyebrow {
+  font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+h1 {
+  font-size: 40px; font-weight: 700; margin: 0 0 16px;
+  letter-spacing: -0.02em; line-height: 1.2;
+  background: linear-gradient(135deg, #e4e7ed 20%, var(--accent) 80%, var(--accent-2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-tagline {
+  font-size: 17px; color: var(--text-dim); margin: 0 auto 22px; max-width: 640px; line-height: 1.6;
+}
+.hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+.hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+.chip.purple { background: var(--accent-soft); color: var(--accent); }
+.chip.blue { background: var(--accent-2-soft); color: var(--accent-2); }
+.chip.pink { background: var(--accent-3-soft); color: var(--accent-3); }
+.chip.green { background: var(--success-soft); color: var(--success); }
+.chip.amber { background: var(--warning-soft); color: var(--warning); }
+.chip.red { background: var(--danger-soft); color: var(--danger); }
+.chip.gray { background: rgba(155,163,180,0.08); color: var(--text-muted); }
+
+/* KEY FACTS STRIP */
+.key-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 28px 0 16px; }
+.kf { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.kf .l { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.kf .v { font-size: 18px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.kf .s { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+@media (max-width: 720px) { .key-facts { grid-template-columns: repeat(2, 1fr); } }
+
+/* ACT BLOCKS */
+.act { margin: 56px 0 0; }
+.act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+.act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+.act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+.act h2 { font-size: 26px; font-weight: 700; color: var(--text); margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.3; }
+.act-lede {
+  font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px;
+  border-left: 2px solid var(--border-strong); padding-left: 14px;
+}
+.act-lede em { color: var(--text); font-style: normal; font-weight: 600; }
+
+/* PANEL */
+.panel {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 26px; margin: 0;
+}
+.panel.tight { padding: 14px 18px; }
+
+/* CHAR USAGE TABLE */
+.char-table { display: grid; gap: 6px; }
+.char-row { display: grid; grid-template-columns: 1fr 80px 80px 1fr; gap: 12px; align-items: center; padding: 10px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; }
+.char-row .name { color: var(--text); font-weight: 600; }
+.char-row .num { color: var(--accent); font-variant-numeric: tabular-nums; text-align: right; }
+.char-row .bar { background: var(--bg); border-radius: 4px; height: 8px; position: relative; overflow: hidden; }
+.char-row .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+@media (max-width: 600px) { .char-row { grid-template-columns: 1fr 60px; gap: 8px; } .char-row .bar, .char-row > :nth-child(3) { display: none; } }
+
+/* METRIC GRID */
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.mg-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.mg-item .mg-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.mg-item .mg-val { font-size: 22px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.mg-item .mg-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+@media (max-width: 600px) { .metric-grid { grid-template-columns: 1fr 1fr; } }
+
+/* TX LIST */
+.tx-list { display: grid; gap: 6px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; }
+.tx-row { display: grid; grid-template-columns: 130px 90px 80px 1fr; gap: 10px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; align-items: center; }
+.tx-row .date { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.tx-row .type { color: var(--accent); }
+.tx-row .amt { color: var(--text); text-align: right; font-weight: 600; }
+.tx-row .desc { color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tx-row.stars .amt { color: var(--warning); }
+@media (max-width: 600px) { .tx-row { grid-template-columns: 1fr 80px; } .tx-row .type, .tx-row .desc { display: none; } }
+
+/* EVENT FUNNEL */
+.event-funnel { display: grid; gap: 4px; }
+.event-bar { display: grid; grid-template-columns: 1fr 220px 60px; gap: 12px; align-items: center; padding: 6px 12px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+.event-bar .name { color: var(--text); }
+.event-bar .num { color: var(--accent); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.event-bar .bar { background: var(--bg); border-radius: 4px; height: 6px; position: relative; overflow: hidden; }
+.event-bar .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius: 4px; }
+@media (max-width: 600px) { .event-bar { grid-template-columns: 1fr 60px; } .event-bar .bar { display: none; } }
+
+/* CALLOUT BLOCKS */
+.signal { background: var(--warning-soft); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fde68a; }
+.signal-title { color: var(--warning); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.signal strong { color: #fef3c7; }
+
+.success-call { background: var(--success-soft); border: 1px solid rgba(52,211,153,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a7f3d0; }
+.success-call .st { color: var(--success); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.danger-call { background: var(--danger-soft); border: 1px solid rgba(248,113,113,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fecaca; }
+.danger-call .st { color: var(--danger); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.info-call { background: var(--accent-2-soft); border: 1px solid rgba(34,211,238,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a5f3fc; }
+.info-call .st { color: var(--accent-2); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.annotation {
+  margin: 12px 0 0; padding: 12px 16px;
+  background: rgba(167, 139, 250, 0.05);
+  border-left: 2px solid var(--accent);
+  border-radius: 8px;
+  font-size: 13.5px; color: var(--text-dim); line-height: 1.65;
+}
+.annotation .a-title { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.annotation strong { color: var(--text); }
+
+/* LESSONS */
+.lessons { display: grid; gap: 12px; }
+.lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+.lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.lesson-body { color: var(--text-dim); font-size: 14.5px; line-height: 1.7; }
+.lesson-body strong { color: var(--text); }
+
+/* SYSTEM SNAPSHOT */
+.snapshot { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); }
+.snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+.snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+.snap-grid dl { margin: 0; display: grid; grid-template-columns: 120px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.snap-grid dt { color: var(--text-muted); }
+.snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+.snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, monospace; }
+@media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+/* QUOTE */
+.discussion {
+  margin-top: 44px;
+  background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2);
+  border-radius: 10px; padding: 18px 22px;
+}
+.discussion .qh { font-size: 11px; color: var(--accent-2); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+.discussion ul { margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 14.5px; line-height: 1.75; }
+.discussion li { margin: 6px 0; }
+.discussion strong { color: var(--text); }
+
+footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <a href="/vivi/cases/">用户案例</a><span>/</span>
+    <span style="color: var(--text-dim);">第一天就订阅 · 第 8 天断更</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #004</div>
+    <h1>第一天就订了 Basic<br>第 8 天 image 报错 · 之后没再回来</h1>
+    <p class="hero-tagline">注册 3 分钟内就发了第一条消息，<em>同一天买了 Basic 周订阅</em>。前 6 天每天活跃，第 7 天连续两次 <em>image_request → image_error</em>，<em>从此再没出现</em>。截止 5/13，她已经 21 天没回来。</p>
+    <div class="hero-chips"><span class="chip red">已流失 · 4/22 之后再没回</span><span class="chip amber">⭐ 99 · Basic 1 次</span><span class="chip blue">133 条 · 7 天</span><span class="chip red">2 次 image_error</span></div>
+  </header>
+<div class="key-facts"><div class="kf"><div class="l">订阅周期</div><div class="v">7 天</div><div class="s">4/15 → 4/23 · 未续订</div></div><div class="kf"><div class="l">消息总数</div><div class="v">133</div><div class="s">全在 Isabella2 与 Valerie</div></div><div class="kf"><div class="l">image 失败</div><div class="v">2 / 2</div><div class="s">两次都报错</div></div><div class="kf"><div class="l">最后活跃</div><div class="v">4/22</div><div class="s">距今 21 天沉默</div></div></div>
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 闪电转化</span>
+      
+    </div>
+    <h2>注册 → 订阅 < 60 秒</h2>
+    <p class="act-lede"><em>2026-04-15 21:58 注册 · 22:01 第一条消息 · 同一天买 Basic</em>。这是 Vivi 历史上最干净的「注册即订阅」案例之一。<em>她进来就清楚自己要什么</em> — 这种用户是付费意愿验证的金标准。</p>
+    <div class='panel'><div class="char-table">
+<div class="char-row"><span class="name">Isabella Cruz</span><span class="num">186</span><span style="color: var(--text-muted); font-size: 12px;">u=90/a=96</span><span class="bar"><i style="width:100%"></i></span></div>
+<div class="char-row"><span class="name">Valerie Noir</span><span class="num">96</span><span style="color: var(--text-muted); font-size: 12px;">u=43/a=53</span><span class="bar"><i style="width:51%"></i></span></div>
+</div></div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 7 天集中燃烧</span>
+      
+    </div>
+    <h2>全部在 Isabella2 · Story 上</h2>
+    <p class="act-lede">7 天里 <em>133 条消息全在 Isabella2_story 一个剧情</em>。这是高浓度沉浸，<em>但浓度过高 = 燃料烧得快</em>。</p>
+    <div class='panel'><div class="event-funnel">
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">message_sent</code></span><span class="bar"><i style="width:100%"></i></span><span class="num">136</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">message_received</code></span><span class="bar"><i style="width:94%"></i></span><span class="num">129</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">chat_open</code></span><span class="bar"><i style="width:33%"></i></span><span class="num">46</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">story_hero_click</code></span><span class="bar"><i style="width:6%"></i></span><span class="num">9</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">paywall_shown</code></span><span class="bar"><i style="width:2%"></i></span><span class="num">3</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_purchase_complete</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">1</span></div>
+</div></div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 体验断点</span>
+      
+    </div>
+    <h2>两次生图都失败 · 21 天再没回</h2>
+    <p class="act-lede"><em>image_request 2 次 · image_error 2 次 (100% 失败率)</em>。两次都是 Valerie 的图，都报错。<em>image 失败的下一刻她就停止了使用 Vivi</em> — 不是巧合。</p>
+    <div class='danger-call'><div class='st'>🚨 100% 失败率 = 流失触发器</div><strong>她在订阅期内付了 99⭐ 期望体验完整功能。生图 0/2 = 信任崩坏。</strong> 这位用户对体验断点的容忍度极低 — Vivi 应该把<strong>单用户 image 失败率</strong>纳入告警，连续 2 次失败立即触发客服或自动赠送 15💎 + 退款 1 次生图费用。</div>
+  </section>
+<section class="act"><div class="act-head"><span class="act-no">复盘 · 这条流失教会我们的</span></div><h2>4 个对体验保护机制的发现</h2><div class="lessons">
+<div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>「注册即订阅」用户的体验断点容忍度最低</strong>。她付得最快，对失败最敏感。系统应该识别这类用户，给他们更高的服务优先级。</div></div>
+<div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>image 失败 = 续订率毒药</strong>。她的订阅没续就停在第 7 天。下一次类似案例应该在 image_error 当下推送：「免费补一次 + 改用 Venice 模型」。</div></div>
+<div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>「单剧情燃料」对周订阅是致命弱点</strong>。和 Case #003 相同模式：单角色单剧情订阅期一过就走。Basic 周订阅必须配「订阅期内自动推送 2-3 条新剧情」才稳。</div></div>
+<div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>image_error 错误码必须分级</strong>。Venice 上游波动 vs. NSFW 误判 vs. face-swap 失败 — 处理方式完全不同。下一步排查：她那两次 error 是哪种？</div></div>
+</div></section><div class="discussion"><div class="qh">📋 会议讨论清单</div><ul><li><strong>image_error 根因排查</strong>：拉出 4/15–4/22 期间所有 image_tasks 状态 = error 的记录，看是不是 fal/Venice 哪一段集中故障。</li><li><strong>失败补偿机制</strong>：当 image_error 时自动 refund 15💎（实际已有，再加上推送一条「下次免费」消息？）</li><li><strong>订阅期内剧情推送</strong>：和 Case #003 合并一起讨论，Basic 订阅 + 主动推剧情 = 续订率提升假说。</li></ul></div>
+  <section class="snapshot">
+    <div class="snapshot-title">SYSTEM SNAPSHOT · 这条记录在 Vivi 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>user_id</dt><dd><code>tg_17158</code> (anonymized)</dd>
+        <dt>language</dt><dd>en</dd>
+        <dt>chat_mode</dt><dd>sweet</dd>
+        <dt>nsfw_enabled</dt><dd>0</dd>
+      </dl>
+      <dl>
+        <dt>created_at</dt><dd>2026-04-15 21:58</dd>
+        <dt>last_active</dt><dd>2026-04-22</dd>
+        <dt>subscription</dt><dd>Basic</dd>
+        <dt>sub_expires</dt><dd>2026-04-23</dd>
+      </dl>
+      <dl>
+        <dt>total_messages</dt><dd>133</dd>
+        <dt>energy / gems</dt><dd>0 ⚡ / 35 💎</dd>
+        <dt>first_purchase</dt><dd>是</dd>
+        <dt>current_char</dt><dd><code>valerie</code></dd>
+      </dl>
+      <dl>
+        <dt>tx 数</dt><dd>143 条</dd>
+        <dt>events 数</dt><dd>565 条</dd>
+        <dt>image 任务</dt><dd>2 条</dd>
+        <dt>affinity 角色</dt><dd>2 位</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Vivi 用户案例 · 案例 #04 · 数据快照 2026-05-13 ·
+    <a href="/vivi/cases/">← 返回案例库</a> · <a href="/vivi/">Vivi 知识库</a>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivi · 案例 #006 · 20 次 paywall · 0 次付款</title>
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #141821;
+  --bg-deep: #1a1f2b;
+  --border: #242a38;
+  --border-strong: #2f3646;
+  --text: #e4e7ed;
+  --text-dim: #9ba3b4;
+  --text-muted: #6b7384;
+  --accent: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.15);
+  --accent-2: #22d3ee;
+  --accent-2-soft: rgba(34, 211, 238, 0.12);
+  --accent-3: #f472b6;
+  --accent-3-soft: rgba(244, 114, 182, 0.12);
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 16px; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+
+.breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+/* HERO */
+header.hero { padding: 24px 0 36px; margin-bottom: 16px; text-align: center; }
+.hero-eyebrow {
+  font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+h1 {
+  font-size: 40px; font-weight: 700; margin: 0 0 16px;
+  letter-spacing: -0.02em; line-height: 1.2;
+  background: linear-gradient(135deg, #e4e7ed 20%, var(--accent) 80%, var(--accent-2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-tagline {
+  font-size: 17px; color: var(--text-dim); margin: 0 auto 22px; max-width: 640px; line-height: 1.6;
+}
+.hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+.hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+.chip.purple { background: var(--accent-soft); color: var(--accent); }
+.chip.blue { background: var(--accent-2-soft); color: var(--accent-2); }
+.chip.pink { background: var(--accent-3-soft); color: var(--accent-3); }
+.chip.green { background: var(--success-soft); color: var(--success); }
+.chip.amber { background: var(--warning-soft); color: var(--warning); }
+.chip.red { background: var(--danger-soft); color: var(--danger); }
+.chip.gray { background: rgba(155,163,180,0.08); color: var(--text-muted); }
+
+/* KEY FACTS STRIP */
+.key-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 28px 0 16px; }
+.kf { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.kf .l { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.kf .v { font-size: 18px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.kf .s { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+@media (max-width: 720px) { .key-facts { grid-template-columns: repeat(2, 1fr); } }
+
+/* ACT BLOCKS */
+.act { margin: 56px 0 0; }
+.act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+.act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+.act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+.act h2 { font-size: 26px; font-weight: 700; color: var(--text); margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.3; }
+.act-lede {
+  font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px;
+  border-left: 2px solid var(--border-strong); padding-left: 14px;
+}
+.act-lede em { color: var(--text); font-style: normal; font-weight: 600; }
+
+/* PANEL */
+.panel {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 26px; margin: 0;
+}
+.panel.tight { padding: 14px 18px; }
+
+/* CHAR USAGE TABLE */
+.char-table { display: grid; gap: 6px; }
+.char-row { display: grid; grid-template-columns: 1fr 80px 80px 1fr; gap: 12px; align-items: center; padding: 10px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; }
+.char-row .name { color: var(--text); font-weight: 600; }
+.char-row .num { color: var(--accent); font-variant-numeric: tabular-nums; text-align: right; }
+.char-row .bar { background: var(--bg); border-radius: 4px; height: 8px; position: relative; overflow: hidden; }
+.char-row .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+@media (max-width: 600px) { .char-row { grid-template-columns: 1fr 60px; gap: 8px; } .char-row .bar, .char-row > :nth-child(3) { display: none; } }
+
+/* METRIC GRID */
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.mg-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.mg-item .mg-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.mg-item .mg-val { font-size: 22px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.mg-item .mg-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+@media (max-width: 600px) { .metric-grid { grid-template-columns: 1fr 1fr; } }
+
+/* TX LIST */
+.tx-list { display: grid; gap: 6px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; }
+.tx-row { display: grid; grid-template-columns: 130px 90px 80px 1fr; gap: 10px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; align-items: center; }
+.tx-row .date { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.tx-row .type { color: var(--accent); }
+.tx-row .amt { color: var(--text); text-align: right; font-weight: 600; }
+.tx-row .desc { color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tx-row.stars .amt { color: var(--warning); }
+@media (max-width: 600px) { .tx-row { grid-template-columns: 1fr 80px; } .tx-row .type, .tx-row .desc { display: none; } }
+
+/* EVENT FUNNEL */
+.event-funnel { display: grid; gap: 4px; }
+.event-bar { display: grid; grid-template-columns: 1fr 220px 60px; gap: 12px; align-items: center; padding: 6px 12px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+.event-bar .name { color: var(--text); }
+.event-bar .num { color: var(--accent); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.event-bar .bar { background: var(--bg); border-radius: 4px; height: 6px; position: relative; overflow: hidden; }
+.event-bar .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius: 4px; }
+@media (max-width: 600px) { .event-bar { grid-template-columns: 1fr 60px; } .event-bar .bar { display: none; } }
+
+/* CALLOUT BLOCKS */
+.signal { background: var(--warning-soft); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fde68a; }
+.signal-title { color: var(--warning); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.signal strong { color: #fef3c7; }
+
+.success-call { background: var(--success-soft); border: 1px solid rgba(52,211,153,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a7f3d0; }
+.success-call .st { color: var(--success); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.danger-call { background: var(--danger-soft); border: 1px solid rgba(248,113,113,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fecaca; }
+.danger-call .st { color: var(--danger); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.info-call { background: var(--accent-2-soft); border: 1px solid rgba(34,211,238,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a5f3fc; }
+.info-call .st { color: var(--accent-2); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.annotation {
+  margin: 12px 0 0; padding: 12px 16px;
+  background: rgba(167, 139, 250, 0.05);
+  border-left: 2px solid var(--accent);
+  border-radius: 8px;
+  font-size: 13.5px; color: var(--text-dim); line-height: 1.65;
+}
+.annotation .a-title { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.annotation strong { color: var(--text); }
+
+/* LESSONS */
+.lessons { display: grid; gap: 12px; }
+.lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+.lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.lesson-body { color: var(--text-dim); font-size: 14.5px; line-height: 1.7; }
+.lesson-body strong { color: var(--text); }
+
+/* SYSTEM SNAPSHOT */
+.snapshot { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); }
+.snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+.snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+.snap-grid dl { margin: 0; display: grid; grid-template-columns: 120px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.snap-grid dt { color: var(--text-muted); }
+.snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+.snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, monospace; }
+@media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+/* QUOTE */
+.discussion {
+  margin-top: 44px;
+  background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2);
+  border-radius: 10px; padding: 18px 22px;
+}
+.discussion .qh { font-size: 11px; color: var(--accent-2); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+.discussion ul { margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 14.5px; line-height: 1.75; }
+.discussion li { margin: 6px 0; }
+.discussion strong { color: var(--text); }
+
+footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <a href="/vivi/cases/">用户案例</a><span>/</span>
+    <span style="color: var(--text-dim);">20 次 paywall 显示 · 0 次付款</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #006</div>
+    <h1>她看了 20 次 paywall<br>到现在没付过一分钱</h1>
+    <p class="hero-tagline">注册 30 天，<em>20 次 paywall_shown、5 次 subscribe_entry_click、10 次 plan_view</em>，<em>0 次 plan_subscribe / 0 次 invoice_callback</em>。在 4 个角色之间转换 174 条对话，今天（5/13）距她最后活跃只过去 2 天 — <em>她还在用，就是不付</em>。</p>
+    <div class="hero-chips"><span class="chip red">⭐ 0 · 至今未付费</span><span class="chip amber">Paywall 20 次</span><span class="chip blue">174 条 · 跨 4 角色</span><span class="chip green">仍活跃 · 5/11 最后</span></div>
+  </header>
+<div class="key-facts"><div class="kf"><div class="l">Paywall 显示</div><div class="v">20</div><div class="s">全 Vivi 单用户 TOP 3</div></div><div class="kf"><div class="l">subscribe_entry_click</div><div class="v">5</div><div class="s">点进入但未继续</div></div><div class="kf"><div class="l">Stars 支付</div><div class="v">0 ⭐</div><div class="s">无任何 invoice</div></div><div class="kf"><div class="l">消息总数</div><div class="v">174</div><div class="s">日均 6 条 · 30 天</div></div></div>
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 角色摇摆</span>
+      
+    </div>
+    <h2>4 个角色平均分配 · 没有沉锚</h2>
+    <p class="act-lede">她的 4 个主要角色 — <em>Emily Grace (118)、Emily Windsor (103)、Isabella Cruz (88)、Evelyn Carter (40)</em> — 数量接近，<em>没有出现 Case #001 / #003 那样的「单角色 500+」沉锚</em>。这种分布通常意味着<em>她还在「找她的人」</em>。</p>
+    <div class='panel'><div class="char-table">
+<div class="char-row"><span class="name">Emily Grace</span><span class="num">118</span><span style="color: var(--text-muted); font-size: 12px;">u=55/a=63</span><span class="bar"><i style="width:100%"></i></span></div>
+<div class="char-row"><span class="name">Emily Windsor</span><span class="num">103</span><span style="color: var(--text-muted); font-size: 12px;">u=43/a=60</span><span class="bar"><i style="width:87%"></i></span></div>
+<div class="char-row"><span class="name">Isabella Cruz</span><span class="num">88</span><span style="color: var(--text-muted); font-size: 12px;">u=41/a=47</span><span class="bar"><i style="width:74%"></i></span></div>
+<div class="char-row"><span class="name">Evelyn Carter</span><span class="num">40</span><span style="color: var(--text-muted); font-size: 12px;">u=17/a=23</span><span class="bar"><i style="width:33%"></i></span></div>
+<div class="char-row"><span class="name">Aquina Blue</span><span class="num">9</span><span style="color: var(--text-muted); font-size: 12px;">u=8/a=1</span><span class="bar"><i style="width:7%"></i></span></div>
+<div class="char-row"><span class="name">Lilith Moran</span><span class="num">8</span><span style="color: var(--text-muted); font-size: 12px;">u=4/a=4</span><span class="bar"><i style="width:6%"></i></span></div>
+</div></div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 极强意图 · 零成交</span>
+      
+    </div>
+    <h2>20 次 paywall × 5 次点击订阅 × 0 次试单</h2>
+    <p class="act-lede"><em>paywall_shown 20 次（疯狂级）、subscribe_entry_click 5 次、plan_view 7 次、subscription_page_view 10 次</em>。<em>plan_subscribe 0 次、invoice_open 0 次</em>。</p>
+    <div class='panel'><div class="event-funnel">
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">paywall_shown</code></span><span class="bar"><i style="width:100%"></i></span><span class="num">20</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">subscribe_entry_click</code></span><span class="bar"><i style="width:25%"></i></span><span class="num">5</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">subscription_page_view</code></span><span class="bar"><i style="width:50%"></i></span><span class="num">10</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_view</code></span><span class="bar"><i style="width:35%"></i></span><span class="num">7</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_select</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_subscribe</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">invoice_open</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_purchase_complete</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+</div></div><div class='signal'><div class='signal-title'>⚠ 漏斗在 plan_view → plan_select 之间断</div>她看了 paywall、点进了 subscribe 页、看了 plan 列表 — 然后<strong>没有任何一次点击「选择套餐」</strong>。断点不是「不想付」，是「<em>没找到满足她的套餐</em>」或者「<em>套餐展示不够说服</em>」。下一步：补 plan_select 阶段的 hover/scroll 埋点，看她到底在 paywall 上做什么动作。</div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 仍然每日打开</span>
+      
+    </div>
+    <h2>20 次 paywall 没把她吓走</h2>
+    <p class="act-lede">正常情况下 paywall 体验 5+ 次后用户会减少打开频率。她<em>app_open 23 次、page_view 188、session_end 21 次</em>，</em>30 天每 1-2 天打开一次</em>。<em>她是 Vivi 最值得做 A/B 测试的潜在付费用户</em>，因为留存意愿明确，缺的只是临门一脚。</p>
+    
+  </section>
+<section class="act"><div class="act-head"><span class="act-no">复盘 · 这条「未付费高意向」教会我们的</span></div><h2>4 个对 paywall 优化的发现</h2><div class="lessons">
+<div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>20 次 paywall 是浪费</strong>。如果一个用户看了 20 次 paywall 0 次试单，要么 paywall 文案对她无效、要么套餐结构不匹配 — <strong>不应该继续给同样的 paywall</strong>。第 6 次之后换文案 / 给折扣码 / 客服跟进。</div></div>
+<div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>plan_view → plan_select 是关键断点</strong>。Vivi 当前数据看不到她到底在 plan 页面停留多久、看哪一档、滚动到底没。建议补 plan 页面的 scroll depth + hover 埋点。</div></div>
+<div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>「未付费但留存」用户应单独运营</strong>。她已经活跃了 30 天，是免费用户里最有价值的一档。可以试给她推送限定折扣码 / 邀请加客服 / 邮件做用户访谈。</div></div>
+<div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>角色矩阵广度型用户</strong>不订阅可能因为「订阅没有匹配她的玩法」。Vivi 的 4 档订阅都是按消息额度 / 能量分档，没有「跨角色解锁」的 SKU。下一步：是否做「全角色畅聊周卡」？</div></div>
+</div></section><div class="discussion"><div class="qh">📋 会议讨论清单</div><ul><li><strong>paywall 频次熔断</strong>：单用户 7 天内 paywall_shown ≥ 10 后切换到 alt 文案（折扣 / 邀请客服 / 礼包）。</li><li><strong>plan_select 深度埋点</strong>：补全 paywall → plan_view → plan_select 之间的微行为（滚动 / hover / dismiss 原因）。</li><li><strong>试探性 outreach</strong>：从这位用户开始，写一个客服话术「我看你在 Vivi 用了 30 天，想送你一个限时 8 折」，做 1v1 测试。</li></ul></div>
+  <section class="snapshot">
+    <div class="snapshot-title">SYSTEM SNAPSHOT · 这条记录在 Vivi 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>user_id</dt><dd><code>tg_36927</code> (anonymized)</dd>
+        <dt>language</dt><dd>en</dd>
+        <dt>chat_mode</dt><dd>sweet</dd>
+        <dt>nsfw_enabled</dt><dd>0</dd>
+      </dl>
+      <dl>
+        <dt>created_at</dt><dd>2026-04-11 20:07</dd>
+        <dt>last_active</dt><dd>2026-05-11</dd>
+        <dt>subscription</dt><dd>free</dd>
+        <dt>sub_expires</dt><dd>—</dd>
+      </dl>
+      <dl>
+        <dt>total_messages</dt><dd>174</dd>
+        <dt>energy / gems</dt><dd>5 ⚡ / 0 💎</dd>
+        <dt>first_purchase</dt><dd>是</dd>
+        <dt>current_char</dt><dd><code>emily</code></dd>
+      </dl>
+      <dl>
+        <dt>tx 数</dt><dd>162 条</dd>
+        <dt>events 数</dt><dd>731 条</dd>
+        <dt>image 任务</dt><dd>0 条</dd>
+        <dt>affinity 角色</dt><dd>7 位</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Vivi 用户案例 · 案例 #06 · 数据快照 2026-05-13 ·
+    <a href="/vivi/cases/">← 返回案例库</a> · <a href="/vivi/">Vivi 知识库</a>
+  </footer>
+</div>
+</body>
+</html>

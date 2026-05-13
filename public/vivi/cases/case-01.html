@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivi · 案例 #001 · 1527 条对话 · Plus 续订</title>
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #141821;
+  --bg-deep: #1a1f2b;
+  --border: #242a38;
+  --border-strong: #2f3646;
+  --text: #e4e7ed;
+  --text-dim: #9ba3b4;
+  --text-muted: #6b7384;
+  --accent: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.15);
+  --accent-2: #22d3ee;
+  --accent-2-soft: rgba(34, 211, 238, 0.12);
+  --accent-3: #f472b6;
+  --accent-3-soft: rgba(244, 114, 182, 0.12);
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 16px; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+
+.breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+/* HERO */
+header.hero { padding: 24px 0 36px; margin-bottom: 16px; text-align: center; }
+.hero-eyebrow {
+  font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+h1 {
+  font-size: 40px; font-weight: 700; margin: 0 0 16px;
+  letter-spacing: -0.02em; line-height: 1.2;
+  background: linear-gradient(135deg, #e4e7ed 20%, var(--accent) 80%, var(--accent-2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-tagline {
+  font-size: 17px; color: var(--text-dim); margin: 0 auto 22px; max-width: 640px; line-height: 1.6;
+}
+.hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+.hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+.chip.purple { background: var(--accent-soft); color: var(--accent); }
+.chip.blue { background: var(--accent-2-soft); color: var(--accent-2); }
+.chip.pink { background: var(--accent-3-soft); color: var(--accent-3); }
+.chip.green { background: var(--success-soft); color: var(--success); }
+.chip.amber { background: var(--warning-soft); color: var(--warning); }
+.chip.red { background: var(--danger-soft); color: var(--danger); }
+.chip.gray { background: rgba(155,163,180,0.08); color: var(--text-muted); }
+
+/* KEY FACTS STRIP */
+.key-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 28px 0 16px; }
+.kf { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.kf .l { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.kf .v { font-size: 18px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.kf .s { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+@media (max-width: 720px) { .key-facts { grid-template-columns: repeat(2, 1fr); } }
+
+/* ACT BLOCKS */
+.act { margin: 56px 0 0; }
+.act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+.act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+.act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+.act h2 { font-size: 26px; font-weight: 700; color: var(--text); margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.3; }
+.act-lede {
+  font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px;
+  border-left: 2px solid var(--border-strong); padding-left: 14px;
+}
+.act-lede em { color: var(--text); font-style: normal; font-weight: 600; }
+
+/* PANEL */
+.panel {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 26px; margin: 0;
+}
+.panel.tight { padding: 14px 18px; }
+
+/* CHAR USAGE TABLE */
+.char-table { display: grid; gap: 6px; }
+.char-row { display: grid; grid-template-columns: 1fr 80px 80px 1fr; gap: 12px; align-items: center; padding: 10px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; }
+.char-row .name { color: var(--text); font-weight: 600; }
+.char-row .num { color: var(--accent); font-variant-numeric: tabular-nums; text-align: right; }
+.char-row .bar { background: var(--bg); border-radius: 4px; height: 8px; position: relative; overflow: hidden; }
+.char-row .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+@media (max-width: 600px) { .char-row { grid-template-columns: 1fr 60px; gap: 8px; } .char-row .bar, .char-row > :nth-child(3) { display: none; } }
+
+/* METRIC GRID */
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.mg-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.mg-item .mg-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.mg-item .mg-val { font-size: 22px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.mg-item .mg-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+@media (max-width: 600px) { .metric-grid { grid-template-columns: 1fr 1fr; } }
+
+/* TX LIST */
+.tx-list { display: grid; gap: 6px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; }
+.tx-row { display: grid; grid-template-columns: 130px 90px 80px 1fr; gap: 10px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; align-items: center; }
+.tx-row .date { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.tx-row .type { color: var(--accent); }
+.tx-row .amt { color: var(--text); text-align: right; font-weight: 600; }
+.tx-row .desc { color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tx-row.stars .amt { color: var(--warning); }
+@media (max-width: 600px) { .tx-row { grid-template-columns: 1fr 80px; } .tx-row .type, .tx-row .desc { display: none; } }
+
+/* EVENT FUNNEL */
+.event-funnel { display: grid; gap: 4px; }
+.event-bar { display: grid; grid-template-columns: 1fr 220px 60px; gap: 12px; align-items: center; padding: 6px 12px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+.event-bar .name { color: var(--text); }
+.event-bar .num { color: var(--accent); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.event-bar .bar { background: var(--bg); border-radius: 4px; height: 6px; position: relative; overflow: hidden; }
+.event-bar .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius: 4px; }
+@media (max-width: 600px) { .event-bar { grid-template-columns: 1fr 60px; } .event-bar .bar { display: none; } }
+
+/* CALLOUT BLOCKS */
+.signal { background: var(--warning-soft); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fde68a; }
+.signal-title { color: var(--warning); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.signal strong { color: #fef3c7; }
+
+.success-call { background: var(--success-soft); border: 1px solid rgba(52,211,153,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a7f3d0; }
+.success-call .st { color: var(--success); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.danger-call { background: var(--danger-soft); border: 1px solid rgba(248,113,113,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fecaca; }
+.danger-call .st { color: var(--danger); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.info-call { background: var(--accent-2-soft); border: 1px solid rgba(34,211,238,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a5f3fc; }
+.info-call .st { color: var(--accent-2); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.annotation {
+  margin: 12px 0 0; padding: 12px 16px;
+  background: rgba(167, 139, 250, 0.05);
+  border-left: 2px solid var(--accent);
+  border-radius: 8px;
+  font-size: 13.5px; color: var(--text-dim); line-height: 1.65;
+}
+.annotation .a-title { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.annotation strong { color: var(--text); }
+
+/* LESSONS */
+.lessons { display: grid; gap: 12px; }
+.lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+.lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.lesson-body { color: var(--text-dim); font-size: 14.5px; line-height: 1.7; }
+.lesson-body strong { color: var(--text); }
+
+/* SYSTEM SNAPSHOT */
+.snapshot { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); }
+.snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+.snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+.snap-grid dl { margin: 0; display: grid; grid-template-columns: 120px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.snap-grid dt { color: var(--text-muted); }
+.snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+.snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, monospace; }
+@media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+/* QUOTE */
+.discussion {
+  margin-top: 44px;
+  background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2);
+  border-radius: 10px; padding: 18px 22px;
+}
+.discussion .qh { font-size: 11px; color: var(--accent-2); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+.discussion ul { margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 14.5px; line-height: 1.75; }
+.discussion li { margin: 6px 0; }
+.discussion strong { color: var(--text); }
+
+footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <a href="/vivi/cases/">用户案例</a><span>/</span>
+    <span style="color: var(--text-dim);">1527 条对话 · Plus 续订</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #001</div>
+    <h1>1527 条对话<br>把 Valentina 锁成了她的世界</h1>
+    <p class="hero-tagline">注册第 6 天打开 Valentina · Story 2，从此 <em>940 条消息</em> 砸在同一个剧本里。4 周内连买 4 次订阅，最终落点是 Plus 包月。<em>她从来没开 NSFW</em>。</p>
+    <div class="hero-chips"><span class="chip purple">⭐ 99 Plus · 已续订</span><span class="chip blue">1527 条消息 · 28 天</span><span class="chip pink">Valentina × Story 2 重度</span><span class="chip green">已订阅 · 5/28 到期</span></div>
+  </header>
+<div class="key-facts"><div class="kf"><div class="l">消息总数</div><div class="v">1527</div><div class="s">日均 54 条 · 28 天</div></div><div class="kf"><div class="l">Stars 支付</div><div class="v">229 ⭐</div><div class="s">4 次 plan_subscribe → 1 次完成</div></div><div class="kf"><div class="l">Paywall 触发</div><div class="v">12 次</div><div class="s">plan_view 14 次</div></div><div class="kf"><div class="l">主线深度</div><div class="v">940 / 945</div><div class="s">Valentina story2 占 99%</div></div></div>
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 进场</span>
+      <span class="act-time">2026-04-14 → 04-20 · 7 天潜伏</span>
+    </div>
+    <h2>Day 1 注册后沉默 6 天</h2>
+    <p class="act-lede">2026-04-14 下午她注册账号，<em>但前 6 天数据是静的</em>。直到 4/20 晚 23:01 — 一个深夜 — 她打开 Vivi，随手点了 <em>Lilith Moran</em>，连续聊了 5 分钟（5 条 chat 扣能量）。随后跳到 Vera Stardust 又聊 4 条。这是典型的「试探入口」：试了 2 个非主角，没找到点。</p>
+    <div class='panel'><div class="char-table">
+<div class="char-row"><span class="name">Valentina Rossi</span><span class="num">945</span><span style="color: var(--text-muted); font-size: 12px;">u=410/a=535</span><span class="bar"><i style="width:100%"></i></span></div>
+<div class="char-row"><span class="name">Jamie Rivers</span><span class="num">789</span><span style="color: var(--text-muted); font-size: 12px;">u=385/a=404</span><span class="bar"><i style="width:83%"></i></span></div>
+<div class="char-row"><span class="name">Vera Stardust</span><span class="num">736</span><span style="color: var(--text-muted); font-size: 12px;">u=351/a=385</span><span class="bar"><i style="width:77%"></i></span></div>
+<div class="char-row"><span class="name">Isabella Hart</span><span class="num">206</span><span style="color: var(--text-muted); font-size: 12px;">u=103/a=103</span><span class="bar"><i style="width:21%"></i></span></div>
+<div class="char-row"><span class="name">Lilith Moran</span><span class="num">124</span><span style="color: var(--text-muted); font-size: 12px;">u=62/a=62</span><span class="bar"><i style="width:13%"></i></span></div>
+</div></div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 锁定</span>
+      
+    </div>
+    <h2>她在 Valentina · Story 2 里燃烧了 940 条</h2>
+    <p class="act-lede">从某个时刻起她停止了「探角色」。<em>Top 1 是 Valentina（945 条）</em>，其中 940 条全在 story2 这条剧情线上。系统里的 affinity 表数据印证了这点：<em>Jamie 768 xp、Vera 736 xp</em> 也很高 — 这位用户的玩法是「锁定 1 个主角深度沉浸 + 偶尔切到 2-3 个备胎试新鲜感」。</p>
+    <div class='annotation'><div class='a-title'>剧本经济学 · 单角色 940 条</div>Vivi 的角色 + 故事矩阵共有 45 × 3 = 135 个剧本。<strong>一个用户单剧本能跑到 940 条</strong>，意味着 system prompt 提供了「不重复的对话动力」 — Valentina · Story 2 的剧情设计值得复盘提取共性，复制到其他角色去拉相同曲线。</div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · Paywall × 12</span>
+      
+    </div>
+    <h2>12 次触墙 · 4 次试订阅 · 1 次成交</h2>
+    <p class="act-lede"><em>paywall_shown 12 次</em>、<em>plan_view 14 次</em>、<em>plan_subscribe 4 次</em>、<em>plan_purchase_complete 1 次</em>。换句话说：她每周都会被 paywall 打断，但只有第 4 次按钮才真正变成订阅。这条转化曲线是 Vivi 当前免费墙 → 订阅的标准漏斗，应作为参考基线。</p>
+    <div class='panel'><div class="event-funnel">
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">paywall_shown</code></span><span class="bar"><i style="width:85%"></i></span><span class="num">12</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_view</code></span><span class="bar"><i style="width:100%"></i></span><span class="num">14</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_select</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_subscribe</code></span><span class="bar"><i style="width:28%"></i></span><span class="num">4</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">invoice_open</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">invoice_callback</code></span><span class="bar"><i style="width:35%"></i></span><span class="num">5</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_purchase_complete</code></span><span class="bar"><i style="width:7%"></i></span><span class="num">1</span></div>
+</div></div><div class='success-call'><div class='st'>✓ 健康转化曲线</div><strong>12 次触墙 → 4 次试单 → 1 次成单</strong>。漏斗里每一步衰减约 67%，是相对健康的状态。前提条件：用户已经投入了 940 条剧情 — 在剧情体验深度足够时，paywall 不是阻碍而是 friction。</div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 04 · 副线 · 礼物</span>
+      
+    </div>
+    <h2>送给 Vera 一束玫瑰和一封情书</h2>
+    <p class="act-lede">中后期她还给 Vera 送了 1 束 rose_bouquet + 1 封 love_letter（合计 30💎），<em>用完且没退</em>。注意：这两件礼物都送给 Vera 而不是 Valentina — 她在主线深度沉浸 Valentina 时，把<em>礼物经济</em>留给了第二喜欢的角色。这是 Vivi 礼物体系最理想的形态：钱花在最深的角色之外的人身上。</p>
+    <div class='panel tight' style='font-size:13px;color:var(--text-dim);'><strong>items 表：</strong> rose_bouquet × 1 → vera (used=1) · love_letter × 1 → vera (used=1)</div>
+  </section>
+<section class="act"><div class="act-head"><span class="act-no">复盘 · 这条转化教会我们的</span></div><h2>5 个对 PM / 内容团队可复用的发现</h2><div class="lessons">
+<div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>「试 6 天再下单」是健康节奏。</strong>她注册到第一次对话间隔 6 天，到第一次 plan_purchase 间隔约 18 天。这个延迟 ≠ 流失，是探索期。把 D7 / D14 留存指标和 D7 / D14 ARPU 拆开看，避免误判。</div></div>
+<div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>单剧本 940 条说明剧情可拉长。</strong>Valentina · Story 2 的 system prompt 应被作为「金本位」复盘 — 找出它能持续燃烧 940 条的核心要素（情感张力点 / 角色一致性 / 用户改写许可），复制到 Top 5 角色。</div></div>
+<div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>NSFW=0 仍能拉满 Plus。</strong>她整个旅程 NSFW 开关 OFF、chat_mode=sweet。Vivi 的「sweet × 深度沉浸」赛道完全可以支撑 Plus 订阅，不必所有内容生产都向 NSFW 倾斜。</div></div>
+<div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>4 次 subscribe 才成 1 次。</strong>从 plan_subscribe 到 plan_purchase_complete 中间有 3 次「点了但没付」。下一步埋点细化：是 invoice_open 后 dismiss 还是 invoice_callback 失败？</div></div>
+<div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>礼物去给第二角色。</strong>主角的钱花在「续费 + 剧情」，副角的钱花在「礼物」。礼物系统的 PM 复盘可以反过来推一推：哪些角色作为「礼物收件人」最常被选？这就是次梯队角色的运营杠杆。</div></div>
+</div></section><div class="discussion"><div class="qh">📋 会议讨论清单</div><ul><li><strong>剧情金本位提取</strong>：把 Valentina · Story 2 的 prompt 拉出来，PM + 内容做一次结构化拆解。</li><li><strong>D7 / D14 探索期定义</strong>：在 daily_monitor 加一档「6 天前注册 / 还没付费」的中间桶，区分流失和潜伏。</li><li><strong>礼物次梯队角色清单</strong>：跑一遍全表 user_items × character_id，统计哪些角色是「礼物收件人」TOP 10，对比「主聊角色」TOP 10。</li></ul></div>
+  <section class="snapshot">
+    <div class="snapshot-title">SYSTEM SNAPSHOT · 这条记录在 Vivi 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>user_id</dt><dd><code>tg_09160</code> (anonymized)</dd>
+        <dt>language</dt><dd>en</dd>
+        <dt>chat_mode</dt><dd>sweet</dd>
+        <dt>nsfw_enabled</dt><dd>0</dd>
+      </dl>
+      <dl>
+        <dt>created_at</dt><dd>2026-04-14 12:22</dd>
+        <dt>last_active</dt><dd>2026-05-12</dd>
+        <dt>subscription</dt><dd>Plus</dd>
+        <dt>sub_expires</dt><dd>2026-05-28</dd>
+      </dl>
+      <dl>
+        <dt>total_messages</dt><dd>1527</dd>
+        <dt>energy / gems</dt><dd>21 ⚡ / 25 💎</dd>
+        <dt>first_purchase</dt><dd>是</dd>
+        <dt>current_char</dt><dd><code>leila</code></dd>
+      </dl>
+      <dl>
+        <dt>tx 数</dt><dd>1540 条</dd>
+        <dt>events 数</dt><dd>3798 条</dd>
+        <dt>image 任务</dt><dd>0 条</dd>
+        <dt>affinity 角色</dt><dd>10 位</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Vivi 用户案例 · 案例 #01 · 数据快照 2026-05-13 ·
+    <a href="/vivi/cases/">← 返回案例库</a> · <a href="/vivi/">Vivi 知识库</a>
+  </footer>
+</div>
+</body>
+</html>

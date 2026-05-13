@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivi · 用户案例库 · 10 个高意向用户旅程</title>
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #141821;
+  --bg-deep: #1a1f2b;
+  --border: #242a38;
+  --border-strong: #2f3646;
+  --text: #e4e7ed;
+  --text-dim: #9ba3b4;
+  --text-muted: #6b7384;
+  --accent: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.15);
+  --accent-2: #22d3ee;
+  --accent-2-soft: rgba(34, 211, 238, 0.12);
+  --accent-3: #f472b6;
+  --accent-3-soft: rgba(244, 114, 182, 0.12);
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 16px; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+
+.breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+/* HERO */
+header.hero { padding: 24px 0 36px; margin-bottom: 16px; text-align: center; }
+.hero-eyebrow {
+  font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+h1 {
+  font-size: 40px; font-weight: 700; margin: 0 0 16px;
+  letter-spacing: -0.02em; line-height: 1.2;
+  background: linear-gradient(135deg, #e4e7ed 20%, var(--accent) 80%, var(--accent-2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-tagline {
+  font-size: 17px; color: var(--text-dim); margin: 0 auto 22px; max-width: 640px; line-height: 1.6;
+}
+.hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+.hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+.chip.purple { background: var(--accent-soft); color: var(--accent); }
+.chip.blue { background: var(--accent-2-soft); color: var(--accent-2); }
+.chip.pink { background: var(--accent-3-soft); color: var(--accent-3); }
+.chip.green { background: var(--success-soft); color: var(--success); }
+.chip.amber { background: var(--warning-soft); color: var(--warning); }
+.chip.red { background: var(--danger-soft); color: var(--danger); }
+.chip.gray { background: rgba(155,163,180,0.08); color: var(--text-muted); }
+
+/* KEY FACTS STRIP */
+.key-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 28px 0 16px; }
+.kf { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.kf .l { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.kf .v { font-size: 18px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.kf .s { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+@media (max-width: 720px) { .key-facts { grid-template-columns: repeat(2, 1fr); } }
+
+/* ACT BLOCKS */
+.act { margin: 56px 0 0; }
+.act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+.act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+.act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+.act h2 { font-size: 26px; font-weight: 700; color: var(--text); margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.3; }
+.act-lede {
+  font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px;
+  border-left: 2px solid var(--border-strong); padding-left: 14px;
+}
+.act-lede em { color: var(--text); font-style: normal; font-weight: 600; }
+
+/* PANEL */
+.panel {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 26px; margin: 0;
+}
+.panel.tight { padding: 14px 18px; }
+
+/* CHAR USAGE TABLE */
+.char-table { display: grid; gap: 6px; }
+.char-row { display: grid; grid-template-columns: 1fr 80px 80px 1fr; gap: 12px; align-items: center; padding: 10px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; }
+.char-row .name { color: var(--text); font-weight: 600; }
+.char-row .num { color: var(--accent); font-variant-numeric: tabular-nums; text-align: right; }
+.char-row .bar { background: var(--bg); border-radius: 4px; height: 8px; position: relative; overflow: hidden; }
+.char-row .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+@media (max-width: 600px) { .char-row { grid-template-columns: 1fr 60px; gap: 8px; } .char-row .bar, .char-row > :nth-child(3) { display: none; } }
+
+/* METRIC GRID */
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.mg-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.mg-item .mg-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.mg-item .mg-val { font-size: 22px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.mg-item .mg-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+@media (max-width: 600px) { .metric-grid { grid-template-columns: 1fr 1fr; } }
+
+/* TX LIST */
+.tx-list { display: grid; gap: 6px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; }
+.tx-row { display: grid; grid-template-columns: 130px 90px 80px 1fr; gap: 10px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; align-items: center; }
+.tx-row .date { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.tx-row .type { color: var(--accent); }
+.tx-row .amt { color: var(--text); text-align: right; font-weight: 600; }
+.tx-row .desc { color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tx-row.stars .amt { color: var(--warning); }
+@media (max-width: 600px) { .tx-row { grid-template-columns: 1fr 80px; } .tx-row .type, .tx-row .desc { display: none; } }
+
+/* EVENT FUNNEL */
+.event-funnel { display: grid; gap: 4px; }
+.event-bar { display: grid; grid-template-columns: 1fr 220px 60px; gap: 12px; align-items: center; padding: 6px 12px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+.event-bar .name { color: var(--text); }
+.event-bar .num { color: var(--accent); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.event-bar .bar { background: var(--bg); border-radius: 4px; height: 6px; position: relative; overflow: hidden; }
+.event-bar .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius: 4px; }
+@media (max-width: 600px) { .event-bar { grid-template-columns: 1fr 60px; } .event-bar .bar { display: none; } }
+
+/* CALLOUT BLOCKS */
+.signal { background: var(--warning-soft); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fde68a; }
+.signal-title { color: var(--warning); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.signal strong { color: #fef3c7; }
+
+.success-call { background: var(--success-soft); border: 1px solid rgba(52,211,153,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a7f3d0; }
+.success-call .st { color: var(--success); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.danger-call { background: var(--danger-soft); border: 1px solid rgba(248,113,113,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fecaca; }
+.danger-call .st { color: var(--danger); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.info-call { background: var(--accent-2-soft); border: 1px solid rgba(34,211,238,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a5f3fc; }
+.info-call .st { color: var(--accent-2); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.annotation {
+  margin: 12px 0 0; padding: 12px 16px;
+  background: rgba(167, 139, 250, 0.05);
+  border-left: 2px solid var(--accent);
+  border-radius: 8px;
+  font-size: 13.5px; color: var(--text-dim); line-height: 1.65;
+}
+.annotation .a-title { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.annotation strong { color: var(--text); }
+
+/* LESSONS */
+.lessons { display: grid; gap: 12px; }
+.lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+.lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.lesson-body { color: var(--text-dim); font-size: 14.5px; line-height: 1.7; }
+.lesson-body strong { color: var(--text); }
+
+/* SYSTEM SNAPSHOT */
+.snapshot { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); }
+.snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+.snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+.snap-grid dl { margin: 0; display: grid; grid-template-columns: 120px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.snap-grid dt { color: var(--text-muted); }
+.snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+.snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, monospace; }
+@media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+/* QUOTE */
+.discussion {
+  margin-top: 44px;
+  background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2);
+  border-radius: 10px; padding: 18px 22px;
+}
+.discussion .qh { font-size: 11px; color: var(--accent-2); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+.discussion ul { margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 14.5px; line-height: 1.75; }
+.discussion li { margin: 6px 0; }
+.discussion strong { color: var(--text); }
+
+footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+  .case-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px 24px;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.15s, transform 0.15s, background 0.15s;
+    display: grid; grid-template-columns: 80px 1fr; gap: 18px; align-items: flex-start;
+  }
+  .case-card:hover { border-color: var(--accent); background: var(--bg-deep); transform: translateY(-1px); }
+  .case-no {
+    font-size: 11px; color: var(--accent); letter-spacing: 0.12em;
+    text-transform: uppercase; font-weight: 700;
+    background: var(--accent-soft); padding: 14px 0; border-radius: 10px;
+    text-align: center; line-height: 1.4;
+  }
+  .case-body { flex: 1; min-width: 0; }
+  .case-tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .case-tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 500; }
+  .case-tag.amber { background: var(--warning-soft); color: var(--warning); }
+  .case-tag.green { background: var(--success-soft); color: var(--success); }
+  .case-tag.red { background: var(--danger-soft); color: var(--danger); }
+  .case-tag.blue { background: var(--accent-2-soft); color: var(--accent-2); }
+  .case-tag.pink { background: var(--accent-3-soft); color: var(--accent-3); }
+  .case-tag.purple { background: var(--accent-soft); color: var(--accent); }
+  .case-tag.muted { background: rgba(155,163,180,0.08); color: var(--text-muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .case-card h3 { margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--text); }
+  .case-card .quote { font-size: 13.5px; color: var(--text-dim); margin: 6px 0 8px; line-height: 1.5; }
+  .case-card .quote::before { content: "“"; color: var(--accent); margin-right: 2px; }
+  .case-card .quote::after { content: "”"; color: var(--accent); margin-left: 2px; }
+  .case-card .meta { font-size: 12px; color: var(--text-muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .cases { display: grid; gap: 12px; }
+
+  .summary-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 0 0 36px; }
+  .sc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .sc .v { font-size: 24px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .sc .l { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
+  @media (max-width: 720px) { .summary-cards { grid-template-columns: 1fr 1fr; } .case-card { grid-template-columns: 1fr; } .case-no { padding: 8px 0; text-align: left; padding-left: 12px; } }
+
+  .note {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2);
+    border-radius: 10px; padding: 16px 20px; font-size: 14px; color: var(--text-dim); margin: 28px 0 0; line-height: 1.7;
+  }
+  .note strong { color: var(--text); }
+  .container { max-width: 960px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/vivi/">Vivi</a><span>/</span><span style="color: var(--text-dim);">用户案例</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-eyebrow">CASE STUDIES · 用户案例库</div>
+    <h1>10 个真实用户旅程<br>从付费转化到无声失血</h1>
+    <p class="hero-tagline">
+      我们从 PostHog 事件流、Turso 用户库、Clarity 行为录屏中挑出 10 个<em>高意向用户案例</em> —
+      包括 5 位实际付费用户和 5 位高意向但卡在某处的潜在付费用户。<br>
+      每个案例 = 一个真实的<em>钱与体验</em>之间的故事。
+    </p>
+  </header>
+
+  <div class="summary-cards">
+    <div class="sc"><div class="v">10</div><div class="l">案例总数</div></div>
+    <div class="sc"><div class="v">5 / 5</div><div class="l">付费 / 高意向未付</div></div>
+    <div class="sc"><div class="v">683 ⭐</div><div class="l">Stars 总流水</div></div>
+    <div class="sc"><div class="v">3199</div><div class="l">合计对话条数</div></div>
+  </div>
+
+  <div class="cases">
+
+    <a class="case-card" href="/vivi/cases/case-01">
+      <div class="case-no">案例 #001</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag green">⭐ Plus 续订 · 健康转化</span>
+          <span class="case-tag muted">⭐ 99 / 28 天 / 1527 条</span>
+          <span class="case-tag muted">NSFW=0 · sweet · en</span>
+        </div>
+        <h3>1527 条对话 · Valentina story2 沉浸 940</h3>
+        <p class="quote">她注册第 6 天才开聊 — 第 28 天买 Plus</p>
+        <div class="meta">
+          <span>⭐ 229 · 12 paywall · 4 plan_subscribe · 1 complete</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-02">
+      <div class="case-no">案例 #002</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag amber">⚡ 高价值 · 不订阅</span>
+          <span class="case-tag muted">⭐ 227 / 229 条 / free 用户</span>
+          <span class="case-tag muted">NSFW=0 · sweet · en</span>
+        </div>
+        <h3>11 次 paywall · 选择充值不订阅</h3>
+        <p class="quote">她付得比订阅还多 — 但偏偏不订阅</p>
+        <div class="meta">
+          <span>⭐ 227 · 20 invoice_callback · 17 store_click · 2 plan_complete (失效)</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-03">
+      <div class="case-no">案例 #003</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag red">🔥 已流失</span>
+          <span class="case-tag muted">⭐ 99 / 14 天 / 502 条</span>
+          <span class="case-tag muted">NSFW=0 · sweet · en</span>
+        </div>
+        <h3>502 条 Marathon · 一次 Basic 之后消失</h3>
+        <p class="quote">单剧本 534 条 · 订阅烧完 · 4/29 沉默</p>
+        <div class="meta">
+          <span>⭐ 99 · 5 paywall · 112 continue_chat_click · 0 续订</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-04">
+      <div class="case-no">案例 #004</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag red">🚨 体验断点流失</span>
+          <span class="case-tag muted">⭐ 99 / 7 天 / 133 条</span>
+          <span class="case-tag muted">NSFW=0 · sweet · en</span>
+        </div>
+        <h3>第一天就订阅 · 第 8 天 image 报错</h3>
+        <p class="quote">注册到订阅 &lt; 60 秒 · 2 次生图全错 · 走了</p>
+        <div class="meta">
+          <span>⭐ 99 · image_error 2/2 · 21 天未回</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-05">
+      <div class="case-no">案例 #005</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag green">💎 3 Months 长订阅</span>
+          <span class="case-tag muted">⭐ ? / 50 天 / 211 条</span>
+          <span class="case-tag muted">NSFW=1 · sweet · en</span>
+        </div>
+        <h3>67 次 chat_reset · 14 次生图 · 多角色玩家</h3>
+        <p class="quote">他订 3 个月不是因为爱上谁 · 是为了 45 个角色都可选</p>
+        <div class="meta">
+          <span>3 Months · 8 位角色 · 14 image_complete · NSFW=1 但 sweet</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-06">
+      <div class="case-no">案例 #006</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag amber">💡 高意向未付费</span>
+          <span class="case-tag muted">⭐ 0 / 30 天 / 174 条</span>
+          <span class="case-tag muted">NSFW=0 · sweet · en</span>
+        </div>
+        <h3>20 次 paywall · 5 次点入订阅 · 0 次试单</h3>
+        <p class="quote">她每周都打开 Vivi · 30 天没付一分钱 · 但还在</p>
+        <div class="meta">
+          <span>⭐ 0 · 20 paywall · 5 subscribe_entry · 0 plan_subscribe</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-07">
+      <div class="case-no">案例 #007</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag red">💳 支付链路失败</span>
+          <span class="case-tag muted">⭐ 0 / 21 天 / 117 条</span>
+          <span class="case-tag muted">NSFW=0 · sweet · en</span>
+        </div>
+        <h3>3 次订阅 · 5 次 invoice_callback · 全失败</h3>
+        <p class="quote">她想付 · Telegram Stars 通道在她这断了</p>
+        <div class="meta">
+          <span>⭐ 0 · 3 plan_subscribe · 5 invoice_callback · 0 complete</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-08">
+      <div class="case-no">案例 #008</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag blue">🌍 国际化潜伏</span>
+          <span class="case-tag muted">⭐ 0 / 30 天 / 87 条</span>
+          <span class="case-tag muted">NSFW=0 · sweet · es</span>
+        </div>
+        <h3>西语用户 · 注册 16 天后才开聊</h3>
+        <p class="quote">checkin 把她钓回来 · Nina 100 affinity</p>
+        <div class="meta">
+          <span>⭐ 0 · checkin × 多 · Nina single-char 沉锚</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-09">
+      <div class="case-no">案例 #009</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag pink">🔥 NSFW 爆发流失</span>
+          <span class="case-tag muted">⭐ 0 / 5 天 / 76 条</span>
+          <span class="case-tag muted">NSFW=1 · sweet · ru</span>
+        </div>
+        <h3>俄语 · NSFW · 5 天爆发 · 第 6 天蒸发</h3>
+        <p class="quote">3 次 paywall 打断了沉浸 · 27 天没再回</p>
+        <div class="meta">
+          <span>⭐ 0 · 单剧情 116 条 · 0 checkin · 已流失</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="case-card" href="/vivi/cases/case-10">
+      <div class="case-no">案例 #010</div>
+      <div class="case-body">
+        <div class="case-tag-row">
+          <span class="case-tag red">⚠ 全漏斗失血</span>
+          <span class="case-tag muted">⭐ 0 / 19 天 / 78 条</span>
+          <span class="case-tag muted">NSFW=0 · flirty · en</span>
+        </div>
+        <h3>19 次点付款按钮 · 0 笔成交</h3>
+        <p class="quote">posthog_load_failed × 2 · 她那一侧浏览器或 Telegram 有问题</p>
+        <div class="meta">
+          <span>⭐ 0 · 4 plan_subscribe + 7 store_click + 8 invoice_callback · 全空响</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="note">
+    <strong>这个案例库给谁看？</strong>给 PM、运营、内容团队，还有所有需要从「指标聚合」回到「真实用户」的人。
+    每一条 paywall_shown、每一次 invoice_callback、每一份 affinity 都对应一个具体的 Telegram 用户。
+    我们这里隐去用户 ID 后五位之外的部分（如 <code>tg_36927</code>），其他数据都是 Turso 数据库里的真实记录。
+    <br><br>
+    <strong>讨论方式：</strong> 每个案例独立 URL，会议上可以单独打开来看。每个案例末尾有「📋 会议讨论清单」 — 这是我们建议团队优先讨论的产品/工程动作。
+    <br><br>
+    <strong>下次怎么追加？</strong>从 Turso 的 users / transactions / events 表跑相同的 join，挑「单用户高 paywall_shown / 高 invoice_callback / 异常 chat_reset」三类信号，每周补 3-5 个新案例。
+  </div>
+
+  <footer>
+    Vivi 用户案例库 · 数据快照 2026-05-13 · <a href="/vivi/">← 返回 Vivi 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivi · 案例 #010 · 8 次 invoice_callback · 0 笔成交</title>
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #141821;
+  --bg-deep: #1a1f2b;
+  --border: #242a38;
+  --border-strong: #2f3646;
+  --text: #e4e7ed;
+  --text-dim: #9ba3b4;
+  --text-muted: #6b7384;
+  --accent: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.15);
+  --accent-2: #22d3ee;
+  --accent-2-soft: rgba(34, 211, 238, 0.12);
+  --accent-3: #f472b6;
+  --accent-3-soft: rgba(244, 114, 182, 0.12);
+  --success: #34d399;
+  --success-soft: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 16px; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+
+.breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+/* HERO */
+header.hero { padding: 24px 0 36px; margin-bottom: 16px; text-align: center; }
+.hero-eyebrow {
+  font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+h1 {
+  font-size: 40px; font-weight: 700; margin: 0 0 16px;
+  letter-spacing: -0.02em; line-height: 1.2;
+  background: linear-gradient(135deg, #e4e7ed 20%, var(--accent) 80%, var(--accent-2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-tagline {
+  font-size: 17px; color: var(--text-dim); margin: 0 auto 22px; max-width: 640px; line-height: 1.6;
+}
+.hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+.hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+.chip.purple { background: var(--accent-soft); color: var(--accent); }
+.chip.blue { background: var(--accent-2-soft); color: var(--accent-2); }
+.chip.pink { background: var(--accent-3-soft); color: var(--accent-3); }
+.chip.green { background: var(--success-soft); color: var(--success); }
+.chip.amber { background: var(--warning-soft); color: var(--warning); }
+.chip.red { background: var(--danger-soft); color: var(--danger); }
+.chip.gray { background: rgba(155,163,180,0.08); color: var(--text-muted); }
+
+/* KEY FACTS STRIP */
+.key-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 28px 0 16px; }
+.kf { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.kf .l { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.kf .v { font-size: 18px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.kf .s { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+@media (max-width: 720px) { .key-facts { grid-template-columns: repeat(2, 1fr); } }
+
+/* ACT BLOCKS */
+.act { margin: 56px 0 0; }
+.act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+.act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+.act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+.act h2 { font-size: 26px; font-weight: 700; color: var(--text); margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.3; }
+.act-lede {
+  font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px;
+  border-left: 2px solid var(--border-strong); padding-left: 14px;
+}
+.act-lede em { color: var(--text); font-style: normal; font-weight: 600; }
+
+/* PANEL */
+.panel {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 26px; margin: 0;
+}
+.panel.tight { padding: 14px 18px; }
+
+/* CHAR USAGE TABLE */
+.char-table { display: grid; gap: 6px; }
+.char-row { display: grid; grid-template-columns: 1fr 80px 80px 1fr; gap: 12px; align-items: center; padding: 10px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; }
+.char-row .name { color: var(--text); font-weight: 600; }
+.char-row .num { color: var(--accent); font-variant-numeric: tabular-nums; text-align: right; }
+.char-row .bar { background: var(--bg); border-radius: 4px; height: 8px; position: relative; overflow: hidden; }
+.char-row .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+@media (max-width: 600px) { .char-row { grid-template-columns: 1fr 60px; gap: 8px; } .char-row .bar, .char-row > :nth-child(3) { display: none; } }
+
+/* METRIC GRID */
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.mg-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.mg-item .mg-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.mg-item .mg-val { font-size: 22px; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+.mg-item .mg-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+@media (max-width: 600px) { .metric-grid { grid-template-columns: 1fr 1fr; } }
+
+/* TX LIST */
+.tx-list { display: grid; gap: 6px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; }
+.tx-row { display: grid; grid-template-columns: 130px 90px 80px 1fr; gap: 10px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; align-items: center; }
+.tx-row .date { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.tx-row .type { color: var(--accent); }
+.tx-row .amt { color: var(--text); text-align: right; font-weight: 600; }
+.tx-row .desc { color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tx-row.stars .amt { color: var(--warning); }
+@media (max-width: 600px) { .tx-row { grid-template-columns: 1fr 80px; } .tx-row .type, .tx-row .desc { display: none; } }
+
+/* EVENT FUNNEL */
+.event-funnel { display: grid; gap: 4px; }
+.event-bar { display: grid; grid-template-columns: 1fr 220px 60px; gap: 12px; align-items: center; padding: 6px 12px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+.event-bar .name { color: var(--text); }
+.event-bar .num { color: var(--accent); text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.event-bar .bar { background: var(--bg); border-radius: 4px; height: 6px; position: relative; overflow: hidden; }
+.event-bar .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius: 4px; }
+@media (max-width: 600px) { .event-bar { grid-template-columns: 1fr 60px; } .event-bar .bar { display: none; } }
+
+/* CALLOUT BLOCKS */
+.signal { background: var(--warning-soft); border: 1px solid rgba(251,191,36,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fde68a; }
+.signal-title { color: var(--warning); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.signal strong { color: #fef3c7; }
+
+.success-call { background: var(--success-soft); border: 1px solid rgba(52,211,153,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a7f3d0; }
+.success-call .st { color: var(--success); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.danger-call { background: var(--danger-soft); border: 1px solid rgba(248,113,113,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fecaca; }
+.danger-call .st { color: var(--danger); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.info-call { background: var(--accent-2-soft); border: 1px solid rgba(34,211,238,0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #a5f3fc; }
+.info-call .st { color: var(--accent-2); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+
+.annotation {
+  margin: 12px 0 0; padding: 12px 16px;
+  background: rgba(167, 139, 250, 0.05);
+  border-left: 2px solid var(--accent);
+  border-radius: 8px;
+  font-size: 13.5px; color: var(--text-dim); line-height: 1.65;
+}
+.annotation .a-title { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.annotation strong { color: var(--text); }
+
+/* LESSONS */
+.lessons { display: grid; gap: 12px; }
+.lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+.lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.lesson-body { color: var(--text-dim); font-size: 14.5px; line-height: 1.7; }
+.lesson-body strong { color: var(--text); }
+
+/* SYSTEM SNAPSHOT */
+.snapshot { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); }
+.snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+.snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+.snap-grid dl { margin: 0; display: grid; grid-template-columns: 120px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.snap-grid dt { color: var(--text-muted); }
+.snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+.snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, monospace; }
+@media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+/* QUOTE */
+.discussion {
+  margin-top: 44px;
+  background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2);
+  border-radius: 10px; padding: 18px 22px;
+}
+.discussion .qh { font-size: 11px; color: var(--accent-2); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+.discussion ul { margin: 0; padding-left: 18px; color: var(--text-dim); font-size: 14.5px; line-height: 1.75; }
+.discussion li { margin: 6px 0; }
+.discussion strong { color: var(--text); }
+
+footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span>
+    <a href="/vivi/">Vivi</a><span>/</span>
+    <a href="/vivi/cases/">用户案例</a><span>/</span>
+    <span style="color: var(--text-dim);">8 次 invoice_callback · 0 笔成交</span>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #010</div>
+    <h1>8 次 invoice_callback<br>7 次 store_purchase_click · 4 次 plan_subscribe · 0 笔成交</h1>
+    <p class="hero-tagline"><em>她按了 19 次付款相关按钮 — 没有任何一次成单</em>。<em>她的支付链路是断的</em>，flirty 模式 + 28 次 chat_reset + 2 次 posthog_load_failed — <em>这是 Vivi 漏斗里最痛的样本</em>。</p>
+    <div class="hero-chips"><span class="chip red">⭐ 0 · 0 笔成交</span><span class="chip amber">19 次付款按钮 = 全空响</span><span class="chip blue">flirty 模式 · NSFW=0</span><span class="chip red">2 次 posthog_load_failed</span></div>
+  </header>
+<div class="key-facts"><div class="kf"><div class="l">plan_subscribe</div><div class="v">4</div><div class="s">plan_purchase_complete 0</div></div><div class="kf"><div class="l">store_purchase_click</div><div class="v">7</div><div class="s">store_purchase_complete 0</div></div><div class="kf"><div class="l">invoice_callback</div><div class="v">8</div><div class="s">全部未触发 complete</div></div><div class="kf"><div class="l">chat_reset</div><div class="v">28</div><div class="s">切角色高频 · flirty 模式</div></div></div>
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 浅试 · 高频切换</span>
+      
+    </div>
+    <h2>26 条 user_msg · 平均 3 字符</h2>
+    <p class="act-lede"><em>msg_stats.avg_chars = 3.3</em>（极短消息），同时 <em>chat_reset 28 次</em>、<em>跨 6 个角色</em>。这是「<em>试探性输入</em>」的典型曲线 — 她在测试角色而不是沉浸对话。她真实想要的内容 Vivi 没给到（或她还没找到）。</p>
+    <div class='panel'><div class="char-table">
+<div class="char-row"><span class="name">Katherine Kate Walker</span><span class="num">18</span><span style="color: var(--text-muted); font-size: 12px;">u=9/a=9</span><span class="bar"><i style="width:100%"></i></span></div>
+<div class="char-row"><span class="name">Emily Grace</span><span class="num">10</span><span style="color: var(--text-muted); font-size: 12px;">u=5/a=5</span><span class="bar"><i style="width:55%"></i></span></div>
+<div class="char-row"><span class="name">Valerie Noir</span><span class="num">8</span><span style="color: var(--text-muted); font-size: 12px;">u=4/a=4</span><span class="bar"><i style="width:44%"></i></span></div>
+<div class="char-row"><span class="name">your_character</span><span class="num">6</span><span style="color: var(--text-muted); font-size: 12px;">u=3/a=3</span><span class="bar"><i style="width:33%"></i></span></div>
+<div class="char-row"><span class="name">Leila Hassan</span><span class="num">4</span><span style="color: var(--text-muted); font-size: 12px;">u=2/a=2</span><span class="bar"><i style="width:22%"></i></span></div>
+<div class="char-row"><span class="name">Valentina Rossi</span><span class="num">4</span><span style="color: var(--text-muted); font-size: 12px;">u=2/a=2</span><span class="bar"><i style="width:22%"></i></span></div>
+</div></div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 想付钱 · 但付不上</span>
+      
+    </div>
+    <h2>19 次付款按钮 全部空响</h2>
+    <p class="act-lede"><em>store_purchase_click 7 + plan_subscribe 4 + invoice_open 0 + invoice_callback 8</em>。<em>store_purchase_complete 0 + plan_purchase_complete 0</em>。</p>
+    <div class='panel'><div class="event-funnel">
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">store_view</code></span><span class="bar"><i style="width:44%"></i></span><span class="num">4</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">store_purchase_click</code></span><span class="bar"><i style="width:77%"></i></span><span class="num">7</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">store_purchase_complete</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_view</code></span><span class="bar"><i style="width:100%"></i></span><span class="num">9</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_subscribe</code></span><span class="bar"><i style="width:44%"></i></span><span class="num">4</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">invoice_open</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">invoice_callback</code></span><span class="bar"><i style="width:88%"></i></span><span class="num">8</span></div>
+<div class="event-bar"><span class="name"><code style="font-size:12.5px;color:var(--text-dim);">plan_purchase_complete</code></span><span class="bar"><i style="width:0%"></i></span><span class="num">0</span></div>
+</div></div><div class='danger-call'><div class='st'>🚨 这是技术漏斗失血</div>store_purchase_click 7 次 → 0 笔成交。plan_subscribe 4 次 → 0 笔成交。invoice_callback 8 次 → 0 笔成交。<strong>没有任何按钮变成钱</strong>。再叠加 posthog_load_failed × 2 — <strong>很可能是她那一侧浏览器或 Telegram WebApp 环境出问题</strong>。<br><br>假设清单（按可能性排序）：<br>1. <strong>Telegram Stars 余额不足</strong> — invoice_callback 立即 cancelled<br>2. <strong>Telegram WebApp 版本太老</strong> — invoice 没法触发<br>3. <strong>地区不支持 Telegram Stars</strong> — Telegram 端直接拒<br>4. <strong>浏览器卡死</strong> — invoice_open 没触发，直接 invoice_callback 错误码<br>5. <strong>广告拦截器</strong> — 与 posthog_load_failed 一致的根因</div>
+  </section>
+
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 现在</span>
+      
+    </div>
+    <h2>78 条消息 · 已沉默 14 天</h2>
+    <p class="act-lede">4/29 最后活跃，距今 14 天。<em>她不是放弃 Vivi，是放弃了「在 Vivi 上付钱」</em>。如果这条支付链路修好，她可能会回来。</p>
+    
+  </section>
+<section class="act"><div class="act-head"><span class="act-no">复盘 · 这条「无声失血」教会我们的</span></div><h2>4 个对支付与监控的发现</h2><div class="lessons">
+<div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>支付按钮 = 钱的转化漏斗 ≠ 用户的意愿</strong>。她按了 19 次付款按钮，<strong>意愿明确得不能再明确</strong>。但 Vivi 没办法把这 19 次转成 1 笔。这是技术问题，不是产品问题。</div></div>
+<div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>必须给 invoice_callback 加 status / error_code 字段</strong>。PR #131 的 invoice_failure 埋点必须 backfill 到这位用户身上。不知道她 8 次 callback 各自的 cancel reason，就找不到问题。</div></div>
+<div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>posthog_load_failed × 2 是关键信号</strong>。她那侧加载分析 SDK 都失败了 — 大概率是<em>有 ad blocker / VPN / Telegram WebApp 版本异常</em>。下一步：把 posthog_load_failed 和 invoice 异常做关联分析。</div></div>
+<div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>这种用户必须能在 Lark 上看见</strong>。当前 daily_monitor 没有「试图付费但失败」桶。补一个：单用户 7 天内 invoice_callback ≥ 3 且 complete = 0 自动 Lark 通知。</div></div>
+</div></section><div class="discussion"><div class="qh">📋 会议讨论清单</div><ul><li><strong>backfill PR #131 埋点</strong>：这位用户作为 invoice_failure 埋点的第一组验证数据。</li><li><strong>Lark 告警「支付失败用户」桶</strong>：每天检测 invoice_callback ≥ 3 + complete = 0 的用户，自动推 Lark。</li><li><strong>支付端环境检测</strong>：当 posthog_load_failed 触发时，附加上报 navigator.userAgent + telegram_version，让前端兼容性问题可被定位。</li></ul></div>
+  <section class="snapshot">
+    <div class="snapshot-title">SYSTEM SNAPSHOT · 这条记录在 Vivi 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>user_id</dt><dd><code>tg_97063</code> (anonymized)</dd>
+        <dt>language</dt><dd>en</dd>
+        <dt>chat_mode</dt><dd>flirty</dd>
+        <dt>nsfw_enabled</dt><dd>0</dd>
+      </dl>
+      <dl>
+        <dt>created_at</dt><dd>2026-04-10 02:33</dd>
+        <dt>last_active</dt><dd>2026-04-29</dd>
+        <dt>subscription</dt><dd>free</dd>
+        <dt>sub_expires</dt><dd>—</dd>
+      </dl>
+      <dl>
+        <dt>total_messages</dt><dd>78</dd>
+        <dt>energy / gems</dt><dd>10 ⚡ / 0 💎</dd>
+        <dt>first_purchase</dt><dd>是</dd>
+        <dt>current_char</dt><dd><code>emily</code></dd>
+      </dl>
+      <dl>
+        <dt>tx 数</dt><dd>59 条</dd>
+        <dt>events 数</dt><dd>784 条</dd>
+        <dt>image 任务</dt><dd>0 条</dd>
+        <dt>affinity 角色</dt><dd>8 位</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Vivi 用户案例 · 案例 #10 · 数据快照 2026-05-13 ·
+    <a href="/vivi/cases/">← 返回案例库</a> · <a href="/vivi/">Vivi 知识库</a>
+  </footer>
+</div>
+</body>
+</html>
