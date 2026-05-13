@@ -194,6 +194,68 @@
     content: ""; flex: 1; height: 1px; background: var(--border);
   }
 
+  /* Timing strip (Act 5 head) =================== */
+  .timing-strip {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; margin: 0 0 18px;
+  }
+  .timing-summary {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px;
+  }
+  .timing-summary .ts-item {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .timing-summary .ts-label {
+    font-size: 10.5px; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;
+  }
+  .timing-summary .ts-val {
+    font-size: 15px; color: var(--text); font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .timing-summary .ts-val .approx { color: var(--text-muted); font-size: 11px; margin-left: 4px; font-weight: 400; }
+  @media (max-width: 600px) { .timing-summary { grid-template-columns: 1fr; } }
+
+  .timing-bars { display: flex; gap: 2px; height: 36px; align-items: stretch; border-radius: 6px; overflow: hidden; }
+  .timing-bar {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 600; line-height: 1;
+    color: rgba(255,255,255,0.95);
+    cursor: default;
+    transition: filter 0.15s;
+    min-width: 28px;
+  }
+  .timing-bar:hover { filter: brightness(1.15); }
+  .timing-bar.ai-to-user {
+    background: linear-gradient(180deg, var(--customer), #f59e0b);
+    color: #1a1f2b;
+  }
+  .timing-bar.user-to-ai {
+    background: linear-gradient(180deg, var(--accent), #7c3aed);
+  }
+  .timing-bar[data-approx="true"] {
+    background-image:
+      repeating-linear-gradient(45deg,
+        rgba(255,255,255,0.18) 0 4px,
+        transparent 4px 8px);
+    background-blend-mode: overlay;
+  }
+  .timing-bar[data-approx="true"]::after {
+    content: "≈"; position: absolute; top: 2px; right: 4px;
+    font-size: 10px; opacity: 0.6;
+  }
+  .timing-legend {
+    display: flex; gap: 14px; margin-top: 8px;
+    font-size: 11px; color: var(--text-muted);
+  }
+  .timing-legend .tl-swatch {
+    display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle;
+  }
+  .timing-legend .tl-swatch.customer { background: var(--customer); }
+  .timing-legend .tl-swatch.akke { background: var(--accent); }
+
   /* Mock QR placeholder bubble */
   .qr-placeholder {
     display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
@@ -344,7 +406,7 @@
     <div class="hero-chips">
       <span class="chip purple">中意向 · 评分 60</span>
       <span class="chip blue">工艺咨询 · 知识号客户</span>
-      <span class="chip amber">河南</span>
+      <span class="chip amber">郑州 · 河南</span>
       <span class="chip green">已甩 2 个 v 号 · 加微中</span>
     </div>
     <br>
@@ -382,7 +444,7 @@
              referrerpolicy="no-referrer"
              loading="lazy">
         <div class="comment-body">
-          <div class="comment-author">郑州黑康 <span class="loc">📍 河南</span></div>
+          <div class="comment-author">郑州黑康 <span class="loc">📍 郑州 · 河南</span></div>
           <div class="comment-text">为什么要刷墙固</div>
           <div class="comment-meta">2026-04-28 02:12 · 评论于「海哥—用心讲装修」的视频</div>
         </div>
@@ -505,6 +567,38 @@
       <span class="act-no">ACT 05 · 他回应了</span>
       <span class="act-time">2026-05-03 → 05-07 · 跨 4 天 · 截图取证</span>
     </div>
+
+    <!-- 时效性概览 · ACT 05 头部 -->
+    <div class="timing-strip" aria-label="对话响应时效">
+      <div class="timing-summary">
+        <div class="ts-item">
+          <div class="ts-label">首次响应延迟</div>
+          <div class="ts-val">约 1 小时 05 分 <span class="approx">≈ 截图</span></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">客户最快接力</div>
+          <div class="ts-val">约 8 分 <span class="approx">≈ 5-06 工艺干货后</span></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">最长沉默缺口</div>
+          <div class="ts-val">约 2 天 21 小时 <span class="approx">≈ AI 战略等待</span></div>
+        </div>
+      </div>
+      <div class="timing-bars" role="img" aria-label="响应间隔时间轴">
+        <!-- log-scale: log(s+60)/log(max+60)*100; max=2天21h=248400s -->
+        <div class="timing-bar ai-to-user" data-approx="true" style="flex: 67" title="5-03 21:20 · 我们破冰 → 5-03 22:25 · 他回「美缝今天下午刚做完」（约 1 小时 5 分）">1 小时 5 分</div>
+        <div class="timing-bar user-to-ai" data-approx="true" style="flex: 100" title="5-03 22:25 · 他报工地状态 → 5-06 19:16 · 我们三天后跟进「美缝完了下一步定柜子」（约 2 天 21 小时 · 主动等待）">2 天 21 小时</div>
+        <div class="timing-bar ai-to-user" data-approx="true" style="flex: 51" title="5-06 19:34 · 我们抛工艺干货 → 5-06 19:42 · 他回「墙面起碱还没干透」（约 8 分）">8 分</div>
+        <div class="timing-bar user-to-ai" data-approx="true" style="flex: 59" title="5-06 19:42 · 他报实情 → 5-06 20:05 · 我们答工艺 + 借「视频糊」要 v（约 23 分）">23 分</div>
+        <div class="timing-bar ai-to-user" data-approx="true" style="flex: 56" title="5-06 20:05 · 我们要 v → 5-06 20:21 · 他「嗯嗯」（约 16 分 · 默许但没给）">16 分</div>
+      </div>
+      <div class="timing-legend">
+        <span><span class="tl-swatch customer"></span>他在回应我们</span>
+        <span><span class="tl-swatch akke"></span>我们在跟进他</span>
+        <span style="margin-left: auto;">≈ 时间为截图估值 · 之后加微 friction 环节略</span>
+      </div>
+    </div>
+
     <h2>从「还没装修」聊到「我两个微信」</h2>
     <p class="act-lede">
       第一条破冰送过去一小时后，郑州黑康回了。他没问产品、没问公司、没问价 —— 他用一句话报告了自己的工地进度：<em>「还没装修，一楼美缝今天下午刚做完」</em>。从这一刻起，对话不是冷启的 ice_break，而是<em>有进度锚点的工艺跟进</em>。后面 3 天里来回 6 轮，每一轮都围绕他工地的下一道工序展开。
