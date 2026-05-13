@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电脑端抖音账号操作守则 · 海外 IP/VPN 环境</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --accent-2: #60a5fa;
+    --accent-2-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 48px 24px 120px; }
+  code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 0.88em; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  a { color: var(--accent); text-decoration: none; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  header.hero { padding: 16px 0 56px; border-bottom: 1px solid var(--border); margin-bottom: 56px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--danger-soft); color: var(--danger); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 {
+    font-size: 44px; font-weight: 700; margin: 0 0 16px;
+    letter-spacing: -0.02em; line-height: 1.2;
+    background: linear-gradient(135deg, #e4e7ed 30%, var(--danger) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .subtitle { font-size: 18px; color: var(--text-dim); margin: 0 0 24px; max-width: 760px; line-height: 1.55; }
+  .meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+
+  h2 { font-size: 26px; font-weight: 700; margin: 56px 0 20px; letter-spacing: -0.01em; }
+  h3 { font-size: 17px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.005em; }
+  p { color: var(--text-dim); }
+  section { scroll-margin-top: 24px; }
+
+  /* ── 0号铁律 banner ── */
+  .iron-rule {
+    background: linear-gradient(135deg, rgba(248, 113, 113, 0.12), rgba(251, 191, 36, 0.08));
+    border: 1px solid var(--danger);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+  .iron-rule .badge { display: inline-block; padding: 3px 10px; border-radius: 6px; background: var(--danger); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .iron-rule h3 { font-size: 22px; margin: 0 0 10px; color: var(--text); }
+  .iron-rule p { color: var(--text-dim); margin: 0; font-size: 15px; line-height: 1.7; }
+
+  /* ── TOC ── */
+  .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 18px 24px; margin-bottom: 56px; }
+  .toc h4 { margin: 0 0 10px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+  .toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 32px; }
+  .toc li { color: var(--text-dim); font-size: 14px; padding: 3px 0; break-inside: avoid; }
+  .toc li a { color: var(--text-dim); }
+  .toc li a:hover { color: var(--accent); }
+  @media (max-width: 640px) { .toc ol { columns: 1; } }
+
+  /* ── red-line list ── */
+  .redlines { display: flex; flex-direction: column; gap: 10px; }
+  .redline {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--danger);
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+  .redline strong { color: var(--text); font-weight: 600; }
+  .redline p { margin: 4px 0 0; color: var(--text-dim); font-size: 13.5px; line-height: 1.6; }
+
+  /* ── matrix table ── */
+  .matrix { width: 100%; border-collapse: collapse; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .matrix th, .matrix td { padding: 12px 14px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .matrix th { background: var(--bg-deep); color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .matrix td { color: var(--text-dim); }
+  .matrix tr:last-child td { border-bottom: none; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.03em; }
+  .pill.ok { background: var(--success-soft); color: var(--success); }
+  .pill.warn { background: var(--warning-soft); color: var(--warning); }
+  .pill.bad { background: var(--danger-soft); color: var(--danger); }
+
+  /* ── scenario card ── */
+  .scenario { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 26px 28px; margin-bottom: 20px; }
+  .scenario .scenario-head { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+  .scenario .num { width: 30px; height: 30px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+  .scenario h3 { margin: 0; font-size: 19px; }
+  .scenario .tldr { margin: 4px 0 18px; color: var(--text-muted); font-size: 13.5px; font-style: italic; }
+  .scenario .verdict { display: inline-block; margin: 0 0 16px; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.03em; }
+  .scenario .verdict.allowed { background: var(--success-soft); color: var(--success); }
+  .scenario .verdict.limited { background: var(--warning-soft); color: var(--warning); }
+  .scenario .verdict.banned { background: var(--danger-soft); color: var(--danger); }
+
+  .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
+  @media (max-width: 700px) { .do-dont { grid-template-columns: 1fr; } }
+  .dd-col { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .dd-col.do { border-left: 3px solid var(--success); }
+  .dd-col.dont { border-left: 3px solid var(--danger); }
+  .dd-col h4 { margin: 0 0 8px; font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+  .dd-col ul { margin: 0; padding-left: 20px; color: var(--text-dim); font-size: 13.5px; line-height: 1.7; }
+  .dd-col ul li { margin: 5px 0; }
+  .dd-col ul li strong { color: var(--text); font-weight: 600; }
+
+  /* ── signal table (error codes) ── */
+  .signals { width: 100%; border-collapse: collapse; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; font-size: 14px; }
+  .signals th, .signals td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .signals th { background: var(--bg-deep); color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .signals td { color: var(--text-dim); }
+  .signals td:first-child { color: var(--text); font-weight: 600; white-space: nowrap; }
+  .signals td code { font-size: 12.5px; }
+  .signals tr:last-child td { border-bottom: none; }
+
+  /* ── playbook ordered list ── */
+  .playbook { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 8px 0; }
+  .playbook ol { margin: 0; padding: 0 24px 0 48px; color: var(--text-dim); }
+  .playbook ol li { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14.5px; line-height: 1.65; }
+  .playbook ol li:last-child { border-bottom: none; }
+  .playbook ol li strong { color: var(--text); font-weight: 600; }
+
+  /* ── checklist ── */
+  .checklist { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
+  .checklist h4 { margin: 0 0 8px; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+  .checklist ul { margin: 0; padding: 0; list-style: none; }
+  .checklist ul li { padding: 8px 0; color: var(--text-dim); font-size: 14px; line-height: 1.65; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-start; }
+  .checklist ul li:last-child { border-bottom: none; }
+  .checklist ul li::before { content: "☐"; color: var(--text-muted); flex-shrink: 0; font-size: 16px; line-height: 1.4; }
+  .checklist ul li strong { color: var(--text); font-weight: 600; }
+
+  /* ── footer ── */
+  footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><span style="color: var(--text-dim);">账号操作守则</span>
+  </nav>
+
+  <header class="hero">
+    <span class="tag">⚠️ 必读 · 海外 IP/VPN 同事</span>
+    <h1>电脑端抖音账号操作守则</h1>
+    <p class="subtitle">
+      Akke 同事普遍使用海外网络 + VPN 出口访问抖音 —— 这是抖音风控权重最高的两个负向信号叠加在一起。
+      本文列出在这种环境下"能做什么 / 怎么做 / 不能做什么"，把账号当资产保护，而不是耗材消耗。
+    </p>
+    <div class="meta">
+      <span>📅 最后更新 2026-05-13</span>
+      <span>🏷️ 账号合规 · 反风控 · 同事 SOP</span>
+      <span>📖 阅读时间 ~12 分钟</span>
+    </div>
+  </header>
+
+  <!-- ─────────── 0号铁律 ─────────── -->
+  <div class="iron-rule">
+    <span class="badge">0 号铁律 · 不可妥协</span>
+    <h3>能在真机+大陆 SIM 网络做的，绝不在电脑+VPN 做</h3>
+    <p>
+      电脑浏览器+海外 IP+VPN 三件叠加，对抖音而言是"营销/黑产"画像的典型组合 ——
+      即使账号本身完全合规，也会被弱信号慢慢累加封禁。日常 DM 发送已切到 iPhone WDA / Android adb（详见
+      <a href="/akke/wda-dm-guide">WDA DM Guide</a>），任何"想偷懒在电脑上点一下"的操作之前，
+      先问一句"这件事能不能在手机上做"。能 = 必须用手机。
+    </p>
+  </div>
+
+  <!-- ─────────── TOC ─────────── -->
+  <div class="toc">
+    <h4>目录</h4>
+    <ol>
+      <li><a href="#why-dangerous">为什么海外 IP/VPN 高危</a></li>
+      <li><a href="#redlines">8 条红线（违反 = 封号风险）</a></li>
+      <li><a href="#matrix">操作风险矩阵</a></li>
+      <li><a href="#scenario-login">场景 1 · 登录与 Cookie 维护</a></li>
+      <li><a href="#scenario-browse">场景 2 · 日常浏览与刷视频（养号）</a></li>
+      <li><a href="#scenario-scrape">场景 3 · 评论抓取 / 号源调研</a></li>
+      <li><a href="#scenario-dm">场景 4 · 电脑端发 DM（禁止）</a></li>
+      <li><a href="#signals">风控信号速查（错误码 + UI 表征）</a></li>
+      <li><a href="#emergency">触发风控后的应急处理</a></li>
+      <li><a href="#environment">环境配置基线</a></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════ 1. 为什么高危 ═══════════════════ -->
+  <section id="why-dangerous">
+    <h2>1. 为什么海外 IP/VPN 是高危环境</h2>
+    <p>抖音风控不是"看到 VPN 就封号"，而是用十几个弱信号做加权累计画像。海外网络 + VPN 在多个维度上同时贡献负分：</p>
+
+    <div class="do-dont" style="grid-template-columns: 1fr 1fr; margin-top: 16px;">
+      <div class="dd-col dont" style="border-left-color: var(--danger);">
+        <h4>IP 维度三层叠加</h4>
+        <ul>
+          <li><strong>非大陆出口 IP</strong>：抖音是大陆产品，海外 IP 在"地理-账号注册地"维度上立即异常</li>
+          <li><strong>数据中心 / VPN 出口段</strong>：商业 VPN 的 IP 段被打标"机房 IP"，被大量营销号共用 → IP 信誉极低</li>
+          <li><strong>共享代理被搭便车</strong>：和我们用同一出口 IP 的人若在跑黑产，我们账号被牵连污染（KDL 共享 IP 已实测翻车）</li>
+        </ul>
+      </div>
+      <div class="dd-col dont" style="border-left-color: var(--danger);">
+        <h4>设备/浏览器维度</h4>
+        <ul>
+          <li><strong>桌面浏览器 = 营销号画像</strong>：真实用户 95% 用手机 App，桌面 web 用户本就被风控重点关注</li>
+          <li><strong>多账号同浏览器 profile</strong>：Cookie / localStorage / 指纹共享 = "群控"信号</li>
+          <li><strong>时区 / 语言 / 分辨率不匹配</strong>：海外 macOS 默认英文时区 ≠ 大陆账号画像</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="margin-top: 20px; font-size: 14.5px; padding: 14px 18px; background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--warning); border-radius: 8px;">
+      <strong style="color: var(--text);">已踩过的关键坑</strong> ——
+      Fly Tokyo 出口 IP 全功能封死（handle/搜索/profile API 全返空 + QR 登录面板不渲染）；
+      本地 Mac + KDL 共享代理触发"营销号画像 + IP 信誉低"双层风控，私信面板 captcha 不可通过；
+      VPN 在 macOS 上会 fake-IP 劫持代理域名 DNS，导致代理看似生效实际未走。详见 <a href="/akke/anti-risk-control">防风控架构</a>。
+    </p>
+  </section>
+
+  <!-- ═══════════════════ 2. 红线 ═══════════════════ -->
+  <section id="redlines">
+    <h2>2. 8 条红线 · 违反即账号高风险</h2>
+    <div class="redlines">
+      <div class="redline">
+        <strong>① 禁止用电脑+VPN 给抖音账号首次登录</strong>
+        <p>新号必须在大陆真机+大陆 SIM 网络下完成首次登录与 7 天基础养号。海外 IP 首登抖音 = 账号一出生就被标"异常"。</p>
+      </div>
+      <div class="redline">
+        <strong>② 禁止用电脑发陌生人 DM（任何形式）</strong>
+        <p>包括 web 抖音、第三方桌面客户端、Playwright/Selenium 自动化。生产 DM 链路只走 iPhone WDA / Android adb，电脑端 web 不可行（Fly Tokyo IP 黑、本地共享 IP captcha）。</p>
+      </div>
+      <div class="redline">
+        <strong>③ 禁止短时间内频繁切换 IP（VPN 节点）</strong>
+        <p>登录中的会话突然换 IP → 抖音强制重新风控验证；多次失败直接掉登录态甚至触发账号封禁。同一会话内 VPN 节点保持不变，跨天换节点也要等会话清空。</p>
+      </div>
+      <div class="redline">
+        <strong>④ 禁止把多个抖音账号登在同一浏览器 profile</strong>
+        <p>Cookie 同源、localStorage 同源、Canvas/WebGL 指纹完全一致 = 抖音确认两账号为同一人控。多账号必须用独立浏览器 profile 或独立物理机。</p>
+      </div>
+      <div class="redline">
+        <strong>⑤ 禁止用账号去搜索同行/竞品账号或加微信</strong>
+        <p>"搜索定制工厂 / 加微 / 留电话"是行业内被监控的高危行为。Akke 的同行/官方号过滤词在 <code>feedback_dm_filter_peer_industry_accounts</code>，调研时不要用主力账号执行。</p>
+      </div>
+      <div class="redline">
+        <strong>⑥ 禁止重新登录已有 Cookie 的账号（除非过期）</strong>
+        <p>Cookie 有效期约 15-30 天，没到期就重新登录 = 二次设备验证 + 风控审查窗口。续登必须在原始登录设备/网络环境下做（见场景 1）。</p>
+      </div>
+      <div class="redline">
+        <strong>⑦ 禁止在抖音 web 端点击"分享 / 复制链接 / 二维码 / 客服 / 申诉"</strong>
+        <p>这些按钮在 web 端会触发额外风控校验，多数情况下都打不开还会标记账号"行为异常"。需要分享/查链接走手机抖音 App。</p>
+      </div>
+      <div class="redline">
+        <strong>⑧ 禁止把账号 Cookie / 密码 贴进 IM / Slack / 群</strong>
+        <p>账号 = 自然人三段强绑（账号-身份证-人），泄露 Cookie 等于把自然人身份外借。Cookie 必须走 Akke 的"导入 Cookie"面板（Cookie-Editor 导出 → 直接粘贴 → 系统加密存库），不进 IM。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 3. 操作风险矩阵 ═══════════════════ -->
+  <section id="matrix">
+    <h2>3. 操作风险矩阵</h2>
+    <p>同事日常会接触的操作分类。<span class="pill ok">可做</span> = 风险低；<span class="pill warn">受限</span> = 必须按守则做；<span class="pill bad">禁止</span> = 红线，违反就账号高风险。</p>
+
+    <table class="matrix" style="margin-top: 16px;">
+      <thead>
+        <tr><th style="width: 28%">操作</th><th style="width: 16%">风险</th><th>说明 / 替代路径</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>在抖音 web 看公开视频/评论（未登录）</td>
+          <td><span class="pill ok">可做</span></td>
+          <td>无 Cookie 的匿名浏览不挂账号，风险为零。但 IP 多次刷会被 IP 级限流，cookie 变 <code>ttwid</code> 匿名标记。</td>
+        </tr>
+        <tr>
+          <td>用 Akke 后台 <a href="/queue">/queue</a> 审消息</td>
+          <td><span class="pill ok">可做</span></td>
+          <td>Akke 自有后台，与抖音无直接交互，VPN 不影响。这是同事日常工作的主战场。</td>
+        </tr>
+        <tr>
+          <td>在 Akke 后台粘贴 Cookie 导入账号</td>
+          <td><span class="pill ok">可做</span></td>
+          <td>Cookie 在本地真实网络 Mac 上抓 → 导入面板。不经 VPN，账号本身无暴露。</td>
+        </tr>
+        <tr>
+          <td>在抖音 web 已登录态下浏览（短时间）</td>
+          <td><span class="pill warn">受限</span></td>
+          <td>仅限"调研号源 / 看竞品评论"，一次会话 ≤15 分钟，不点交互按钮（点赞/评论/分享/关注）。</td>
+        </tr>
+        <tr>
+          <td>本地 Mac 浏览器扫码登录新账号</td>
+          <td><span class="pill warn">受限</span></td>
+          <td>仅在大陆 SIM 网络（关 VPN + 切手机热点）下做。完成后立即 Cookie-Editor 导出 → 导入 Akke 后台 → 不再用浏览器操作该账号。</td>
+        </tr>
+        <tr>
+          <td>抓评论（自动化 / 手动）</td>
+          <td><span class="pill warn">受限</span></td>
+          <td>自动化走 Akke worker 的 f2 签名直调（Fly Tokyo），同事不直接操作；手动调研单条视频评论可在 web 看，不下载、不批量。</td>
+        </tr>
+        <tr>
+          <td>用 Akke 主力账号给陌生人发 DM</td>
+          <td><span class="pill bad">禁止</span></td>
+          <td>电脑 web DM 风控极高；生产路径只走 WDA/adb 手机端。详见<a href="/akke/wda-dm-guide">WDA DM Guide</a>。</td>
+        </tr>
+        <tr>
+          <td>给同行/竞品账号发互动 / 加微信</td>
+          <td><span class="pill bad">禁止</span></td>
+          <td>同行账号识别后会标记上下游全部互动账号；找微信线索通过其他平台（电话/官网）。</td>
+        </tr>
+        <tr>
+          <td>多账号同浏览器 / 同 profile 共登</td>
+          <td><span class="pill bad">禁止</span></td>
+          <td>多账号管理必须独立物理设备（最佳）或独立浏览器 profile + 独立 VPN 节点（次优）。</td>
+        </tr>
+        <tr>
+          <td>使用商业 VPN 公共节点跑抖音相关脚本</td>
+          <td><span class="pill bad">禁止</span></td>
+          <td>公共节点出口 IP 被大量营销号共用，IP 信誉极低。需要自动化的走 Akke worker，不在同事的本地机器上跑。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════ 4. 场景 1 · 登录与 Cookie ═══════════════════ -->
+  <section id="scenario-login">
+    <h2>4. 场景细则</h2>
+
+    <div class="scenario">
+      <div class="scenario-head"><div class="num">1</div><h3>登录与 Cookie 维护</h3></div>
+      <p class="tldr">原则：账号生命周期只有"首登 + 续 Cookie"两个动作需要触碰浏览器，其余一律不登录。</p>
+      <span class="verdict limited">受限 · 必须按 SOP 做</span>
+
+      <h4 style="margin: 8px 0 6px; font-size: 15px; color: var(--text);">关键概念：Cookie 类型识别</h4>
+      <p style="margin: 0 0 12px; font-size: 14px;">
+        浏览器 DevTools 看到 Cookie 时先识别状态：
+        含 <code>sessionid</code> / <code>sid_tt</code> / <code>uid_tt</code> = <strong style="color: var(--success)">真登录</strong>（可用，导入 Akke 可发 DM）；
+        只有 <code>passport_csrf_token</code> / <code>ttwid</code> = <strong style="color: var(--warning)">匿名访问</strong>（不可用，账号未真登录）。
+      </p>
+
+      <div class="do-dont">
+        <div class="dd-col do">
+          <h4>SOP · 首次登录新账号</h4>
+          <ul>
+            <li><strong>关掉 VPN</strong>，切手机热点（大陆 SIM）或人在大陆的同事代登</li>
+            <li>无痕浏览器开 <code>www.douyin.com</code> → 扫码登录</li>
+            <li>登录成功后，<strong>不要在 web 做任何点击</strong>（不点赞/不评论/不分享）</li>
+            <li>Cookie-Editor 扩展 → Export → JSON → 立即贴进 Akke <code>/accounts</code> 的"导入 Cookie"面板</li>
+            <li>关浏览器 tab，从此该账号操作只走 Akke 系统</li>
+          </ul>
+        </div>
+        <div class="dd-col dont">
+          <h4>反例 · 这样做 = 账号污染</h4>
+          <ul>
+            <li>开着 VPN 直接 web 扫码（IP 与账号画像不匹配）</li>
+            <li>登录后顺手刷了几条视频 + 关注了一个号（异地 IP + 操作 = 高风险）</li>
+            <li>把 Cookie 字符串发到 Slack / 微信群（自然人身份外借）</li>
+            <li>Cookie 失效后在 VPN 环境下重新登录（不要！必须关 VPN）</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4 style="margin: 20px 0 6px; font-size: 15px; color: var(--text);">Cookie 过期检测与续登</h4>
+      <p style="margin: 0; font-size: 14px;">
+        Cookie 寿命约 15-30 天。Akke 后台账号状态变红 = 该重新登录。
+        续登规则同首登：关 VPN、原始网络环境、Cookie-Editor 导出 → 导入。
+        <strong style="color: var(--warning)">不要"小修小补"在 web 里活跃账号试图延寿，反而触发风控。</strong>
+      </p>
+    </div>
+
+    <!-- 场景 2 · 浏览 -->
+    <div class="scenario">
+      <div class="scenario-head"><div class="num">2</div><h3>日常浏览与刷视频（养号）</h3></div>
+      <p class="tldr">原则：电脑端不养号，养号在手机上做。电脑端登录后浏览只用于"调研"，单次短、不交互、不操作。</p>
+      <span class="verdict limited">受限 · 仅限只读调研</span>
+
+      <div class="do-dont">
+        <div class="dd-col do">
+          <h4>调研 OK 的做法</h4>
+          <ul>
+            <li>一次性看一个号源的视频/评论 ≤<strong>15 分钟</strong></li>
+            <li>固定 VPN 节点不切换（同节点 = 同 IP 画像，平台已"接受"该 IP）</li>
+            <li>只看（滚动浏览），<strong>不点</strong>赞、关注、评论、分享、收藏</li>
+            <li>看完直接关 tab，不留长时间挂机的 web 抖音</li>
+            <li>需要批量调研评论 → 用 Akke 后台 <code>/sources</code> 添加号源，让 worker 抓</li>
+          </ul>
+        </div>
+        <div class="dd-col dont">
+          <h4>触发风控的常见操作</h4>
+          <ul>
+            <li>开着抖音 web 挂机几小时（异地长 session = 风控持续累分）</li>
+            <li>边看边切 VPN 节点（IP 跳跃 = 立即异常）</li>
+            <li>用主力账号给同行视频点赞/评论/关注（同行账号识别会逆向标记你的账号）</li>
+            <li>在 web 端尝试搜索（搜索 API 在海外 IP 上经常出 captcha）</li>
+            <li>在 web 端尝试看私信收件箱（即使能看也容易触发 captcha 后清登录态）</li>
+          </ul>
+        </div>
+      </div>
+
+      <p style="margin: 18px 0 0; font-size: 14px; padding: 14px 18px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px;">
+        <strong style="color: var(--text)">养号实践</strong>：账号"健康度"需要真实用户行为画像 — 这只有手机端能做。
+        每天/每周抽 5-10 分钟在手机抖音 App（大陆 SIM 网络）上正常刷视频、点赞、关注两三个号，对 Akke 账号的存活周期帮助极大。
+      </p>
+    </div>
+
+    <!-- 场景 3 · 抓取/调研 -->
+    <div class="scenario">
+      <div class="scenario-head"><div class="num">3</div><h3>评论抓取 / 号源调研</h3></div>
+      <p class="tldr">原则：所有批量抓取都让 Akke worker 做（已加固），同事手动只做单点 spot check。</p>
+      <span class="verdict allowed">可做 · 走 Akke 后台</span>
+
+      <div class="do-dont">
+        <div class="dd-col do">
+          <h4>对的做法</h4>
+          <ul>
+            <li><strong>添加号源</strong>：抖音 App 复制分享链接 → 贴进 Akke <code>/sources</code> 的批量导入框 → worker 自动解析 sec_uid 并入库</li>
+            <li><strong>临时看某条视频评论</strong>：直接在 web 端打开视频 URL（无需登录），看完即关</li>
+            <li><strong>调研竞品话术</strong>：用 Akke <code>/leads</code> 筛选库里已有的评论（系统已存历史），不在 web 上手动翻</li>
+            <li><strong>看评论区找潜在客户</strong>：从评论池反向挖掘，详见 <a href="/akke/scraping-pipeline">数据采集方案</a></li>
+          </ul>
+        </div>
+        <div class="dd-col dont">
+          <h4>不要做</h4>
+          <ul>
+            <li>在本地机器跑 Playwright / Puppeteer 自己抓评论（你的 IP 立即被打标）</li>
+            <li>反复刷新同一个 profile 页（抖音对单 IP 重复访问敏感）</li>
+            <li>用 v.douyin.com 短链解 sec_uid 时不走 Akke worker（自己手动跳转会暴露你的 IP）</li>
+            <li>开 100+ tab 同时看号源（浏览器并发请求 = 自动化嫌疑）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 场景 4 · DM -->
+    <div class="scenario">
+      <div class="scenario-head"><div class="num">4</div><h3>电脑端发 DM / 私信</h3></div>
+      <p class="tldr">原则：禁止。这是 Akke V1 反复验证后的硬结论。</p>
+      <span class="verdict banned">禁止 · 走 WDA/adb 真机</span>
+
+      <p style="margin: 0 0 14px; font-size: 14.5px;">
+        电脑端发 DM 在我们的真实环境下不可行 — 不是"做不好"，是"做不到"。三条独立的证据链：
+      </p>
+      <ol style="color: var(--text-dim); font-size: 14px; line-height: 1.75; padding-left: 24px;">
+        <li><strong style="color: var(--text);">Fly Tokyo 出口 IP 完全封死</strong>：私信面板 / 搜索 / handle 解析 API 在 Fly Tokyo 全返回空，QR 登录面板都不渲染。这是 IDC IP 段被打标的硬封锁。</li>
+        <li><strong style="color: var(--text);">本地 Mac + 共享 VPN = 营销号画像 + IP 信誉低</strong>：KDL 共享代理实测，账号本身完全干净，私信面板仍触发 captcha 且无法通过。"营销号画像"信号一旦激活，新登录的 fresh cookie 反而比 stale cookie 更易撞 captcha（反直觉）。</li>
+        <li><strong style="color: var(--text);">协议层 200 ≠ 真送达</strong>：即便 web 端表面发送成功，<code>cmd:100</code> 响应可能是静默丢弃，必须 protobuf 解码业务级 <code>status_code</code> 才能确认 — 而这套校验已经做进 Akke worker，电脑同事手动操作无法获得这层保护。</li>
+      </ol>
+
+      <p style="margin: 16px 0 0; font-size: 14.5px; padding: 16px 20px; background: var(--success-soft); border: 1px solid var(--success); border-radius: 10px; color: var(--text);">
+        <strong style="color: var(--success);">替代路径</strong>：所有出站 DM 走 iPhone WDA / Android adb 真机自动化。
+        新人 1.5 小时上手：<a href="/akke/wda-dm-guide" style="font-weight: 600;">→ WDA DM Onboarding 指南</a>。
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 5. 风控信号速查 ═══════════════════ -->
+  <section id="signals">
+    <h2>5. 风控信号速查表</h2>
+    <p>看到下面这些信号 = 当前账号/IP 已被风控盯上。<strong style="color: var(--danger);">立即停手，不要重试</strong>。</p>
+
+    <table class="signals" style="margin-top: 16px;">
+      <thead>
+        <tr><th style="width: 16%">信号</th><th style="width: 16%">来源</th><th>含义 + 处理</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>验证码弹出</td>
+          <td>web UI</td>
+          <td>浏览器指纹/IP 被挑战。<strong>不要尝试通过</strong>，关 tab，账号本身没事；同 IP 短时间不要再访问。</td>
+        </tr>
+        <tr>
+          <td>"未登录 / 登录已失效"</td>
+          <td>web UI</td>
+          <td>账号级故障，Cookie 被服务端吊销。按场景 1 的"续登"流程关 VPN 重新登录。</td>
+        </tr>
+        <tr>
+          <td>私信面板转圈不渲染</td>
+          <td>web IM</td>
+          <td>营销号画像被激活，账号 web DM 通道关闭。<strong>切 WDA</strong>，该账号 web 端不要再尝试私信。</td>
+        </tr>
+        <tr>
+          <td>profile 页"网络错误"</td>
+          <td>web / WDA</td>
+          <td>schema 跳转限流。WDA 端解法是侧边快 swipe 3 次预热（<code>duration≤0.15s</code>）；web 端直接放弃。</td>
+        </tr>
+        <tr>
+          <td><code>cmd:100</code> 返回但对方未收到</td>
+          <td>protobuf 解码</td>
+          <td>静默丢弃。Akke worker 已识别此情况标 failed；同事手动 web 操作时识别不出，所以禁止 web 发 DM。</td>
+        </tr>
+        <tr>
+          <td>错误码 <code>7173</code></td>
+          <td>DM API</td>
+          <td>永久不重试。账号或对方被冻结/拉黑。Akke 已自动跳过该候选，同事看到这个码不要尝试再发。</td>
+        </tr>
+        <tr>
+          <td>错误码 <code>7462</code></td>
+          <td>DM API</td>
+          <td>陌生人首条 DM 配额耗尽（1 条/对/方向永久）。同号同对象不能再发，扩号才能继续触达。</td>
+        </tr>
+        <tr>
+          <td>错误码 <code>7911</code></td>
+          <td>DM API</td>
+          <td>速率软封 ~24h。该账号当天停发，24h 后再试。</td>
+        </tr>
+        <tr>
+          <td>错误码 <code>22102</code></td>
+          <td>DM API</td>
+          <td>账号进入观察期（半封禁）。停用 3-7 天，期间手机 App 正常活跃养号。</td>
+        </tr>
+        <tr>
+          <td>"作品不见了"</td>
+          <td>抖音 App</td>
+          <td>视频被风控隐藏或已删。WDA 自动化遇到立即 HALT，不要重试 deeplink。</td>
+        </tr>
+        <tr>
+          <td>DYLoginActivity 黑遮罩</td>
+          <td>Android</td>
+          <td>云手机/IDC IP/陌生设备 + 老号组合的"被动只读"封禁。账号被永久限制在该设备无法操作。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════ 6. 应急 ═══════════════════ -->
+  <section id="emergency">
+    <h2>6. 触发风控后的应急处理</h2>
+
+    <div class="playbook">
+      <ol>
+        <li><strong>立刻 HALT</strong> — 关掉当前 tab / 停掉脚本。再多一次操作 = 风险等级从"可疑"升到"确认违规"，自愈周期从 1 天变 30 天甚至永封。</li>
+        <li><strong>记录现场</strong> — 错误码、UI 截图、IP（<code>curl ifconfig.me</code>）、账号 ID、操作时间。Slack 给负责人，便于在工程层加规则避免下次。</li>
+        <li><strong>不要换 VPN 重试</strong> — 切节点重试只会让平台把"群控"标签贴得更牢。账号 = 自然人 = 单人单设备单 IP，跨 IP 重试是黑产特征。</li>
+        <li><strong>账号冷却</strong> — 验证码类信号冷却 6-12 小时；7911 冷却 24 小时；22102 冷却 3-7 天；7173 直接报废 / 换号。冷却期手机端可以正常用，但不要走我们的自动化。</li>
+        <li><strong>判断是否升级到运维</strong> — 同一组织连续 3+ 账号触发同一错误码，可能是 IP 段 / Cookie 失效 / migration 引入了新问题，立即告警负责人。</li>
+        <li><strong>不要补偿性"养号"</strong> — 触发风控后突击刷视频 / 点赞 / 关注会被识别为"自救行为"反而加重判罚。让账号自然冷却就是最好的恢复。</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 7. 环境基线 ═══════════════════ -->
+  <section id="environment">
+    <h2>7. 环境配置基线（一次配好，长期省事）</h2>
+
+    <div class="checklist">
+      <h4>浏览器</h4>
+      <ul>
+        <li>主力工作浏览器和"抖音调研浏览器"<strong>物理隔离</strong>（不同 Chrome profile 或干脆用 Edge/Arc 单独跑抖音）</li>
+        <li>调研浏览器关闭<strong>所有扩展</strong>，除了 Cookie-Editor（导出 Cookie 用）</li>
+        <li>关闭 hardware acceleration 不必要，但保持<strong>默认时区/语言</strong>（不要为了"看着舒服"改成 zh-CN UI，与 macOS 系统级 en-US 不一致 = 指纹冲突）</li>
+        <li>不要安装 Anti-fingerprint / Privacy Badger 类反指纹插件（反而暴露你在反指纹 = 自动化嫌疑）</li>
+      </ul>
+    </div>
+
+    <div class="checklist" style="margin-top: 16px;">
+      <h4>VPN / 代理</h4>
+      <ul>
+        <li>抖音相关操作期间<strong>固定一个 VPN 节点</strong>，不要切换；选择"商业 VPN 中相对小众"的节点（避开大量营销号共用的热门节点）</li>
+        <li><strong>不要</strong>在 macOS 上同时跑系统级 VPN + 浏览器代理（fake-IP 劫持已踩过，详见 <a href="/akke/pitfalls#network">pitfalls 网络章</a>）</li>
+        <li>用 <code>curl ifconfig.me</code> 确认实际出口 IP，不要假设 VPN UI 显示的就是真出口</li>
+        <li>登录、调研、Cookie 导出三件事保持<strong>同一 IP</strong>；混用 = 服务端立即看到"同账号多 IP" 异常</li>
+      </ul>
+    </div>
+
+    <div class="checklist" style="margin-top: 16px;">
+      <h4>账号管理</h4>
+      <ul>
+        <li>所有 Akke 在用账号必须在 Akke <code>/accounts</code> 面板登记，<strong>不存在"私下临时用一下"的账号</strong></li>
+        <li>Cookie 过期或账号被风控后，<strong>不要在浏览器里抢救</strong>，直接在 Akke 后台标 disabled，等冷却期结束按 SOP 重新导入</li>
+        <li>遇到 <code>7173</code> / <code>22102</code> 这种重型错误码 → 账号<strong>直接报废换号</strong>，不要试图恢复</li>
+        <li>账号密码 / Cookie / sec_uid 等敏感信息<strong>只在 Akke 系统里流转</strong>，不进 Slack / Lark / 微信 / 邮件</li>
+      </ul>
+    </div>
+
+    <div class="checklist" style="margin-top: 16px;">
+      <h4>真机配套（养号 / DM 必需）</h4>
+      <ul>
+        <li>每个长期使用的 Akke 账号要有对应的<strong>大陆 SIM 物理 SIM 卡或 eSIM</strong>，每周手机端正常活跃 1-2 次</li>
+        <li>DM 发送只走 <a href="/akke/wda-dm-guide">iPhone WDA</a>，物理设备和账号<strong>一一对应</strong>，不要在同一设备登多账号</li>
+        <li>真机长期开机、不锁屏、抖音 App 不强退，是 WDA 稳定的前提</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      本文档面向 Akke 同事日常操作账号的合规守则，与<a href="/akke/anti-risk-control">系统层防风控架构</a>互补。<br>
+      违反红线可能导致账号永封；不确定的操作先在 Slack 问，不要"试试看"。<br>
+      最后更新 2026-05-13 · <a href="/akke/">← 回到 Akke 知识库</a>
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
