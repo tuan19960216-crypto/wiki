@@ -196,6 +196,104 @@
   }
   .dm.from-akke .dm-meta { justify-content: flex-end; }
 
+  /* Transcript (对话全文) ==================== */
+  .transcript {
+    margin: 36px 0 12px; padding: 24px 26px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .transcript-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 18px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .transcript-head h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  .transcript-head .t-sub { font-size: 12.5px; color: var(--text-muted); }
+  .transcript-head .t-hint { font-size: 12px; color: var(--text-muted); }
+  .transcript-head .t-hint code {
+    background: var(--bg-deep); padding: 1px 6px; border-radius: 4px;
+    font-size: 11px; color: var(--accent);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .transcript .channel-label {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
+  }
+  .transcript .channel-label.dm { background: var(--accent-soft); color: var(--accent); }
+  .transcript .channel-label.reverse { background: var(--customer-soft); color: var(--customer); }
+
+  .msg-id {
+    display: inline-block; min-width: 24px; text-align: center;
+    padding: 1px 6px; border-radius: 4px; margin-right: 8px;
+    background: var(--bg-deep); border: 1px solid var(--border-strong);
+    color: var(--text-dim); text-decoration: none;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px; font-weight: 700;
+    scroll-margin-top: 20px;
+  }
+  .msg-id:hover { color: var(--accent); border-color: var(--accent); }
+  .dm[id^="msg-"], .rt-row[id^="msg-"] { scroll-margin-top: 80px; }
+
+  .msg-ref {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700;
+    padding: 1px 6px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    text-decoration: none;
+    vertical-align: 1px;
+  }
+  .msg-ref:hover { background: var(--accent); color: #fff; }
+
+  /* Region granularity analysis ============== */
+  .region-panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px;
+  }
+  .region-panel .rp-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .region-panel .rp-head h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text); }
+  .region-panel .rp-head .rp-sub { font-size: 12px; color: var(--text-muted); }
+  .region-layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .region-layer {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .region-layer .rl-label { font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .region-layer .rl-val { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 4px; }
+  .region-layer .rl-val .null { color: var(--text-muted); font-weight: 400; font-size: 14px; font-style: italic; }
+  .region-layer .rl-source { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .region-layer .rl-source code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 10px; font-family: "SF Mono", Menlo, Consolas, monospace; color: #c4b5fd; }
+  @media (max-width: 640px) { .region-layers { grid-template-columns: 1fr; } }
+
+  .region-usage { display: grid; gap: 10px; }
+  .region-usage .ru-row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 14px; align-items: start;
+    padding: 12px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .region-usage .ru-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 4px 0; text-align: center; border-radius: 6px; line-height: 1.1;
+  }
+  .region-usage .ru-tag.province { background: var(--info-soft); color: var(--info); }
+  .region-usage .ru-tag.city { background: var(--success-soft); color: var(--success); }
+  .region-usage .ru-tag.muted { background: var(--bg); color: var(--text-muted); }
+  .region-usage .ru-body { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .region-usage .ru-body strong { color: var(--text); }
+  .region-usage .ru-body .ru-quote {
+    display: inline-block; background: var(--bg-elevated); padding: 2px 8px; border-radius: 4px;
+    font-size: 12.5px; color: var(--text); border-left: 2px solid var(--accent); margin: 2px 0;
+  }
+  @media (max-width: 600px) {
+    .region-usage .ru-row { grid-template-columns: 1fr; gap: 6px; }
+    .region-usage .ru-tag { text-align: left; padding: 3px 8px; display: inline-block; }
+  }
+
   /* Annotation under DM */
   .annotation {
     margin: 12px 0 0; padding: 12px 16px;
@@ -360,6 +458,47 @@
     <div class="js-step now"><div class="num">7</div><div class="lbl">跟进 / 加微</div></div>
   </div>
 
+  <!-- ============ 完整对话 · 先看全文再看分析 ============ -->
+  <section class="transcript" aria-label="完整对话">
+    <div class="transcript-head">
+      <h2>完整对话 · 3 条触达 + 1 条作者回</h2>
+      <span class="t-sub">2026-05-05 → 05-11 · 跨 6 天 · 双通道</span>
+    </div>
+    <p class="t-hint">这条 lead 走的是<strong>双通道</strong>：<code>#1</code> 是私信 DM，<code>#2 / #3</code> 是反向评论通道（Akke 在追颖<em>自己的视频</em>底下留言，引导她以"作者"身份回复）。下方各 ACT 用 <code>#N</code> 引用回这里。</p>
+
+    <span class="channel-label dm">通道 A · 私信 DM</span>
+    <div class="dm from-akke" id="msg-1">
+      <div class="dm-bubble">你好追颖姐 那期品牌买与不买列得真细 80 平欧派从 12 落到 18 你这水分摸得很清。安徽这边整屋项目我们做过 货也走得通。80 平整屋全包7-11w段是合理位 你家这次想推翻重做还是改局部？</div>
+    </div>
+    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-1" class="msg-id">#1</a>📱 5-05 21:40 CST · AI 由账号「哈哈哈」推送 · status = sent · 暂无 DM 回复</div>
+
+    <div style="margin-top: 24px;">
+      <span class="channel-label reverse">通道 B · 反向评论 · 在她自己的视频下</span>
+    </div>
+    <div class="replies-thread">
+      <div class="rt-row" id="msg-2">
+        <div class="rt-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">星</div>
+        <div class="rt-body">
+          <div class="rt-author">小星定制 <span class="tag-akke">Akke 反向评论</span> <a href="#msg-2" class="msg-id">#2</a></div>
+          <div class="rt-text">我也在选全屋定制！姐妹说的 80 平从 12 万超到 18 万真的太戳我了，我家也卡在预算上。视频里整体布局看着挺合理的，后来怎么控制住的呀？</div>
+          <div class="rt-meta">📍 浙江 · 评论于 2026-05-11 · 业主同侪口吻</div>
+        </div>
+      </div>
+      <div class="rt-row rt-reply" id="msg-3">
+        <div class="rt-avatar">
+          <img src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_oIBIxJYeIHeDMWjIkGFGeCQ2fDALAAEAApHgQN.jpeg?from=2064092626"
+               alt="追颖" referrerpolicy="no-referrer" loading="lazy"
+               style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="rt-body">
+          <div class="rt-author">追颖 <span class="tag-author">作者</span> <a href="#msg-3" class="msg-id">#3</a></div>
+          <div class="rt-text">拿时间和精力换的，到处跑装修公司全屋定制，各种材料，多家对比，定了哪家慢慢跟他谈价格</div>
+          <div class="rt-meta">📍 安徽 · 2026-05-11 20:55 · 以「作者」身份回复</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ ACT 1 ============ -->
   <section class="act">
     <div class="act-head">
@@ -386,6 +525,50 @@
       <a class="comment-source-link" href="https://www.douyin.com/video/7628961309380435444" target="_blank" rel="noopener noreferrer">
         📹 评论所在视频（在抖音打开）
       </a>
+    </div>
+
+    <!-- 地区粒度分析 · ACT 01 子模块 -->
+    <div class="region-panel" style="margin-top: 18px;">
+      <div class="rp-head">
+        <h3>📍 地区粒度 · 自报市 NULL 的降级模式</h3>
+        <span class="rp-sub">只有省级信号 + 双通道无同城判定</span>
+      </div>
+
+      <div class="region-layers">
+        <div class="region-layer">
+          <div class="rl-label">省 · IP 属地</div>
+          <div class="rl-val">安徽</div>
+          <div class="rl-source">来源 <code>comments.ip_location</code> · 抖音 IP 反查 · 跨视频稳定（见 profile 推断）</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">市 · 自报现居</div>
+          <div class="rl-val"><span class="null">未自报</span></div>
+          <div class="rl-source">来源 <code>comments.city</code> · f2 USER_DETAIL 未捕获</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">号源服务市</div>
+          <div class="rl-val">全国</div>
+          <div class="rl-source">来源 <code>source_accounts.city</code> · 嘉伟室内设计是跨地域知识号 · <code>is_same_city = null</code></div>
+        </div>
+      </div>
+
+      <div class="region-usage">
+        <div class="ru-row">
+          <div class="ru-tag province">省级</div>
+          <div class="ru-body">
+            <strong>DM 破冰用省级建立业务可达感</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br>
+            <span class="ru-quote">安徽这边整屋项目我们做过 货也走得通</span><br>
+            <span style="color: var(--text-muted); font-size: 12px;">这条破冰<em>不卖产品</em>，靠"省 + 业务能接得住"打信任。如果客户来自<strong>同省装修工厂号</strong>评论区（如「合肥某全屋定制」），且自报合肥，<code>is_same_city = true</code>，hero 会多一个绿色「同城」chip，破冰可直接写「合肥同城上门看 / 顺路过去」更激进。</span>
+          </div>
+        </div>
+        <div class="ru-row">
+          <div class="ru-tag muted">市级</div>
+          <div class="ru-body">
+            <strong>市级信号不可用</strong> · 不影响双通道转化<br>
+            <span style="color: var(--text-muted); font-size: 12px;">追颖这条 lead 的转化路径靠的是<strong>反向评论 + 业主同侪口吻</strong>，地区粒度本身不是决胜因素。市级缺失只影响"郑州这阵子白天晒"这种 micro-context 文案，对本案 narrative 影响不大。</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -454,12 +637,9 @@
     </div>
     <h2>Akke 拟了一段「装修同行式」破冰</h2>
     <p class="act-lede">
-      因为她不是问产品的客户而是<em>复盘自己经历的业主</em>，破冰文案的策略也跟着调整 — 不能装作"我是来卖货的"，而要打成<em>"我也懂这条路、我也能接这种活"</em>的同行口吻。一条好的破冰要做四件事：复述昵称、复述她说的数字、绑住 IP 属地、用反问把对话推回到她的具体场景。
+      因为她不是问产品的客户而是<em>复盘自己经历的业主</em>，破冰文案（见 <a href="#msg-1" class="msg-ref">#1</a>）的策略也跟着调整 — 不能装作"我是来卖货的"，而要打成<em>"我也懂这条路、我也能接这种活"</em>的同行口吻。<br>
+      这条破冰做四件事：复述昵称、复述她说的数字、绑住 IP 属地、用反问把对话推回到她的具体场景。系统记录 sent_at 21:40:53 CST，status = sent。
     </p>
-    <div class="dm from-akke">
-      <div class="dm-bubble">你好追颖姐 那期品牌买与不买列得真细 80 平欧派从 12 落到 18 你这水分摸得很清。安徽这边整屋项目我们做过 货也走得通。80 平整屋全包7-11w段是合理位 你家这次想推翻重做还是改局部？</div>
-    </div>
-    <div class="dm-meta" style="justify-content: flex-end;">📱 系统记录 sent_at 21:40:53 CST · status = sent</div>
 
     <div class="breakdown">
       <div class="bd-item">
@@ -527,35 +707,12 @@
     </div>
     <h2>她在评论区给了我们一段真实复盘</h2>
     <p class="act-lede">
-      追颖没回 DM — 她回的是评论。在她自己视频的评论区，看见小星定制的留言后，她以<em>「作者」</em>身份回复了一段非常具体的复盘：拿时间和精力换了价格优势。这句话的价值不在长短，而在<em>她真的在分享经验，不是在敷衍陌生人</em>。
+      追颖没回 DM — 她回的是评论。在她自己视频的评论区，看见小星定制的留言（<a href="#msg-2" class="msg-ref">#2</a>）后，她以<em>「作者」</em>身份回复了一段非常具体的复盘（<a href="#msg-3" class="msg-ref">#3</a>）：拿时间和精力换了价格优势。这句话的价值不在长短，而在<em>她真的在分享经验，不是在敷衍陌生人</em>。
     </p>
-
-    <div class="replies-thread">
-      <div class="rt-row">
-        <div class="rt-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">星</div>
-        <div class="rt-body">
-          <div class="rt-author">小星定制 <span class="tag-akke">Akke 反向评论</span></div>
-          <div class="rt-text">我也在选全屋定制！姐妹说的 80 平从 12 万超到 18 万真的太戳我了，我家也卡在预算上。视频里整体布局看着挺合理的，后来怎么控制住的呀？</div>
-          <div class="rt-meta">📍 浙江 · 评论于 2026-05-11</div>
-        </div>
-      </div>
-      <div class="rt-row rt-reply">
-        <div class="rt-avatar">
-          <img src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_oIBIxJYeIHeDMWjIkGFGeCQ2fDALAAEAApHgQN.jpeg?from=2064092626"
-               alt="追颖" referrerpolicy="no-referrer" loading="lazy"
-               style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <div class="rt-body">
-          <div class="rt-author">追颖 <span class="tag-author">作者</span></div>
-          <div class="rt-text">拿时间和精力换的，到处跑装修公司全屋定制，各种材料，多家对比，定了哪家慢慢跟他谈价格</div>
-          <div class="rt-meta">📍 安徽 · 2026-05-11 20:55</div>
-        </div>
-      </div>
-    </div>
 
     <div class="signal">
       <div class="signal-title">⚡ 高意向强信号</div>
-      <strong>「跑装修公司 / 各种材料 / 多家对比 / 谈价格」</strong> — 这 4 个词每一个都对应一个我们能<em>立刻接住的服务点</em>：跑工厂 = 我们做源头供货 / 各种材料 = 我们有全品类样板 / 多家对比 = 我们出对比方案 / 谈价格 = 我们有底价空间。她在用 25 个字告诉我们她的<strong>真实痛点</strong>是「太费时间」。下一句话只要说"安徽这边我们能帮你省掉跑材料市场这一段"，方向就对了。
+      <a href="#msg-3" class="msg-ref">#3</a> <strong>「跑装修公司 / 各种材料 / 多家对比 / 谈价格」</strong> — 这 4 个词每一个都对应一个我们能<em>立刻接住的服务点</em>：跑工厂 = 我们做源头供货 / 各种材料 = 我们有全品类样板 / 多家对比 = 我们出对比方案 / 谈价格 = 我们有底价空间。她在用 25 个字告诉我们她的<strong>真实痛点</strong>是「太费时间」。下一句话只要说"安徽这边我们能帮你省掉跑材料市场这一段"，方向就对了。
     </div>
   </section>
 

@@ -245,6 +245,97 @@
   .timing-legend .tl-swatch.customer { background: var(--customer); }
   .timing-legend .tl-swatch.akke { background: var(--accent); }
 
+  /* Transcript (对话全文) ==================== */
+  .transcript {
+    margin: 36px 0 12px; padding: 24px 26px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .transcript-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 18px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .transcript-head h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  .transcript-head .t-sub { font-size: 12.5px; color: var(--text-muted); }
+  .transcript-head .t-hint { font-size: 12px; color: var(--text-muted); }
+  .transcript-head .t-hint code {
+    background: var(--bg-deep); padding: 1px 6px; border-radius: 4px;
+    font-size: 11px; color: var(--accent);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  .msg-id {
+    display: inline-block; min-width: 24px; text-align: center;
+    padding: 1px 6px; border-radius: 4px; margin-right: 8px;
+    background: var(--bg-deep); border: 1px solid var(--border-strong);
+    color: var(--text-dim); text-decoration: none;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px; font-weight: 700;
+    scroll-margin-top: 20px;
+  }
+  .msg-id:hover { color: var(--accent); border-color: var(--accent); }
+  .dm[id^="msg-"] { scroll-margin-top: 80px; }
+
+  .msg-ref {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700;
+    padding: 1px 6px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    text-decoration: none;
+    vertical-align: 1px;
+  }
+  .msg-ref:hover { background: var(--accent); color: #fff; }
+
+  /* Region granularity analysis ============== */
+  .region-panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px;
+  }
+  .region-panel .rp-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .region-panel .rp-head h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text); }
+  .region-panel .rp-head .rp-sub { font-size: 12px; color: var(--text-muted); }
+  .region-layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .region-layer {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .region-layer .rl-label { font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .region-layer .rl-val { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 4px; }
+  .region-layer .rl-val .null { color: var(--text-muted); font-weight: 400; font-size: 14px; font-style: italic; }
+  .region-layer .rl-source { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .region-layer .rl-source code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 10px; font-family: "SF Mono", Menlo, Consolas, monospace; color: #c4b5fd; }
+  @media (max-width: 640px) { .region-layers { grid-template-columns: 1fr; } }
+
+  .region-usage { display: grid; gap: 10px; }
+  .region-usage .ru-row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 14px; align-items: start;
+    padding: 12px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .region-usage .ru-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 4px 0; text-align: center; border-radius: 6px; line-height: 1.1;
+  }
+  .region-usage .ru-tag.province { background: var(--info-soft); color: var(--info); }
+  .region-usage .ru-tag.city { background: var(--success-soft); color: var(--success); }
+  .region-usage .ru-tag.muted { background: var(--bg); color: var(--text-muted); }
+  .region-usage .ru-body { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .region-usage .ru-body strong { color: var(--text); }
+  .region-usage .ru-body .ru-quote {
+    display: inline-block; background: var(--bg-elevated); padding: 2px 8px; border-radius: 4px;
+    font-size: 12.5px; color: var(--text); border-left: 2px solid var(--accent); margin: 2px 0;
+  }
+  @media (max-width: 600px) {
+    .region-usage .ru-row { grid-template-columns: 1fr; gap: 6px; }
+    .region-usage .ru-tag { text-align: left; padding: 3px 8px; display: inline-block; }
+  }
+
   /* Annotation under DM */
   .annotation {
     margin: 12px 0 0; padding: 12px 16px;
@@ -377,6 +468,37 @@
     <div class="js-step now"><div class="num">7</div><div class="lbl">跟进 / 加微</div></div>
   </div>
 
+  <!-- ============ 完整对话 · 先看全文再看分析 ============ -->
+  <section class="transcript" aria-label="完整对话">
+    <div class="transcript-head">
+      <h2>完整对话 · 4 条来回</h2>
+      <span class="t-sub">2026-05-11 下午 · 单通道 DM</span>
+    </div>
+    <p class="t-hint">每条消息有编号 <code>#1</code>~<code>#4</code>。下方各 ACT 在拆解时会用 <code>#N</code> 引用回这里。</p>
+
+    <div class="day-sep">2026-05-11 · AI 破冰 + 客户当天回</div>
+
+    <div class="dm from-akke" id="msg-1">
+      <div class="dm-bubble">草莓圣戴女士，508 这型号近期问的人多，源头工厂直供的价格对比建材市场更优，湖北我接过几单类似选型，美的 508 风冷双变频日常够用，你家厨房预留尺寸多大，橱柜定了没？</div>
+    </div>
+    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-1" class="msg-id">#1</a>📱 5-11 14:08 CST · 客户端显示 15:25 · AI 由账号「零星」推送</div>
+
+    <div class="dm from-customer" id="msg-2">
+      <div class="dm-bubble">我没有做嵌入</div>
+    </div>
+    <div class="dm-meta"><a href="#msg-2" class="msg-id">#2</a>📱 5-11 下午 · 约 1 小时 27 分后回 · 报户型条件</div>
+
+    <div class="dm from-customer" id="msg-3">
+      <div class="dm-bubble">放客厅里</div>
+    </div>
+    <div class="dm-meta"><a href="#msg-3" class="msg-id">#3</a>📱 5-11 下午 · 紧跟 #2 · 补安装位置</div>
+
+    <div class="dm from-akke" id="msg-4">
+      <div class="dm-bubble">客厅放冰箱也挺多人这样，做整面包柜就能整起来。源头工厂直供对比门店至少省 4 成，本月活动名额还剩几个，留个v发你几张实拍型号 + 活动价单。</div>
+    </div>
+    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-4" class="msg-id">#4</a>📱 5-11 16:39 CST · AI 跟进 · 承接 → 锚价 → 加微</div>
+  </section>
+
   <!-- ============ ACT 1 ============ -->
   <section class="act">
     <div class="act-head">
@@ -403,6 +525,50 @@
       <a class="comment-source-link" href="https://www.douyin.com/video/7632545007186021684" target="_blank" rel="noopener noreferrer">
         📹 评论所在视频（在抖音打开）
       </a>
+    </div>
+
+    <!-- 地区粒度分析 · ACT 01 子模块 -->
+    <div class="region-panel" style="margin-top: 18px;">
+      <div class="rp-head">
+        <h3>📍 地区粒度 · 自报市 NULL 的降级模式</h3>
+        <span class="rp-sub">只有省级信号可用</span>
+      </div>
+
+      <div class="region-layers">
+        <div class="region-layer">
+          <div class="rl-label">省 · IP 属地</div>
+          <div class="rl-val">湖北</div>
+          <div class="rl-source">来源 <code>comments.ip_location</code> · 抖音 IP 反查</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">市 · 自报现居</div>
+          <div class="rl-val"><span class="null">未自报</span></div>
+          <div class="rl-source">来源 <code>comments.city</code> · f2 USER_DETAIL 未捕获到（client 端没填或 profile 隐私）</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">号源服务市</div>
+          <div class="rl-val">全国</div>
+          <div class="rl-source">来源 <code>source_accounts.city</code> · 嘉伟室内设计是跨地域知识号，<code>is_same_city = null</code></div>
+        </div>
+      </div>
+
+      <div class="region-usage">
+        <div class="ru-row">
+          <div class="ru-tag province">省级</div>
+          <div class="ru-body">
+            <strong>破冰话术用省级回退</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br>
+            <span class="ru-quote">湖北我接过几单类似选型</span><br>
+            <span style="color: var(--text-muted); font-size: 12px;">这是<strong>市级 NULL 时的标准回退</strong>：只有 ip_location，话术里只能引「省 + 类似客户」做归属感。如果 USER_DETAIL 有捕获到自报市（如「武汉」），LLM 会改写成「武汉这阵子甲醛味散得慢」这种 micro-context。</span>
+          </div>
+        </div>
+        <div class="ru-row">
+          <div class="ru-tag muted">市级</div>
+          <div class="ru-body">
+            <strong>市级信号不可用</strong> · 客户没自报，号源也是全国<br>
+            <span style="color: var(--text-muted); font-size: 12px;">本案是<strong>知识号 + 客户未自报</strong>这一最常见的组合 — 全程靠省级回退已经足以建立信任。同城判定也不触发：<code>source_accounts.city = "全国"</code> 时按 supabase migration <code>20260512173500</code> 的规则跳过比较。</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -446,12 +612,9 @@
     </div>
     <h2>Akke 拟了一段破冰</h2>
     <p class="act-lede">
-      AI 起草、运营批准、通过<em>本地 Android 手机自动化（adb + uiautomator2）</em>把消息打到她的抖音私信里。一条好的破冰要做四件事：复述昵称、复述视频里的型号、绑住 IP 属地、用反问代替「您好」结尾 — 这条全做到了。
+      AI 起草、运营批准、通过<em>本地 Android 手机自动化（adb + uiautomator2）</em>把消息打到她的抖音私信里。<br>
+      这条破冰文案（见 <a href="#msg-1" class="msg-ref">#1</a>）做了四件事：复述昵称、复述视频里的型号、绑住 IP 属地、用反问代替「您好」结尾。系统记录 sent_at 14:08:50 CST，客户端显示时间 15:25。
     </p>
-    <div class="dm from-akke">
-      <div class="dm-bubble">草莓圣戴女士，508 这型号近期问的人多，源头工厂直供的价格对比建材市场更优，湖北我接过几单类似选型，美的 508 风冷双变频日常够用，你家厨房预留尺寸多大，橱柜定了没？</div>
-    </div>
-    <div class="dm-meta" style="justify-content: flex-end;">📱 客户端显示时间 15:25 · 系统记录 sent_at 14:08:50 CST</div>
 
     <div class="breakdown">
       <div class="bd-item">
@@ -547,19 +710,12 @@
 
     <h2>她在主动给条件</h2>
     <p class="act-lede">
-      草莓圣戴女士没有回「多少钱」也没有问「在哪里」— 她直接<em>把户型信息送到我们手上</em>：「我没有做嵌入」+「放客厅里」。这是高意向客户最有价值的信号 —— <em>她在帮我们把方案要素拼齐</em>。
+      草莓圣戴女士没有回「多少钱」也没有问「在哪里」— 她直接<em>把户型信息送到我们手上</em>：<a href="#msg-2" class="msg-ref">#2</a>「我没有做嵌入」+ <a href="#msg-3" class="msg-ref">#3</a>「放客厅里」。这是高意向客户最有价值的信号 —— <em>她在帮我们把方案要素拼齐</em>。
     </p>
-
-    <div class="dm from-customer">
-      <div class="dm-bubble">我没有做嵌入</div>
-    </div>
-    <div class="dm from-customer">
-      <div class="dm-bubble">放客厅里</div>
-    </div>
 
     <div class="signal">
       <div class="signal-title">⚡ 高意向强信号</div>
-      <strong>客户主动 disclose ≠ 礼貌回复</strong>。她不是被问到「在哪里放」之后回答的，而是主动两句话切到自己的<strong>实际安装位置</strong>。一旦客户从「问产品」切到「说自家场景」— ice_break 就过了。下一步只剩「方案 + 报价 + 加微」三件事。
+      <strong>客户主动 disclose ≠ 礼貌回复</strong>。她不是被问到「在哪里放」之后回答的，而是主动两句话（<a href="#msg-2" class="msg-ref">#2</a> + <a href="#msg-3" class="msg-ref">#3</a>）切到自己的<strong>实际安装位置</strong>。一旦客户从「问产品」切到「说自家场景」— ice_break 就过了。下一步只剩「方案 + 报价 + 加微」三件事。
     </div>
   </section>
 
@@ -571,12 +727,8 @@
     </div>
     <h2>跟进话术：把她给的条件变成方案</h2>
     <p class="act-lede">
-      跟进的核心动作不是「介绍产品」而是<em>承接客户刚说的话</em>。她说放客厅 → 我们说做整面包柜把空间收齐。然后才是价格优势（省 4 成）+ 名额紧张（本月还剩几个）+ 转化锚点（留个 v 发实拍）。
+      跟进的核心动作不是「介绍产品」而是<em>承接客户刚说的话</em>。她说放客厅（<a href="#msg-3" class="msg-ref">#3</a>）→ 我们说做整面包柜把空间收齐（<a href="#msg-4" class="msg-ref">#4</a>）。然后才是价格优势（省 4 成）+ 名额紧张（本月还剩几个）+ 转化锚点（留个 v 发实拍）。系统记录 sent_at 16:39:48 CST。
     </p>
-    <div class="dm from-akke">
-      <div class="dm-bubble">客厅放冰箱也挺多人这样，做整面包柜就能整起来。源头工厂直供对比门店至少省 4 成，本月活动名额还剩几个，留个v发你几张实拍型号 + 活动价单。</div>
-    </div>
-    <div class="dm-meta" style="justify-content: flex-end;">系统记录 sent_at 16:39:48 CST</div>
 
     <div class="annotation">
       <div class="a-title">承接 → 锚价 → 加微 · 三步链</div>
