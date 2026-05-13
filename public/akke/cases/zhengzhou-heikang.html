@@ -256,6 +256,49 @@
   .timing-legend .tl-swatch.customer { background: var(--customer); }
   .timing-legend .tl-swatch.akke { background: var(--accent); }
 
+  .timing-list {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: grid; gap: 6px; list-style: none; padding-left: 0;
+  }
+  .timing-list .tl-row {
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 12px; align-items: center;
+    padding: 8px 12px;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .timing-list .tl-num {
+    font-size: 12px; font-weight: 700;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums; text-align: center;
+  }
+  .timing-list .tl-path {
+    font-size: 12.5px; color: var(--text-dim);
+    line-height: 1.5;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: baseline;
+  }
+  .timing-list .tl-time {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    color: var(--text-muted); font-size: 11px;
+    background: rgba(255,255,255,0.03); padding: 1px 6px; border-radius: 4px;
+  }
+  .timing-list .tl-arrow { color: var(--text-muted); }
+  .timing-list .tl-actor { color: var(--text); }
+  .timing-list .tl-gap {
+    font-size: 12px; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    padding: 4px 10px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .timing-list .tl-gap.ai-to-user { background: var(--customer-soft); color: var(--customer); }
+  .timing-list .tl-gap.user-to-ai { background: var(--accent-soft); color: var(--accent); }
+  @media (max-width: 600px) {
+    .timing-list .tl-row { grid-template-columns: 1fr; gap: 6px; }
+  }
+
   /* Mock QR placeholder bubble */
   .qr-placeholder {
     display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
@@ -597,6 +640,64 @@
         <span><span class="tl-swatch akke"></span>我们在跟进他</span>
         <span style="margin-left: auto;">≈ 时间为截图估值 · 之后加微 friction 环节略</span>
       </div>
+
+      <ol class="timing-list" aria-label="响应间隔逐条列表">
+        <li class="tl-row">
+          <span class="tl-num">①</span>
+          <div class="tl-path">
+            <span class="tl-time">5-03 21:20</span>
+            <span class="tl-actor">AI 破冰</span>
+            <span class="tl-arrow">→</span>
+            <span class="tl-time">5-03 22:25</span>
+            <span class="tl-actor">他「美缝今天下午刚做完」</span>
+          </div>
+          <span class="tl-gap ai-to-user">≈ 1 小时 5 分</span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-num">②</span>
+          <div class="tl-path">
+            <span class="tl-time">5-03 22:25</span>
+            <span class="tl-actor">他报工地状态</span>
+            <span class="tl-arrow">→</span>
+            <span class="tl-time">5-06 19:16</span>
+            <span class="tl-actor">我们三天后跟进「美缝完了下一步定柜子」</span>
+          </div>
+          <span class="tl-gap user-to-ai">≈ 2 天 21 小时</span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-num">③</span>
+          <div class="tl-path">
+            <span class="tl-time">5-06 19:34</span>
+            <span class="tl-actor">AI 抛工艺干货</span>
+            <span class="tl-arrow">→</span>
+            <span class="tl-time">5-06 19:42</span>
+            <span class="tl-actor">他「墙面起碱还没干透」</span>
+          </div>
+          <span class="tl-gap ai-to-user">≈ 8 分</span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-num">④</span>
+          <div class="tl-path">
+            <span class="tl-time">5-06 19:42</span>
+            <span class="tl-actor">他报实情</span>
+            <span class="tl-arrow">→</span>
+            <span class="tl-time">5-06 20:05</span>
+            <span class="tl-actor">我们答工艺 + 借「视频糊」要 v</span>
+          </div>
+          <span class="tl-gap user-to-ai">≈ 23 分</span>
+        </li>
+        <li class="tl-row">
+          <span class="tl-num">⑤</span>
+          <div class="tl-path">
+            <span class="tl-time">5-06 20:05</span>
+            <span class="tl-actor">AI 要 v</span>
+            <span class="tl-arrow">→</span>
+            <span class="tl-time">5-06 20:21</span>
+            <span class="tl-actor">他「嗯嗯」(默许但没给)</span>
+          </div>
+          <span class="tl-gap ai-to-user">≈ 16 分</span>
+        </li>
+      </ol>
     </div>
 
     <h2>从「还没装修」聊到「我两个微信」</h2>
