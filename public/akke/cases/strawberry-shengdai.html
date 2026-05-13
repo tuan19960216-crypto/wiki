@@ -183,6 +183,68 @@
   }
   .dm.from-akke .dm-meta { justify-content: flex-end; }
 
+  /* Timing strip (Act 5 head) =================== */
+  .timing-strip {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; margin: 0 0 18px;
+  }
+  .timing-summary {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px;
+  }
+  .timing-summary .ts-item {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .timing-summary .ts-label {
+    font-size: 10.5px; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;
+  }
+  .timing-summary .ts-val {
+    font-size: 15px; color: var(--text); font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .timing-summary .ts-val .approx { color: var(--text-muted); font-size: 11px; margin-left: 4px; font-weight: 400; }
+  @media (max-width: 600px) { .timing-summary { grid-template-columns: 1fr; } }
+
+  .timing-bars { display: flex; gap: 2px; height: 36px; align-items: stretch; border-radius: 6px; overflow: hidden; }
+  .timing-bar {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 600; line-height: 1;
+    color: rgba(255,255,255,0.95);
+    cursor: default;
+    transition: filter 0.15s;
+    min-width: 28px;
+  }
+  .timing-bar:hover { filter: brightness(1.15); }
+  .timing-bar.ai-to-user {
+    background: linear-gradient(180deg, var(--customer), #f59e0b);
+    color: #1a1f2b;
+  }
+  .timing-bar.user-to-ai {
+    background: linear-gradient(180deg, var(--accent), #7c3aed);
+  }
+  .timing-bar[data-approx="true"] {
+    background-image:
+      repeating-linear-gradient(45deg,
+        rgba(255,255,255,0.18) 0 4px,
+        transparent 4px 8px);
+    background-blend-mode: overlay;
+  }
+  .timing-bar[data-approx="true"]::after {
+    content: "≈"; position: absolute; top: 2px; right: 4px;
+    font-size: 10px; opacity: 0.6;
+  }
+  .timing-legend {
+    display: flex; gap: 14px; margin-top: 8px;
+    font-size: 11px; color: var(--text-muted);
+  }
+  .timing-legend .tl-swatch {
+    display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle;
+  }
+  .timing-legend .tl-swatch.customer { background: var(--customer); }
+  .timing-legend .tl-swatch.akke { background: var(--accent); }
+
   /* Annotation under DM */
   .annotation {
     margin: 12px 0 0; padding: 12px 16px;
@@ -454,6 +516,35 @@
       <span class="act-no">ACT 05 · 她回应了</span>
       <span class="act-time">2026-05-11 下午 · 客户端时间</span>
     </div>
+
+    <!-- 时效性概览 · ACT 05 头部 -->
+    <div class="timing-strip" aria-label="对话响应时效">
+      <div class="timing-summary">
+        <div class="ts-item">
+          <div class="ts-label">首次响应延迟</div>
+          <div class="ts-val">约 1 小时 27 分 <span class="approx">≈ 截图取证</span></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">AI 跟进延迟</div>
+          <div class="ts-val">约 1 小时 03 分 <span class="approx">≈ 截图取证</span></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">最长沉默缺口</div>
+          <div class="ts-val">约 1 小时 27 分</div>
+        </div>
+      </div>
+      <div class="timing-bars" role="img" aria-label="响应间隔时间轴">
+        <!-- log-scale: log(s+60)/log(max+60)*100; 1h27m=5220s → ~52%; 1h3m=3780s → ~48% -->
+        <div class="timing-bar ai-to-user" data-approx="true" style="flex: 52" title="14:08 · 我们破冰 → 15:35 · 她回「我没有做嵌入」（约 1 小时 27 分）">1 小时 27 分</div>
+        <div class="timing-bar user-to-ai" data-approx="true" style="flex: 48" title="15:36 · 她说「放客厅里」 → 16:39 · 我们跟进（约 1 小时 03 分）">1 小时 03 分</div>
+      </div>
+      <div class="timing-legend">
+        <span><span class="tl-swatch customer"></span>她在回应我们</span>
+        <span><span class="tl-swatch akke"></span>我们在跟进她</span>
+        <span style="margin-left: auto;">≈ 时间为截图估值（DB 未入库）</span>
+      </div>
+    </div>
+
     <h2>她在主动给条件</h2>
     <p class="act-lede">
       草莓圣戴女士没有回「多少钱」也没有问「在哪里」— 她直接<em>把户型信息送到我们手上</em>：「我没有做嵌入」+「放客厅里」。这是高意向客户最有价值的信号 —— <em>她在帮我们把方案要素拼齐</em>。
