@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创始人手册：构建 AI 原生创业公司 · Anthropic（中文译本）</title>
+<style>
+  :root {
+    --bg: #1a1815;
+    --bg-soft: #221f1a;
+    --bg-card: #2a2620;
+    --text: #ebe5d4;
+    --text-muted: #968d80;
+    --text-dim: #6e665b;
+    --accent: #d97757;
+    --accent-soft: rgba(217,119,87,0.12);
+    --rule: rgba(235,229,212,0.08);
+    --serif: "Tiempos", "Source Serif Pro", "STSong", "Songti SC", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  /* Cover */
+  .cover {
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 32px 60px;
+    border-bottom: 1px solid var(--rule);
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+  }
+  .cover-inner { max-width: 760px; margin: 0 auto; width: 100%; }
+  .kicker {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+  .cover h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 64px;
+    line-height: 1.05;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+  }
+  .cover h2 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 32px;
+    line-height: 1.2;
+    color: var(--text-muted);
+    margin: 0 0 56px;
+    letter-spacing: -0.005em;
+  }
+  .cover-meta {
+    font-size: 13px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--rule);
+    padding-top: 24px;
+    line-height: 1.8;
+  }
+  .cover-meta strong { color: var(--text-muted); font-weight: 500; }
+  /* TOC */
+  .toc {
+    padding: 80px 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .toc-inner { max-width: 760px; margin: 0 auto; }
+  .toc h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 32px;
+  }
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: chapter;
+  }
+  .toc li {
+    counter-increment: chapter;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+  }
+  .toc li:before {
+    content: counter(chapter, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    flex-shrink: 0;
+    width: 30px;
+  }
+  .toc li a {
+    color: var(--text);
+    text-decoration: none;
+    font-family: var(--serif);
+    font-size: 20px;
+    flex: 1;
+    transition: color 0.15s;
+  }
+  .toc li a:hover { color: var(--accent); }
+  /* Chapters */
+  section.chapter {
+    padding: 96px 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .chapter-inner { max-width: 760px; margin: 0 auto; }
+  .chapter-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+  .chapter h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 44px;
+    line-height: 1.15;
+    margin: 0 0 48px;
+    letter-spacing: -0.01em;
+  }
+  .chapter h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.25;
+    margin: 56px 0 20px;
+    color: var(--text);
+  }
+  .chapter h3 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 18px;
+    margin: 36px 0 14px;
+    color: var(--text);
+  }
+  .chapter h4 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 15px;
+    margin: 24px 0 8px;
+    color: var(--accent);
+  }
+  .chapter p { margin: 0 0 16px; color: var(--text); }
+  .chapter ul, .chapter ol {
+    margin: 0 0 20px;
+    padding-left: 24px;
+  }
+  .chapter li {
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .chapter li::marker { color: var(--accent); }
+  .chapter strong { color: var(--text); font-weight: 600; }
+  .chapter em { color: var(--text-muted); font-style: italic; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  blockquote {
+    border-left: 2px solid var(--accent);
+    background: var(--bg-soft);
+    margin: 24px 0;
+    padding: 18px 24px;
+    color: var(--text-muted);
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+  /* Callout boxes */
+  .callout {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: 24px 28px;
+    margin: 28px 0;
+    border-radius: 2px;
+  }
+  .callout .label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .callout h4 {
+    margin-top: 0;
+    color: var(--text);
+  }
+  /* Challenge block */
+  .challenge {
+    margin: 32px 0;
+    padding: 20px 24px;
+    background: var(--bg-soft);
+    border-radius: 4px;
+  }
+  .challenge h3 { margin-top: 0; color: var(--accent); }
+  .challenge .lead {
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 12px;
+  }
+  /* Exercise */
+  .exercise {
+    margin: 20px 0;
+    padding: 16px 20px;
+    background: var(--accent-soft);
+    border-radius: 4px;
+    font-size: 15px;
+  }
+  .exercise:before {
+    content: "练习 / EXERCISE";
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  /* Table for Chat/Cowork/Code */
+  .surface-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+    background: var(--bg-soft);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .surface-table th, .surface-table td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--rule);
+  }
+  .surface-table th {
+    background: var(--bg-card);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .surface-table td:first-child { color: var(--text); }
+  .surface-table tr:last-child td { border-bottom: none; }
+  /* Footer */
+  footer {
+    padding: 60px 32px 80px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+    margin: 40px auto;
+    opacity: 0.5;
+  }
+  @media (max-width: 600px) {
+    .cover h1 { font-size: 44px; }
+    .cover h2 { font-size: 22px; }
+    .chapter h1 { font-size: 32px; }
+    .chapter h2 { font-size: 22px; }
+    .container, .cover, .toc, section.chapter { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<header class="cover">
+  <div class="cover-inner">
+    <div class="kicker">Anthropic · 2026 年 5 月</div>
+    <h1>创始人手册</h1>
+    <h2>构建 AI 原生创业公司</h2>
+    <div class="cover-meta">
+      <p><strong>原文标题</strong>　The Founder's Playbook: Building an AI-Native Startup</p>
+      <p><strong>发布方</strong>　Anthropic · 2026-05-14 · 36 页</p>
+      <p><strong>本译本</strong>　中文版（技术圈口吻，PMF/MVP/Agentic/CLAUDE.md 等术语保留英文）</p>
+    </div>
+  </div>
+</header>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc-inner">
+    <h3>目录</h3>
+    <ol>
+      <li><a href="#ch1">为 2026 重启的创业生命周期</a></li>
+      <li><a href="#ch2">"创始人"的定义正在改变</a></li>
+      <li><a href="#ch3">Idea 阶段</a></li>
+      <li><a href="#ch4">MVP 阶段</a></li>
+      <li><a href="#ch5">Launch 阶段</a></li>
+      <li><a href="#ch6">Scale 阶段</a></li>
+      <li><a href="#ch7">同样的活，新的规则</a></li>
+    </ol>
+  </div>
+</nav>
+
+<!-- CHAPTER 1 -->
+<section class="chapter" id="ch1">
+  <div class="chapter-inner">
+    <div class="chapter-num">CHAPTER 01</div>
+    <h1>为 2026 重启的创业生命周期</h1>
+
+    <p>AI 正在重塑创业公司的建造方式。一行代码都没写过的创始人，今天能直接发布生产级应用；那种"10 人独角兽"的精瘦团队，已经从草莽逆袭的奇闻变成了主动设计的路径。</p>
+
+    <p>2026 年的 AI 可以写生产代码、做市场调研、综合竞争格局、起草投资人材料、自动化运营 workflow。它把那条连资深技术创始人都要爬一遍的工具/平台/系统学习曲线直接抹平 —— 更重要的是，AI 把"谁有资格开公司、谁能做出产品"这件事彻底拉平了。</p>
+
+    <p>2026 年，一个好 idea 能把创始人带到比以往任何时候都远的位置。Agentic coding 把过去需要一整个工程团队的工作量，压缩成一个创始人自己就能交付的东西。</p>
+
+    <p>传统创业的成长弧线假设：从 idea 到规模化的路径是 <em>验证 → 融资 → 招人 → 建产品 → 再融资 → 增长 → 再招人 → 循环</em>。AI 已经抹掉了每个新阶段都"需要更大团队、不同技能、新一轮融资"的预期。</p>
+
+    <p>这本手册按四个核心阶段（Idea、MVP、Launch、Scale）重新映射创业旅程。我们会拆解：当 AI 成为技术和组织发展的核心时，每个阶段长什么样、每个阶段该用什么工具、用这些工具的创始人在如何压缩时间线。如果你已经准备好从 idea 到 exit 跑最短路径，往下读。</p>
+  </div>
+</section>
+
+<!-- CHAPTER 2 -->
+<section class="chapter" id="ch2">
+  <div class="chapter-inner">
+    <div class="chapter-num">CHAPTER 02</div>
+    <h1>"创始人"的定义正在改变</h1>
+
+    <p>创始人过去是按"能干什么"定义的：技术型创始人写代码，非技术型创始人跑业务、谈单子。但 2026 年创始人能调用的模型、系统和 AI agent，已经把"能 build 的人"和"有值得 build 的 idea 的人"之间的那堵墙拆掉了。</p>
+
+    <p>AI 原生创业公司正在彻底改写"创始人"的含义。一个没有工程背景的人现在能造出生产级软件、把 idea 落地；一个有技术但不懂业务的创始人，也能轻松产出 go-to-market 策略、财务模型、做工精美的 pitch deck。</p>
+
+    <p>过去创始人的大部分时间花在执行模式上：写代码、管人、处理日常运营杂事。在 AI 原生创业公司里，创始人的角色从"独立贡献者"急剧转向"agent 的指挥者" —— 调度那些能读文件、跑命令、执行代码、甚至浏览网页的专属 AI 助手。创始人的注意力上移到更高阶的工作：产生 idea、指挥那些把 idea 落地的系统（AI agent、工具、还存在的那个小团队）。</p>
+
+    <p>AI 作为核心基础设施最革命性的结果是：解锁了有领域专长的非技术创始人。当创始人这个池子不再只是工程背景出身的人，你就会看到一些带着完全不同人生经验的人做出的创业公司 —— 解决那些传统技术创业人才管线从未优先考虑（甚至从未注意到）的真实问题。</p>
+
+    <h2>面向精瘦团队的 AI 工具能力</h2>
+
+    <p>传统创业模型假设：你需要招工程师 build、招销售卖东西、招 ops 跑业务。Headcount 被当作组织动能和产品成熟度的标志。</p>
+
+    <p>2026 年的早期创业公司则在设计上极度精瘦 —— 经常就是创始人单干，或者两三个人。把技术和组织发展都建立在"AI 即基础设施"之上，他们能在扩团队之前就达成产品验证、早期营收、甚至盈利。有三个领域 AI 让创业公司能跑得像一家大得多的组织：研究、agentic coding、关键业务运营的 workflow 自动化。</p>
+
+    <h3>对话式智能与研究</h3>
+    <p><em>定位：每个领域都有的 on-call 专家</em></p>
+
+    <p>想想创始人在第一年里几乎肯定不知道、但又必须懂的所有事：怎么搭工资单系统？怎么规划产品开发 sprint？怎么写一份言简意赅的投资人 memo？</p>
+
+    <p>这类早期问题过去答案都一样 —— <em>找一个懂的人</em>。对一个自筹或者 pre-seed 的创始人来说，这要么消耗本该用在 build 上的时间，要么砸掉一笔本就稀缺的早期资金请顾问。现在他们把 AI 当作横跨任何能想到的领域的 on-call 专家。</p>
+
+    <ul>
+      <li><strong>深度研究</strong>：竞品分析、市场容量测算、财务建模</li>
+      <li><strong>文档起草</strong>：pitch deck、case study、投资人 memo、PRD</li>
+      <li><strong>战略思维伙伴</strong>：唱反调、pre-mortem、情景规划、roadmap 优化</li>
+    </ul>
+
+    <h3>Agentic coding</h3>
+    <p><em>定位：永远 on-call、永不被阻塞的工程师</em></p>
+
+    <p>过去要 build 软件，要么有技术联合创始人、要么外包给开发团队、要么自己 runway 长到能在写第一行生产代码前组建工程团队。</p>
+
+    <p>现在 agentic coding 工具让任何想创业的人都能用自然语言描述要 build 什么，由 AI 来生成、测试、debug、重构生产级代码库 —— 速度和规模相当于一整个工程团队。</p>
+
+    <p>从"我有个 idea"到"我有一个产品"的时间线被压缩了。创始人的角色现在聚焦在"该 build 什么、为什么 build"，而 AI 处理真正能给真实用户用的基础设施的实际建造。</p>
+
+    <h3>Workflow 自动化</h3>
+    <p><em>定位：随叫随到、自动化的 ops 团队</em></p>
+
+    <p>就算一个创始人能像顾问一样做研究、像工程团队一样 build，还是有一整类工作要做：日程安排、更新 CRM、拉每周报表、维护文档、发内容、跟踪合规要求、维护公司运营所依赖的工具和系统之间的连接组织 —— 这些都得有人干。在精瘦创业公司里，这副担子主要落在创始人头上 —— 对本该用在高阶决策上的时间和注意力来说，这是个明显的税。</p>
+
+    <p>AI workflow 自动化卸掉这个税。重复性运营任务可以配置成自动执行：deal 状态变化时 CRM 自动更新、每周报表自我生成、产品文档随产品变化同步更新。关键是，Claude Cowork 能集成创业公司依赖的互联系统 —— 项目管理工具、通讯栈、数据源 —— 不需要专门有人 build 和维护这些集成。在 Day Zero 阶段的创业公司里，那个"专门的人"几乎总是创始人本人。</p>
+
+    <h3>时机与编排是一切</h3>
+
+    <p>能高效驾驭 AI 研究、自动化、agentic coding 能力的创始人，能跑出一家杠杆远大于 headcount 暗示的创业公司。他们也能把大多数时间和精力投入到真正重要的事情上。</p>
+
+    <p>但这种工作不会自动发生 —— 指挥这些 AI 工具的创始人必须知道<strong>怎么用</strong>和<strong>什么时候用</strong>。本手册接下来的内容专门探讨：AI 原生创业路径上，创始人会遇到什么目标和挑战，以及如何在每个阶段有效应用 AI 工具。</p>
+  </div>
+</section>
+
+<!-- CHAPTER 3 -->
+<section class="chapter" id="ch3">
+  <div class="chapter-inner">
+    <div class="chapter-num">CHAPTER 03</div>
+    <h1>Idea 阶段</h1>
+
+    <p>所有创业创始人都从同一个地方出发：一个让你停不下来思考的问题。这是 idea 和现实相撞的阶段：2026 年的创业要想成功，需要一种纪律 —— <strong>在证据足以支撑之前不去 build</strong>。</p>
+
+    <p>这一阶段的工作是研究、客户发现、竞品分析、对反向证据的诚实评估 —— 全部要在你让 Claude Code 生成第一行生产代码之前完成。</p>
+
+    <h2>Idea 阶段的目标</h2>
+
+    <p>处于 Idea 阶段时，创始人的主要目标是<strong>面向研究的验证</strong>：在投入资源 build 之前，拼出一份扎实的证据，证明一个真实的问题存在（并且你提议的解决方案能有效解决它）。</p>
+
+    <p>实操上，Idea 阶段是创始人按大致顺序回答下面这些问题：</p>
+
+    <ul>
+      <li>这个问题是真实的、具体的、频次足够高，值得围绕它 build 吗？</li>
+      <li>谁<strong>具体地</strong>有这个问题？这构成市场吗？</li>
+      <li>有别人在解吗？怎么解的、解得有多好？</li>
+      <li>一个解决方案要做到什么才能真正解掉这个问题？我的 idea 做到了吗？</li>
+    </ul>
+
+    <p>这些追问加起来回答一个终极问题：<strong>这值得 build 吗？</strong></p>
+
+    <p>意思就是：先把话说具体，再行动。"人们觉得报销很烦"是一个观察。"中型公司的财务经理每周花 4 小时以上对账，因为他们现在的工具和会计软件不集成" —— 这是一个可测试的假设。</p>
+
+    <h2>Idea 阶段的退出条件</h2>
+
+    <p>Idea 阶段的退出条件是 <strong>problem-solution fit（问题-方案契合）</strong>。你已经攒出了定性证据（主要来自和真人的对话），证明你在为真实的人解决真实的问题 —— 然后才开始 build 那个解决方案。</p>
+
+    <p>当你能对下面三件事都答"是"时，就可以离开 Idea 阶段：</p>
+
+    <ol>
+      <li><strong>问题真实且具体吗？</strong>这要求你能精确说出：谁经历这个问题、多久遇到一次、严重程度多高、他们现在怎么应对。</li>
+      <li><strong>你的方案是不是真的对应这个问题？</strong>—— 不是你最初假设的那个问题，而是验证过程揭示出来的那个。有时这俩是同一个，但并不总是。</li>
+      <li><strong>信号足够强、值得 build 了吗？</strong>这个阶段你永远拿不到确定性，等确定性本身就是一种失败模式 —— 但你需要足够多的定性证据，让"committing to MVP"成为一个有理由的决定，而不是一次信仰行为。</li>
+    </ol>
+
+    <h2>Idea 阶段的挑战</h2>
+
+    <p>Idea 阶段是创业旅程里最重要的工作所在 —— 因为这里最容易犯下决定性错误：现在把事情搞错，能很快让一个萌芽中的事业脱轨。</p>
+
+    <div class="challenge">
+      <h3>把 build 误认为 validate</h3>
+      <p class="lead">挑战：当技术 blocker 被解除，一个热情高涨的创始人会冒险跳过创业旅程里最重要的工作 —— 验证 idea 是不是真的是人们需要并会用的方案。</p>
+
+      <p>即使在 agentic coding 之前的时代，<strong>42% 的创业公司死于 build 了没人要的东西</strong>。现在 Claude Code 这类 agentic coding 工具已经把"我有 idea"到"我有产品"之间的距离剧烈压缩，这个失败率只会涨。</p>
+
+      <p>对一个有了"突破性 idea"的创始人来说，从未有过比现在更好的时代；但是，"快速、轻易地拉起一个看起来像产品的原型"这件事本身，反直觉地成了 AI 原生创业公司一个真实而危险的存在性风险。</p>
+
+      <p>直到最近，build 还需要真实的开发时间和预算，搭一个基本原型也要几个月。现在技术开发的门槛基本没了，AI 让一个创始人太容易跳过验证、直接开始 build。</p>
+
+      <p>达成 problem-solution fit 要求<strong>先验证假设，再 build</strong>，但许多初次（甚至有经验的）创始人错误地相信 AI 短路了这个要求，把流程变成了：<em>有 idea → 立刻 build prototype → 把 prototype 的存在当作验证</em>。Prototype 成了"相信假设一直是对的"的理由 —— 但从未真正测试它到底是不是真的。</p>
+
+      <p>可工作的 prototype 很容易被误认为是"解决真实问题"的硬证据，但它不是。Prototype 真正的用处是当作一个"压力测试道具"，用来和潜在用户对话。这些对话本身才是真正的证据。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>过早 scaling</h3>
+      <p class="lead">挑战：当 build 变得轻松、即时，你可以把"执行"远远 scale 到业务需要之前。</p>
+
+      <p>过早 scaling 意味着：在你真正验证一条产品路径值得 commit 之前，就 commit 了。</p>
+
+      <p>这一直是创业杀手，但 AI 让创始人极易在不察觉的情况下掉进这个陷阱。Agentic coding 助手太强，太容易让"执行"远跑在"problem-solution fit 验证"之前 —— 而你甚至没意识到自己已经偏航。</p>
+
+      <p>它会围绕一个根本错误的前提去生成、测试、debug、重构代码库 —— 跟围绕一个好 idea 时同样热情。系统里的智能是<strong>你的</strong>。这个阶段的最高指令是：让你的"判断"始终跑在"建造"之前，特别是当建造如此快速、如此轻松的时候。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>客观性丧失</h3>
+      <p class="lead">挑战：让 AI 工具找证据支持你已经相信的东西，它就会找到。Confirmation bias 现在配上了一台研究引擎。</p>
+
+      <p>Confirmation bias 一直是创业中的职业病：创始人本性上对自己的 idea 充满激情。现在 AI 工具给 confirmation bias 加了一次大幅 powerup。让 AI 验证你的创业 idea，它会找到支持证据；让它测算潜在市场，它会给出让你 TAM 看起来 fundable 的数字。</p>
+
+      <p>AI 跟着你的指挥走 —— 这意味着一个不问硬问题的创始人，现在能比以往任何时候都快地构造出一份精致、看起来"有研究的"、支撑一个坏 idea 的论证 —— 同时还觉得自己确实在做尽职调查。解药是同一个工具，只是指向相反方向：AI 给 idea 做压力测试和验证它一样彻底。</p>
+
+      <p>当研究和结构化的对抗性思维浮现出"你的 idea 需要修正"的证据时，这就是 pivot 的信号。</p>
+    </div>
+
+    <h2>Claude 怎么帮 Idea 阶段的创始人</h2>
+
+    <p>推动你的 AI 原生创业概念走过 Idea 阶段会感觉像永远过不完。你是创始人，你只想 build。但这个至关重要的启动阶段在本质上是研究和验证练习，意味着你应该选那些帮你<strong>更严格地思考</strong>的工具，而不是上来就猛写代码。下面是在 Idea 阶段如何跨 Claude 的几个产品形态（Chat、Claude Cowork、Claude Code）尽快走完，同时把尽调做到位。</p>
+
+    <div class="callout">
+      <div class="label">Chat / Cowork / Code · 选哪个</div>
+      <p>AI 让创始人更快交付、自动化乏味工作、规模化运营 —— 但你用哪个产品形态很重要。</p>
+      <p><strong>Chat</strong> —— 不离开当前应用的快速交换。用于跑公司过程中的不断零碎事项：从一份密密麻麻的投资人 memo 里拉一句要点、董事会前 sanity check 一个声明、消化一条很长的 Slack 线程。</p>
+      <p><strong>Claude Cowork</strong> —— 真正花时间的知识工作：从多个来源拉信息、消化、产出一个成品（文档、deck、表格）。比如把一文件夹客户访谈转录变成下次产品 review 的主题发现文档；融资前从十几个供应商网站搭出竞品全景；每周一早上自动拉取所有连接工具的指标、把周 KPI 简报投进共享文件夹。</p>
+      <p><strong>Claude Code</strong> —— 给你团队工程师的 agentic coding 环境：直接访问代码库、Plan Mode、git 集成、本地/IDE/沙箱化云环境。精瘦团队在增长中的代码库里发新功能、把 MVP 期的遗留代码迁移、不用等更多 headcount 就从 prototype 走到 production。</p>
+      <table class="surface-table">
+        <thead><tr><th>任务</th><th>用哪个</th><th>为什么</th></tr></thead>
+        <tbody>
+          <tr><td>一个问题 / 一次改写 / 快速 brainstorm</td><td>Chat</td><td>快、对话式、零配置</td></tr>
+          <tr><td>研究、分析、从你的文件 / 系统构建成品</td><td>Claude Cowork</td><td>folder 访问、connector、skill、定时跑</td></tr>
+          <tr><td>写、测试、发软件</td><td>Claude Code</td><td>代码库访问、diff、git、开发环境</td></tr>
+        </tbody>
+      </table>
+      <p><em>底层都是同一个 Claude，变的是它周围的工作空间。</em></p>
+    </div>
+
+    <h3>定义并压力测试你的问题假设</h3>
+
+    <p>你自己的领域专长和前期研究已经生成了一个假设。第一件事是把它打磨到<strong>真的可测试</strong>。Claude 在这里尤其有用：逼你把话说具体 —— 谁<strong>具体</strong>有这个问题、多频繁、多严重、他们现在怎么应对。一个问题陈述如果无法精确回答这些，就还没准备好被验证。</p>
+
+    <div class="exercise">和 Claude 一起把问题陈述打磨到一个可测试的假设。比如"合同 review 太慢"几乎没法测试；但"中型公司的内部法务团队在每个合同 review 周期上花 3 天以上，因为 redline 是通过邮件线程而非单一版本受控文档管理的" —— 这就非常可测试。</div>
+
+    <p>下一步：让 Claude 对你的 idea 唱反调，找反驳你的假设的反向证据。这能浮现出在"支持性综述"里会被悄悄降权的：负面市场信号、失败的竞争者、用户行为模式、结构性障碍。</p>
+
+    <p>目标是：在你做客户发现之前，已经把假设和最强反方观点对撞过一轮，让那些信息式用户访谈真的是开放性的，而不是"找确认"。</p>
+
+    <blockquote>把 Claude 当作结构化的"魔鬼代言人"，是 AI 创业生命周期里每个阶段都适用的核心用法。</blockquote>
+
+    <h3>市场研究和绘制竞品格局</h3>
+
+    <h4>评估你的竞争对手</h4>
+    <p>有种创业公司特有的现象叫 <em>competitor neglect</em>：太聚焦自己的愿景和执行，以至于系统性地低估同一空间里别人在做什么。AI 提供了解药：让 Claude 写出"为什么这个赛道的某个竞争对手会成功而你不会"这种最有说服力的论证。</p>
+
+    <p>Claude 能分析为什么对方的方法实际更好、为什么用户会选他们、为什么你认为的差异化护城河可能没那么牢。</p>
+
+    <div class="exercise">让 Claude 按层级画出你的竞品全景：直接竞争对手、间接竞争对手、潜在收购方、可能切入你赛道的相邻玩家。然后让它论证每一层都对你的成功构成真威胁 —— 不是那种最容易被打发的版本。</div>
+
+    <h4>市场调研</h4>
+    <p>Claude Code 可以综合公开的用户反馈、浮现重复出现的抱怨和未满足需求。附加收益：这本质上是在免费做你竞争对手的客户的定性研究。</p>
+
+    <div class="exercise">让 Claude Cowork 综合关键来源上的竞品 review，列出现有方案没解决的最常见抱怨。如果你的假设命中其中一个或多个 —— problem-solution fit 的强证据。如果没命中 —— 这也值得知道。</div>
+
+    <p>Claude Cowork 还能从密集的行业报告、分析师 filing、市场研究文档里抽取相关信息和数字；这些干净、综合过的输入就成了 Claude 后续分析工作的理想 context。</p>
+
+    <div class="exercise">用公开数据构建 TAM/SAM/SOM 模型，并对其背后的假设做压力测试。判断市场是在扩张、整合还是成熟期；这个 context 会影响你怎么思考时机和差异化。Map 买方版图：谁掌握预算、谁影响决策、这俩是不是同一个人。</div>
+
+    <h4>趋势分析</h4>
+    <p>最后，用 Claude 倾听早期指标，判断你是不是在正确的时机切入。追踪那些已经在讨论你这个问题的 subreddit 和 LinkedIn 群组，注意用户描述问题时所用的精确语言。让 Claude 找出曾经解过类似问题的"对照市场"，提取什么 work、什么没 work。浮现可能加速或威胁这个机会的监管、技术、人口结构趋势。</p>
+
+    <div class="exercise">让 Claude 找出未来两年内可能显著影响你市场的 3 个外部趋势（监管、技术或人口结构），并评估每一个对你的具体假设是顺风还是逆风。</div>
+
+    <blockquote>市场研究和竞品 mapping 不是一次性练习。你会在 MVP 和 Launch 阶段持续发现新东西、迭代你的思考，所以每当假设演化时，这些练习都要重做。</blockquote>
+
+    <h3>规划和设计客户发现</h3>
+
+    <p>你从和潜在用户的对话里学到的东西的质量，由两件事决定：(1) 你问的问题的质量，(2) 你问的人对不对。Claude 在客户发现上特别有用 —— 该和谁聊、该问什么、怎么消化听到的东西。</p>
+
+    <h4>该和谁聊</h4>
+    <p>一个精确的目标画像比一份长长的联系人名单有价值得多 —— 包括最可能强烈经历这个问题的具体职位、公司类型、团队结构、资历级别。然后找出这些人实际能联系到的地方 —— 他们聚集的社区、活动、LinkedIn 群组、Slack workspace —— 并基于他们离问题有多近，建一个优先级框架。</p>
+
+    <h4>该问什么</h4>
+    <p>有了目标画像，用 Claude 构建访谈框架本身：合适的问题、合适的顺序，设计成<strong>浮现人们实际做了什么</strong>而不是<strong>他们认为他们会做什么</strong>。一个新手创始人常犯的错是问一个泛泛的、开放的、关于未来的问题（"你会用这种东西吗？"），而不是具体询问相关的过去（"告诉我你上一次处理这个问题的情形")。</p>
+
+    <p>Claude 也能标出你的草拟问题里哪些是诱导性的、太宽泛、或者倾向于产生噪声而非信号。Claude 还能帮你设计 follow-up 问题，去探查回避或在重要问题上含糊其辞的回答。</p>
+
+    <p>如果你的假设涉及多个 persona，Claude 也能为每个设计不同的问题集。一个财务经理和一个 CFO 对同一个问题有不同的关系，单一访谈框架会抹平这种区分。</p>
+
+    <div class="exercise">先手写你的访谈问题，再让 Claude 审计。明确让它标出任何诱导性、面向未来、太宽、或者倾向于产生"社会期许"答案而非诚实答案的问题。然后让它为访谈中最可能产生回避的两到三个时刻建议 follow-up 探查。</div>
+
+    <h4>访谈后分析</h4>
+    <p>每次对话之后用 Claude debrief：把笔记喂给它，让它指出什么确认了你的假设、什么挑战了它、什么真正令人意外。攒到一批访谈之后，把全套访谈笔记跑过 Claude Cowork，浮现重复主题、矛盾、双向最强信号。然后把综合输出再丢回 Claude，让它标出你自己对数据的解读哪里可能是在 pattern-match 到"你希望听到的"而不是"实际在那里的"。</p>
+
+    <div class="exercise">每 5 次访谈之后，让 Claude Cowork 综合你的笔记并产出两份清单：支持你假设的证据，和挑战你假设的证据。如果第一份明显比第二份长，问 Claude：这个不对称真的反映数据本身，还是反映你期望找到的东西？</div>
+
+    <h4>客户外联和排期</h4>
+    <p>用 Claude Cowork 自动化建联系人列表、做 outreach、排用户访谈的运营负担。Claude Cowork 可以用你在 Claude 里定义的目标画像（职位、公司类型、资历）来研究并编一个有结构的潜在客户列表（含验证过的联系方式）。然后它在 scale 上起草个性化的 outreach 邮件，按每个人的角色和上下文定制。</p>
+
+    <p>回复进来时，它通过 MCP 连接 Gmail 和 Google Calendar 来管线程、处理排期请求、把访谈进日历。Workflow 持续：Claude Cowork 按既定节奏生成 follow-up 草稿（比如对未回复的联系人在第 7 天 follow-up），每一步完成都更新你的追踪表，你随时知道每个潜在客户在 pipeline 的哪个阶段。</p>
+
+    <div class="exercise">给 Claude Cowork 你验证过的访谈目标画像，让它建潜在客户列表、起草个性化 outreach 序列、设置一个追踪表（含 outreach 状态、follow-up 节奏、访谈完成情况）。然后让它跑协调工作，你专心准备对话本身。</div>
+
+    <h3>设计你的最终方案概念</h3>
+
+    <p>验证工作做完了：问题真实、你知道谁有这个问题、你有一个证据支持的方案概念。用 Claude 从各个角度发展和挑战你的方案概念：哪里有缺口？有什么替代方案？这个方案在 scale 时要成立，前提是什么？</p>
+
+    <p>这是一个重要的"现实复核检查点"：这个设计真的对应验证过程揭示的那个问题，而不是你最初假设的那个？</p>
+
+    <div class="exercise">把你的方案概念呈现给 Claude，让它指出你的设计最依赖的 3 个假设。然后问每个假设要成立需要什么、如果有一个不成立后果是什么。</div>
+
+    <h3>用 Claude Code 构建轻量原型</h3>
+
+    <p>现在到了有意思的部分：有了验证过的假设和压力测试过的方案概念，你终于准备好 build 点东西了。</p>
+
+    <p>这是 Idea 阶段里 Claude Code 登场的时刻。即使你之前一直在小打小闹，现在是你生成<strong>官方轻量原型</strong>的时点 —— 把 idea 摆到真人面前、得到真实反应所需的最小表面积。</p>
+
+    <p>你还不是在 build 一个真实的产品；你在构造一个 idea 的功能样本，用来在客户和投资人对话里使用。真实用户对一个能真正摸到的东西的反应，会告诉你 12 场 problem-solution 发现访谈都告诉不了的事情。之前你是在确认你要解的问题真实；现在你是请潜在用户和提议的方案<strong>互动</strong>。</p>
+
+    <div class="exercise">定义你的方案所依赖的<strong>单一核心交互</strong>。让 Claude Code 只 build 那个。做出来后，把它摆到 5 个验证过的目标画像内的人面前，请他们试。你在那 5 场对话里学到的东西决定：继续 build，还是回到画板。</div>
+  </div>
+</section>
+
+<!-- CHAPTER 4 -->
+<section class="chapter" id="ch4">
+  <div class="chapter-inner">
+    <div class="chapter-num">CHAPTER 04</div>
+    <h1>MVP 阶段</h1>
+
+    <p>很多创始人把 MVP 阶段当成"建造阶段"，但 MVP 阶段在本质上仍是一次"证据收集"练习。区别在于：你现在收集的证据是关于<strong>方案</strong>的，而不是问题空间 —— 具体来说，是关于一个真实、可识别的人群是否觉得它够有价值去用、回访、付费、和/或告诉别人。</p>
+
+    <h2>MVP 阶段的目标</h2>
+
+    <p>作为 AI 原生创业公司的创始人，你的目标是：把验证过的问题翻译成一个真实用户会真的去用的可工作产品。这<strong>不</strong>是 roadmap 上每个功能都齐全的完整版本，而是 idea 最小、最聚焦的迭代 —— 把一个真实方案摆到真实用户面前，产生 PMF 的真实证据。</p>
+
+    <p>同时，<strong>你现在怎么 build 决定以后能做什么</strong>。这意味着 MVP 阶段还有第二个同等重要的目标：在不积累那种会 compound 的技术债的前提下移动得快 —— 那种技术债会在真实用户开始大量到来时回头咬你。</p>
+
+    <p>最后，从 day one 投资 <em>persistent context</em> 是让 AI 持续作为力量倍增器而不是熵的来源的关键。在 AI 原生创业公司里，你的代码库是你和 AI 在一次次 session 中共同协作的东西，所以可读性是基础。跳过规格说明、架构决策、上下文文件（比如 CLAUDE.md）的创始人会撞上一面可预测的墙：每个新 session 都要重新解释代码库，AI 生成的改动也偏离原始愿景。</p>
+
+    <h2>MVP 阶段的退出条件</h2>
+
+    <p>MVP 阶段的退出条件是 <strong>PMF 的真实证据</strong>：证明一个具体、可识别的用户群体觉得产品够有价值，到了愿意回访（retention）、付费（revenue）、或者告诉别人（referral）的程度。</p>
+
+    <h2>MVP 阶段的挑战</h2>
+
+    <p>MVP 阶段创始人的最高指令是<strong>速度</strong>和<strong>判断力</strong>。这里的挑战围绕：你能不能 build 对的东西、用对的方式、足够快地 build 出来 —— 而不抄那些以后要付代价的近路。</p>
+
+    <div class="challenge">
+      <h3>Agentic 技术债</h3>
+      <p class="lead">挑战：因为 AI 本质上消除了每一个曾经控制"什么能进 production"的自然瓶颈，速度是被保证的。但当速度成为创始人在 MVP 构建中考虑的唯一变量时，他们就有积累难以偿还的技术债的风险。</p>
+
+      <p>MVP 阶段有些技术债是合适的，前提是你明白它必须在 scaling 之前管控。它逐渐积累，可以随时间或一次专门的 sprint 清理。然而，<strong>AI 技术债是 compound 的</strong>。</p>
+
+      <p>没有把规格说明和架构约束写在 AI 能读到的地方，每个 session 都会从头推导基础决策，那些决策会漂移。你最终会得到一个没有连贯心智模型的代码库 —— 不是因为某个单独的部件糟糕，而是因为这些部件从来没被设计成能拼到一起。这是个真问题，而且它倾向于<strong>晚才浮现</strong>。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>误以为找到了 PMF</h3>
+      <p class="lead">挑战：AI 工具能生成漂亮的早期数字，但这些不是市场需要你产品的保证。</p>
+
+      <p>早期动能是创始人能体验到的、心理上最强力的体验之一。经过几周或几个月的验证和谨慎、有纪律的建造之后，发布产品感觉像是对"你一直是对的"的确认。</p>
+
+      <p>Agentic coding 工具能让你比以往任何时候都更快地到达这个时刻 —— 但<strong>早期 traction 不等于 PMF</strong>。发布期的能量来自短暂的力量：你创始人的朋友、投资人 portfolio 里其他公司的潜在买家、一个把你顶上 Hacker News 头条的 spike。可惜，这些里没有一个能可靠地预测第 6 周或第 12 周、初始热度退去之后会发生什么。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>零摩擦的 scope creep</h3>
+      <p class="lead">挑战：当建造感觉毫不费力、几乎免费时，总有"再加一个酷功能"或"再处理一个边界情况"的诱惑。这种 scope creep 弊大于利。</p>
+
+      <p>Scope creep 一直是创业风险。区别在于：传统对它的天然制约 —— 工程时间的真实成本 —— 现在不存在了，加一个功能只要一个下午而不是一个 sprint。</p>
+
+      <p>这里的挑战是：每一个单独的添加都站得住。产品当然应该处理那个边界情况；用户当然会想要那个 workflow。在当下它们不像 scope creep，因为 agentic coding 让每一个的建造成本都很低 —— 但随着你的产品蔓延到原始边界之外，你会失去方向和动能。</p>
+
+      <p>解药是<strong>一份在 build 开始之前写好的 scope 定义</strong>：描述产品做什么、刻意不做什么、以及哪些来自真实用户的具体证据会 justify 添加新东西。这把决策点从"我们应该 build 这个吗？"变成"是不是有相当大比例的用户告诉我们，没有这个他们就没法从产品里得到价值？"</p>
+    </div>
+
+    <div class="challenge">
+      <h3>因经验不足而不安全</h3>
+      <p class="lead">挑战：在没有先理解基本安全原理的情况下用 AI 工具把应用赶进市场的创始人，最终把用户暴露在可预防的风险下。</p>
+
+      <p>残酷的事实是：agentic coding 工具生成的是"能工作的代码"，不是"本质上安全的代码"。功能性代码容易判断 —— 要么 feature 能工作要么不能。<strong>安全漏洞在被利用之前是不可见的</strong>，意味着没有自然反馈回路提醒第一次创业的创始人"出问题了"。但把一个活的 MVP 发给真实用户意味着真实数据、真实暴露、出事就有真实后果。</p>
+
+      <p>轻视安全不是 AI 原生项目独有的。各个时代的自筹创业公司经常把安全考虑拖到 build 晚期，有时拖到接近 production 上线的边缘。<strong>在任何用户碰到你的 app 或方案之前做一次安全 review，是把 MVP 放到世界上的最低负责门槛。</strong></p>
+    </div>
+
+    <h2>Claude 怎么帮 MVP 阶段的创始人</h2>
+
+    <h3>在 build 之前定义你的架构</h3>
+
+    <p>在 Claude Code 写第一行生产代码之前，用 Claude 定义并文档化将治理这个阶段所有建造的架构决策：要遵循的 pattern、要避免的依赖、做了哪些 trade-off 以及为什么。这份输出会成为一份聚焦的<strong>架构上下文文档</strong>，也建立 Claude Code 运行的护栏。</p>
+
+    <p>没有这个 context，每个 session 都从头开始，Claude Code 被迫推断它自己的结构假设。让 Claude Code 没有护栏地 build，会产出一个功能上能工作但结构上不连贯的代码库 —— 在不连贯的代码库上迭代和 scale 最终是浪费时间和 token。迟早会到一个点，代码不可避免地崩塌，逼你重头来过。</p>
+
+    <div class="exercise">在打开 Claude Code 之前，先打开 Claude，描述你在 build 什么：核心解决什么问题、服务哪些用户、未来 6 个月你现实预期的规模。让它帮你定义应该治理 MVP 构建的架构原则、考虑约束应避免的依赖、以及你在这个阶段有意识接受的 trade-off。然后把这份输出保存成 <code>CLAUDE.md</code> markdown 文件 —— 这是你 build 的第一件 artifact，也是后续每个 session 都要依赖的那一个。CLAUDE.md 文件作为 Claude Code 的项目级指令，在 Agent SDK 运行于该目录时自动被读取。在功能上它们是你项目的持久"记忆"。</div>
+
+    <h3>定义并执行你的 MVP scope</h3>
+
+    <p>无摩擦的 scope creep 是 AI 时代 MVP 的标志性失败模式之一。就像你定义并文档化了产品的应用架构一样，你也需要在任何 feature 开建之前定义你的 MVP scope。</p>
+
+    <p>Claude 能帮你创建一份 scope 文档，描述 MVP 产品做什么、刻意不做什么、以及 feature 增添的判定准则：什么来自真实用户的具体证据会 justify 在当前点添加新东西。</p>
+
+    <p>当新功能 idea 浮现（一定会），用 Claude 压力测试：这是用户的真实信号，还是被包装成"产品思考"的创始人热情。</p>
+
+    <h3>用 Claude Code 构建你的 MVP</h3>
+
+    <p>架构和 scope 定义之后，Claude Code 成为主要的 MVP 构建工具。用它生成、测试、debug、迭代代码库 —— 但把每个 session 当作执行你已经做出的产品决策，<strong>而不是临场加新决策的机会</strong>。</p>
+
+    <p>每个 Claude Code session 开始时：(1) 重温你的 scope 文档，(2) 提供你的 CLAUDE.md 架构上下文文档。Session 结束时用本次浮现的决策更新它。目标是一个你能解释其结构的代码库，而不是一个仅仅能跑起来的代码库。</p>
+
+    <div class="exercise">为你的 Claude Code 工作创建一个简单的 session 模板：包含架构上下文文档、本次 session 的具体任务、要遵守的约束或 pattern。每个 session 结束时往上下文文档里加一条简短日志：本次 build 了什么、做了什么决策、引入了什么假设。每个 session 五分钟的文档化，是对抗"compound 到不可管理"的架构漂移的廉价保险。</div>
+
+    <h3>在任何用户碰到之前做安全 review</h3>
+
+    <p>作为 AI 原生创业创始人，你的责任是：知道你的代码库里有什么、理解任何潜在暴露向量、不把明显漏洞发给信任你数据的真实用户。</p>
+
+    <p>Claude 能对 AI 生成的代码做有用的初步安全 review，也能帮识别常见漏洞。在发布前把这个习惯做进 loop 是好的。但它<strong>不是</strong>安全工具的替代品，更不是高 stakes 下人工 reviewer 的替代品 —— 把它当替代品的创始人是最终上了 breach 新闻的那些。</p>
+
+    <p>Claude Code Security 更进一步：它扫描代码库找安全漏洞，并给出供人工 review 的定向补丁建议，浮现传统方法可能漏掉的问题。</p>
+
+    <blockquote>注：本手册发布时 Claude Code Security 是受限 beta，把它接进 workflow 前先看一下当前可用性。</blockquote>
+
+    <div class="exercise">部署给任何真实用户之前，把你的核心应用代码以一个具体 brief 跑过 Claude：review 身份验证和 session 处理、API 响应里的数据暴露、输入校验和注入风险、有已知漏洞的依赖。认真对待每个发现，评估是否需要修复 —— 任何涉及身份验证、密钥、数据处理的事必须人工 review。</div>
+
+    <h3>在发布前 build 你的度量框架</h3>
+
+    <p>那些把早期 traction 误认作 PMF 的创始人，通常就是那些发布后才开始跟踪数据的人 —— 用的指标是为了证明"什么 work 了"而不是浮现"什么没 work"。解药是在第一个用户出现之前就建立度量框架。</p>
+
+    <p>用 Claude 定义对你具体产品哪些指标重要、benchmark 是什么、数据里什么 pattern 构成真正的 PMF 而不是好看的噪声。具体地：在你发布 MVP 之前就设好 retention benchmark、激活准则、Day 7 和 Day 30 目标。</p>
+
+    <p>接下来，为你的具体产品定义<strong>false positive</strong>长什么样：注册但未激活、有营收但无 retention、初始热情但无重复使用。当数据到来时，让 Claude 对你自己的 traction 做反方陈词：质疑者会怎么看这些数字？</p>
+
+    <h3>管理 discovery 和用户反馈的运营</h3>
+
+    <p>真实用户进入产品后，运营层会快速膨胀。Claude Cowork 处理那些"重要但乏味"的工作：建和维护用户联系人列表、跑 outreach 序列、排反馈 session、分流 bug 报告、追踪迭代周期。Idea 阶段管 discovery 运营的同一套 MCP 集成在这里也适用。</p>
+
+    <p>对用户反馈的细微解释保持<strong>人在 loop 里</strong>。用户说"这很棒，但我希望它也能……"需要解释：这是核心需求还是 nice-to-have？是这个客户特有的还是代表一个 segment？缺的 feature 才是真问题，还是 onboarding 上游有别的东西出错了？没有工具能回答这些。</p>
+
+    <div class="exercise">配置 Claude Cowork 跑你的 MVP 阶段反馈回路：起草发给早期用户的 outreach、排反馈 session、为 bug 报告和 feature 请求设计结构化录入流程、写每周综述。先自己 review 综述；之后可以让 Claude 分析信息抓你可能漏掉的重要点。</div>
+
+    <h3>向着证据迭代，而不是向着"完成度"</h3>
+
+    <p>MVP 阶段在你有 PMF 真实证据时结束，无论产品感觉有多"成品"。声明"我们已经达成 PMF、可以从 MVP 阶段进入 Launch 阶段"最终是一次判断练习 —— 结合创始人直觉和收集的证据。下面有一些有用的试纸：</p>
+
+    <ul>
+      <li><strong>Sean Ellis 测试</strong>：问你的活跃用户："如果你再也不能用这个产品你会怎么感觉？"如果超过 40% 答"非常失望"，这是一个有意义的 PMF 指标。</li>
+      <li><strong>Effort 测试</strong>：PMF 前，retention 需要持续干预 —— 频繁 outreach、激励、个人 follow-up、创始人投入英雄式的精力让用户保持参与。PMF 后，产品开始自己做这件事。当事情从"推"变成"拉"，这个 effort 的变化是最清晰的"有真东西发生了"的信号之一。</li>
+    </ul>
+
+    <p>最终没有单一数据点能确认 PMF，因为它是一种 pattern —— 必须跨多个迭代周期保持，你才能确定地这么叫它。</p>
+
+    <h3>当证据要求时 pivot</h3>
+
+    <p>如果你做了所有这些工作还是到不了 PMF 怎么办？结果不确认你最初的方向，<strong>不是失败 —— 是系统在工作</strong>：MVP 阶段就是设计来在你在错误答案上过度投入之前浮现这种信息的。</p>
+
+    <p>当数据不支持当前产品时，用 Claude 去消化数据在告诉你什么：</p>
+
+    <ul>
+      <li><strong>探索另外的客户 segment</strong>。也许那些没转化的用户从一开始就不是合适目标。合适受众通常已经在你数据里，只是被低估了。</li>
+      <li><strong>调整产品价值主张</strong>。也许你有正确的受众但 MVP 没和用户产生共鸣。调整 onboarding、messaging、或核心 feature 的强调，可以在不改你已经 build 的东西的前提下修这个。</li>
+    </ul>
+
+    <p>对"断点深到需要更根本变化"的可能性保持开放。</p>
+
+    <div class="exercise">如果你做了 3 个或更多迭代周期、PMF benchmark 没有有意义移动，让 Claude 在决定下一步之前跑一次诊断。喂它你的 retention 数据、用户反馈、原始问题假设，问它三个问题：(1) 这个数据里有没有一个 segment 反应明显不同？(2) 设计价值和体验价值的差距是 positioning 问题还是产品问题？(3) 当前产品要找到真正的 PMF，前提是什么？基于你看到的，那个情景现实吗？让答案决定你是调整、pivot、还是回到 Idea 阶段。</div>
+  </div>
+</section>
+
+<!-- CHAPTER 5 -->
+<section class="chapter" id="ch5">
+  <div class="chapter-inner">
+    <div class="chapter-num">CHAPTER 05</div>
+    <h1>Launch 阶段</h1>
+
+    <p>如果说 MVP 阶段在证明"你的产品值得存在"，Launch 阶段就在证明"你的<strong>业务</strong>值得增长"。</p>
+
+    <h2>Launch 阶段的目标</h2>
+
+    <p>Launch 阶段，创业创始人必须把早期 traction 变成一个可重复、可持续的增长引擎。除了让产品 production-ready，你还必须在 build 一个围绕产品的真正公司的同时，硬化它下面的基础设施。</p>
+
+    <p>创业公司在 Idea 和 MVP 阶段天然是创始人为中心的 —— 因为你需要完整的态势感知和紧密的反馈回路。但现在，那些还在亲自把每根线都攥手里的创始人会变成 Launch 阶段的瓶颈。目标不是把自己从公司里抽离，而是 build 运营系统，把你的注意力释放出来去做只有创始人能做的决定。</p>
+
+    <h2>Launch 阶段的退出条件</h2>
+
+    <p>Launch 阶段的退出条件有三个要素：</p>
+
+    <ol>
+      <li><strong>增长可重复且渠道驱动</strong>。你不只是在保住用户 —— 你是通过单位经济模型清晰的具体渠道在可预测地获取用户。CAC、LTV、payback period 是你知道并能辩护的数字。</li>
+      <li><strong>产品能处理 production workload</strong>。基础设施硬化、安全和合规就位、可靠性在真实 production 条件下保持（不只是你测试过的那些条件）。</li>
+      <li><strong>运营在没有创始人瓶颈下跑</strong>。流程存在、自动化到位。你不再是亲自处理 support、triage、sprint 规划、报表的人。</li>
+    </ol>
+
+    <h2>Launch 阶段的挑战</h2>
+
+    <p>找到 PMF 是早期创业生命周期里最难的问题。现在，创始人的挑战变成<strong>保住它</strong>。Launch 阶段是那些找到了真正产品 traction 的公司可能因为围绕产品的组织跟不上而散架的地方。下面是要警惕的失败模式。</p>
+
+    <div class="challenge">
+      <h3>技术债到期</h3>
+      <p class="lead">挑战：为速度和验证 build 的 MVP 代码库跑得够好、证明了产品能 work，但 production 流量、新 feature、不断增长的复杂度正在把那些抄过的近路暴露出来。</p>
+
+      <p>MVP 阶段，积累一些技术债是为速度做的合理 trade-off。Launch 阶段，那笔债开始计利息，拖得越久修起来越贵。</p>
+
+      <p>解法包括：系统性架构审计找结构性弱点、有针对性的重构修最严重的那些、有意义地扩大测试覆盖让下一轮 feature 工作不重新引入相同问题。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>创始人成为瓶颈</h3>
+      <p class="lead">挑战：MVP 阶段创始人在每个 loop 里是资产。Launch 阶段，随着 support 量增加、产品决策堆积、运营复杂度倍增，同样的本能变成约束。</p>
+
+      <p>从"做事"转向"设计做事的系统"是创业生命周期里最难的转变之一。因为很少有清晰的"它发生了"的时刻，风险是你完全错过它，停留在 builder 模式而组织在你周围停滞。征兆包括：本该一小时的决定现在你需要一周去处理；support 请求堆积因为只有你知道答案；运营任务只有在你个人记得时才发生。</p>
+
+      <p>解决办法是对你亲自处理的每件事做一次彻底审计，从最小任务到最高 stake 的决定 —— 找出什么能系统化、什么能委派、什么真的还值得创始人时间和注意力。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>安全和合规不再能拖</h3>
+      <p class="lead">挑战：MVP 阶段把安全和合规措施保持简单 OK，但现在 —— 真实用户、真实数据、可能桌上有企业合同 —— 它变成负债。</p>
+
+      <p>MVP 阶段，少量 beta 用户、没有敏感数据在 production，安全漏洞是理论风险。从产品进入 production、真实用户依赖于你的那一刻起，假设变成非常真实的暴露风险。此外，对原型不适用的合规要求，在你开始处理客户数据、处理支付、卖到受监管行业的那一刻肯定就适用了。</p>
+
+      <p>解决办法是：在 production scale 到达<strong>之前</strong>做系统性的安全和合规 review，而不是之后 —— 把浮现的一切当作下一波用户到达之前必须 remediation 的，而不是建议。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>没准备好就扩张</h3>
+      <p class="lead">挑战：新市场和新融资机会看起来像增长机会。它们也可能是 PMF 去死的地方。</p>
+
+      <p>你 build 的初始 traction 是真实的，但它也是<strong>对你早期受众</strong>而言的。太早扩张到一个和原始市场显著不同的市场，会引入新的用户行为、合规要求、支付基础设施、和基准期望 —— 你的产品没围绕这些设计。突然之间变量太多、你失去了清楚解读自己数据的能力。你也面临"在追未经验证的新受众时忽视原始用户基础"的风险。</p>
+    </div>
+
+    <h2>Claude 怎么帮 Launch 阶段的创始人</h2>
+
+    <p>Claude 的三种形态在 Launch 阶段都被全面使用，并且互相支撑：每个工具的输出都成为另两个的输入。结果有机地 compound，同时用三个工具的创始人得到的远超它们之和。</p>
+
+    <p>这就是 ultra-lean 创业模型在结构上可能的原因。当 Claude Code 建产品、Claude Cowork 建围绕产品的公司、Claude 帮把产品和组织知识运营化时，一个小团队可以跑得像它体量 n 倍的公司。</p>
+
+    <h3>在技术债 compound 前修它</h3>
+
+    <p>你的 MVP 代码库能 work，但也需要一次系统性 remediation pass —— 找任何可能变成结构性负债的技术债。</p>
+
+    <p>先用 Claude Code 做完整架构审计：找出代码库哪里脆、哪些近路会变成昂贵维护、哪里测试覆盖薄到下一轮 feature 工作会重新引入相同问题。</p>
+
+    <p>把 Claude Code 的审计发现喂回 Claude 来 triage 和排序 remediation 工作：什么必须在下次 release 前修、什么可以等一个 sprint、什么是给定当前阶段可接受的持续债。这也是文档化 MVP 阶段做出的架构决策的时刻（那些只活在你脑子里、当时没时间写下来的）。把它们放进 CLAUDE.md，确保未来每个 Claude Code session 从对"系统怎么设计、为什么这么设计"的共享理解开始。</p>
+
+    <div class="exercise">让 Claude Code 审计你的 MVP 代码库，产出一份按优先级排序的结构性弱点、测试覆盖缺口、重构候选清单。然后把清单喂给 Claude，让它跨多个 sprint 排序 remediation 工作：必须先处理的重大问题、可以与 feature 开发并行处理的、可以等的。</div>
+
+    <h3>build 取代创始人注意力的系统</h3>
+
+    <p>build 那些把你的注意力释放出来去处理只有创始人能处理的责任的运营系统，要求你<strong>精确知道你的注意力去哪了</strong>。用 Claude Cowork 对你当前的运营负载做一次结构化审计：文档化每一个重复任务、每一个落到你桌上的决策、每一个只因为你亲自记得才发生的 workflow。然后让 Claude Cowork 把这份清单分类：什么能完全自动化、什么需要人但不必是你、什么真的需要创始人判断。</p>
+
+    <p>审计完成后，用 Claude Cowork 设计自动化候选的 workflow 逻辑：什么触发每个 workflow、决策规则是什么、输出长什么样、完成时去哪。</p>
+
+    <h3>把安全和合规变成产品 workstream</h3>
+
+    <p>用 Claude Code 浮现 SOC 2、GDPR、HIPAA 审计中经常出现的代码级问题，以及你目标市场要求的标准。这会同时浮现漏洞和合规缺口。把这些发现喂给 Claude 帮你排 remediation 优先级，并设计企业买家签合同前会要的控制、审计日志、访问管理。</p>
+
+    <blockquote>AI 扫描是辅助但不是合格合规 review 的替代品。</blockquote>
+
+    <p>接下来，把合规 workstream 做进开发周期，而不是当一次性项目跑 —— 合规文档需要持续维护和更新。对接近企业合同或国际市场的创始人，这也是 Claude Code 安全扫描能帮你为独立安全评估做准备的时刻。</p>
+
+    <div class="exercise">运行一次面向目标市场要求框架的代码级安全 review。把输出喂给 Claude，要它产出两样：一份按优先级排序的安全 remediation 序列，和一份你需要产出的文档与控制清单 —— 用来满足潜在企业买家的合规 review。</div>
+
+    <h3>把你之前跳过的产品管理流程立起来</h3>
+
+    <p>Launch 阶段要求一套轻量、可重复的流程 —— 能在不需要创始人触发或运转的情况下跑。用 Claude 设计你的产品时间线和工作周期怎么结构化、一份 spec 在 Claude Code 碰 feature 之前必须包含什么、bug 报告怎么 triage 和路由、每周指标报告覆盖什么和怎么分发。</p>
+
+    <p>流程设计完成后，用 Claude Cowork build 并运行运营层：排 sprint 仪式、把进来的 bug 报告路由到合适的地方、从连接的数据源编每周指标、维护让用户信号持续流入产品决策的反馈回路。</p>
+
+    <div class="exercise">让 Claude 设计一个轻量产品管理 operating system：明确的 sprint 节奏、最小 spec 模板、bug triage 决策树、从你实际数据源拉的每周指标简报。然后让 Claude Cowork 实施并运行系统的重复运营元素 —— 排期、路由、报告编制 —— 按时发生，不需要你。</div>
+  </div>
+</section>
+
+<!-- CHAPTER 6 -->
+<section class="chapter" id="ch6">
+  <div class="chapter-inner">
+    <div class="chapter-num">CHAPTER 06</div>
+    <h1>Scale 阶段</h1>
+
+    <p>Scale 阶段，创始人的角色从 builder 重新对中到"面向公众的高管"。产品仍然是核心，但你个人的日常工作变得越来越关于公司本身。你的注意力必须扩展到新的 Scale 阶段活动 —— 比如分析师 briefing 和 IPO roadshow —— 同时努力维持精瘦、AI 为中心的结构性优势。</p>
+
+    <h2>Scale 阶段的目标</h2>
+
+    <p>scale 技术基础设施的工作持续进行，现在加上 scale 组织本身、让它成熟为一门生意的工作。</p>
+
+    <p>Scale 阶段你在看从几千用户到几百万、从一个市场到多个市场。在之前每个阶段，增长是你能凭直觉走通的 —— 贴近用户、根据紧密反馈回路的数据加上健康剂量的创始人直觉调整方向。现在，目标是 build <strong>由成熟组织运营持续支撑的系统性增长</strong>。</p>
+
+    <p>对一家 AI 原生创业公司，你的目标应该是通过<strong>累积深度</strong>构建可防御的护城河 —— 来源于你 build 进产品的专长、产品和用户依赖的其他工具与平台的集成深度、专有的系统数据和 workflow。在一致基础设施上、向同一方向持续 build 的创始人，现在拥有真正难以复制的东西。</p>
+
+    <p>这个阶段，公开市场投资人、分析师、监管机构、企业采购、收购方施加更大压力 —— 也带着更大怀疑 —— 因为 stake 更高。你的产品和组织必须经得住外部审视：不只是你 build 了什么的能力，还有围绕它的治理、合规姿态、财务控制、战略叙事。</p>
+
+    <h2>Scale 阶段的退出条件</h2>
+
+    <p>Scale 的退出条件不再是单一里程碑而是一个阈值事件：<strong>即使创始人越来越不直接运营日常，公司也是可持续的</strong>。你已展示系统性增长；build 了能满足最苛刻外部 reviewer 的组织治理和合规基础设施；并对"如果一个资金充足的现有玩家今天复制你的产品，你的用户会留下吗？"有一个扎实的答案。</p>
+
+    <p>实操上，这个阈值通常呈现三种形态之一：不再需要外部资金的规模化盈利、IPO-readiness、被收购。三者都要求你的增长是系统性的、可审计的，你的产品护城河经得住审视，你的组织在运营上成熟且可持续。</p>
+
+    <p>当这是真的时候，恭喜你：你的创业公司已经从一个 bet 变成了一门 business。</p>
+
+    <h2>Scale 阶段的挑战</h2>
+
+    <div class="challenge">
+      <h3>委派运营层</h3>
+      <p class="lead">挑战：Scale 阶段运营系统必须可靠、可持续地跑，不需要看孩子。对一个从 day one 就 hands-on 的创始人，这种过渡既是结构性挑战，也是心理性挑战。</p>
+
+      <p>你 Launch 阶段的工作是创造系统；Scale 阶段，工作变成 (1) 让这些系统成熟到完全可信，(2) 然后真正信任它们。</p>
+
+      <p>这比听起来难。即使你是个善于委派的创始人，什么交出去、什么留在桌上也不总是显然的。交得太多、太快 —— 特别是交给 AI 自动化系统 —— 关键决策会在缺乏只有创始人能提供的关键 context 的情况下做出。但拖得太久，你又会变成瓶颈。</p>
+
+      <p>这里的根本挑战是：识别那些只存在于创始人脑中或未文档化 workflow 里的<strong>机构知识</strong>，然后把它编码进文档化、可审计、可转移的系统。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>scale 技术运营</h3>
+      <p class="lead">挑战：客户不再只评估你的产品；他们想知道你的组织能成为可靠的基础设施合作伙伴。</p>
+
+      <p>前三阶段的技术挑战集中在代码库上：build 对的方案、不积累技术债、然后为真实用户硬化安全和合规。Scale 阶段，挑战变成围绕代码库 build 的一切 —— 信号成熟度的 support 基础设施、文档、可靠性保证。</p>
+
+      <p>签多年合同的大客户和机构买家在签字前会要这些，签了之后也会拿这些来要求你。同样的 AI 基础设施帮你 build 专门的 support 函数 —— 有定义响应时间、文档让新客户工程团队真的能用。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>scale 组织功能</h3>
+      <p class="lead">挑战：Scale 阶段的公司一般需要组织基础设施 —— 招聘、工资单、会计、法务运营 —— 不管运营它的有多少人。</p>
+
+      <p>Launch 阶段，系统化运营意味着自动化消耗创始人注意力的 workflow。Scale 阶段的创业公司现在需要长出一组更广、某种程度上更重要的运营功能 —— 财务报告、合规监控、合同管理、客户 support，等等。</p>
+    </div>
+
+    <div class="challenge">
+      <h3>build GTM 函数</h3>
+      <p class="lead">挑战：有机增长有天花板，大多数 Scale 阶段创始人在他们曾经 build 过真实 go-to-market 函数之前就撞到了它。</p>
+
+      <p>Idea、MVP、Launch 阶段的增长经常来自创始人主导的销售 —— 从一次精准时机的 Product Hunt 发帖到与早期客户的私人关系。这种有机增长只在某个点之前 work，大多数创业公司在 Scale 阶段撞到这个限制。征兆包括：用户曲线变平、获客成本上升、pipeline 只在创始人个人介入时才动。</p>
+
+      <p>Scale 阶段的增长要求 build 专门的增长引擎来触及产品的新的、更广的受众。但大多数创业创始人可能从未运营过营销、销售、分析师关系项目。一个真正的 GTM 行动不只要求建立新系统和流程，还要为你想怎么谈论产品创造品牌声音和故事。因为在创业生命周期的这个阶段，你需要触及的不只是个体新用户，还有整个目标受众群体 —— 比如投资人和企业买家。</p>
+
+      <p>幸运的是，GTM 函数不需要大才能有效，build 出产品的同样 AI 基础设施可以 bootstrap 把它带到市场。</p>
+    </div>
+
+    <h2>Claude 怎么帮 Scale 阶段的创始人</h2>
+
+    <p>早期创业阶段把 Claude 当作产品本身的基础设施：验证 idea 的研究伙伴、设计并 build 原型的工程团队、让单创始人创业公司可能的 AI 运营层。到达 Scale 阶段的 AI 原生创业创始人现在可以用 Claude、Claude Code、Claude Cowork 用 build 时的同一方式继续 scale。</p>
+
+    <h3>把日常任务交给 Claude Cowork</h3>
+
+    <p>Scale 阶段以清晰的视角开始：现在最需要把你的时间和注意力投在哪里 —— 对从未 build 过 business 的初次创始人这可能是挑战。Claude 能帮你 build 一份"在这个阶段只有你应该做的事"清单 —— 可能包括产品叙事决策、董事会关系、企业 deal、创始人之间的对话。不在这份清单上的一切都是委派或 Claude Cowork 自动化的候选。</p>
+
+    <div class="exercise">用 Claude 产出当前运营层的"瓶颈地图"：所有目前路由经过你的 workflow、决策、审批。然后让 Claude 推演：你一周不可用时，每一个会发生什么。会停滞的 workflow 就是你仍然 hands-on 到能搅乱进展的那些。这些怎么映射到你和 Claude 一起做的创始人优先级和责任清单？</div>
+
+    <p>接下来，是时候压力测试你已经 build 的系统是否真的准备好和你的业务一起 scale。</p>
+
+    <div class="exercise">用 Claude map 你当前的 workflow，然后问它：你一周不可用时，每一个会发生什么。会停滞的 workflow 就是 handoff 准则、escalation 路径、异常处理还需要收紧的那些。Claude 能帮分析失败点并推荐合适的修复，让你按需更新或替换 Claude Cowork 自动化。</div>
+
+    <h3>把技术运营 scale 成企业级基础设施</h3>
+
+    <p>随着你 scale，买家需要保证你的产品和组织能作为长期基础设施被信任。技术工作在代码库内部照常进行，但现在围绕代码库的技术工作也要处理。</p>
+
+    <p>第一步是把机构知识转化为可 scale 的系统。用 Claude 起草并维护企业采购期待看到的成文基础设施，包括产品文档、support playbook、SLA。</p>
+
+    <p>并行地，让 Claude Code 审计并硬化代码库，对照企业合同要求的具体可靠性和安全标准，并 build 出基于 Discord 社区 support 从未需要提供的技术 support 基础设施：日志、监控、incident response 工具、让 SLA 真正可执行的可观测层。</p>
+
+    <p>Claude Cowork 然后跑企业 support 本身的运营层：工单路由、escalation workflow、由产品变更触发的文档更新、续签追踪、企业客户成功依赖的报告节奏。三个一起，给一个小团队大得多组织的 support 姿态 —— 这正是签多年企业合同要求你证明的。</p>
+
+    <div class="exercise">挑出你最苛刻的 3 个潜在客户、或识别 3 个你梦想签的理想客户。让 Claude 产出 gap 分析：这些账户的企业采购团队在签多年合同之前会期待看到什么文档、SLA、support 基础设施，你目前差在哪？用输出在 Claude Code 和 Claude Cowork 之间排序技术和文档工作。</div>
+
+    <h3>build 真正的 GTM 函数</h3>
+
+    <p>创始人 hustle 把你带到这里，但 scale 你的创业公司要求创造并实施真正的 go-to-market 战略。AI 能帮你 build 然后跑完整的 GTM 引擎。</p>
+
+    <p>Claude 能帮从零 build 基础 GTM 资源：市场细分、messaging 架构、分析师关系战略、销售 playbook、当你开始和公开市场投资人、企业买家、华尔街分析师对话时重要的投资人面向指标叙事。每个受众都有自己的词汇并以自己的标准评估你；Claude 的工作是把你产品的价值主张翻译成对每个受众 segment 相关的产品营销 approach。</p>
+
+    <p>然后 Claude Cowork 能成为你的战术执行层：内容 pipeline、outbound 序列、分析师 briefing 后勤、新闻发布和 PR 节奏、CRM 卫生、pipeline 报告、把 GTM 战略变成实际商业行动的众多重复周期。</p>
+
+    <p>哪里 GTM 行动需要产品营销基础设施 —— 交互式 demo 环境、集成文档、沙箱 tenant、API 引用、技术 one-pager —— Claude Code 能帮你 build。Scale 阶段，买家期待技术性评估你的产品，一个 Loom 视频和一份销售 deck 已不再够。这也是让你的 GTM 行动异步运行的基础设施：一个 build 良好的 demo 环境会在你开董事会时关单。</p>
+
+    <h3>把领域专长和机构知识变成 AI context</h3>
+
+    <p>很多 ultra-lean 创业创始人是在为他们在特定行业里第一手经历或观察到的真实问题 build 高度具体的 app 或工具。Agentic AI 现在让一行代码都没写过的创始人能用领域专长 build 解决复杂问题的产品。Claude、Claude Code、Claude Cowork 各自在"把创始人知识转化为 compound 的产品具体性"中扮演角色。</p>
+
+    <p>用 Claude 捕获、组织、提炼创始人知识，把领域专长放到产品能触及的地方。通过扩展对话、project、memory，创始人能分享他知道的一切 —— 行业行话、监管 gotcha、边界情况、挫折、那些显然答案在这个问题上不 work 的原因 —— 进一个结构化、可搜索的 context。Skill 能把重复 workflow（比如"我怎么审计一份商业租约"、"我怎么 triage 一份病人入院表"）编码进 Claude 每次都同样运行的可复用流程。几个月后，这就成了一个通用 AI 无法匹配的专有知识基底。</p>
+
+    <p>用 Claude 外化你的领域知识对编码"行业特定边界情况进产品"特别有价值：一个通用医疗账单工具可能在 340B 药品计划申报上崩溃，但你的有特定逻辑处理它。Claude Code 帮你把同行其他专业人士经历的常见挫折翻译成校验逻辑、prompt 提炼、或者和一个你竞争对手没听过的小众行业系统的 MCP 集成。结果是你 app 或工具的深度和广度都以竞争者根本无法复制的方式持续 compound。</p>
+
+    <div class="exercise">在你的垂直里识别一个通用竞品肯定会搞错的边界情况。和 Claude Code 一起为它 build 一个专门测试 case（不是 unit test），基于你真实见过的场景。每次类似边界情况浮现，就加上。<strong>你的测试套件成为你护城河的地图。</strong></div>
+
+    <h3>把累积的用户数据 compound 成可防御优势</h3>
+
+    <p>用户和产品交互时生成行为信号（哪些输出他们接受、哪些拒绝），这反过来告知产品 roadmap。随时间推移，你会学到你特定用户群的具体 pattern、偏好、边界情况。这就是我们说的<strong>compound 价值</strong>：每一次改进让产品更有用，驱动更多使用，产生更多反馈，驱动更多改进。</p>
+
+    <p>这种数据是<strong>时间锁定、上下文具体、抄袭者无法重建的</strong>：你根本买不来"几千用户在你产品里磨练 workflow 的行为指纹"。</p>
+
+    <p>Claude 能帮审计你收集到的任何用户交互数据，识别其中信号最强的行为 pattern，并设计把持续使用转化为系统性模型改进的反馈回路。</p>
+
+    <div class="exercise">把你产品交互数据的概要喂给 Claude：你在收集什么、收集多久了、关于用户随时间和你产品互动你知道什么。让它识别数据里 3 个信号最强的行为 pattern、为每一个设计把它变成系统性模型改进的反馈回路。然后让它帮你起草一页"护城河叙事"用于产品营销：你的数据飞轮怎么 work、转了多久、为什么一个今天起步的资金充足的竞争者两年内无法复制它。</div>
+
+    <h3>创造 workflow lock-in</h3>
+
+    <p>Compound 的数据网络效应让你的产品更难复制；用户 workflow lock-in 让你的产品更难离开。用户在日常运营里跑你产品越久，它就越深嵌进他们实际怎么工作。他们已经在它之上 build 了自动化、训练了人去用、连了数据源和其他工具。他们开发的 prompt、提炼的 workflow、标准化的输出，都已围绕你产品做什么和怎么做塑形。这时候，切换从"产品决策"变成"全面运营项目"。</p>
+
+    <p>创造 workflow lock-in 的第一步是让 Claude 按集成深度 map 你当前的客户基础。对每个客户 segment，识别他们在你产品上 build 了什么 workflow、依赖哪些集成。这显示你产品哪里粘住了、哪里需要更深。</p>
+
+    <p>你提供的集成越多，客户有越多表面积去构造依赖你产品的 workflow。Claude Code 帮你快速立起和目标用户依赖的数据 pipeline、项目管理工具、其他系统的原生集成。Claude Code 也能 build API、webhook、SDK —— 让客户不只是<strong>用</strong>你产品，还能在它<strong>之上</strong> build —— 这是最深形式的 lock-in。</p>
+
+    <div class="exercise">让 Claude 帮你为前 10 个客户 build 一份 workflow 集成审计。对每一个，文档化他们 build 的自动化、依赖的集成、跑过你产品的团队 workflow、和你对他们切换成本的估算。然后让 Claude 跨组识别 pattern：什么类型的集成对你特定产品创造最深 lock-in？为目前还在表面的客户，你能 build 或 enable 什么来加深集成？</div>
+  </div>
+</section>
+
+<!-- CHAPTER 7 -->
+<section class="chapter" id="ch7">
+  <div class="chapter-inner">
+    <div class="chapter-num">CHAPTER 07</div>
+    <h1>同样的活，新的规则</h1>
+
+    <p>AI 时代里，创始人的活没变：找一个真实问题、build 一个解决它的东西、scale 成一家有分量的公司。变的是<strong>到达那里的路径</strong>。横跨四个阶段 —— Idea、MVP、Launch、Scale —— AI 把季度压缩成周。</p>
+
+    <p>过去要几个月的验证周期，现在只要一个下午。一个可工作的原型不再要求一个 stack 合适的联合创始人 —— 它要求一个清晰的问题和与 coding agent 的几次聚焦 session。Launch readiness 从"发布前的手忙脚乱"压缩成一条连续 workstream。在 scale 上，那些过去逼着早期招人陷入救火角色的运营重量，越来越能交给 AI —— 让你的团队把注意力花在那些会成为你护城河的判断决策上。</p>
+
+    <div class="divider"></div>
+
+    <p style="font-family: var(--serif); font-size: 22px; font-weight: 300; color: var(--text-muted); text-align: center; line-height: 1.5; margin: 60px 0 40px;">瓶颈不再是<strong style="color: var(--accent); font-weight: 400;">你能 build 什么</strong>，而是<strong style="color: var(--accent); font-weight: 400;">你选择 build 什么</strong>。</p>
+
+    <h2>资源</h2>
+
+    <h3>用 Claude build</h3>
+    <ul>
+      <li><strong>Building AI Agents for Startups</strong> —— 创业公司如何用 agent 让自己在 scale 时减少对创始人的依赖</li>
+      <li><strong>Claude Code 文档</strong> —— 从初始安装到高级 agentic workflow。建议从 "How Claude Code works" 概览入手</li>
+      <li><strong>Claude Code best practices</strong> —— Anthropic 内部和工程团队跨案验证过的 pattern —— context 管理、权限、规划、验证 workflow</li>
+      <li><strong>Using CLAUDE.md files</strong> —— 怎么为你的具体代码库配置 Claude Code。MVP 阶段创始人配置开发环境的必读</li>
+      <li><strong>Claude Code power user tips</strong> —— Claude Code 团队自己的 workflow pattern，包括并行 session 和验证回路</li>
+      <li><strong>Get started with Claude Cowork</strong> —— 团队怎么搭 Claude Cowork、开始实施 skill / plugin / 其他 feature</li>
+      <li><strong>Tutorials</strong> —— <code>claude.com/resources/tutorials</code> 提供可搜索的 hands-on walkthrough 清单</li>
+    </ul>
+
+    <h3>创始人案例</h3>
+    <ul>
+      <li><strong>3 家 YC 创业公司用 Claude Code build 出公司</strong> —— HumanLayer (F24)、Ambral (W25)、Vulcan Technologies (S25) 怎么用 Claude 快速把原型推向市场、用 agentic coding workflow scale AI 平台</li>
+      <li><strong>GC AI</strong> —— 用领域专长 build 了响应式、Claude 驱动的法律平台 —— 适配内部团队实际工作方式：公司特定 playbook、跨职能 stakeholder、可变风险容忍阈值</li>
+      <li><strong>Carta Healthcare</strong> —— 用 Claude 驱动他们的临床 abstraction 平台，每年处理 22,000 例手术案例，把数据 abstraction 时间减少 66%</li>
+      <li><strong>Anything</strong> —— 由 Claude 和 Agent SDK 驱动，帮 150 万用户把 idea 变成可工作软件产品而无需写代码，包括一个非技术创始人 build 并已经在卖一个完整招聘平台</li>
+      <li><strong>Cogent</strong> —— 一个 build agent 自动化关键企业安全任务的应用 AI 实验室。该创业公司用 Claude 作为 agent 的推理层，跨整个漏洞生命周期自动化调查、优先级排序、remediation</li>
+      <li><strong>Airtree</strong> —— 把 Claude Cowork 作为运营基础设施的中心，把过去散在十几个不同工具和团队的数据统一起来。现在一个人用 skill build 出 workflow 自动化后，全组织都能用它</li>
+      <li><strong>Duvo</strong> —— build AI agent 跨 ERP、供应商门户、电子表格、邮件、甚至电话运营采购、供应链、品类管理流程。完全 build 在 Claude 上，用 Agent SDK 在 workflow 之间编排</li>
+      <li><strong>Zingage</strong> —— 为家庭护理机构 build 的 7×24 自动化运营 AI agent 平台。用 Claude 的结构化工具调用在 EMR 和多通信渠道间编排，用 Claude 的上下文推理 build agent —— 给出针对患者的细致结果而非 pattern-match 到最常见响应</li>
+      <li><strong>Kindora</strong> —— 一个非营利高管 build 的 AI 平台 —— 用 Claude Sonnet build 了一个迫切需要的工具，智能匹配慈善机构和资助方。把数千 match 过滤到几个值得追的之后，Kindora 的 MCP 连接器让非营利机构直接在 Claude 内访问它的 prospecting 工具</li>
+      <li><strong>Wordsmith</strong> —— 由一位律师转型 CTO 创立，为内部法务团队提供可靠的 AI 驱动法律技术。Claude 是 Wordsmith 合同 review、协议起草、文档 review 能力的推理引擎；工程团队用 Claude Code build 并演化平台本身</li>
+    </ul>
+
+    <h3>创业 support 和机会</h3>
+    <ul>
+      <li><strong>Anthropic Startups Program</strong> —— 对和 Anthropic VC 合作伙伴合作的创业公司，提供免费 API credit、最高级别的公开可用 rate limit、独家创始人活动和 workshop 邀请</li>
+      <li><strong>Claude community</strong> —— 给 builder 的论坛和社区空间</li>
+      <li><strong>Live learning resources</strong> —— 会议、webinar、直播、回放</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <p>原文：<a href="https://cdn.prod.website-files.com/6889473510b50328dbb70ae6/69fe2a55b93bb0732b1fe33c_The-Founders-Playbook-05062026_v3%20(1).pdf">The Founder's Playbook: Building an AI-Native Startup</a></p>
+  <p>© 2026 Anthropic · 中文译本仅供个人参考</p>
+  <p style="margin-top: 24px; color: var(--text-dim);">译本由 Claude 生成 · 2026-05-17 · 术语保留英文以便对照</p>
+</footer>
+
+</body>
+</html>
