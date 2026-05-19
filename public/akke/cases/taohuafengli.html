@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akke · 用户案例 · 陶华风里 · 深夜询价后的状态不明</title>
+<title>Akke · 用户案例 · 陶华风里 · 深夜询价 + 15h 后触达</title>
 <style>
   :root {
     --bg: #0b0d12;
@@ -388,13 +388,13 @@
     <h1>陶华风里的<br>深夜价格一问</h1>
     <p class="hero-tagline">
       她在安徽。临近午夜 23:50 刷到一个装修知识号的视频，<br>
-      仓促打下一行带错字的<em>「最终一步，价格对少」</em> — Akke 第二天中午把破冰打到了她屏幕上，但屏幕的另一端，状态至今未明。
+      仓促打下一行带错字的<em>「最终一步，价格对少」</em> — Akke 用 <em>15 小时 04 分</em> 把破冰打到了她屏幕上。queue 一度悲观判定 silent drop，<em>人工审 screenshot 已修正回 sent</em>。
     </p>
     <div class="hero-chips">
       <span class="chip purple">高意向 · 评分 78</span>
       <span class="chip blue">产品咨询 · 询价</span>
       <span class="chip amber">安徽</span>
-      <span class="chip" style="background: var(--warning-soft); color: var(--customer);">投递状态待审</span>
+      <span class="chip green">DM 已送达 · 等首响</span>
     </div>
     <br>
     <a class="hero-profile" href="https://www.douyin.com/user/MS4wLjABAAAAKOE7KQ32XlSnZStc5_-zREdECa75emELhGC0ILGwmOc" target="_blank" rel="noopener noreferrer">
@@ -408,8 +408,8 @@
     <div class="js-step done"><div class="num">2</div><div class="lbl">留评论</div></div>
     <div class="js-step done"><div class="num">3</div><div class="lbl">AI 评分</div></div>
     <div class="js-step done"><div class="num">4</div><div class="lbl">起草破冰</div></div>
-    <div class="js-step now"><div class="num">5</div><div class="lbl">DM 触达 · 状态待审</div></div>
-    <div class="js-step"><div class="num">6</div><div class="lbl">等首次回应</div></div>
+    <div class="js-step done"><div class="num">5</div><div class="lbl">DM 触达 · 15h04m</div></div>
+    <div class="js-step now"><div class="num">6</div><div class="lbl">等首次回应</div></div>
     <div class="js-step"><div class="num">7</div><div class="lbl">跟进 / 加微</div></div>
   </div>
 
@@ -417,20 +417,20 @@
   <section class="transcript" aria-label="完整对话">
     <div class="transcript-head">
       <h2>完整对话 · 1 条 AI 破冰</h2>
-      <span class="t-sub">2026-05-19 中午 · 单通道 DM · 投递状态待审</span>
+      <span class="t-sub">2026-05-19 14:54 CST · 单通道 DM · 已送达 · 等首响</span>
     </div>
-    <p class="t-hint">本案目前只有 <code>#1</code> 一条消息。下方 ACT 在拆解时用 <code>#N</code> 引用回这里。<code>queue.status = failed</code> 是 algorithm 的悲观判定，<strong>不等于客户没看到</strong> — 见 ACT 04 + 复盘第 4 条。</p>
+    <p class="t-hint">本案目前只有 <code>#1</code> 一条消息。下方 ACT 在拆解时用 <code>#N</code> 引用回这里。queue 一度因 <code>silent_drop_suspected</code> 落 failed，<strong>人工审 screenshot 后已修正回 sent</strong> — 见 ACT 04 + 复盘第 4 条。</p>
 
-    <div class="day-sep">2026-05-19 · AI 破冰（投递状态待人工审）</div>
+    <div class="day-sep">2026-05-19 · AI 破冰（已送达 · 等首响）</div>
 
     <div class="dm from-akke" id="msg-1">
       <div class="dm-bubble">你好，陶华风里姐。油工阶段墙面找平得盯紧，不然后面装柜子缝隙显眼。安徽这边湿气重，柜体板材得选防潮的。能做，全屋柜体90到160平下来5万。我们源头工厂直供，这个月活动名额紧张，比建材市场划算不少。你家准备先动哪一组柜子？</div>
     </div>
-    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-1" class="msg-id">#1</a>📱 2026-05-19 中午 CST · 由账号「小文（野荞）」推送 · queue 状态 <code style="background: var(--bg-deep); padding: 0 4px; border-radius: 3px;">failed</code>（待审）</div>
+    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-1" class="msg-id">#1</a>📱 2026-05-19 14:54:37 CST · 由账号「小文（野荞）」推送 · queue 终态 <code style="background: rgba(52,211,153,0.15); padding: 0 4px; border-radius: 3px; color: var(--success);">sent</code>（人工核实）</div>
 
     <div style="margin-top: 18px; padding: 14px 18px; background: var(--bg-deep); border: 1px dashed var(--border-strong); border-radius: 12px; text-align: center; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
-      <strong style="color: var(--text-dim);">客户首次回应 · 等待中 · 同时投递状态待审</strong><br>
-      <span style="font-size: 12px;">真机点击「发送」已完成，但 <code>detect_send_outcome</code> 未在 source XML 里找到 placeholder banner → 标记 <code>silent_drop_suspected</code>。该判定的历史 false-negative ≈ 80%。</span>
+      <strong style="color: var(--text-dim);">客户首次回应 · 等待中</strong>　· DM 已送达 ≈ 已等数小时<br>
+      <span style="font-size: 12px;">queue 初判 <code>silent_drop_suspected</code>，2026-05-19 15:25 CST（DM 起送后 ≈30 分钟）真机操作员审 <code>/tmp/warmup_*_after_send.png</code>，看见蓝 bubble + placeholder banner，<em>修正回 sent</em>。<code>error_message = "[人工核实] WDA silent_drop_suspected 假阳性，实际送达"</code>。</span>
     </div>
   </section>
 
@@ -543,12 +543,12 @@
   <section class="act">
     <div class="act-head">
       <span class="act-no">ACT 03 · 第一句话</span>
-      <span class="act-time">2026-05-19　中午 CST · 由账号「小文（野荞）」起草</span>
+      <span class="act-time">2026-05-19　14:53:16 CST 起草 · 14:54:37 CST 推送</span>
     </div>
     <h2>Akke 拟了一段四段式破冰</h2>
     <p class="act-lede">
       AI 起草、运营批准、通过<em>本地真机自动化</em>把消息打到她的抖音私信里。<br>
-      这条破冰文案（见 <a href="#msg-1" class="msg-ref">#1</a>）走的是四段式 V3 模板：复述昵称 + 阶段诊断 → 省级地区接业务 → 报价 + 紧迫 → 反问。
+      这条破冰文案（见 <a href="#msg-1" class="msg-ref">#1</a>）走的是四段式 V3 模板：复述昵称 + 阶段诊断 → 省级地区接业务 → 报价 + 紧迫 → 反问。系统记录 <em>message.created_at = 14:53:16 CST</em>、<em>queue.scheduled_for = 14:54:37 CST</em>，距评论留下 <em>15 小时 04 分钟</em>。
     </p>
 
     <div class="breakdown">
@@ -583,11 +583,11 @@
   <section class="act">
     <div class="act-head">
       <span class="act-no">ACT 04 · 触达路径</span>
-      <span class="act-time">iOS WDA 真机 · queue 状态 = failed（待审）</span>
+      <span class="act-time">iOS WDA 真机 · queue 终态 sent（人工核实）</span>
     </div>
-    <h2>真机点击发送 · 但回执读不到</h2>
+    <h2>真机点击发送 · 回执失读 · 人工审截图修正</h2>
     <p class="act-lede">
-      抖音对 web 端陌生人 DM 的封锁极严（Fly Tokyo 出口 IP 在 IM 入口直接挂掉）。Akke 走的是<em>真实 iPhone + WDA 自动化</em>（<code>worker/dm_warmup_send.py</code>），让风控判定路径几乎等同于「一个真人在自己手机上发消息」。本案 send 步骤完成 — 发送按钮被真机点了 — 但<em>投递回执的读取失败</em>，触发悲观判定 <code>silent_drop_suspected</code>。
+      抖音对 web 端陌生人 DM 的封锁极严（Fly Tokyo 出口 IP 在 IM 入口直接挂掉）。Akke 走的是<em>真实 iPhone + WDA 自动化</em>（<code>worker/dm_warmup_send.py</code>），让风控判定路径几乎等同于「一个真人在自己手机上发消息」。本案 send 步骤完成 — 发送按钮被真机点了 — 但<em>投递回执的读取失败</em>，触发悲观判定 <code>silent_drop_suspected</code>；30 分钟后真机操作员审 screenshot 看到蓝色 chat bubble，<em>把 queue 改回 sent</em>，runbook 闭环。
     </p>
     <div class="delivery-row">
       <div class="dr-item">
@@ -601,9 +601,26 @@
         <div class="dr-sub">代码引用 <code style="background: var(--bg); padding: 0 4px; border-radius: 3px; font-size: 11px;">worker/dm_warmup_send.py</code></div>
       </div>
       <div class="dr-item">
-        <div class="dr-label">queue 终态</div>
-        <div class="dr-val" style="color: var(--customer);">failed · 待审</div>
-        <div class="dr-sub">error: <code style="background: var(--bg); padding: 0 4px; border-radius: 3px; font-size: 11px;">silent_drop_suspected</code></div>
+        <div class="dr-label">触达延迟</div>
+        <div class="dr-val">15 小时 04 分</div>
+        <div class="dr-sub">评论 2026-05-18 23:50 → DM 2026-05-19 14:54 CST</div>
+      </div>
+    </div>
+    <div class="delivery-row" style="margin-top: 12px;">
+      <div class="dr-item">
+        <div class="dr-label">queue 初判</div>
+        <div class="dr-val" style="color: var(--customer);">failed · silent_drop_suspected</div>
+        <div class="dr-sub">algorithm 在 XCTest source XML 里找不到 placeholder banner → 悲观判定</div>
+      </div>
+      <div class="dr-item">
+        <div class="dr-label">人工核实</div>
+        <div class="dr-val" style="color: var(--success);">15:25 CST · 修正回 sent</div>
+        <div class="dr-sub">真机操作员审 <code style="background: var(--bg); padding: 0 4px; border-radius: 3px; font-size: 11px;">/tmp/warmup_*_after_send.png</code> 看见蓝 bubble + banner</div>
+      </div>
+      <div class="dr-item">
+        <div class="dr-label">人工核实延迟</div>
+        <div class="dr-val">≈ 30 分钟</div>
+        <div class="dr-sub">DM 推送 14:54 → 修正 15:25 · 在 followup 触发窗内闭环</div>
       </div>
     </div>
 
@@ -611,8 +628,8 @@
       <div class="ambiguity-title">⚠ 这是本案最有教育意义的一幕</div>
       <strong>"queue.status = failed" ≠ "客户没收到"</strong>。<br><br>
       <code>detect_send_outcome</code> 用关键字匹配 XCTest source XML 里的 placeholder banner（"对方回复后才能发消息"）来判定投递成功。但抖音 iOS App 把这串文案<strong>渲染成 image 或 custom control</strong>，<em>不在 accessibility tree 里</em> — XCTest 的 <code>source()</code> 拿不到。<br><br>
-      历史复盘（2026-05-02 批量 14 条 warmup）：algorithm 标 8 条 <code>silent_drop_suspected</code>，肉眼审 screenshot 后<strong>全部</strong>看见蓝色 chat bubble + placeholder banner = <strong>真投递</strong>。<br><br>
-      因此本案的正确解读是：<strong>"已点击发送 + 回执失读 → 真实投递概率 ≈ 80%"</strong>，剩下 20% 才是真 silent drop。下一步必须打开本机 <code>/tmp/warmup_*_after_send.png</code> 看截图，看到蓝 bubble 就批量改 <code>messages.status='sent'</code> + <code>message_queue.status='sent'</code>。
+      历史复盘（2026-05-02 批量 14 条 warmup）：algorithm 标 8 条 <code>silent_drop_suspected</code>，肉眼审 screenshot 后<strong>全部</strong>看见蓝色 chat bubble + placeholder banner = <strong>真投递</strong>。本案延续这条 runbook — 真机操作员在 DM 推送 30 分钟内审完截图、批量改回 sent，<code>error_message</code> 字段被改写为 <code>[人工核实] WDA silent_drop_suspected 假阳性，实际送达</code>，留作下次复盘的可搜索锚点。<br><br>
+      所以本案的 queue 终态 = <strong>sent · 人工核实</strong>，不是 failed。
     </div>
   </section>
 
@@ -620,11 +637,11 @@
   <section class="act">
     <div class="act-head">
       <span class="act-no">ACT 05 · 等首次回应</span>
-      <span class="act-time">已等不到 24 小时</span>
+      <span class="act-time">DM 已送达 · 已等不到 24 小时</span>
     </div>
-    <h2>她还没回 · 而且我们其实不确定她有没有看到</h2>
+    <h2>她还没回 · 但 DM 已确认进了私信框</h2>
     <p class="act-lede">
-      系统记录 <code>messages</code> 表里仅有 <a href="#msg-1" class="msg-ref">#1</a> 一条 AI 消息，没有 role=customer 行。<em>这是 ice_break 阶段常见的中间态</em>，但本案叠加了一层不确定性 — <strong>我们没法肯定 DM 真的进了她的私信框</strong>。在确认投递状态之前，"她还没回"和"她根本没看到"这两个分支无法被区分开来。Akke 不会在没回应时主动追问，避免把 sec_uid 烧成陌生人 DM 黑名单；本案推荐先<em>人工审 screenshot 修正 queue 状态</em>，再让 followup_policy = standard 自然推进。
+      系统记录 <code>messages</code> 表里仅有 <a href="#msg-1" class="msg-ref">#1</a> 一条 AI 消息，没有 role=customer 行。<em>这是 ice_break 阶段常见的中间态</em> — 人工核实闭环后我们已经能确定她的私信框里有这条破冰，"她还没回"和"她没看到"两个分支被切干净，剩下的就是<em>她什么时候回</em>。Akke 不会在没回应时主动追问，避免把 sec_uid 烧成陌生人 DM 黑名单；本案让 <code>followup_policy = standard</code> 自然推进，超过策略窗口再由 cron 触发跟进或归档。
     </p>
   </section>
 
@@ -634,14 +651,14 @@
   <section class="act">
     <div class="act-head">
       <span class="act-no">ACT 07 · 现在</span>
-      <span class="act-time">stage = ice_break · 投递状态待审</span>
+      <span class="act-time">stage = ice_break · queue = sent（人工核实）</span>
     </div>
-    <h2>需要的不是再发一条，而是先回头看截图</h2>
+    <h2>DM 已落地 · 等她翻牌</h2>
     <div class="status-card">
       <div class="status-pulse"></div>
       <div class="status-text">
-        <strong>对话还在 ice_break 阶段 · queue 状态卡在 failed 待审。</strong><br>
-        followup_policy = <code>standard</code>，但在投递状态澄清前任何 followup 都是错位 — 如果 #1 其实送达了，followup 会显得叠加追问；如果真没送达，问题就不在话术而在通道。<em>下一步动作</em>：(1) 本机打开 <code>/tmp/warmup_*_after_send.png</code> 找本条对应截图肉眼审；(2) 看见蓝 bubble + banner 就改 status='sent'；(3) 修正后 followup_policy 才有意义。这条线索的真正价值在<em>它把 detect_send_outcome 的 false-negative 暴露成可写进流程的检查项</em>。
+        <strong>对话还在 ice_break · DM 已确认送达 · 等首次回应。</strong><br>
+        <code>followup_policy = standard</code>，followup_count = 0；之前阻碍 followup 推进的"投递状态不明"已经被人工核实清除。<em>下一步动作</em>：等 standard policy 窗口（≈ 24-48h 沉默）触发自动 followup 起草，或客户先行翻牌进入 nurture。这条线索的真正价值在<em>它把 detect_send_outcome 的 false-negative 走完了完整 runbook — 从 algorithm 悲观判定 → 人工审 screenshot → 修正 queue → 闭环</em>，可作为下次同类工单的样本。
       </div>
     </div>
   </section>
@@ -656,8 +673,8 @@
       <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>错字不抑评分。</strong>"价格对少" → "价格多少"是键盘相邻位的笔误，LLM 评分（DeepSeek V4 Flash）做了 fuzzy 容错没被误导。这条对 prompt 调参的启示是：不要在 noise filter 里加"必须是规范中文"过滤，否则会丢失大量真实高意向。</div></div>
       <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>临近午夜的询价是装修业的高意向时段。</strong>23:50 这种时间点留言，往往意味着客户白天工地跑完、晚上正在比价决策。Akke 的评分模型把"freshness · active"权重设得偏高，是为了不让深夜评论在第二天醒来时就被 cron 当 stale 跳过。</div></div>
       <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>知识号场景下，省级气候话术 = 同城回退路径。</strong>没有 <code>comments.city</code>、号源又是"全国"，硬同城判定一定 false。这时"安徽湿气重 → 板材选防潮"这种省级气候 + 产品约束的组合是最稳的破冰锚 — 它证"我懂你的本地物理约束"，比泛报价更接得住产品咨询型评论。</div></div>
-      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>queue.status='failed' 是 algorithm 的悲观判定 · 不是事实。</strong><code>detect_send_outcome</code> 用 XCTest source XML 抓 placeholder banner，但抖音 iOS 把这串文案渲染成 image / custom control 让 accessibility tree 拿不到，历史 false-negative ≈ 80%。<strong>遇到 silent_drop_suspected 必须打开 screenshot 肉眼审</strong>，看见蓝 bubble = 真投递，批量改回 sent。把这条写成 runbook 比写在脑子里靠谱。</div></div>
-      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>状态未澄清前不要追加 followup。</strong>如果 #1 其实送达，followup 会变叠加追问把客户推走；如果真没送达，问题在通道不在话术 — 追加文案也无效。<strong>诚实地把"待审"作为一个 stage 标出来</strong>，比假装已经触达然后追第二条更省客户的耐心。</div></div>
+      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>queue.status='failed' 是 algorithm 的悲观判定 · 不是事实 · 但 runbook 能把它兜回来。</strong><code>detect_send_outcome</code> 用 XCTest source XML 抓 placeholder banner，但抖音 iOS 把这串文案渲染成 image / custom control 让 accessibility tree 拿不到，历史 false-negative ≈ 80%。本案就是这条 runbook 的活样本：DM 起送 30 分钟内，真机操作员审 <code>/tmp/warmup_*_after_send.png</code>，看见蓝 bubble + placeholder banner 把 queue 改回 sent，并把 <code>error_message</code> 留成 <code>[人工核实] WDA silent_drop_suspected 假阳性，实际送达</code>作为可搜索锚点。</div></div>
+      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>触达延迟 15h04m = 深夜评论被 cron 窗口吃掉的真实代价。</strong>评论 2026-05-18 23:50 落下时，analyze cron 还没触发；下一轮 analyze 命中已经是 2026-05-19 12:11（≈ 12h21m 后），起草 + 审批 + 推送又花了 2h43m。从客户视角，她午夜的一句问价等到了次日下午才被回应 — 这是<strong>"深夜评论 freshness 仍是 active 但触达窗口被 cron 节奏滞后"</strong>的具体计量。是否要为 22:00 后的高分评论开一个 priority 通道，是本案给出的 product 问题。</div></div>
     </div>
   </section>
 
@@ -686,8 +703,8 @@
       <dl>
         <dt>发送账号</dt><dd>小文（野荞）（messaging）</dd>
         <dt>号源</dt><dd>海哥—用心讲装修 · 知识号 · 全国</dd>
-        <dt>DM queue</dt><dd>failed · <code>silent_drop_suspected</code></dd>
-        <dt>客户回复</dt><dd>等首次回应（前置依赖：先审截图修正 queue）</dd>
+        <dt>DM queue</dt><dd>sent · 人工核实假阳性</dd>
+        <dt>触达延迟</dt><dd>15h04m（评论 → 推送）</dd>
       </dl>
     </div>
   </section>
