@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 小红书 → 抖音 一键流水线 使用指南</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-code: #1a1f2b;
+    --border: #242a38;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --info: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border); }
+
+  header.hero { padding: 32px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  h1 { font-size: 40px; font-weight: 700; margin: 0 0 16px; letter-spacing: -0.02em; line-height: 1.2; }
+  .subtitle { font-size: 18px; color: var(--text-dim); margin: 0 0 24px; }
+  .meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+  .meta span::before { content: ""; display: inline-block; width: 4px; height: 4px; background: var(--text-muted); border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+
+  h2 { font-size: 28px; font-weight: 700; margin: 56px 0 16px; letter-spacing: -0.01em; padding-top: 16px; }
+  h2 .num { display: inline-block; width: 36px; height: 36px; line-height: 36px; text-align: center; background: var(--accent); color: #fff; border-radius: 10px; font-size: 18px; margin-right: 12px; vertical-align: middle; }
+  h3 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; }
+  p { margin: 12px 0; color: var(--text-dim); }
+  p strong, li strong { color: var(--text); }
+
+  ol, ul { padding-left: 24px; color: var(--text-dim); }
+  ol li, ul li { margin: 10px 0; }
+
+  code { background: var(--bg-code); padding: 2px 6px; border-radius: 4px; font-size: 0.92em; color: var(--info); font-family: "SF Mono", "Monaco", Consolas, monospace; }
+  pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+  pre code { background: transparent; padding: 0; color: var(--text); font-size: 13.5px; line-height: 1.6; }
+
+  .alert { padding: 16px 20px; border-radius: 10px; margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .alert .icon { flex: 0 0 24px; font-size: 22px; line-height: 1; padding-top: 2px; }
+  .alert.warn { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); color: #fde68a; }
+  .alert.info { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.25); color: #bfdbfe; }
+  .alert.danger { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #fecaca; }
+  .alert.success { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); color: #bbf7d0; }
+  .alert strong { color: inherit; }
+
+  .step { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin: 16px 0; position: relative; }
+  .step .step-num { position: absolute; top: -14px; left: 24px; background: var(--accent); color: #fff; font-weight: 700; padding: 4px 12px; border-radius: 6px; font-size: 13px; }
+  .step h3 { margin-top: 8px; }
+
+  .toc { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin: 32px 0; }
+  .toc-title { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .toc a { color: var(--text); text-decoration: none; display: block; padding: 6px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+  .toc a:last-child { border-bottom: none; }
+
+  .check-list { list-style: none; padding: 0; }
+  .check-list li { padding: 8px 0 8px 32px; position: relative; color: var(--text); }
+  .check-list li::before { content: "✓"; position: absolute; left: 0; top: 8px; color: var(--success); font-weight: 700; font-size: 18px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14.5px; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; background: var(--bg-elevated); }
+  td { color: var(--text-dim); }
+  td:first-child { color: var(--text); font-weight: 500; }
+
+  .sample-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin: 24px 0; }
+  .sample-card .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-top: 14px; margin-bottom: 4px; }
+  .sample-card .label:first-child { margin-top: 0; }
+  .sample-card .value { color: var(--text); font-size: 15px; }
+  .sample-card .arrow { color: var(--accent); margin: 14px 0 6px; font-size: 14px; }
+  .sample-card .tags { color: var(--info); font-size: 14px; line-height: 1.6; }
+
+  footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio</a><span>/</span><a href="/akke/">Akke</a><span>/</span>小红书 → 抖音 一键流水线
+  </nav>
+
+  <header class="hero">
+    <span class="tag">团队内部 · PM / 内容运营 · 内容生产链路</span>
+    <h1>小红书 → 抖音 一键流水线 使用指南</h1>
+    <p class="subtitle">粘一条小红书链接 → 等 30 秒 → 拿到二改视频 + 抖音可发布文案。完整跑一条只需 3 步。</p>
+    <div class="meta">
+      <span>更新于 2026-05-19</span>
+      <span>面向 PM / 内容运营</span>
+      <span>团队内部使用，请勿外传</span>
+    </div>
+  </header>
+
+  <div class="alert info">
+    <span class="icon">📌</span>
+    <div>
+      <strong>这是给谁看的？</strong> 给负责帮客户做抖音内容投放的 PM / 内容运营。看完后你能独立跑：把一条小红书视频笔记 → 自动二改 + 重写抖音风格文案 → 下载到手机 → 上传抖音 App 发布。
+      <br><br>
+      <strong>读完前请准备：</strong>一台电脑 + 一部手机（装抖音 App），一条人工挑好的小红书笔记链接（视频笔记，发布 7-14 天内最稳）。
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">📖 目录</div>
+    <a href="#section-1">① 这条链路在干什么</a>
+    <a href="#section-2">② 入口 + 访问 token</a>
+    <a href="#section-3">③ 三步操作（PM 主流程）</a>
+    <a href="#section-4">④ 实测样例</a>
+    <a href="#section-5">⑤ v0 二改做了什么</a>
+    <a href="#section-6">⑥ 故障排查</a>
+    <a href="#section-7">⑦ 注意事项与红线</a>
+    <a href="#section-8">⑧ 后续会补</a>
+  </div>
+
+  <!-- ───────────────────────── ① ───────────────────────── -->
+  <h2 id="section-1"><span class="num">1</span>这条链路在干什么</h2>
+
+  <p>我们要把<strong>小红书上的视频笔记</strong>拿到<strong>抖音上发布</strong>，但抖音对原样搬运有相似度检测，文案风格也跟小红书不同。这条流水线把中间所有繁琐工序自动化：</p>
+
+  <pre><code>① 解析小红书链接，拿到原视频
+② ffmpeg 二改：水平翻转 + 音频变速 1.02x（破抖音 hash 检测）
+③ LLM 重写文案：抖音风格的标题、标签、正文
+④ 给 PM 一个下载链接 + 一键复制文案</code></pre>
+
+  <p>整套<strong>端到端约 30 秒</strong>，PM 全程只用做两件事：贴链接、把结果搬到抖音 App。</p>
+
+  <div class="alert info">
+    <span class="icon">💡</span>
+    <div>
+      <strong>为什么不是直接搬运？</strong> 抖音对原视频 + 原音频会做 hash 指纹检测，相似度过高会限流。<strong>水平翻转</strong>改变画面 hash，<strong>音频变速 1.02x</strong> 改变音频指纹 —— 这两步的视听代价几乎为零（人眼/人耳几乎察觉不到），但能显著降低被识别为搬运的概率。
+    </div>
+  </div>
+
+  <!-- ───────────────────────── ② ───────────────────────── -->
+  <h2 id="section-2"><span class="num">2</span>入口 + 访问 token</h2>
+
+  <table>
+    <tr><th>项</th><th>值</th></tr>
+    <tr><td>网址</td><td><code>https://xhs-pipe.fly.dev/</code></td></tr>
+    <tr><td>访问 token</td><td><code>xhs-pipe-0e993127</code></td></tr>
+    <tr><td>部署区域</td><td>Fly San Jose（美国西海岸）</td></tr>
+  </table>
+
+  <p>第一次打开网址，在底部"访问 token"输入框里粘一次，浏览器会记住，下次免填。</p>
+
+  <div class="alert warn">
+    <span class="icon">🔐</span>
+    <div>
+      <strong>token 是简单访问控制，不是机密。</strong> 不要把 token 贴到任何外部对话框（公开 Slack/微信群、社交媒体、第三方 AI 工具）。只在 Akke 内部使用，外传等于送给竞品。
+    </div>
+  </div>
+
+  <div class="alert info">
+    <span class="icon">⏳</span>
+    <div>
+      <strong>服务空闲会休眠</strong>（节省成本，正常行为）。第一次访问可能要 5-10 秒冷启动，之后每次秒开。如果发现 "Connection refused" 多刷一次就好。
+    </div>
+  </div>
+
+  <!-- ───────────────────────── ③ ───────────────────────── -->
+  <h2 id="section-3"><span class="num">3</span>三步操作（PM 主流程）</h2>
+
+  <div class="step">
+    <span class="step-num">第 1 步</span>
+    <h3>从小红书 App 复制笔记链接</h3>
+    <p>在小红书 App 里打开目标视频笔记 → 点右上角"<strong>···</strong>" → 选"<strong>复制链接</strong>"。系统剪贴板会得到类似这段（整段不用剪，系统自动抽 URL）：</p>
+    <pre><code>140 装成200 ㎡｜极简奶油风果然显大又高级❗️ 我家... http://xhslink.com/o/1e7HQQPU9FD</code></pre>
+    <div class="alert warn">
+      <span class="icon">⚠️</span>
+      <div><strong>只支持视频笔记。</strong>图文笔记跑会失败，会有错误提示。如何分辨：视频笔记封面右上角有播放图标。</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">第 2 步</span>
+    <h3>打开网址 → 粘贴 → 点"生成抖音版本"</h3>
+    <p>打开 <code>https://xhs-pipe.fly.dev/</code>，整段粘到顶部输入框，点按钮。<strong>页面会显示状态条</strong>：</p>
+    <pre><code>🔄 正在解析链接、下载视频、ffmpeg 二改、LLM 重写… 通常需要 10-30 秒。</code></pre>
+    <p>不要切换浏览器标签，等结果出来。</p>
+  </div>
+
+  <div class="step">
+    <span class="step-num">第 3 步</span>
+    <h3>拿三样东西 → 上传抖音 App</h3>
+    <ul class="check-list">
+      <li><strong>二改视频</strong> —— 页面里直接预览，点 <strong>"↓ 下载二改视频"</strong> 存到电脑/手机</li>
+      <li><strong>抖音文案</strong> —— 标题 / 标签 / 正文 各一格，每格右上角有"复制"按钮；最下方有"<strong>一键复制全部</strong>"</li>
+      <li><strong>原小红书对照</strong> —— 下半屏摆着原标题/描述/标签，方便人工校对 LLM 改得对不对</li>
+    </ul>
+    <p>在手机抖音 App 里 → 上传刚才下载的视频 → 在标题/正文框分别粘对应内容 → 发布。</p>
+  </div>
+
+  <!-- ───────────────────────── ④ ───────────────────────── -->
+  <h2 id="section-4"><span class="num">4</span>实测样例</h2>
+
+  <p>用一条真实小红书链接跑出来的结果（已发到 Akke Bot 群上线公告里）：</p>
+
+  <div class="sample-card">
+    <div class="label">原小红书 · 标题</div>
+    <div class="value">140 装成200 ㎡｜极简奶油风果然显大又高级❗️</div>
+    <div class="label">作者</div>
+    <div class="value">谁都不要认识我</div>
+
+    <div class="arrow">↓ 流水线处理 30 秒后 ↓</div>
+
+    <div class="label">抖音 · 标题</div>
+    <div class="value">❗140㎡秒变200㎡？极简奶油风放大术曝光！</div>
+    <div class="label">抖音 · 标签</div>
+    <div class="tags">#装修 #极简风 #奶油风 #小户型放大 #140平改造 #显大设计 #家居改造</div>
+    <div class="label">抖音 · 正文</div>
+    <div class="value">谁说140㎡只能装成小户型？看我如何用极简奶油风，让空间瞬间放大到200㎡！高级感满满，快来抄作业！</div>
+    <div class="label">二改视频</div>
+    <div class="value">720 × 960 · 63.5 秒 · 6.2 MB</div>
+    <div class="label">总耗时</div>
+    <div class="value">31 秒</div>
+  </div>
+
+  <p>LLM 给出的标题钩子前置（"❗" + "140㎡秒变200㎡？" 的对比反差），标签覆盖大词（#装修）→ 中词（#奶油风）→ 长尾（#140平改造），正文口语化 —— <strong>都是抖音算法偏好的写法</strong>，比小红书原标题更适合直接发抖音。</p>
+
+  <!-- ───────────────────────── ⑤ ───────────────────────── -->
+  <h2 id="section-5"><span class="num">5</span>v0 二改做了什么</h2>
+
+  <table>
+    <tr><th>操作</th><th>作用</th><th>视听代价</th></tr>
+    <tr><td>水平翻转</td><td>破画面 hash 检测</td><td>人眼几乎察觉不到（除非画面里有文字）</td></tr>
+    <tr><td>音频变速 1.02x</td><td>破音频指纹检测</td><td>视频时长缩短 ~2%，人耳几乎察觉不到</td></tr>
+  </table>
+
+  <p>视频里如果有<strong>大段文字</strong>（如品牌 logo、屏幕截图、字幕中文）翻转后可能反向阅读 —— 这种笔记建议手动校对再发，或者跳过。</p>
+
+  <div class="alert warn">
+    <span class="icon">⚠️</span>
+    <div>
+      <strong>v0 没做的事：</strong>BGM 替换、品牌水印、上下裁切、变焦。这意味着原 BGM 还在 —— 如果原视频用的是小红书热门 BGM，到抖音可能仍被识别。下一版会加 BGM 替换。
+    </div>
+  </div>
+
+  <!-- ───────────────────────── ⑥ ───────────────────────── -->
+  <h2 id="section-6"><span class="num">6</span>故障排查</h2>
+
+  <table>
+    <tr><th>症状</th><th>原因</th><th>修法</th></tr>
+    <tr><td>HTTP 404 / "note deleted"</td><td>链接太老 / 笔记被删 / 链接格式不对</td><td>换条新链接（7-14 天内发布的最稳）</td></tr>
+    <tr><td>HTTP 401 "invalid app token"</td><td>token 没填或填错</td><td>检查底部 token 输入框是 <code>xhs-pipe-0e993127</code></td></tr>
+    <tr><td>"not a xiaohongshu URL"</td><td>粘的不是小红书链接</td><td>从小红书 App "复制链接"重粘，别从浏览器地址栏拷</td></tr>
+    <tr><td>"login wall? geo-blocked?"</td><td>笔记需要登录看 / 服务出口被临时封</td><td>找 Owner 上报，多半要重启或换区</td></tr>
+    <tr><td>处理 60 秒还没回</td><td>视频特别大 / 服务冷启动 + 长视频</td><td>多等 30 秒；超过 90 秒再换链接</td></tr>
+    <tr><td>视频网页里能播但下载失败</td><td>浏览器拦截 / 网络中断</td><td>右键链接"另存为"</td></tr>
+    <tr><td>LLM 标题感觉不对</td><td>偶发：原笔记信息量太低 / LLM 创意飘</td><td>同一条再跑一次（会出不同结果）；或手动改</td></tr>
+  </table>
+
+  <p>遇到表里没列的错误，<strong>把红色错误条整段贴给 Owner</strong>，多半是某种异常笔记格式没覆盖到，加个 case 就能修。</p>
+
+  <!-- ───────────────────────── ⑦ ───────────────────────── -->
+  <h2 id="section-7"><span class="num">7</span>注意事项与红线</h2>
+
+  <ul class="check-list">
+    <li><strong>链接 TTL</strong>：小红书短链发布 7-14 天后可能 404，越新越稳</li>
+    <li><strong>只支持视频笔记</strong>，图文笔记下一版再说</li>
+    <li><strong>同一条链接重复跑会生成新的视频文件</strong>，旧文件保留在服务器（1GB volume 够装几百条）</li>
+    <li><strong>token 不外传</strong>，不要贴公开聊天 / 不要发给客户</li>
+    <li><strong>抖音文案 LLM 出的是建议</strong>，建议人工 quick scan 一遍 —— 偶尔会有事实性偏差（如把"奶油风"写成"奶咖风"）</li>
+    <li><strong>不要批量灌入抖音</strong>，单号一天发 ≤ 3 条二改内容观察效果，没限流再加量</li>
+  </ul>
+
+  <div class="alert danger">
+    <span class="icon">🚫</span>
+    <div>
+      <strong>红线 · 不要做：</strong>
+      <ul style="margin: 8px 0;">
+        <li>不要发<strong>带原作者明显水印</strong>（左上角 ID、自带签名）的视频 —— 这种侵权风险高，建议跳过</li>
+        <li>不要发<strong>带明显小红书 UI 元素</strong>的截屏 —— 抖音对竞品引流容忍度低</li>
+        <li>不要把<strong>同一条二改视频投到多个抖音号</strong> —— 抖音跨号 hash 检测一样敏感</li>
+        <li>不要在<strong>客户账号</strong>没经 Owner 确认的情况下批量上线 —— 账号是客户资产</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ───────────────────────── ⑧ ───────────────────────── -->
+  <h2 id="section-8"><span class="num">8</span>后续会补</h2>
+
+  <p>v0 是单链接交互版，先用一周看 PM 实际痛点。已规划但还没做的：</p>
+
+  <ul>
+    <li><strong>BGM 替换</strong> —— 准备 10-30 首抖音商用 BGM 素材库，自动随机替换原音轨</li>
+    <li><strong>品牌水印</strong> —— 右下角加客户品牌 logo（每个客户传一次素材）</li>
+    <li><strong>批量录入</strong> —— Lark Base 表 + n8n 编排，PM 一次粘 20 条链接自动跑批，结果落"草稿池"</li>
+    <li><strong>抖音直发</strong> —— 暂不做（账号风控风险高，人工最后一道审核更稳）</li>
+    <li><strong>图文笔记支持</strong> —— 抽图 + Wan2.2 I2V 生视频 + TTS 配音 —— 工程量大一档，先看视频笔记够不够用</li>
+  </ul>
+
+  <div class="alert success">
+    <span class="icon">💬</span>
+    <div>
+      <strong>有反馈直接找 Owner</strong>。看 LLM 出的某条标题特别好 / 特别糟、想加某种新二改、跑出了奇怪错误 —— 直接截屏发 Lark，所有反馈都会变成下一版的输入。
+    </div>
+  </div>
+
+  <footer>
+    Akke · 内部教程 · 2026-05-19
+  </footer>
+
+</div>
+</body>
+</html>
