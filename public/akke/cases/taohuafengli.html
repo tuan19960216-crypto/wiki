@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 用户案例 · 陶华风里 · 深夜询价后的状态不明</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --customer: #fbbf24;
+    --customer-soft: rgba(251, 191, 36, 0.08);
+    --akke: #8b5cf6;
+    --akke-soft: rgba(139, 92, 246, 0.10);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  /* HERO ============================================ */
+  header.hero { padding: 24px 0 40px; margin-bottom: 16px; text-align: center; }
+  .hero-avatar {
+    width: 112px; height: 112px; border-radius: 50%;
+    border: 3px solid var(--border-strong); background: var(--bg-elevated); object-fit: cover;
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.06);
+    margin-bottom: 22px;
+  }
+  .hero-eyebrow {
+    font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 44px; font-weight: 700; margin: 0 0 14px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .hero-tagline {
+    font-size: 18px; color: var(--text-dim); margin: 0 auto 18px; max-width: 600px; line-height: 1.5;
+  }
+  .hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .chip.purple { background: var(--accent-soft); color: var(--accent); }
+  .chip.blue { background: var(--info-soft); color: var(--info); }
+  .chip.amber { background: var(--customer-soft); color: var(--customer); }
+  .chip.green { background: var(--success-soft); color: var(--success); }
+  .hero-profile {
+    display: inline-block; margin-top: 18px; font-size: 13px; color: var(--info); text-decoration: none;
+    border-bottom: 1px dashed currentColor; padding-bottom: 1px;
+  }
+  .hero-profile:hover { color: var(--accent); }
+
+  /* JOURNEY MAP STRIP =============================== */
+  .journey-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 32px 0 24px;
+    padding: 16px 20px; background: var(--bg-elevated);
+    border: 1px solid var(--border); border-radius: 14px;
+  }
+  .js-step { text-align: center; position: relative; }
+  .js-step .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-deep); color: var(--text-muted);
+    border: 1.5px solid var(--border-strong);
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+  }
+  .js-step.done .num { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .js-step.now .num { background: var(--customer-soft); color: var(--customer); border-color: var(--customer); }
+  .js-step .lbl { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+  .js-step.done .lbl, .js-step.now .lbl { color: var(--text-dim); }
+  .js-step::after {
+    content: ""; position: absolute; top: 14px; right: -3px; width: 6px; height: 2px; background: var(--border-strong);
+  }
+  .js-step:last-child::after { display: none; }
+  @media (max-width: 720px) {
+    .journey-strip { grid-template-columns: repeat(4, 1fr); }
+    .js-step .lbl { font-size: 10px; }
+  }
+
+  /* ACT BLOCKS ====================================== */
+  .act { margin: 64px 0 0; }
+  .act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .act-no {
+    font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .act h2 {
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.25;
+  }
+  .act-lede {
+    font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px;
+    border-left: 2px solid var(--border-strong); padding-left: 14px;
+  }
+  .act-lede em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  /* GENERIC PANEL =================================== */
+  .panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px; margin: 0;
+  }
+  .panel.tight { padding: 16px 20px; }
+
+  /* COMMENT BUBBLE (Act 1) ========================== */
+  .comment-wrap { display: flex; gap: 14px; align-items: flex-start; }
+  .comment-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; background: var(--bg-deep); object-fit: cover; border: 1px solid var(--border); }
+  .comment-body { flex: 1; min-width: 0; }
+  .comment-author { font-size: 13px; color: var(--text-dim); font-weight: 500; margin-bottom: 4px; }
+  .comment-author .loc { color: var(--text-muted); font-weight: 400; margin-left: 8px; font-size: 12px; }
+  .comment-text {
+    font-size: 22px; color: var(--text); font-weight: 600; line-height: 1.45;
+    padding: 6px 0 4px;
+  }
+  .comment-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .comment-source-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12.5px; color: var(--info); text-decoration: none; padding-top: 12px; border-top: 1px solid var(--border); width: 100%; }
+  .comment-source-link:hover { color: var(--accent); }
+
+  /* AI READS THE COMMENT (Act 2) ===================== */
+  .scoring {
+    display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: center;
+  }
+  .scoring .score-bar {
+    background: var(--bg-deep); border-radius: 12px; padding: 18px 16px; text-align: center; border: 1px solid var(--border);
+  }
+  .scoring .score-num { font-size: 44px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .scoring .score-num small { font-size: 16px; color: var(--text-muted); font-weight: 400; }
+  .scoring .score-label { font-size: 12px; color: var(--accent); margin-top: 6px; letter-spacing: 0.06em; font-weight: 600; }
+  .scoring .score-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .scoring .score-reasoning { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+  .scoring .score-reasoning strong { color: var(--text); }
+  @media (max-width: 560px) { .scoring { grid-template-columns: 1fr; } }
+
+  /* DM bubble (Act 3 & 5) =========================== */
+  .dm {
+    display: flex; gap: 12px; margin-top: 6px;
+  }
+  .dm.from-akke { justify-content: flex-end; }
+  .dm-bubble {
+    max-width: 78%;
+    padding: 14px 18px; border-radius: 16px;
+    font-size: 15.5px; line-height: 1.55; color: var(--text);
+    position: relative;
+  }
+  .dm.from-akke .dm-bubble {
+    background: linear-gradient(135deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .dm.from-customer .dm-bubble {
+    background: var(--bg-deep);
+    border: 1px solid var(--border-strong);
+    border-bottom-left-radius: 4px;
+  }
+  .dm-meta {
+    font-size: 11.5px; color: var(--text-muted); margin-top: 6px;
+    display: flex; gap: 10px;
+  }
+  .dm.from-akke .dm-meta { justify-content: flex-end; }
+
+  /* Transcript (对话全文) ==================== */
+  .transcript {
+    margin: 36px 0 12px; padding: 24px 26px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .transcript-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 18px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .transcript-head h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  .transcript-head .t-sub { font-size: 12.5px; color: var(--text-muted); }
+  .transcript-head .t-hint { font-size: 12px; color: var(--text-muted); }
+  .transcript-head .t-hint code {
+    background: var(--bg-deep); padding: 1px 6px; border-radius: 4px;
+    font-size: 11px; color: var(--accent);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+  .day-sep {
+    font-size: 11.5px; color: var(--text-muted); letter-spacing: 0.06em;
+    margin: 14px 0 10px; padding-bottom: 4px; border-bottom: 1px dashed var(--border);
+  }
+
+  .msg-id {
+    display: inline-block; min-width: 24px; text-align: center;
+    padding: 1px 6px; border-radius: 4px; margin-right: 8px;
+    background: var(--bg-deep); border: 1px solid var(--border-strong);
+    color: var(--text-dim); text-decoration: none;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px; font-weight: 700;
+    scroll-margin-top: 20px;
+  }
+  .msg-id:hover { color: var(--accent); border-color: var(--accent); }
+  .dm[id^="msg-"] { scroll-margin-top: 80px; }
+
+  .msg-ref {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700;
+    padding: 1px 6px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    text-decoration: none;
+    vertical-align: 1px;
+  }
+  .msg-ref:hover { background: var(--accent); color: #fff; }
+
+  /* Region granularity analysis ============== */
+  .region-panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px;
+  }
+  .region-panel .rp-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .region-panel .rp-head h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text); }
+  .region-panel .rp-head .rp-sub { font-size: 12px; color: var(--text-muted); }
+  .region-layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .region-layer {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .region-layer .rl-label { font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .region-layer .rl-val { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 4px; }
+  .region-layer .rl-val .null { color: var(--text-muted); font-weight: 400; font-size: 14px; font-style: italic; }
+  .region-layer .rl-source { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .region-layer .rl-source code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 10px; font-family: "SF Mono", Menlo, Consolas, monospace; color: #c4b5fd; }
+  @media (max-width: 640px) { .region-layers { grid-template-columns: 1fr; } }
+
+  .region-usage { display: grid; gap: 10px; }
+  .region-usage .ru-row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 14px; align-items: start;
+    padding: 12px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .region-usage .ru-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 4px 0; text-align: center; border-radius: 6px; line-height: 1.1;
+  }
+  .region-usage .ru-tag.province { background: var(--info-soft); color: var(--info); }
+  .region-usage .ru-tag.city { background: var(--success-soft); color: var(--success); }
+  .region-usage .ru-tag.muted { background: var(--bg); color: var(--text-muted); }
+  .region-usage .ru-body { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .region-usage .ru-body strong { color: var(--text); }
+  .region-usage .ru-body .ru-quote {
+    display: inline-block; background: var(--bg-elevated); padding: 2px 8px; border-radius: 4px;
+    font-size: 12.5px; color: var(--text); border-left: 2px solid var(--accent); margin: 2px 0;
+  }
+  @media (max-width: 600px) {
+    .region-usage .ru-row { grid-template-columns: 1fr; gap: 6px; }
+    .region-usage .ru-tag { text-align: left; padding: 3px 8px; display: inline-block; }
+  }
+
+  /* Annotation under DM */
+  .annotation {
+    margin: 12px 0 0; padding: 12px 16px;
+    background: rgba(139, 92, 246, 0.04);
+    border-left: 2px solid var(--accent);
+    border-radius: 8px;
+    font-size: 13.5px; color: var(--text-dim); line-height: 1.6;
+  }
+  .annotation .a-title { color: var(--accent); font-weight: 600; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .annotation strong { color: var(--text); }
+
+  /* Highlight breakdown (Act 3 specifically) ======= */
+  .breakdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+  .breakdown .bd-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .breakdown .bd-num { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.04em; }
+  .breakdown .bd-title { font-size: 12.5px; color: var(--text); font-weight: 600; margin: 2px 0 4px; }
+  .breakdown .bd-quote { font-size: 12px; color: var(--text-muted); line-height: 1.45; font-style: italic; }
+  @media (max-width: 700px) { .breakdown { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Delivery details (Act 4) ======================= */
+  .delivery-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .delivery-row .dr-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .delivery-row .dr-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .delivery-row .dr-val { font-size: 14.5px; color: var(--text); font-weight: 600; }
+  .delivery-row .dr-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+  @media (max-width: 600px) { .delivery-row { grid-template-columns: 1fr; } }
+
+  /* Outcome ambiguity callout (this case's unique) ===== */
+  .ambiguity-callout {
+    background: var(--warning-soft); border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 12px; padding: 16px 20px; margin-top: 16px;
+    font-size: 14px; color: #fde68a; line-height: 1.65;
+  }
+  .ambiguity-title { color: var(--customer); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .ambiguity-callout strong { color: #fef3c7; }
+  .ambiguity-callout code { background: rgba(0,0,0,0.25); padding: 1px 6px; border-radius: 3px; font-size: 12px; color: #fde68a; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  /* Current status =========================== */
+  .status-card {
+    background: linear-gradient(135deg, rgba(251,191,36,0.10), rgba(139,92,246,0.06));
+    border: 1px solid rgba(251,191,36,0.25);
+    border-radius: 14px; padding: 22px 26px;
+    display: flex; gap: 18px; align-items: center;
+  }
+  .status-pulse {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--customer);
+    box-shadow: 0 0 0 6px rgba(251,191,36,0.18);
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 6px rgba(251,191,36,0.18); }
+    50% { box-shadow: 0 0 0 10px rgba(251,191,36,0.05); }
+  }
+  .status-text strong { color: var(--text); }
+  .status-text { color: var(--text-dim); font-size: 14.5px; line-height: 1.55; }
+  .status-text code { background: var(--bg-deep); padding: 1px 6px; border-radius: 3px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  /* Lessons ================================ */
+  .lessons { display: grid; gap: 12px; }
+  .lesson {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start;
+  }
+  .lesson-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lesson-body strong { color: var(--text); }
+  .lesson-body { color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+  .lesson-body code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 12px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  /* System snapshot =========================== */
+  .snapshot {
+    margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border);
+  }
+  .snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+  .snap-grid dl { margin: 0; display: grid; grid-template-columns: 100px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .snap-grid dt { color: var(--text-muted); }
+  .snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+  .snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><a href="/akke/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">陶华风里</span>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <img class="hero-avatar"
+         src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_okhkeAzvEAChADEbNAAgIJAfm93BrISgA869Cs.jpeg?from=2064092626"
+         alt="陶华风里 头像"
+         referrerpolicy="no-referrer"
+         loading="lazy">
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 陶华风里</div>
+    <h1>陶华风里的<br>深夜价格一问</h1>
+    <p class="hero-tagline">
+      她在安徽。临近午夜 23:50 刷到一个装修知识号的视频，<br>
+      仓促打下一行带错字的<em>「最终一步，价格对少」</em> — Akke 第二天中午把破冰打到了她屏幕上，但屏幕的另一端，状态至今未明。
+    </p>
+    <div class="hero-chips">
+      <span class="chip purple">高意向 · 评分 78</span>
+      <span class="chip blue">产品咨询 · 询价</span>
+      <span class="chip amber">安徽</span>
+      <span class="chip" style="background: var(--warning-soft); color: var(--customer);">投递状态待审</span>
+    </div>
+    <br>
+    <a class="hero-profile" href="https://www.douyin.com/user/MS4wLjABAAAAKOE7KQ32XlSnZStc5_-zREdECa75emELhGC0ILGwmOc" target="_blank" rel="noopener noreferrer">
+      → 抖音个人主页
+    </a>
+  </header>
+
+  <!-- ============ JOURNEY MAP STRIP ============ -->
+  <div class="journey-strip" aria-label="用户旅程进度">
+    <div class="js-step done"><div class="num">1</div><div class="lbl">刷视频</div></div>
+    <div class="js-step done"><div class="num">2</div><div class="lbl">留评论</div></div>
+    <div class="js-step done"><div class="num">3</div><div class="lbl">AI 评分</div></div>
+    <div class="js-step done"><div class="num">4</div><div class="lbl">起草破冰</div></div>
+    <div class="js-step now"><div class="num">5</div><div class="lbl">DM 触达 · 状态待审</div></div>
+    <div class="js-step"><div class="num">6</div><div class="lbl">等首次回应</div></div>
+    <div class="js-step"><div class="num">7</div><div class="lbl">跟进 / 加微</div></div>
+  </div>
+
+  <!-- ============ 完整对话 · 先看全文再看分析 ============ -->
+  <section class="transcript" aria-label="完整对话">
+    <div class="transcript-head">
+      <h2>完整对话 · 1 条 AI 破冰</h2>
+      <span class="t-sub">2026-05-19 中午 · 单通道 DM · 投递状态待审</span>
+    </div>
+    <p class="t-hint">本案目前只有 <code>#1</code> 一条消息。下方 ACT 在拆解时用 <code>#N</code> 引用回这里。<code>queue.status = failed</code> 是 algorithm 的悲观判定，<strong>不等于客户没看到</strong> — 见 ACT 04 + 复盘第 4 条。</p>
+
+    <div class="day-sep">2026-05-19 · AI 破冰（投递状态待人工审）</div>
+
+    <div class="dm from-akke" id="msg-1">
+      <div class="dm-bubble">你好，陶华风里姐。油工阶段墙面找平得盯紧，不然后面装柜子缝隙显眼。安徽这边湿气重，柜体板材得选防潮的。能做，全屋柜体90到160平下来5万。我们源头工厂直供，这个月活动名额紧张，比建材市场划算不少。你家准备先动哪一组柜子？</div>
+    </div>
+    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-1" class="msg-id">#1</a>📱 2026-05-19 中午 CST · 由账号「小文（野荞）」推送 · queue 状态 <code style="background: var(--bg-deep); padding: 0 4px; border-radius: 3px;">failed</code>（待审）</div>
+
+    <div style="margin-top: 18px; padding: 14px 18px; background: var(--bg-deep); border: 1px dashed var(--border-strong); border-radius: 12px; text-align: center; color: var(--text-muted); font-size: 13px; line-height: 1.6;">
+      <strong style="color: var(--text-dim);">客户首次回应 · 等待中 · 同时投递状态待审</strong><br>
+      <span style="font-size: 12px;">真机点击「发送」已完成，但 <code>detect_send_outcome</code> 未在 source XML 里找到 placeholder banner → 标记 <code>silent_drop_suspected</code>。该判定的历史 false-negative ≈ 80%。</span>
+    </div>
+  </section>
+
+  <!-- ============ ACT 1 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 起点</span>
+      <span class="act-time">2026-05-18　23:50 CST</span>
+    </div>
+    <h2>她在临近午夜留下错字</h2>
+    <p class="act-lede">
+      在<em>海哥—用心讲装修</em>（号源池里的一个知识号）发的某条视频底下，陶华风里打了 8 个字。这 8 个字之所以重要，因为她在「<em>装修流程中的"最后一步"、问价语气、临近午夜的决策时段</em>」三件事上同时暴露了自己 — 哪怕中间一个字打错（"对少" ≈ "多少"），也藏不住"想结束了"的紧迫感。
+    </p>
+    <div class="panel">
+      <div class="comment-wrap">
+        <img class="comment-avatar"
+             src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_okhkeAzvEAChADEbNAAgIJAfm93BrISgA869Cs.jpeg?from=2064092626"
+             alt="陶华风里"
+             referrerpolicy="no-referrer"
+             loading="lazy">
+        <div class="comment-body">
+          <div class="comment-author">陶华风里 <span class="loc">📍 安徽</span></div>
+          <div class="comment-text">最终一步，价格对少</div>
+          <div class="comment-meta">2026-05-18 23:50 CST · 评论于「海哥—用心讲装修」的视频 · 关键词 <code style="background: var(--bg-deep); padding: 0 4px; border-radius: 3px; font-size: 11px;">价格</code></div>
+        </div>
+      </div>
+      <a class="comment-source-link" href="https://www.douyin.com/video/7638100116418628879" target="_blank" rel="noopener noreferrer">
+        📹 评论所在视频（在抖音打开）
+      </a>
+    </div>
+
+    <!-- 地区粒度分析 · ACT 01 子模块 -->
+    <div class="region-panel" style="margin-top: 18px;">
+      <div class="rp-head">
+        <h3>📍 地区粒度 · 知识号 + 跨地域</h3>
+        <span class="rp-sub">自报市 NULL · 号源服务全国 → 同城判定不参与，省级回退激活</span>
+      </div>
+
+      <div class="region-layers">
+        <div class="region-layer">
+          <div class="rl-label">省 · IP 属地</div>
+          <div class="rl-val">安徽</div>
+          <div class="rl-source">来源 <code>comments.ip_location</code> · 抖音 IP 反查</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">市 · 自报现居</div>
+          <div class="rl-val"><span class="null">未自报</span></div>
+          <div class="rl-source">来源 <code>comments.city</code> · USER_DETAIL 未捕获</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">号源服务市</div>
+          <div class="rl-val">全国</div>
+          <div class="rl-source">来源 <code>source_accounts.city</code> · 知识号（跨地域）· 不参与同城判定</div>
+        </div>
+      </div>
+
+      <div class="region-usage">
+        <div class="ru-row">
+          <div class="ru-tag province">省级</div>
+          <div class="ru-body">
+            <strong>opener 用了省级气候话术作为开场锚（见 <a href="#msg-1" class="msg-ref">#1</a>）：</strong>
+            <span class="ru-quote">安徽这边湿气重，柜体板材得选防潮的</span><br>
+            <span style="color: var(--text-muted); font-size: 12px;">缺自报市时退到省级是 Akke opener 的标准回退路径。安徽梅雨带 + 板材防潮是装修业内人尽皆知的真问题 — 用它来证"我懂你的本地约束"，比泛报价更接得住高意向产品咨询。</span>
+          </div>
+        </div>
+        <div class="ru-row">
+          <div class="ru-tag muted">市级</div>
+          <div class="ru-body">
+            <strong>市级硬同城规则不触发</strong> · 因 <code>comments.city = NULL</code> + <code>source_accounts.city = '全国'</code><br>
+            <span style="color: var(--text-muted); font-size: 12px;">migration <code>20260512173500</code> 的同城判定需要 <em>comments.city</em> 非空且 <em>source_accounts.city ≠ '全国'</em>。本案两端都失败 → 硬同城徽章不出现，hero chips 只显示省级「安徽」。知识号的副作用就是跨地域 — 没有"我们就在你城市"的物理近度可用。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACT 2 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 被看见</span>
+      <span class="act-time">2026-05-19　12:11 CST · 评分 cron 命中</span>
+    </div>
+    <h2>系统给她打了 78 分</h2>
+    <p class="act-lede">
+      Akke 的分析 cron 把新评论喂给 LLM 评分（DeepSeek V4 Flash）。模型穿过了错字看出三件事：<em>「价格」是询价钩</em>、<em>"最终一步"= 装修流程末端、具体性中等</em>、<em>评论刚发不久、还活跃</em> — 给出 78 分高意向，并自动创建 conversation，状态 <code>ice_break</code>。
+    </p>
+    <div class="panel">
+      <div class="scoring">
+        <div class="score-bar">
+          <div class="score-num">78<small>/100</small></div>
+          <div class="score-label">高意向</div>
+        </div>
+        <div>
+          <div class="score-tags">
+            <span class="chip purple">type · product</span>
+            <span class="chip blue">specificity · medium</span>
+            <span class="chip green">freshness · active</span>
+            <span class="chip amber">keyword · 价格</span>
+          </div>
+          <div class="score-reasoning">
+            <strong>评分理由：</strong>产品型 · 中等具体 · 进行中。<br>
+            <span style="color: var(--text-muted);">"价格" = 询价语气直接；"最终一步" = 装修流程节点提示（中等具体，但不到"已经在选某具体型号"那么细）；语气主动 + 刚发不到 13 小时 = 进行中。三轴合并 78，越过 70 的高意向门槛 → 进入 ice_break 流水线。模型对"对少"做了 fuzzy 容错，没被错字误导成 noise。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACT 3 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 第一句话</span>
+      <span class="act-time">2026-05-19　中午 CST · 由账号「小文（野荞）」起草</span>
+    </div>
+    <h2>Akke 拟了一段四段式破冰</h2>
+    <p class="act-lede">
+      AI 起草、运营批准、通过<em>本地真机自动化</em>把消息打到她的抖音私信里。<br>
+      这条破冰文案（见 <a href="#msg-1" class="msg-ref">#1</a>）走的是四段式 V3 模板：复述昵称 + 阶段诊断 → 省级地区接业务 → 报价 + 紧迫 → 反问。
+    </p>
+
+    <div class="breakdown">
+      <div class="bd-item">
+        <div class="bd-num">① 招呼 + 阶段诊断</div>
+        <div class="bd-title">复述昵称 + 锚一个具体施工阶段</div>
+        <div class="bd-quote">「陶华风里姐」「油工阶段墙面找平得盯紧」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">② 地域接业务</div>
+        <div class="bd-title">省级气候 → 产品约束</div>
+        <div class="bd-quote">「安徽这边湿气重，柜体板材得选防潮的」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">③ 报价 + 紧迫</div>
+        <div class="bd-title">区间报价 + 渠道 + 名额</div>
+        <div class="bd-quote">「90到160平下来5万」「源头工厂直供…活动名额紧张」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">④ 反问</div>
+        <div class="bd-title">推进锚</div>
+        <div class="bd-quote">「你家准备先动哪一组柜子？」</div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="a-title">破冰文案 V3 · 四段式定型</div>
+      四段式 ice_break 的标准结构 — <strong>不结束在客气话，而是结束在问题上</strong>。本条 DM 用了一个有趣的策略：把客户那句模糊的"最终一步"<strong>主动解读为"油工阶段"</strong>，赌的是"如果蒙对了，她会觉得我懂；蒙不对，她会纠正我"。这是 cold opener 里的小赌注 — 没有自报市可用、又是知识号场景，需要靠一个"懂行的具体性"破冰。客户的"价格"钩在第三段被回答（区间报价 5 万），第二轮如果有机会，可改为"先单独报柜体单价 vs 全屋包"对比展开。
+    </div>
+  </section>
+
+  <!-- ============ ACT 4 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 04 · 触达路径</span>
+      <span class="act-time">iOS WDA 真机 · queue 状态 = failed（待审）</span>
+    </div>
+    <h2>真机点击发送 · 但回执读不到</h2>
+    <p class="act-lede">
+      抖音对 web 端陌生人 DM 的封锁极严（Fly Tokyo 出口 IP 在 IM 入口直接挂掉）。Akke 走的是<em>真实 iPhone + WDA 自动化</em>（<code>worker/dm_warmup_send.py</code>），让风控判定路径几乎等同于「一个真人在自己手机上发消息」。本案 send 步骤完成 — 发送按钮被真机点了 — 但<em>投递回执的读取失败</em>，触发悲观判定 <code>silent_drop_suspected</code>。
+    </p>
+    <div class="delivery-row">
+      <div class="dr-item">
+        <div class="dr-label">发送账号</div>
+        <div class="dr-val">小文（野荞）</div>
+        <div class="dr-sub">messaging 类型号池 · active</div>
+      </div>
+      <div class="dr-item">
+        <div class="dr-label">通道</div>
+        <div class="dr-val">iOS · WDA 真机</div>
+        <div class="dr-sub">代码引用 <code style="background: var(--bg); padding: 0 4px; border-radius: 3px; font-size: 11px;">worker/dm_warmup_send.py</code></div>
+      </div>
+      <div class="dr-item">
+        <div class="dr-label">queue 终态</div>
+        <div class="dr-val" style="color: var(--customer);">failed · 待审</div>
+        <div class="dr-sub">error: <code style="background: var(--bg); padding: 0 4px; border-radius: 3px; font-size: 11px;">silent_drop_suspected</code></div>
+      </div>
+    </div>
+
+    <div class="ambiguity-callout">
+      <div class="ambiguity-title">⚠ 这是本案最有教育意义的一幕</div>
+      <strong>"queue.status = failed" ≠ "客户没收到"</strong>。<br><br>
+      <code>detect_send_outcome</code> 用关键字匹配 XCTest source XML 里的 placeholder banner（"对方回复后才能发消息"）来判定投递成功。但抖音 iOS App 把这串文案<strong>渲染成 image 或 custom control</strong>，<em>不在 accessibility tree 里</em> — XCTest 的 <code>source()</code> 拿不到。<br><br>
+      历史复盘（2026-05-02 批量 14 条 warmup）：algorithm 标 8 条 <code>silent_drop_suspected</code>，肉眼审 screenshot 后<strong>全部</strong>看见蓝色 chat bubble + placeholder banner = <strong>真投递</strong>。<br><br>
+      因此本案的正确解读是：<strong>"已点击发送 + 回执失读 → 真实投递概率 ≈ 80%"</strong>，剩下 20% 才是真 silent drop。下一步必须打开本机 <code>/tmp/warmup_*_after_send.png</code> 看截图，看到蓝 bubble 就批量改 <code>messages.status='sent'</code> + <code>message_queue.status='sent'</code>。
+    </div>
+  </section>
+
+  <!-- ============ ACT 5 · 客户未回复 · 简化为占位说明 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 05 · 等首次回应</span>
+      <span class="act-time">已等不到 24 小时</span>
+    </div>
+    <h2>她还没回 · 而且我们其实不确定她有没有看到</h2>
+    <p class="act-lede">
+      系统记录 <code>messages</code> 表里仅有 <a href="#msg-1" class="msg-ref">#1</a> 一条 AI 消息，没有 role=customer 行。<em>这是 ice_break 阶段常见的中间态</em>，但本案叠加了一层不确定性 — <strong>我们没法肯定 DM 真的进了她的私信框</strong>。在确认投递状态之前，"她还没回"和"她根本没看到"这两个分支无法被区分开来。Akke 不会在没回应时主动追问，避免把 sec_uid 烧成陌生人 DM 黑名单；本案推荐先<em>人工审 screenshot 修正 queue 状态</em>，再让 followup_policy = standard 自然推进。
+    </p>
+  </section>
+
+  <!-- ACT 06 · 跟进未发出（仅首发 DM），按 SPEC 规定省略整段 -->
+
+  <!-- ============ ACT 7 / NOW ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 07 · 现在</span>
+      <span class="act-time">stage = ice_break · 投递状态待审</span>
+    </div>
+    <h2>需要的不是再发一条，而是先回头看截图</h2>
+    <div class="status-card">
+      <div class="status-pulse"></div>
+      <div class="status-text">
+        <strong>对话还在 ice_break 阶段 · queue 状态卡在 failed 待审。</strong><br>
+        followup_policy = <code>standard</code>，但在投递状态澄清前任何 followup 都是错位 — 如果 #1 其实送达了，followup 会显得叠加追问；如果真没送达，问题就不在话术而在通道。<em>下一步动作</em>：(1) 本机打开 <code>/tmp/warmup_*_after_send.png</code> 找本条对应截图肉眼审；(2) 看见蓝 bubble + banner 就改 status='sent'；(3) 修正后 followup_policy 才有意义。这条线索的真正价值在<em>它把 detect_send_outcome 的 false-negative 暴露成可写进流程的检查项</em>。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">复盘 · 这条线索教会我们的</span>
+    </div>
+    <h2>5 个可复用的系统观察</h2>
+    <div class="lessons">
+      <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>错字不抑评分。</strong>"价格对少" → "价格多少"是键盘相邻位的笔误，LLM 评分（DeepSeek V4 Flash）做了 fuzzy 容错没被误导。这条对 prompt 调参的启示是：不要在 noise filter 里加"必须是规范中文"过滤，否则会丢失大量真实高意向。</div></div>
+      <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>临近午夜的询价是装修业的高意向时段。</strong>23:50 这种时间点留言，往往意味着客户白天工地跑完、晚上正在比价决策。Akke 的评分模型把"freshness · active"权重设得偏高，是为了不让深夜评论在第二天醒来时就被 cron 当 stale 跳过。</div></div>
+      <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>知识号场景下，省级气候话术 = 同城回退路径。</strong>没有 <code>comments.city</code>、号源又是"全国"，硬同城判定一定 false。这时"安徽湿气重 → 板材选防潮"这种省级气候 + 产品约束的组合是最稳的破冰锚 — 它证"我懂你的本地物理约束"，比泛报价更接得住产品咨询型评论。</div></div>
+      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>queue.status='failed' 是 algorithm 的悲观判定 · 不是事实。</strong><code>detect_send_outcome</code> 用 XCTest source XML 抓 placeholder banner，但抖音 iOS 把这串文案渲染成 image / custom control 让 accessibility tree 拿不到，历史 false-negative ≈ 80%。<strong>遇到 silent_drop_suspected 必须打开 screenshot 肉眼审</strong>，看见蓝 bubble = 真投递，批量改回 sent。把这条写成 runbook 比写在脑子里靠谱。</div></div>
+      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>状态未澄清前不要追加 followup。</strong>如果 #1 其实送达，followup 会变叠加追问把客户推走；如果真没送达，问题在通道不在话术 — 追加文案也无效。<strong>诚实地把"待审"作为一个 stage 标出来</strong>，比假装已经触达然后追第二条更省客户的耐心。</div></div>
+    </div>
+  </section>
+
+  <!-- ============ SYSTEM SNAPSHOT ============ -->
+  <section class="snapshot">
+    <div class="snapshot-title">SYSTEM SNAPSHOT · 这条记录在 Akke 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>conversation</dt><dd><code>d2f4d9b1-2518-…-e03b2ab9a4e4</code></dd>
+        <dt>stage</dt><dd><code>ice_break</code></dd>
+        <dt>created_at</dt><dd>2026-05-19 12:11 CST</dd>
+        <dt>触发评论</dt><dd><code>8c34798c-…-82cd0278568c</code></dd>
+      </dl>
+      <dl>
+        <dt>抖音昵称</dt><dd>陶华风里</dd>
+        <dt>sec_uid</dt><dd><code>MS4wLjABAAAAKOE7KQ32X…GwmOc</code></dd>
+        <dt>IP 属地</dt><dd>安徽</dd>
+        <dt>自报市</dt><dd>未自报</dd>
+      </dl>
+      <dl>
+        <dt>intent_score</dt><dd>78 / 100</dd>
+        <dt>intent_label</dt><dd>高意向</dd>
+        <dt>comment_type</dt><dd>product · 询价</dd>
+        <dt>specificity</dt><dd>medium · active</dd>
+      </dl>
+      <dl>
+        <dt>发送账号</dt><dd>小文（野荞）（messaging）</dd>
+        <dt>号源</dt><dd>海哥—用心讲装修 · 知识号 · 全国</dd>
+        <dt>DM queue</dt><dd>failed · <code>silent_drop_suspected</code></dd>
+        <dt>客户回复</dt><dd>等首次回应（前置依赖：先审截图修正 queue）</dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Akke 用户案例 · 陶华风里 · 数据快照 2026-05-19 · <a href="/akke/cases/">← 返回案例库</a> · <a href="/akke/">Akke 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>
