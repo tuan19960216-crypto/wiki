@@ -186,27 +186,17 @@
   .transcript .dm-row { display: flex; flex-direction: column; }
   .transcript .dm-row.from-akke { align-items: flex-end; }
   .transcript .dm-row.from-customer { align-items: flex-start; }
-
-  /* 等首次回应 in-flight state card */
-  .awaiting-card {
-    background: linear-gradient(135deg, rgba(251,191,36,0.06), rgba(96,165,250,0.04));
-    border: 1px dashed rgba(251, 191, 36, 0.35);
-    border-radius: 12px; padding: 22px 24px;
-    text-align: center;
+  .day-sep {
+    text-align: center; font-size: 11px; color: var(--text-muted);
+    letter-spacing: 0.1em; padding: 4px 0; margin: 4px 0;
+    border-top: 1px dashed var(--border); position: relative;
   }
-  .awaiting-card .aw-eyebrow {
-    font-size: 11px; color: var(--customer); letter-spacing: 0.12em; text-transform: uppercase;
-    font-weight: 700; margin-bottom: 6px;
-  }
-  .awaiting-card .aw-title {
-    font-size: 17px; font-weight: 600; color: var(--text); margin: 0 0 8px;
-  }
-  .awaiting-card .aw-body {
-    font-size: 13px; color: var(--text-dim); line-height: 1.6; margin: 0;
-  }
-  .awaiting-card .aw-body code {
-    background: var(--bg-deep); padding: 1px 6px; border-radius: 4px;
-    font-size: 12px; color: #fde68a; font-family: "SF Mono", Menlo, Consolas, monospace;
+  .day-sep span { background: var(--bg-elevated); padding: 0 12px; position: relative; top: -10px; }
+  .sys-divider {
+    text-align: center; font-size: 11.5px; color: var(--text-muted);
+    margin: 4px 0; padding: 6px 12px;
+    background: rgba(255,255,255,0.02); border-radius: 6px;
+    font-style: italic;
   }
 
   /* DM bubble · transcript 内复用 */
@@ -230,6 +220,9 @@
     background: var(--bg-deep);
     border: 1px solid var(--border-strong);
     border-bottom-left-radius: 4px;
+  }
+  .dm[data-approx="true"] .dm-bubble {
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(251,191,36,0.05) 6px, rgba(251,191,36,0.05) 12px);
   }
   .dm-meta {
     font-size: 11.5px; color: var(--text-muted); margin-top: 6px;
@@ -313,22 +306,41 @@
   .signal-title { color: var(--customer); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
   .signal strong { color: #fef3c7; }
 
+  /* WeChat highlight - 客户主动甩号高光块 */
+  .wechat-callout {
+    background: linear-gradient(135deg, rgba(52,211,153,0.12), rgba(251,191,36,0.06));
+    border: 1px solid rgba(52,211,153,0.35);
+    border-radius: 14px; padding: 20px 22px; margin-top: 18px;
+  }
+  .wechat-callout .wc-eyebrow {
+    color: var(--success); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .wechat-callout h3 { margin: 0 0 8px; font-size: 18px; color: var(--text); font-weight: 700; }
+  .wechat-callout p { margin: 0; color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+  .wechat-callout strong { color: var(--text); }
+  .wechat-callout code {
+    background: var(--bg-deep); padding: 2px 8px; border-radius: 5px;
+    font-size: 13px; color: #6ee7b7; font-family: "SF Mono", Menlo, Consolas, monospace;
+    border: 1px solid rgba(52,211,153,0.25);
+  }
+
   /* Current status (Act 7) ========================== */
   .status-card {
-    background: linear-gradient(135deg, rgba(251,191,36,0.10), rgba(96,165,250,0.04));
-    border: 1px solid rgba(251, 191, 36, 0.30);
+    background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(96,165,250,0.06));
+    border: 1px solid rgba(52,211,153,0.25);
     border-radius: 14px; padding: 22px 26px;
     display: flex; gap: 18px; align-items: center;
   }
   .status-pulse {
-    width: 12px; height: 12px; border-radius: 50%; background: var(--warning);
-    box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.18);
+    width: 12px; height: 12px; border-radius: 50%; background: var(--success);
+    box-shadow: 0 0 0 6px rgba(52,211,153,0.18);
     flex-shrink: 0;
     animation: pulse 2s ease-in-out infinite;
   }
   @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.18); }
-    50% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0.05); }
+    0%, 100% { box-shadow: 0 0 0 6px rgba(52,211,153,0.18); }
+    50% { box-shadow: 0 0 0 10px rgba(52,211,153,0.05); }
   }
   .status-text strong { color: var(--text); }
   .status-text { color: var(--text-dim); font-size: 14.5px; line-height: 1.55; }
@@ -429,6 +441,110 @@
     .region-usage .ru-row { grid-template-columns: 1fr; gap: 6px; }
     .region-usage .ru-tag { text-align: left; padding: 3px 8px; display: inline-block; }
   }
+
+  /* Timing strip (Act 5 head) =================== */
+  .timing-strip {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; margin: 0 0 18px;
+  }
+  .timing-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .timing-summary .ts-item {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .timing-summary .ts-label {
+    font-size: 10.5px; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;
+  }
+  .timing-summary .ts-val {
+    font-size: 15px; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+  .timing-summary .ts-val .approx { color: var(--text-muted); font-size: 11px; margin-left: 4px; font-weight: 400; }
+  .timing-summary .ts-val .none { color: var(--text-muted); font-weight: 400; font-style: italic; }
+  @media (max-width: 600px) { .timing-summary { grid-template-columns: 1fr; } }
+
+  .timing-bars { display: flex; gap: 2px; height: 36px; align-items: stretch; border-radius: 6px; overflow: hidden; }
+  .timing-bar {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 600; line-height: 1;
+    color: rgba(255,255,255,0.95);
+    cursor: default;
+    transition: filter 0.15s;
+    min-width: 28px;
+  }
+  .timing-bar:hover { filter: brightness(1.15); }
+  .timing-bar.ai-to-user {
+    background: linear-gradient(180deg, var(--customer), #f59e0b);
+    color: #1a1f2b;
+  }
+  .timing-bar.user-to-ai {
+    background: linear-gradient(180deg, var(--accent), #7c3aed);
+  }
+  .timing-bar[data-approx="true"] {
+    background-image:
+      repeating-linear-gradient(45deg,
+        rgba(255,255,255,0.18) 0 4px,
+        transparent 4px 8px);
+    background-blend-mode: overlay;
+  }
+  .timing-bar[data-approx="true"]::after {
+    content: "≈"; position: absolute; top: 2px; right: 4px;
+    font-size: 10px; opacity: 0.6;
+  }
+  .timing-legend {
+    display: flex; gap: 14px; margin-top: 8px;
+    font-size: 11px; color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .timing-legend .tl-swatch {
+    display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle;
+  }
+  .timing-legend .tl-swatch.customer { background: var(--customer); }
+  .timing-legend .tl-swatch.akke { background: var(--accent); }
+
+  .timing-list {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: grid; gap: 6px; list-style: none; padding-left: 0;
+  }
+  .timing-list .tl-row {
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 12px; align-items: center;
+    padding: 8px 12px;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .timing-list .tl-num {
+    font-size: 12px; font-weight: 700;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums; text-align: center;
+  }
+  .timing-list .tl-path {
+    font-size: 12.5px; color: var(--text-dim);
+    line-height: 1.5;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: baseline;
+  }
+  .timing-list .tl-time {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    color: var(--text-muted); font-size: 11px;
+    background: rgba(255,255,255,0.03); padding: 1px 6px; border-radius: 4px;
+  }
+  .timing-list .tl-arrow { color: var(--text-muted); }
+  .timing-list .tl-actor { color: var(--text); }
+  .timing-list .tl-gap {
+    font-size: 12px; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    padding: 4px 10px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .timing-list .tl-gap.ai-to-user { background: var(--customer-soft); color: var(--customer); }
+  .timing-list .tl-gap.user-to-ai { background: var(--accent-soft); color: var(--accent); }
+  @media (max-width: 600px) {
+    .timing-list .tl-row { grid-template-columns: 1fr; gap: 6px; }
+  }
 </style>
 </head>
 <body>
@@ -446,16 +562,16 @@
          referrerpolicy="no-referrer"
          loading="lazy">
     <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 #009</div>
-    <h1>空间向量<br>一句明明白白的求联系</h1>
+    <h1>空间向量<br>她给了老公的微信号</h1>
     <p class="hero-tagline">
-      他在广东。在福州本地号「阿斌」的「<em>联动拉篮怎么做</em>」视频底下，留了 11 个字 — <em>「我房子准备装修怎么联系你」</em>。<br>
-      Akke 在 1 小时 13 分内拟了一段「直接给加 V 入口」的破冰，账号「小文（野荞）」推了出去。<em>5 天过去，inbox 仍无入站</em>。
+      她在广东。在福州本地号「阿斌」的「<em>联动拉篮怎么做</em>」视频底下，留了 11 个字 — <em>「我房子准备装修怎么联系你」</em>。<br>
+      Akke 拟了一段「直接给加 V 入口」破冰。5 天后，她接受了聊天，回了 6 个字符 — <em>「+我老公v / was19817800」</em>。
     </p>
     <div class="hero-chips">
       <span class="chip purple">高意向 · 评分 78</span>
       <span class="chip blue">产品咨询 · 直接求联系</span>
       <span class="chip amber">广东 → 福州跨省</span>
-      <span class="chip amber">⏳ 等首次回应</span>
+      <span class="chip green">老公 v · 分工型决策</span>
     </div>
     <br>
     <a class="hero-profile" href="https://www.douyin.com/user/MS4wLjABAAAAy4RzWUDERiDR-t8EruWgXwcpI4tIAJ0L_-4DwdaGTH6J1uXj9NqZygTnlj9tF6-E" target="_blank" rel="noopener noreferrer">
@@ -470,8 +586,8 @@
     <div class="js-step done"><div class="num">3</div><div class="lbl">AI 评分</div></div>
     <div class="js-step done"><div class="num">4</div><div class="lbl">起草破冰</div></div>
     <div class="js-step done"><div class="num">5</div><div class="lbl">DM 触达</div></div>
-    <div class="js-step now"><div class="num">6</div><div class="lbl">客户回应</div></div>
-    <div class="js-step"><div class="num">7</div><div class="lbl">跟进 / 加微</div></div>
+    <div class="js-step done"><div class="num">6</div><div class="lbl">客户回应</div></div>
+    <div class="js-step now"><div class="num">7</div><div class="lbl">跟进 / 加微</div></div>
   </div>
 
   <!-- ============ 源料 PACK · 还原层 ============ -->
@@ -542,19 +658,27 @@
 
     <!-- 4) 反向评论 · 本案未走该通道，整块 skip -->
 
-    <!-- 5) 站内对话 · 等首次回应 -->
+    <!-- 5) 站内对话 transcript -->
     <section class="source-block">
       <div class="src-eyebrow">
         <span class="src-step">📨 04 · 站内对话</span>
-        <span class="src-meta">无入站消息 · 5 天 + 计</span>
+        <span class="src-meta">截图取证 · 客户回复 1 条 · DB 未入库</span>
       </div>
-      <div class="awaiting-card">
-        <div class="aw-eyebrow">⏳ 在飞 · IN FLIGHT</div>
-        <h3 class="aw-title">等首次回应</h3>
-        <p class="aw-body">
-          截至 2026-05-20 16:00 CST，Akke 的 check-replies cron 在该 conversation 上没拉到任何入站消息，运营端也没看到 inbox 提醒。<br>
-          下一步：观察 inbox 是否有同步延迟（参考 gangzi-daochang / 用户3824342698628 的截图取证教训），followup_policy=<code>standard</code> 触发下一轮跟进时再补气泡。
-        </p>
+      <div class="transcript">
+        <div class="day-sep"><span>≈ 4 天 23 小时后 · 客户端时间 16:02 · 截图取证</span></div>
+
+        <div class="sys-divider">— 对方已确认聊天，可继续发送消息 —</div>
+
+        <div class="dm-row from-customer">
+          <div class="dm from-customer" id="msg-2" data-approx="true">
+            <div class="dm-bubble">+我老公v
+was19817800</div>
+          </div>
+          <div class="dm-meta">
+            <a href="#msg-2" class="msg-id">#2</a>
+            <span>· 客户端 16:02 · 微信号（老公的）· 截图取证 · 日期为估值（约 5/20）</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -568,11 +692,11 @@
     </div>
     <h2>这是案例库最直白的「求联系」</h2>
     <p class="act-lede">
-      在<em>福州荣耀全屋定制丨阿斌</em>（号源池里的一个福州本地工厂号）发的<a href="#src-video" class="msg-ref">那条「联动拉篮怎么做」视频</a>底下，他打了 11 个字（<a href="#src-comment" class="msg-ref">原评论</a>）。其他案例（刚子道场问起订量、用户3824342698628 问尺寸）都是在问<em>工艺问题</em>顺带表明意向；这条<strong>直接跳过问题层，开口就是「怎么联系」</strong>。3 件事同时暴露：①「准备装修」= 还在前期决策、对承接方仍开放（动词时态很关键）；②「怎么联系」= <em>直来直去的决策风格</em>，不在意先问个问题铺垫；③ 跨省（广东 IP / 福州号源） = 对「异地工厂直供」接受度高。
+      在<em>福州荣耀全屋定制丨阿斌</em>（号源池里的一个福州本地工厂号）发的<a href="#src-video" class="msg-ref">那条「联动拉篮怎么做」视频</a>底下，她打了 11 个字（<a href="#src-comment" class="msg-ref">原评论</a>）。其他案例（刚子道场问起订量、用户3824342698628 问尺寸）都是在问<em>工艺问题</em>顺带表明意向；这条<strong>直接跳过问题层，开口就是「怎么联系」</strong>。3 件事同时暴露：①「准备装修」= 还在前期决策、对承接方仍开放（动词时态很关键）；②「怎么联系」= <em>直来直去的决策风格</em>，不在意先问个问题铺垫；③ 跨省（广东 IP / 福州号源） = 对「异地工厂直供」接受度高。
     </p>
     <div class="panel">
       <p style="margin:0;font-size:14px;color:var(--text-dim);line-height:1.7;">
-        <strong style="color:var(--text);">视频信号与评论信号的轻度错位</strong>：「联动拉篮怎么做」是工艺教程类视频，看这种通常是<em>装修中后期、在选具体五金</em>的人。但客户写「准备装修」是<em>前期表述</em>。一种合理解读：客户在做<em>预研</em> — 先看哪家工厂工艺过硬、再到装修阶段时直接定。所以「准备装修」的「准备」可能不是 24 小时内，但客户对供应商决策的优先级已经排到「主动求联系」的高度。
+        <strong style="color:var(--text);">视频信号与评论信号的轻度错位</strong>：「联动拉篮怎么做」是工艺教程类视频，看这种通常是<em>装修中后期、在选具体五金</em>的人。但她写「准备装修」是<em>前期表述</em>。一种合理解读：客户在做<em>预研</em> — 先看哪家工厂工艺过硬、再到装修阶段时直接定。<a href="#msg-2" class="msg-ref">#2</a> 给的「老公 v」也印证了这点：她在<strong>分工型决策</strong>里负责调研（看视频、比工厂），具体签约由老公出面，因此对供应商决策的优先级排得很高。
       </p>
     </div>
 
@@ -607,14 +731,14 @@
           <div class="ru-body">
             <strong>省级 micro-context 用得非常实</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br>
             <span class="ru-quote">广东回南天潮气重，柜体选耐潮板材更稳</span><br>
-            <span style="color: var(--text-muted); font-size: 12px;">这是案例库目前<em>省级 micro-context 最具体的一例</em>。「回南天」是华南春末梅雨季室内泛潮的现象 — 不是「广东客户多」这种模板话，而是把<em>地理气候</em>直接接到<em>工艺选择</em>（耐潮板材）。客户读到「回南天」会立刻意识到「这家工厂懂我们这边的实际装修环境」，比纯销售话术真。</span>
+            <span style="color: var(--text-muted); font-size: 12px;">这是案例库目前<em>省级 micro-context 最具体的一例</em>。「回南天」是华南春末梅雨季室内泛潮的现象 — 不是「广东客户多」这种模板话，而是把<em>地理气候</em>直接接到<em>工艺选择</em>（耐潮板材）。客户读到「回南天」会立刻意识到「这家工厂懂我们这边的实际装修环境」，比纯销售话术真。<strong>事后看，这句省级 micro-context 很可能是客户决定接受聊天的拐点之一</strong>。</span>
           </div>
         </div>
         <div class="ru-row">
           <div class="ru-tag muted">市级</div>
           <div class="ru-body">
             <strong>市级 micro-context 整层缺席</strong> · 因为 <code>comments.city = NULL</code><br>
-            <span style="color: var(--text-muted); font-size: 12px;">如果当时抓到了自报市（比如「广州」「深圳」），第二轮跟进时本可以编进话术（参考郑州黑康「郑州这阵子白天晒晚上凉」）。但本案<em>客户没回复</em>，nurture 阶段还没启动 — 即便补抓到自报市，也得等 inbox 同步才能用上。</span>
+            <span style="color: var(--text-muted); font-size: 12px;">如果当时抓到了自报市（比如「广州」「深圳」），第二轮跟进时本可以编进话术（参考郑州黑康「郑州这阵子白天晒晚上凉」）。本案运营接下来加微 was19817800 后，市级信息会从微信端补回 — customer_profile 可以记下「老公 v · 估自报市」。</span>
           </div>
         </div>
         <div class="ru-row">
@@ -634,7 +758,7 @@
       <span class="act-no">ACT 02 · 被看见</span>
       <span class="act-time">2026-05-15　15:36 CST · 评论滞后 2 天后才命中</span>
     </div>
-    <h2>系统给他打了 78 分 — 但晚了 2 天</h2>
+    <h2>系统给她打了 78 分 — 但晚了 2 天</h2>
     <p class="act-lede">
       Akke 的分析 cron 把评论喂给 LLM（DeepSeek V4 Flash）评分。模型读到「我房子准备装修怎么联系你」立刻识别为 <em>求联系/询价 → product 信号</em>，三轴合并 78 分 / 高意向。但<strong>评分发生在 2026-05-15 15:36，距评论提交（5-13 10:21）<em>晚了 2 天 5 小时</em></strong>。
     </p>
@@ -659,8 +783,8 @@
       </div>
     </div>
     <div class="signal" style="margin-top:14px;">
-      <div class="signal-title">⚠ 评分滞后 · 不该再等</div>
-      <strong>评分 cron 在「求联系」类高优先级评论上不该等批次</strong> — 客户写「怎么联系你」的当下心理状态是「想立刻找人」，2 天后再触达，客户可能已经被别家联系了/已经在跟别的工厂谈了。后续工程考虑：①给「联系/微信/电话/v」等关键词加 cron 加速通道（写入即评分，不等批次）；②或把这种关键词命中的评论标记 <code>priority=urgent</code>，调度器优先消费。
+      <div class="signal-title">⚠ 评分滞后 · 但还是回了</div>
+      <strong>评分 cron 在「求联系」类高优先级评论上不该等批次</strong> — 客户写「怎么联系你」的当下心理状态是「想立刻找人」，2 天后才推 + 抖音陌生 DM 推送惯性 = 从评论到首响共拖到 7 天才完成（见 <a href="#msg-2" class="msg-ref">#2</a>）。本案<em>客户仍然回了</em>，但这是高意向 lead 的容错带宽 — 不能依赖。后续工程考虑：给「联系/微信/电话/v/wx」等关键词加 cron 加速通道（写入即评分，不等批次），或标记 <code>priority=urgent</code> 优先消费。
     </div>
   </section>
 
@@ -672,7 +796,7 @@
     </div>
     <h2>客户直接要联系 → AI 直接给加 V 入口</h2>
     <p class="act-lede">
-      首条 AI DM 已在源料 pack 内（<a href="#msg-1" class="msg-ref">#1</a>）。这条破冰跟其他案例的<em>四段式</em>有一个关键变体：<strong>第 ③ 段不绕弯</strong>。其他案例（zhengzhou-heikang / gangzi-daochang）的钩子是「我帮你算一下」「让我同事发你参考」— 客户没直说要联系时，钩子要<em>含蓄</em>。但本案<em>客户原话就是「怎么联系」</em> — AI 不能再含蓄，直接「想做柜体可以直接加 v」给入口。<em>客户的表达直接度，决定钩子的显式度</em>。
+      首条 AI DM 已在源料 pack 内（<a href="#msg-1" class="msg-ref">#1</a>）。这条破冰跟其他案例的<em>四段式</em>有一个关键变体：<strong>第 ③ 段不绕弯</strong>。其他案例（zhengzhou-heikang / gangzi-daochang）的钩子是「我帮你算一下」「让我同事发你参考」— 客户没直说要联系时，钩子要<em>含蓄</em>。但本案<em>客户原话就是「怎么联系」</em> — AI 不能再含蓄，直接「想做柜体可以直接加 v」给入口。<em>客户的表达直接度，决定钩子的显式度</em>。事后看，这条破冰的「直接给加 v 入口」做对了 — 客户回的也是 v（虽然给的是老公的）。
     </p>
     <div class="breakdown">
       <div class="bd-item">
@@ -698,7 +822,7 @@
     </div>
     <div class="annotation">
       <div class="a-title">破冰文案 V3+ · 求联系直给版</div>
-      标准四段式（参考 strawberry-shengdai / gangzi-daochang）通常把<em>加微钩子做成隐含动作</em>（"我帮你算/同事发你参考"）。本案客户原话即「怎么联系」，AI 把第 ③ 段写成 <strong>显式加 v 入口 + 活动期紧迫感</strong>。<em>客户的表达直接度</em> = 钩子的显式度刻度。同时 ① 段保留视频复述 + 工艺干货（"重型五金""轨道承重"），不因为客户直接就降低专业性。<strong>含蓄是给"还在挑供应商"的客户准备的；直白是给"已经决定要找供应商"的客户准备的</strong>。
+      标准四段式（参考 strawberry-shengdai / gangzi-daochang）通常把<em>加微钩子做成隐含动作</em>（"我帮你算/同事发你参考"）。本案客户原话即「怎么联系」，AI 把第 ③ 段写成 <strong>显式加 v 入口 + 活动期紧迫感</strong>。<em>客户的表达直接度</em> = 钩子的显式度刻度。同时 ① 段保留视频复述 + 工艺干货（"重型五金""轨道承重"），不因为客户直接就降低专业性。<strong>含蓄是给"还在挑供应商"的客户准备的；直白是给"已经决定要找供应商"的客户准备的</strong>。客户在 <a href="#msg-2" class="msg-ref">#2</a> 给的就是 v — 镜像式回应。
     </div>
   </section>
 
@@ -731,44 +855,90 @@
     </div>
   </section>
 
-  <!-- ============ ACT 05 · 等首次回应 ============ -->
+  <!-- ============ ACT 05 · 她回应了 ============ -->
   <section class="act">
     <div class="act-head">
-      <span class="act-no">ACT 05 · 等首次回应</span>
-      <span class="act-time">2026-05-15 16:49 → 2026-05-20 16:00 · 5 天 + 计</span>
+      <span class="act-no">ACT 05 · 她回应了</span>
+      <span class="act-time">≈ 5 天后 · 客户端时间 16:02 · 截图取证</span>
     </div>
-    <h2>截至快照时刻，还没回</h2>
+    <h2>她给的不是自己的 v，是「我老公」的 v</h2>
     <p class="act-lede">
-      Akke 在 2026-05-15 16:49 CST 把破冰推了出去。截至本案例数据快照（2026-05-20），<em>5 天过去，conversation 上 customer_messages 仍为 0</em>。这不是「失败」 — 是 ice_break 阶段的合理状态。但<strong>对于一个原话写「怎么联系你」的客户来说，5 天无回应值得拆开分析</strong>。
+      她没在第一时间回。AI 在 2026-05-15 16:49 推送，截至截图（约 2026-05-20 17:57 客户端）共拖了 ~5 天。但她回的内容只有 6 个字符（<a href="#msg-2" class="msg-ref">#2</a>）—<em>「+我老公v / was19817800」</em>。没问「你哪家公司」「能不能先发个目录」「价格多少」<strong>跳过所有验证步骤，直接给了一个 v</strong>。但这个 v <em>不是她自己的</em>。
     </p>
 
-    <div class="signal">
-      <div class="signal-title">⏱ 没回的 3 种可能解读</div>
-      <strong>① 推送通知不亮</strong>：抖音陌生人 DM 不会触发推送，得客户主动开 inbox 才看到。客户写完评论可能就刷下一条视频去了 — 完全没意识到有人回他。<br>
-      <strong>② 评分滞后让窗口关闭</strong>：客户在 5-13 评论时是「想立刻找人」的状态，AI 在 5-15 才推 — 中间 2 天他可能已经被别家联系了（其他工厂号、装修队私信、平台广告主），决策已经做完。<br>
-      <strong>③ inbox 同步延迟</strong>：参考 gangzi-daochang / 用户3824342698628 的教训 — check-replies cron 跟抖音 inbox 的同步本就有 hours 级延迟。客户可能已经回了但 Akke 这边没拉到，应当截图人工核验。
+    <!-- 时效性概览 -->
+    <div class="timing-strip" aria-label="对话响应时效">
+      <div class="timing-summary">
+        <div class="ts-item">
+          <div class="ts-label">首次响应延迟</div>
+          <div class="ts-val">≈ 4 天 23 小时 <span class="approx">≈ 截图日期为估值</span></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">AI 跟进延迟</div>
+          <div class="ts-val"><span class="none">N/A</span> <span class="approx">客户直接给微 · AI 未再跟进</span></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">客户给微到位</div>
+          <div class="ts-val">几乎与"确认聊天"同时 <span class="approx">老公 v · 1 条字符串</span></div>
+        </div>
+      </div>
+      <div class="timing-bars" role="img" aria-label="响应间隔时间轴">
+        <!-- 仅 1 段 interval（AI→user，5-15 16:49 → ≈5-20 16:02 ≈ 4 天 23 小时 / 428000 秒）-->
+        <div class="timing-bar ai-to-user" data-approx="true" style="flex: 100" title="5-15 16:49 · AI 破冰 → ≈5-20 16:02 · 客户接受聊天 + 给老公 v「was19817800」（约 4 天 23 小时 · 截图日期估值）">≈ 4 天 23 小时</div>
+      </div>
+      <div class="timing-legend">
+        <span><span class="tl-swatch customer"></span>她在回应我们</span>
+        <span><span class="tl-swatch akke"></span>我们在跟进（本案 AI 未再跟进，运营接力加 v）</span>
+        <span style="margin-left: auto;">≈ 时间为客户端截图估值 · DB 内 first_response_gap = null（inbox 未拉到）</span>
+      </div>
+
+      <ol class="timing-list" aria-label="响应间隔逐条列表">
+        <li class="tl-row">
+          <span class="tl-num">①</span>
+          <div class="tl-path">
+            <a href="#msg-1" class="msg-ref">#1</a>
+            <span class="tl-time">5-15 16:49</span>
+            <span class="tl-actor">AI 破冰（系统时间）</span>
+            <span class="tl-arrow">→</span>
+            <a href="#msg-2" class="msg-ref">#2</a>
+            <span class="tl-time">≈ 5-20 16:02</span>
+            <span class="tl-actor">她「+我老公v · was19817800」</span>
+          </div>
+          <span class="tl-gap ai-to-user">≈ 4 天 23 小时</span>
+        </li>
+      </ol>
     </div>
 
-    <div class="annotation" style="margin-top: 14px;">
-      <div class="a-title">不要假装这是个转化案例</div>
-      其他案例（刚子道场 / 用户3824342698628）的复盘有「客户主动给微」做结论；本案<em>没有结论</em>。但这正是案例库价值的另一面 — <strong>展示破冰阶段决策的诚实当下状态</strong>。如果 inbox 后续拉到客户回复，本案会增补 ACT 06；如果 followup_policy=standard 触发的下一轮跟进有了响应，案例会重写。<em>不要为了"故事完整"提前编结局</em>。
+    <div class="signal">
+      <div class="signal-title">⏱ 时效信号 · 5 天后才回 · 但还是回了</div>
+      <strong>陌生 DM 的真实路径：5 天才打开 + 1 句话给微</strong>。她在 5/15 没收到推送（陌生人 DM 不亮通知），刷抖音时偶然进 inbox（约 5/20）看到那段破冰 — 决定接受聊天。"对方已确认聊天"系统通知之后，她<em>没有任何寒暄</em>，直接发了 6 个字符。<strong>5 天后的回复不代表犹豫，代表"现在我终于打开 inbox 了，那就回吧"</strong>。后续工程：用 v 通过验证 was19817800 后，应当核对加 v 时的客户提示是否符合「妻子推荐"找谁谁谁的工厂"」型转介路径。
+    </div>
+
+    <div class="wechat-callout">
+      <div class="wc-eyebrow">⚡ 客户给的是老公的微信号</div>
+      <h3>这是<code>分工型决策</code>的典型信号 · <code>was19817800</code></h3>
+      <p>
+        在全屋定制 / 装修场景里，<strong>家庭决策常常是分工的</strong>：一方做调研（看视频、对比工厂、跑展厅、收集报价），另一方负责对接 / 签约（去店里下定、付钱、对接工地）。本案客户在抖音端是「空间向量」（看视频、留评论、回 DM 的人），但她给的不是自己的 v — 是<em>「我老公」</em>的 v。<br><br>
+        这条信号有 3 层含义：①<strong>她在调研环节</strong>：所以才会在「联动拉篮怎么做」这种工艺教程视频底下问；②<strong>签约不在她身上</strong>：所以给 v 是给「下一步具体谈的人」，不是她自己；③<strong>她对这家工厂的初筛信任已经过了</strong>：愿意把家里另一半的 v 给陌生 DM 来源，意味着她在初筛阶段把这家排到了「值得对接」的位置。<br><br>
+        <strong>运营加 v <code>was19817800</code> 时的话术应当反映这点</strong> — 不是"嗨我是 Akke 工厂"，而是"嗨，您太太刚才在抖音上联系我们，让我们直接加您的 v 聊柜体" — 让老公先理解"为什么是我接收陌生加 v"，减少他的接听门槛。
+      </p>
     </div>
   </section>
 
-  <!-- ============ ACT 06 · 接住 · 整段省略（未跟进） ============ -->
+  <!-- ============ ACT 06 · 接住 · 整段省略（只发了首条 DM，跟进未发） ============ -->
 
   <!-- ============ ACT 07 · 现在 ============ -->
   <section class="act">
     <div class="act-head">
       <span class="act-no">ACT 07 · 现在</span>
-      <span class="act-time">stage = ice_break · 5 天计</span>
+      <span class="act-time">DB stage = ice_break · 客户已给微，等运营加 v + handoff</span>
     </div>
-    <h2>对话在飞 · 等下一信号</h2>
+    <h2>客户那一头开了门 · 这一头要走过去</h2>
     <div class="status-card">
       <div class="status-pulse"></div>
       <div class="status-text">
-        <strong>对话技术状态：DB 内 stage = ice_break，ai_messages = 1，customer_messages = 0，最近一次 outbound = 2026-05-15 16:49 CST。</strong><br>
-        本案是案例库目前<em>唯一一条「在飞」状态的展示</em> — 没有截图取证、没有 inbox 同步进来的回复、没有运营手动跟进的痕迹。<strong>下一步</strong>：①运营在 inbox 端做一次人工核验，若发现客户已回但 cron 未拉，截图取证补 transcript + 立即手动跟进；②若确实无回应，等 followup_policy=<code>standard</code> 触发的下一轮自动跟进。无论哪条路径，案例都会按真实状态增补 — 不会留旧版「假成功」叙述。
+        <strong>对话技术状态：DB 内 stage = ice_break，ai_messages = 1，customer_messages_in_db = 0（截图取证 1 条）。</strong><br>
+        客户回复（<a href="#msg-2" class="msg-ref">#2</a>）来自截图取证 — check-replies cron 尚未同步入库。<strong>真实业务状态：客户已给老公的 v「was19817800」，下一步</strong>：①运营用对应工厂账号加 v <code>was19817800</code>，话术包含「您太太在抖音上找我们」的来源说明（参考 ACT 05 wechat-callout）；②加 v 通过后 customer_profile 写入 <code>husband_wechat = was19817800</code> + 标注「分工型决策 · 妻子调研 / 丈夫对接」；③conversation 手动 handoff。<em>这条线索的下一步全在运营端 — 不在 AI 端</em>。
       </div>
     </div>
   </section>
@@ -778,13 +948,13 @@
     <div class="act-head">
       <span class="act-no">复盘 · 这条线索教会我们的</span>
     </div>
-    <h2>5 个 ice_break 阶段决策的原则</h2>
+    <h2>5 个可复用的话术原则</h2>
     <div class="lessons">
-      <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>客户的表达直接度，决定 AI 钩子的显式度。</strong>其他案例的加微钩子是「我帮你算」「让同事发参考」 — <em>含蓄</em>，因为客户没直说要联系。本案客户原话就是「怎么联系你」 — AI 不能再含蓄，直接「想做柜体可以直接加 v」给入口。<em>含蓄是给挑供应商的客户准备的；直白是给已决定找供应商的客户准备的</em>。读评论的<em>表达密度</em>，再决定钩子风格。</div></div>
-      <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>省级 micro-context 不止"接业务"，可以"接气候"。</strong>「广东回南天潮气重，柜体选耐潮板材更稳」是案例库目前最具体的省级 micro-context — 把<em>地理气候</em>直接接到<em>工艺选择</em>，比泛泛「广东客户多」真。判断标准：客户读到这句话<em>能想到自家装修的真实场景</em>（南方人都体验过回南天衣柜里发霉）。能做到这点，<em>"我们懂你这边"的信任就建立了</em>。</div></div>
-      <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>判断客户处于装修哪段，看动词时态不看名词。</strong>视频是「联动拉篮怎么做」（中后期工艺教程），评论是「<em>准备</em>装修」（前期表述）。两个信号轻度错位 — 不能凭"看了工艺教程视频"就当客户在装修中，要看 ta 自己用的动词。「准备」=前期，「在装」=进行中，「刚装完」=收尾。<em>动词时态是最便宜也最准的装修阶段信号</em>，破冰话术要据此分轨。</div></div>
-      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>评分 cron 滞后 2 天 = 错过最佳窗口。</strong>客户在 5-13 评论时心情是「想立刻找人」，Akke 5-15 才推 — 2 天足够他被别家联系/谈完/放弃。本案 5 天没回应，<em>很可能不是话术问题，是时机问题</em>。后续工程考虑：「联系/微信/电话/v/wx」等关键词命中即评分（不等批次）、或标记 priority=urgent 优先消费。<em>触达延迟在求联系类高意向评论上代价最高</em>。</div></div>
-      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>5 天没回 ≠ 转化失败 ≠ 案例失败。</strong>抖音陌生 DM 的真实回复率本就低（推送不亮 + 主动开 inbox 才可见），破冰阶段 5 天沉默是常态而非异常。followup_policy=standard 进入下一轮跟进，本案仍是 nurture 资产 — 不要把「在飞」标成「失败」。<em>案例库需要这种「在飞」展示，因为它是真实状态分布的一半</em>。给对外读者看的、不只是漂亮的成交叙事，还有 ice_break 阶段的诚实运行画面。</div></div>
+      <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>客户的表达直接度，决定 AI 钩子的显式度。</strong>其他案例的加微钩子是「我帮你算」「让同事发参考」— <em>含蓄</em>，因为客户没直说要联系。本案客户原话就是「怎么联系你」 — AI 不能再含蓄，直接「想做柜体可以直接加 v」给入口。客户在 <a href="#msg-2" class="msg-ref">#2</a> 回的也是 v — 镜像式回应。<em>含蓄是给挑供应商的客户准备的；直白是给已决定找供应商的客户准备的</em>。读评论的<em>表达密度</em>，再决定钩子风格。</div></div>
+      <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>客户给的不是自己的 v，是"我老公"的 v · 分工型决策信号。</strong>本案案例库首次出现 — 客户在抖音端是"空间向量"，但给的 v 标记是「我老公 was19817800」。这是<em>家庭分工型决策</em>的典型：一方调研、一方签约。运营加 v 时话术要带「您太太在抖音找我们」的来源说明，减少老公的接听门槛。在 customer_profile 里应当显式标 <code>husband_wechat</code> + <code>decision_split: research/sign</code>，未来跟进时知道<em>跟谁聊什么</em>。</div></div>
+      <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>省级 micro-context 不止"接业务"，可以"接气候"。</strong>「广东回南天潮气重，柜体选耐潮板材更稳」是案例库目前最具体的省级 micro-context — 把<em>地理气候</em>直接接到<em>工艺选择</em>，比泛泛「广东客户多」真。判断标准：客户读到这句话<em>能想到自家装修的真实场景</em>（南方人都体验过回南天衣柜里发霉）。本案客户 5 天后仍然回了 — 「回南天 → 耐潮板材」很可能是她接受聊天的拐点之一。能做到这点，<em>"我们懂你这边"的信任就建立了</em>。</div></div>
+      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>5 天延迟 + 评分滞后 2 天 = 仍然能回 · 但不能依赖。</strong>客户在 5-13 评论时心情是「想立刻找人」，Akke 在 5-15 推 + 客户 5-20 才打开 inbox = 从评论到首响共 7 天。本案<em>仍然</em>转化（客户给了老公的 v）— 但这是高意向 lead 的容错带宽，不是话术运气好。后续工程：「联系/微信/电话/v/wx」等关键词命中即评分（不等批次）、标记 priority=urgent 优先消费。<em>触达延迟在求联系类高意向评论上代价最高 — 这次没失败是运气</em>。</div></div>
+      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>陌生 DM 的回复延迟不是「冷淡」, 是「我打开 inbox 之前根本没看到」。</strong>抖音陌生 DM 不亮推送（不是好友）+ 得客户主动打开 inbox 才看到。本案客户从 5/15 → 5/20 没回 — 不是她在权衡 5 天，是她<em>这 5 天里都没去翻 inbox</em>。打开的那一刻她<em>没寒暄、没问问题，直接给 v</em>。<strong>转化决定权在「inbox 同步那一刻起的下 5 分钟」</strong>，与 AI 当时是否在线无关。这条印证：高意向 lead 在沉默期仍是 nurture 资产，followup_policy 不应在 ice_break 阶段过早判定流失。</div></div>
     </div>
   </section>
 
@@ -794,7 +964,7 @@
     <div class="snap-grid">
       <dl>
         <dt>conversation</dt><dd><code>af5f9d78-9e92-…-207c7ad3c510</code></dd>
-        <dt>stage</dt><dd><code>ice_break</code> · 5 天计</dd>
+        <dt>stage</dt><dd><code>ice_break</code> · 待 handoff</dd>
         <dt>created_at</dt><dd>2026-05-15 15:36 CST</dd>
         <dt>触发评论</dt><dd><code>909fbdb3-…-62749df69230</code></dd>
       </dl>
@@ -813,8 +983,8 @@
       <dl>
         <dt>发送账号</dt><dd>小文（野荞）· messaging · active</dd>
         <dt>通道</dt><dd>真机自动化 · 待证</dd>
-        <dt>DM 已发出</dt><dd>1 条（status=sent · attempts=0）</dd>
-        <dt>客户回复</dt><dd>0 · 等 inbox 同步</dd>
+        <dt>DB DM</dt><dd>1 条 status=sent（仅 #1 入库）</dd>
+        <dt>客户回复</dt><dd>1 条（截图取证 · 老公 v: was19817800）</dd>
       </dl>
     </div>
   </section>
