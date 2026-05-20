@@ -372,6 +372,172 @@
 
   /* 锚点目标加 scroll-margin-top */
   #src-video, #src-comment { scroll-margin-top: 80px; }
+
+  /* Region granularity analysis ============== */
+  .region-panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px;
+  }
+  .region-panel .rp-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .region-panel .rp-head h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text); }
+  .region-panel .rp-head .rp-sub { font-size: 12px; color: var(--text-muted); }
+  .region-layers {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin-bottom: 16px;
+  }
+  .region-layer {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .region-layer .rl-label {
+    font-size: 10.5px; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .region-layer .rl-val {
+    font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 4px;
+  }
+  .region-layer .rl-val .null { color: var(--text-muted); font-weight: 400; font-size: 14px; font-style: italic; }
+  .region-layer .rl-source { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .region-layer .rl-source code {
+    background: var(--bg); padding: 1px 5px; border-radius: 3px;
+    font-size: 10px; font-family: "SF Mono", Menlo, Consolas, monospace; color: #c4b5fd;
+  }
+  @media (max-width: 640px) { .region-layers { grid-template-columns: 1fr; } }
+
+  .region-usage { display: grid; gap: 10px; }
+  .region-usage .ru-row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 14px; align-items: start;
+    padding: 12px 14px;
+    background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .region-usage .ru-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 4px 0; text-align: center; border-radius: 6px; line-height: 1.1;
+  }
+  .region-usage .ru-tag.province { background: var(--info-soft); color: var(--info); }
+  .region-usage .ru-tag.city { background: var(--success-soft); color: var(--success); }
+  .region-usage .ru-tag.muted { background: var(--bg); color: var(--text-muted); }
+  .region-usage .ru-body { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .region-usage .ru-body strong { color: var(--text); }
+  .region-usage .ru-body .ru-quote {
+    display: inline-block;
+    background: var(--bg-elevated); padding: 2px 8px; border-radius: 4px;
+    font-size: 12.5px; color: var(--text);
+    border-left: 2px solid var(--accent); margin: 2px 0;
+  }
+  @media (max-width: 600px) {
+    .region-usage .ru-row { grid-template-columns: 1fr; gap: 6px; }
+    .region-usage .ru-tag { text-align: left; padding: 3px 8px; display: inline-block; }
+  }
+
+  /* Timing strip (Act 5 head) =================== */
+  .timing-strip {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; margin: 0 0 18px;
+  }
+  .timing-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .timing-summary .ts-item {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .timing-summary .ts-label {
+    font-size: 10.5px; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;
+  }
+  .timing-summary .ts-val {
+    font-size: 15px; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+  .timing-summary .ts-val .approx { color: var(--text-muted); font-size: 11px; margin-left: 4px; font-weight: 400; }
+  .timing-summary .ts-val .none { color: var(--text-muted); font-weight: 400; font-style: italic; }
+  @media (max-width: 600px) { .timing-summary { grid-template-columns: 1fr; } }
+
+  .timing-bars { display: flex; gap: 2px; height: 36px; align-items: stretch; border-radius: 6px; overflow: hidden; }
+  .timing-bar {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 600; line-height: 1;
+    color: rgba(255,255,255,0.95);
+    cursor: default;
+    transition: filter 0.15s;
+    min-width: 28px;
+  }
+  .timing-bar:hover { filter: brightness(1.15); }
+  .timing-bar.ai-to-user {
+    background: linear-gradient(180deg, var(--customer), #f59e0b);
+    color: #1a1f2b;
+  }
+  .timing-bar.user-to-ai {
+    background: linear-gradient(180deg, var(--accent), #7c3aed);
+  }
+  .timing-bar[data-approx="true"] {
+    background-image:
+      repeating-linear-gradient(45deg,
+        rgba(255,255,255,0.18) 0 4px,
+        transparent 4px 8px);
+    background-blend-mode: overlay;
+  }
+  .timing-bar[data-approx="true"]::after {
+    content: "≈"; position: absolute; top: 2px; right: 4px;
+    font-size: 10px; opacity: 0.6;
+  }
+  .timing-legend {
+    display: flex; gap: 14px; margin-top: 8px;
+    font-size: 11px; color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .timing-legend .tl-swatch {
+    display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle;
+  }
+  .timing-legend .tl-swatch.customer { background: var(--customer); }
+  .timing-legend .tl-swatch.akke { background: var(--accent); }
+
+  .timing-list {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: grid; gap: 6px; list-style: none; padding-left: 0;
+  }
+  .timing-list .tl-row {
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 12px; align-items: center;
+    padding: 8px 12px;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .timing-list .tl-num {
+    font-size: 12px; font-weight: 700;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums; text-align: center;
+  }
+  .timing-list .tl-path {
+    font-size: 12.5px; color: var(--text-dim);
+    line-height: 1.5;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: baseline;
+  }
+  .timing-list .tl-time {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    color: var(--text-muted); font-size: 11px;
+    background: rgba(255,255,255,0.03); padding: 1px 6px; border-radius: 4px;
+  }
+  .timing-list .tl-arrow { color: var(--text-muted); }
+  .timing-list .tl-actor { color: var(--text); }
+  .timing-list .tl-gap {
+    font-size: 12px; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    padding: 4px 10px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .timing-list .tl-gap.ai-to-user { background: var(--customer-soft); color: var(--customer); }
+  .timing-list .tl-gap.user-to-ai { background: var(--accent-soft); color: var(--accent); }
+  @media (max-width: 600px) {
+    .timing-list .tl-row { grid-template-columns: 1fr; gap: 6px; }
+  }
 </style>
 </head>
 <body>
@@ -517,6 +683,57 @@
         <strong style="color:var(--text);">注意 · 视频上下文缺失</strong>：因为视频元数据残缺（见 <a href="#src-video" class="msg-ref">原视频</a>），我们无法从 hashtag / 工艺词推断他刷到的具体是「美缝」「定制柜」「拆改」中的哪一类。只能从两件事推断：①「西安全屋定制工厂」号源池定位 = <em>整屋定制 / 工厂直供</em>；② 评论问的是「起订」，是工厂场景才会出现的措辞（客户在零售场景下不会问起订量）。两点合起来 = 客户正在为<em>自家装修</em>找<em>批量配置定制柜</em>的工厂。
       </p>
     </div>
+
+    <!-- 地区粒度分析 · ACT 01 子模块 -->
+    <div class="region-panel" style="margin-top: 18px;">
+      <div class="rp-head">
+        <h3>📍 地区粒度 · 只剩省级一层信号</h3>
+        <span class="rp-sub">湖北 IP · 自报市未抓到 · 跨地域工厂号</span>
+      </div>
+
+      <div class="region-layers">
+        <div class="region-layer">
+          <div class="rl-label">省 · IP 属地</div>
+          <div class="rl-val">湖北</div>
+          <div class="rl-source">来源 <code>comments.ip_location</code> · 抖音 IP 反查，可能偶尔漫游波动</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">市 · 自报现居</div>
+          <div class="rl-val"><span class="null">未自报</span></div>
+          <div class="rl-source">来源 <code>comments.city</code> · f2 USER_DETAIL 抓取时为 NULL（客户未在抖音 profile 自填，或 profile 抓取被风控降级）</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">号源服务市</div>
+          <div class="rl-val">西安</div>
+          <div class="rl-source">来源 <code>source_accounts.city</code> · 「西安全屋定制工厂」是西安本地工厂号，但客户在湖北 → 跨地域，<code>is_same_city = null</code>（自报市为空时同城判定无法运行）</div>
+        </div>
+      </div>
+
+      <div class="region-usage">
+        <div class="ru-row">
+          <div class="ru-tag province">省级</div>
+          <div class="ru-body">
+            <strong>破冰话术用省级回退</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br>
+            <span class="ru-quote">湖北我接过好几单 你那块儿问起订量的多</span><br>
+            <span style="color: var(--text-muted); font-size: 12px;">没有自报市时，省级是唯一可用的归属感锚点。「湖北我接过好几单」+「你那块儿」两段都把「同省客户」的暗示塞进去 —— 客户读到的是「这家工厂跟我同省做过单」，而不是「群发模板」。如果只有 ip_location 没有 city，就只走这一层。</span>
+          </div>
+        </div>
+        <div class="ru-row">
+          <div class="ru-tag muted">市级</div>
+          <div class="ru-body">
+            <strong>市级 micro-context 整层缺席</strong> · 因为 <code>comments.city = NULL</code><br>
+            <span style="color: var(--text-muted); font-size: 12px;">如果当时抓到了自报市（比如「武汉」「黄冈」），第二轮跟进时本可以编进话术细节（参考郑州黑康案例「郑州这阵子白天晒晚上凉」）。本案这条线索<strong>没机会做这层升级</strong>，因为客户回的是微信号 — 跳过了 nurture 阶段。</span>
+          </div>
+        </div>
+        <div class="ru-row">
+          <div class="ru-tag city">市级</div>
+          <div class="ru-body">
+            <strong>未触发同城徽章</strong> · 因为自报市 NULL + 号源市 ≠ 客户省<br>
+            <span style="color: var(--text-muted); font-size: 12px;">同城判定（见 supabase migration <code>20260512173500</code>）要求两边 city 都非空且号源市 ≠ "全国"。本案号源市是西安（具体市）、客户自报市 NULL —— 规则短路在第一步。即使补抓到自报市是武汉，也仍然 false（西安 ≠ 武汉），跨地域工厂号天然不打这个钩。</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ============ ACT 02 · 被看见 ============ -->
@@ -629,9 +846,52 @@
       刚子道场没有回「多少钱」也没有回「先发个目录」 — 他只发了 7 个字符（<a href="#msg-2" class="msg-ref">#2</a>）。<em>不是问题，不是寒暄，是一个 ID 格式的字符串</em>。在跟 Akke 的对话框里，发这种字符串只有一种意思。
     </p>
 
+    <!-- 时效性概览 -->
+    <div class="timing-strip" aria-label="对话响应时效">
+      <div class="timing-summary">
+        <div class="ts-item">
+          <div class="ts-label">首次响应延迟</div>
+          <div class="ts-val">约 2 天 7 小时 <span class="approx">≈ 截图</span></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">AI 跟进平均延迟</div>
+          <div class="ts-val"><span class="none">N/A</span> <span class="approx">客户直接给微 · 未跟进</span></div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">最长沉默缺口</div>
+          <div class="ts-val">约 2 天 7 小时 <span class="approx">仅 1 跨 role 切换</span></div>
+        </div>
+      </div>
+      <div class="timing-bars" role="img" aria-label="响应间隔时间轴">
+        <!-- 仅 1 段 interval（AI→user，5-09 14:02 → 5-11 21:04 ≈ 2 天 7 小时 / 198120 秒）-->
+        <div class="timing-bar ai-to-user" data-approx="true" style="flex: 100" title="5-09 14:02 · AI 破冰 → 5-11 21:04 · 他直接发微信号「gz44995」（约 2 天 7 小时 · 截图取证）">2 天 7 小时</div>
+      </div>
+      <div class="timing-legend">
+        <span><span class="tl-swatch customer"></span>他在回应我们</span>
+        <span><span class="tl-swatch akke"></span>我们在跟进他（本案无）</span>
+        <span style="margin-left: auto;">≈ 时间为截图客户端时间估值 · DB 内 first_response_gap = null</span>
+      </div>
+
+      <ol class="timing-list" aria-label="响应间隔逐条列表">
+        <li class="tl-row">
+          <span class="tl-num">①</span>
+          <div class="tl-path">
+            <a href="#msg-1" class="msg-ref">#1</a>
+            <span class="tl-time">5-09 14:02</span>
+            <span class="tl-actor">AI 破冰</span>
+            <span class="tl-arrow">→</span>
+            <a href="#msg-2" class="msg-ref">#2</a>
+            <span class="tl-time">5-11 21:04</span>
+            <span class="tl-actor">他「gz44995」（微信号）</span>
+          </div>
+          <span class="tl-gap ai-to-user">≈ 2 天 7 小时</span>
+        </li>
+      </ol>
+    </div>
+
     <div class="signal">
-      <div class="signal-title">⏱ 时效 · 不可精确</div>
-      首响延迟在 DB 内为 <code style="background:var(--bg);padding:1px 5px;border-radius:3px;font-size:12px;color:#fde68a;font-family:'SF Mono',Menlo,Consolas,monospace;">null</code>（check-replies 没拉到这条 inbox），按截图客户端时间 21:04 估算 — 距 AI 破冰约 <strong>2 天 7 小时</strong>。这种「2 天后才回」+「直接给微」的组合通常意味着客户当时没在线，回头翻 inbox 看到那段四段式破冰，<strong>决定跳过谈判</strong>。
+      <div class="signal-title">⏱ 时效信号 · 这种延迟的语义</div>
+      DB 内首响延迟为 <code style="background:var(--bg);padding:1px 5px;border-radius:3px;font-size:12px;color:#fde68a;font-family:'SF Mono',Menlo,Consolas,monospace;">null</code>（check-replies 没拉到 inbox）。「2 天后才回」+「直接给微」的组合通常意味着客户当时没在线，回头翻 inbox 看到那段四段式破冰，<strong>决定跳过谈判</strong>。如果他在线时实时回的，更可能是问「多少钱」、「发个目录」之类常规节奏；隔了两天看完才回的，是已经<em>想清楚了要找供应商</em>的状态。
     </div>
 
     <div class="wechat-callout">
