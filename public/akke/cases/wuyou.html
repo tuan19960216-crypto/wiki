@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akke · 用户案例 · 红尘有梦7865 · 高意向 73 分 × 9 天滞后</title>
+<title>Akke · 用户案例 · 无忧 · 93 分 × 2.37h 闪电响应 · 价格信号偏软</title>
 <style>
   :root {
     --bg: #0b0d12;
@@ -224,6 +224,10 @@
   .timing-bar.user-to-ai {
     background: linear-gradient(180deg, var(--accent), #7c3aed);
   }
+  .timing-bar.success {
+    background: linear-gradient(180deg, var(--success), #10b981);
+    color: #052e1a;
+  }
   .timing-bar[data-approx="true"] {
     background-image:
       repeating-linear-gradient(45deg,
@@ -244,6 +248,7 @@
   }
   .timing-legend .tl-swatch.customer { background: var(--customer); }
   .timing-legend .tl-swatch.akke { background: var(--accent); }
+  .timing-legend .tl-swatch.success { background: var(--success); }
 
   /* Transcript (对话全文) ==================== */
   .transcript {
@@ -348,7 +353,7 @@
   .annotation strong { color: var(--text); }
 
   /* Highlight breakdown (Act 3 specifically) ======= */
-  .breakdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+  .breakdown { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 16px; }
   .breakdown .bd-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
   .breakdown .bd-num { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.04em; }
   .breakdown .bd-title { font-size: 12.5px; color: var(--text); font-weight: 600; margin: 2px 0 4px; }
@@ -369,6 +374,12 @@
     border-radius: 12px; padding: 16px 20px; margin-top: 16px;
     font-size: 14px; color: #fde68a;
   }
+  .signal.green {
+    background: var(--success-soft); border-color: rgba(52,211,153,0.25);
+    color: #bbf7d0;
+  }
+  .signal.green .signal-title { color: var(--success); }
+  .signal.green strong { color: #d1fae5; }
   .signal-title { color: var(--customer); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
   .signal strong { color: #fef3c7; }
 
@@ -429,125 +440,112 @@
 <div class="container">
 
   <nav class="breadcrumb">
-    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><a href="/akke/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">红尘有梦7865</span>
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><a href="/akke/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">无忧</span>
   </nav>
 
   <!-- ============ HERO ============ -->
   <header class="hero">
     <img class="hero-avatar"
-         src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_ok2D9ANDpCYiLfAFEAAjWAIBAA0cfTdgU9QYCD.jpeg?from=2064092626"
-         alt="红尘有梦7865 头像"
+         src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813_osFLLA1Tf0Af5EQaFlFfCIAqu9PASUIV2AD9Df.jpeg?from=2064092626"
+         alt="无忧 头像"
          referrerpolicy="no-referrer"
          loading="lazy">
-    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 · 红尘有梦7865</div>
-    <h1>73 分高意向，<br>但我们用了 9 天才接上</h1>
-    <p class="hero-tagline">安徽一位准备自建房的业主，在视频下抛出了非常具体的技术问题。<br>系统打了 73 分高意向，但从评论到我们第一次公开反评，时差是 <em>217 小时（9 天）</em>。<br>他问：<em>"卫生间是做下沉还是不做下沉呢？下沉多少公分合适"</em></p>
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 · 无忧</div>
+    <h1>2.37 小时 + 93 分，<br>但价格钩子偏软</h1>
+    <p class="hero-tagline">湖北一位业主在<em>前一晚刚发的</em>奶咖配色餐边柜视频下，抛出 9 字反问。<br>系统打 <em>93 分高意向</em>、<em>2 小时 22 分钟</em>就发出 DM——本案是这份集子里响应最快的一条。<br>但价格钩子用的是"拉清单"而非"报价清单"，客户依然 0 回复。<br>她问：<em>"2.1米可以做这种吗"</em></p>
     <div class="hero-chips">
-      <span class="chip purple">高意向 · 评分 73</span>
-      <span class="chip blue">知识型 · specificity=high</span>
-      <span class="chip amber">安徽 · 仅省级</span>
-      <span class="chip green">RC×2 + DM×1 · 客户未回复</span>
+      <span class="chip purple">高意向 · 评分 93</span>
+      <span class="chip blue">产品型 · specificity=high</span>
+      <span class="chip green">2.37h · SLA 闪电达标 ⚡</span>
+      <span class="chip amber">湖北 · 仅省级</span>
     </div>
     <br>
-    <a class="hero-profile" href="https://www.douyin.com/user/MS4wLjABAAAAlUYYcoXo_xVBRO9-zEUuFxgzBn1UBNjHjZxJDtRULBU" target="_blank" rel="noopener noreferrer">
+    <a class="hero-profile" href="https://www.douyin.com/user/MS4wLjABAAAAe20b5sY0YgH2urle_PHNBV_njTuZRaU0--iJwU6ieKg" target="_blank" rel="noopener noreferrer">
       → 抖音个人主页
     </a>
   </header>
 
   <!-- ============ JOURNEY MAP STRIP ============ -->
   <div class="journey-strip" aria-label="用户旅程进度">
-    <div class="js-step done"><div class="num">1</div><div class="lbl">留评论<br>5-9 21:41</div></div>
-    <div class="js-step done"><div class="num">2</div><div class="lbl">评论入库<br>5-16（+6d）</div></div>
-    <div class="js-step done"><div class="num">3</div><div class="lbl">AI 评分 73<br>5-16</div></div>
-    <div class="js-step done"><div class="num">4</div><div class="lbl">RC1 反评<br>5-18（+9d）</div></div>
-    <div class="js-step done"><div class="num">5</div><div class="lbl">RC2 反评<br>5-20（含 bug）</div></div>
-    <div class="js-step done"><div class="num">6</div><div class="lbl">DM 加 v<br>5-21（+11d）</div></div>
-    <div class="js-step now"><div class="num">7</div><div class="lbl">客户未回复<br>仍 ice_break</div></div>
+    <div class="js-step done"><div class="num">1</div><div class="lbl">留评论<br>5-20 14:46</div></div>
+    <div class="js-step done"><div class="num">2</div><div class="lbl">评论入库<br>5-20 16:00</div></div>
+    <div class="js-step done"><div class="num">3</div><div class="lbl">AI 评分 93<br>5-20 16:00</div></div>
+    <div class="js-step done"><div class="num">4</div><div class="lbl">status=skipped<br>funnel 旁路</div></div>
+    <div class="js-step done"><div class="num">5</div><div class="lbl">DM 闪电送出<br>5-20 17:08</div></div>
+    <div class="js-step done"><div class="num">6</div><div class="lbl">2.37h 达标<br>≤ 3h ✓</div></div>
+    <div class="js-step now"><div class="num">7</div><div class="lbl">客户未回复<br>0 inbound</div></div>
   </div>
 
   <!-- ============ 完整对话 · 先看全文再看分析 ============ -->
   <section class="transcript" aria-label="完整对话">
     <div class="transcript-head">
-      <h2>完整对话 · 3 条 outbound × 0 条 inbound</h2>
-      <span class="t-sub">2026-05-18 → 2026-05-21 · RC 公开反评 + DM 兜底</span>
+      <h2>完整对话 · 1 条 outbound × 0 条 inbound</h2>
+      <span class="t-sub">2026-05-20 · 单次 DM 触达 · 案例集中响应最快的一条</span>
     </div>
-    <p class="t-hint">每条消息有编号 <code>#1</code>~<code>#3</code>。下方各 ACT 在拆解时会用 <code>#N</code> 引用回这里。「我们」=Akke 运营账号；客户从未回复。</p>
-
-    <div class="day-sep">2026-05-09 · 客户留评（评论被晚 6 天才入库分析）</div>
+    <p class="t-hint">每条消息有编号 <code>#1</code>。本案只有 1 条 outbound DM。下方各 ACT 在拆解时会用 <code>#N</code> 引用回这里。「我们」=Akke 运营账号；客户从未回复。</p>
 
     <div class="dm from-customer" id="msg-0">
-      <div class="dm-bubble">问一下主播，我想建个一层自建房，卫生间是做下沉还是不做下沉呢？下沉多少公分合适</div>
+      <div class="dm-bubble">2.1米可以做这种吗</div>
     </div>
-    <div class="dm-meta"><a href="#msg-0" class="msg-id">#0</a>📍 安徽 · 5-9 21:41 CST · 视频本身只比这条评论早 3 小时（5-9 18:32 发布）</div>
-
-    <div class="day-sep">2026-05-18 → 2026-05-21 · 我们的三次回应（公开 RC + 私信 DM）</div>
+    <div class="dm-meta"><a href="#msg-0" class="msg-id">#0</a>📍 湖北 · 5-20 14:46:38 CST · 视频于 5-19 19:44 发布（前一晚刚发，评论时视频 + 19h freshness 顶满）</div>
 
     <div class="dm from-akke" id="msg-1">
-      <div class="dm-bubble">红尘有梦7865，下沉式卫生间这种自建房推荐做，下沉 15-20 公分给排水管走，防水和坡度做到位就稳，你家是几个卫生间呀，具体方案私信给你拉清单？</div>
+      <div class="dm-bubble">无忧，视频里这个奶咖配色配现代简约风挺显高级，2.1 米这种尺寸我们做过不少柜体定制案例，板材选 ENF 级也能压住潮气，你家是平层还是复式呀？具体方案私信给你拉清单？</div>
     </div>
-    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-1" class="msg-id">#1</a>📨 RC1 · 5-18 22:08:50 CST · 公开反向评论 · 距客户评论 <strong>+ 217 小时（9 天 0.5 小时）</strong></div>
-
-    <div class="dm from-akke" id="msg-2">
-      <div class="dm-bubble">红尘，自建房一层卫生间下沉确实关键，建议下沉 25-30 cm 留好排水坡度。我们自建房整装做过不少湖南类似户型，卫生间防水柜体一起规划更省。具体方案私信给你拉清单？</div>
-    </div>
-    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-2" class="msg-id">#2</a>📨 RC2 · 5-20 17:18:27 CST · 距 RC1 <strong>+ 43 小时</strong> · ⚠️ 含两处生成 bug：① 地域写成「湖南」（客户实为安徽）；② 下沉数字与 RC1 矛盾（15-20 → 25-30）</div>
-
-    <div class="dm from-akke" id="msg-3">
-      <div class="dm-bubble">不客气~ 你这一层自建房现在到哪一步了，刚打地基还是已经砌墙水电？卫生间防水+柜体一起规划最省心，避免后期返工。加我 v：Homedz3791（设计师 武海艳），备注「抖音」，发你份《自建房卫生间+柜体一体施工清单》带尺寸标注，方便你和水电师傅对接。</div>
-    </div>
-    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-3" class="msg-id">#3</a>📱 DM · 5-21 09:24:43 CST · 距客户评论 <strong>+ 275 小时（11.5 天）</strong> · ⚠️ 开场「不客气~」假设客户曾感谢，实际客户从未回复</div>
+    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-1" class="msg-id">#1</a>📱 DM #1 · 5-20 17:08:37 CST · 距客户评论 <strong>+ 2h 22min ≈ 2.37h</strong> · ⚡ 案例集响应最快</div>
   </section>
 
   <!-- ============ ACT 1 ============ -->
   <section class="act">
     <div class="act-head">
       <span class="act-no">ACT 01 · 起点</span>
-      <span class="act-time">2026-05-09　21:41 CST</span>
+      <span class="act-time">2026-05-20　14:46:38 CST · 视频前一晚才发</span>
     </div>
-    <h2>他留下了一条非常具体的技术问题</h2>
+    <h2>"2.1 米可以做这种吗" — 9 个字的购买信号</h2>
     <p class="act-lede">
-      视频发布于<em>当晚 18:32</em>，仅 3 小时后红尘有梦7865在评论区抛出 30 字的具体技术问题。他没问价格，没问"在哪里"，而是问<em>"做不做下沉 / 多少公分"</em> — 一个只有正在做自建房水电的人才会问的细节。模型把它打到 73 分高意向，<code>specificity=high</code>。
+      视频是<em>"设计师｜美嘉"</em>前一晚 19:44 发布的，主题是奶咖色 + 木纹跳色 + 免拉手 + 圆弧边角的"中古风餐边柜"。客户次日下午 14:46 留评——视频<em>距评论只有 19 小时</em>，freshness 顶满。<br><br>
+      9 字评论"2.1 米可以做这种吗"——<em>主语已经省略</em>了"我家"二字，直接把家里现有的"2.1 米"尺寸抛过来问"做不做这种"。这是典型的<em>已经在做家具决策</em>的客户：知道自家位置宽度、看到了喜欢的款、在确认能不能做。模型给 <strong>93 分 · product · 高 · 进行中</strong>。
     </p>
     <div class="panel">
       <div class="comment-wrap">
         <img class="comment-avatar"
-             src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813c001_ok2D9ANDpCYiLfAFEAAjWAIBAA0cfTdgU9QYCD.jpeg?from=2064092626"
-             alt="红尘有梦7865"
+             src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-i-0813_osFLLA1Tf0Af5EQaFlFfCIAqu9PASUIV2AD9Df.jpeg?from=2064092626"
+             alt="无忧"
              referrerpolicy="no-referrer"
              loading="lazy">
         <div class="comment-body">
-          <div class="comment-author">红尘有梦7865 <span class="loc">📍 安徽</span></div>
-          <div class="comment-text">问一下主播，我想建个一层自建房，卫生间是做下沉还是不做下沉呢？下沉多少公分合适</div>
-          <div class="comment-meta">2026-05-09 21:41 CST · 评论 <code>7e0dc728…1a978c2</code> · 关键词命中：<code>自建房</code> · <code>下沉</code></div>
+          <div class="comment-author">无忧 <span class="loc">📍 湖北</span></div>
+          <div class="comment-text">2.1米可以做这种吗</div>
+          <div class="comment-meta">2026-05-20 14:46:38 CST · 评论 <code>41de663e…af50805e1dfd</code> · 关键词命中：<code>2.1米</code> · <code>餐边柜</code></div>
         </div>
       </div>
-      <a class="comment-source-link" href="https://www.douyin.com/video/7637837957706409841" target="_blank" rel="noopener noreferrer">
-        📹 评论所在视频（在抖音打开）
+      <a class="comment-source-link" href="https://www.douyin.com/video/7641567454103129396" target="_blank" rel="noopener noreferrer">
+        📹 评论所在视频（在抖音打开）· 设计师｜美嘉 · 5-19 19:44 发布
       </a>
     </div>
 
     <!-- 地区粒度分析 · ACT 01 子模块 -->
     <div class="region-panel" style="margin-top: 18px;">
       <div class="rp-head">
-        <h3>📍 地区粒度 · 仅省级 · 号源 NULL 的双重 fallback</h3>
-        <span class="rp-sub">本案没有同城判定可用</span>
+        <h3>📍 地区粒度 · 仅省级 · 号源 city=NULL</h3>
+        <span class="rp-sub">和大欣案完全一样的地域配置——本地号但未填市</span>
       </div>
 
       <div class="region-layers">
         <div class="region-layer">
           <div class="rl-label">省 · IP 属地</div>
-          <div class="rl-val">安徽</div>
+          <div class="rl-val">湖北</div>
           <div class="rl-source">来源 <code>comments.ip_location</code> · 抖音 IP 反查</div>
         </div>
         <div class="region-layer">
           <div class="rl-label">市 · 自报现居</div>
           <div class="rl-val"><span class="null">NULL · 未自报</span></div>
-          <div class="rl-source">来源 <code>comments.city</code> · profile 没填或未捕获</div>
+          <div class="rl-source">来源 <code>comments.city</code> · profile 没填</div>
         </div>
         <div class="region-layer">
           <div class="rl-label">号源服务市</div>
-          <div class="rl-val"><span class="null">NULL · 号源未识别</span></div>
-          <div class="rl-source">来源 <code>videos.source_account_id = null</code> · <code>topic_status=rejected</code>，视频本身被识别为"非号源池"，靠 <code>discovery_source=profile</code> 兜底捡到</div>
+          <div class="rl-val"><span class="null">NULL · 本地号未填市</span></div>
+          <div class="rl-source">来源 <code>source_accounts.city</code> · 设计师_美嘉是 designer 本地号但 city 字段空</div>
         </div>
       </div>
 
@@ -555,17 +553,16 @@
         <div class="ru-row">
           <div class="ru-tag province">省级</div>
           <div class="ru-body">
-            <strong>本来应该用 IP 属地「安徽」做回退</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br>
-            <span class="ru-quote">RC1 实际没有引省名 — 用 "这种自建房推荐做" 泛指处理</span><br>
-            <span style="color: var(--text-muted); font-size: 12px;">RC1 直接答了技术问题，没绑省份 — 在<strong>只有 IP 属地可用</strong>的最常见场景下，文案没把这张牌打出来，是<em>第一处文案漏洞</em>。</span>
+            <strong>DM 把湖北写进了文案（隐式）</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br>
+            <span class="ru-quote">"板材选 ENF 级也能压住潮气"</span><br>
+            <span style="color: var(--text-muted); font-size: 12px;">本案的省级回退打法<em>没直接写"湖北"二字</em>——而是用"压住潮气"这个气候特征隐式带入。湖北潮气客户感同身受，但不像大欣案"河北冬天暖气足"那么直接。这是<em>"半隐式"的省级回退</em>，效力略弱于直接命名省份。</span>
           </div>
         </div>
         <div class="ru-row">
           <div class="ru-tag muted">市级</div>
           <div class="ru-body">
-            <strong>RC2 凭空换省，写成了「湖南」</strong> · 见 <a href="#msg-2" class="msg-ref">#2</a><br>
-            <span class="ru-quote">"我们自建房整装做过不少湖南类似户型"</span><br>
-            <span style="color: var(--text-muted); font-size: 12px;">客户 IP 是<strong>安徽</strong>，文案却写"湖南"。LLM 在第二次生成时没复用第一条 RC 的省份信息，是<em>第二处文案漏洞</em> — 这种 cross-省 抖动会立刻露馅。</span>
+            <strong>没法触发 same_city · 和大欣案同款问题</strong><br>
+            <span style="color: var(--text-muted); font-size: 12px;">客户 city=NULL，号源 city=NULL——这两个 NULL 是本案例集里反复出现的<em>结构性短板</em>。修：在号源池里强制要求<code>designer / peer_decoration</code> 类型必须填 city。</span>
           </div>
         </div>
       </div>
@@ -576,29 +573,30 @@
   <section class="act">
     <div class="act-head">
       <span class="act-no">ACT 02 · 被看见</span>
-      <span class="act-time">2026-05-16　09:27 CST · 评论入库后 0 秒，但距客户留言已 <strong>6 天</strong></span>
+      <span class="act-time">2026-05-20　16:00:28 CST · 入库延迟仅 1h 14min</span>
     </div>
-    <h2>系统打了 73 分高意向 — 6 天后才打</h2>
+    <h2>93 分 · product · high · active — funnel 最理想画像</h2>
     <p class="act-lede">
-      评论本身发生在 5-9 21:41，但 <code>comments.created_at = 2026-05-16 09:27 CST</code> — 这条评论被 <em>scraper 抓回 + analyze cron 评分</em>整整晚了 <strong>6 天</strong>。模型一旦看到，立刻给出 73 分高意向（具体到 specificity=high），但<em>此时距客户发出问题已过 130 小时</em>，整条 funnel 已经被时间打了一半折扣。
+      93 分是本案例集里的高位（与大欣案并列最高）。但本案<em>四个维度同时顶满</em>：93 分高意向 + product 型 + high specificity + active freshness。模型给的判断是"产品型·具体·进行中"——funnel 上游识别完全准确。<br><br>
+      入库延迟只有 <strong>1h 14min</strong>——比天涯客（2h 44min）和大欣（14h 21min）都更快。视频前一晚才发，scraper 可能跟着这个号源的<em>"新视频高优先"</em>策略提前抓回了评论。
     </p>
     <div class="panel">
       <div class="scoring">
         <div class="score-bar">
-          <div class="score-num">73<small>/100</small></div>
+          <div class="score-num">93<small>/100</small></div>
           <div class="score-label">高意向</div>
         </div>
         <div>
           <div class="score-tags">
-            <span class="chip purple">type · knowledge</span>
+            <span class="chip purple">type · product</span>
             <span class="chip blue">specificity · high</span>
             <span class="chip green">freshness · active</span>
-            <span class="chip amber">keyword · 自建房 · 下沉</span>
+            <span class="chip amber">keyword · 2.1米 · 餐边柜</span>
           </div>
           <div class="score-reasoning">
-            <strong>评分理由：</strong>"知识型·具体·进行中"（来源 <code>comments.intent_reason</code>）<br>
-            <strong>分类依据：</strong>"问卫生间下沉设计→knowledge"（来源 <code>comments.comment_type_reason</code>）<br>
-            <span style="color: var(--text-muted);">这种问"具体施工参数"的评论，是<strong>所有意向类型里 conversion rate 最高的一类</strong> — 客户正在做选择，回答能直接让他下一步动作。理论上应该秒回，实际上我们 9 天才回上。</span>
+            <strong>评分理由：</strong>"产品型·具体·进行中"（<code>comments.intent_reason</code>）<br>
+            <strong>分类依据：</strong>客户已带具体尺寸（2.1 米）问产品适配 → product · high。"做不做"已经过了，现在是"<em>能不能做这种</em>"——下单前的最后一步技术确认。<br>
+            <span style="color: var(--text-muted);">这种"自带量好的尺寸问款式"的客户，是 funnel 里 conversion rate 应该最高的一类。理论上 + 2.37h 闪电响应——是完美组合。</span>
           </div>
         </div>
       </div>
@@ -608,157 +606,170 @@
   <!-- ============ ACT 3 ============ -->
   <section class="act">
     <div class="act-head">
-      <span class="act-no">ACT 03 · 沉默的 9 天</span>
-      <span class="act-time">2026-05-09 21:41 → 2026-05-18 22:08 · 队列里的 217 小时</span>
+      <span class="act-no">ACT 03 · 2.37h 闪电响应</span>
+      <span class="act-time">2026-05-20 14:46 → 2026-05-20 17:08 · 案例集最快</span>
     </div>
-    <h2>评分准 ≠ 接住快</h2>
+    <h2>2 小时 22 分钟 — 比天涯客还快 28 分钟</h2>
     <p class="act-lede">
-      高意向评论入库后默认进入<em>反向评论（RC）队列</em>，等待运营按当日额度批量审核 + 投放。本案的 RC1 一直到 <strong>5-18 22:08:50 CST</strong> 才发出 — 距客户原始评论时间 <strong>217 小时（9 天 0.5 小时）</strong>。
+      DM 在 <strong>5-20 17:08:37 CST</strong> 发出，距客户评论 <strong>2h 22min ≈ 2.37h</strong>——本案例集里最快的一次。两段延迟都被压得极短：入库延迟 1h 14min（视频高优先 + 新评论近实时抓回）+ DM 队列 1h 8min（运营下午第一波审批）。
     </p>
 
     <div class="timing-strip" aria-label="评论到首次回应的时间跨度">
       <div class="timing-summary">
         <div class="ts-item">
           <div class="ts-label">用户评论 → 评论入库分析</div>
-          <div class="ts-val">≈ 6 天 12 小时</div>
+          <div class="ts-val" style="color: var(--success);">1h 14min ⚡</div>
         </div>
         <div class="ts-item">
-          <div class="ts-label">入库分析 → RC1 投放</div>
-          <div class="ts-val">≈ 2 天 13 小时</div>
+          <div class="ts-label">入库分析 → DM 投放</div>
+          <div class="ts-val" style="color: var(--success);">1h 8min ⚡</div>
         </div>
         <div class="ts-item">
-          <div class="ts-label"><strong>用户评论 → 首次回应（RC1）</strong></div>
-          <div class="ts-val"><strong style="color: var(--warning);">217 小时</strong> · 远超 3h 标准</div>
+          <div class="ts-label"><strong>用户评论 → 首次回应（DM #1）</strong></div>
+          <div class="ts-val"><strong style="color: var(--success);">2h 22min</strong> · 案例集最快 ⚡</div>
         </div>
       </div>
       <div class="timing-bars" role="img" aria-label="时效阶段分布">
-        <div class="timing-bar user-to-ai" style="flex: 72" title="评论入库分析延迟 ≈ 156 小时">入库延迟 156h</div>
-        <div class="timing-bar ai-to-user" style="flex: 28" title="入库到 RC1 发出 ≈ 61 小时">RC 队列 61h</div>
+        <div class="timing-bar success" style="flex: 52" title="入库延迟 ≈ 1h 14min">入库 1.23h</div>
+        <div class="timing-bar success" style="flex: 48" title="DM 队列 ≈ 1h 8min">DM 1.13h</div>
       </div>
       <div class="timing-legend">
-        <span><span class="tl-swatch customer"></span>scraper / analyze cron 延迟</span>
-        <span><span class="tl-swatch akke"></span>RC 审核 + 投放队列延迟</span>
+        <span><span class="tl-swatch success"></span>scraper 入库</span>
+        <span><span class="tl-swatch success"></span>DM 审批 + 投放</span>
         <span style="margin-left: auto;">参考标准：≤ 3h</span>
       </div>
     </div>
 
     <div class="annotation">
-      <div class="a-title">为什么会这么慢？</div>
-      ① 视频被识别为 <code>topic_status=rejected</code>，<code>source_account_id=null</code> — 不在<em>每日号源轮询</em>里，只能等运营手动用 profile 扫描兜底捡到（5-15 / 5-16 之间）。<br>
-      ② RC 投放靠运营每日选 10-20 条<em>批量审过</em>后入设备，单条排队周期 1-3 天属正常。<br>
-      ③ 结果：<strong>"评分准"但"接住慢"</strong> — funnel 上游正确，但 SLA 远未达到能"接住"高意向客户的水准。
+      <div class="a-title">三案时效对比</div>
+      • <strong>无忧（本案）</strong> · 2.37h · 案例集最快 ⚡<br>
+      • <strong>天涯客</strong> · 2.85h · 当天打透 ✓<br>
+      • <strong>大欣</strong> · 28.6h · 超期 9.5 倍 ✗<br>
+      • <strong>红尘有梦7865</strong> · 217h · 超期 72 倍 ✗✗<br>
+      <span style="color: var(--text-muted); font-size: 12px;">本案证明：当 scraper 跟号源新视频策略 + 运营在线 + 客户评论时间凑巧——funnel<em>能跑到 2-3h SLA 之内</em>。瓶颈不是技术，是节奏匹配。</span>
     </div>
   </section>
 
   <!-- ============ ACT 4 ============ -->
   <section class="act">
     <div class="act-head">
-      <span class="act-no">ACT 04 · 第一次回应（RC1）</span>
-      <span class="act-time">2026-05-18　22:08:50 CST · 公开反向评论</span>
+      <span class="act-no">ACT 04 · DM 文案拆解</span>
+      <span class="act-time">2026-05-20　17:08:37 CST · 视觉细节复述五段式</span>
     </div>
-    <h2>RC1 答了具体施工参数，但没绑省份、没提价格</h2>
+    <h2>视觉细节复述是 product · high 的标准动作</h2>
     <p class="act-lede">
-      RC1 是<em>公开</em>发在视频评论区的（不是私信），让所有刷到这条评论的人都能看到我们怎么答。文案见 <a href="#msg-1" class="msg-ref">#1</a> — 它做了三件正确事 + 漏了两件标准动作。
+      DM #1（见 <a href="#msg-1" class="msg-ref">#1</a>）整条<em>67 个字</em>，前半段几乎全是视觉细节复述：奶咖配色、现代简约风、2.1 米尺寸、ENF 板材。这一组细节让客户感觉"这家是认真看了视频的"，不是模板群发。
     </p>
 
     <div class="breakdown">
       <div class="bd-item">
-        <div class="bd-num">① 招呼</div>
-        <div class="bd-title">直呼昵称</div>
-        <div class="bd-quote">「红尘有梦7865」</div>
+        <div class="bd-num">① 直呼</div>
+        <div class="bd-title">不加"你好"</div>
+        <div class="bd-quote">「无忧，」</div>
       </div>
       <div class="bd-item">
-        <div class="bd-num">② 直答问题</div>
-        <div class="bd-title">给具体参数</div>
-        <div class="bd-quote">「下沉 15-20 公分给排水管走」</div>
+        <div class="bd-num">② 视觉复述</div>
+        <div class="bd-title">奶咖 + 简约</div>
+        <div class="bd-quote">「奶咖配色 + 现代简约风显高级」</div>
       </div>
       <div class="bd-item">
-        <div class="bd-num">③ 反问</div>
-        <div class="bd-title">逼客户给条件</div>
-        <div class="bd-quote">「你家是几个卫生间呀」</div>
+        <div class="bd-num">③ 直答</div>
+        <div class="bd-title">2.1m 可以做</div>
+        <div class="bd-quote">「2.1 米我们做过不少柜体定制」</div>
       </div>
       <div class="bd-item">
-        <div class="bd-num">④ 钩子</div>
-        <div class="bd-title">引向私信</div>
-        <div class="bd-quote">「具体方案私信给你拉清单」</div>
+        <div class="bd-num">④ 地域 + 选型</div>
+        <div class="bd-title">隐式湖北气候</div>
+        <div class="bd-quote">「ENF 板材压住潮气」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">⑤ 反问 + 钩</div>
+        <div class="bd-title">平层/复式 · 拉清单</div>
+        <div class="bd-quote">「平层 or 复式 · 拉清单」</div>
       </div>
     </div>
     <div class="annotation">
-      <div class="a-title">⚠️ 两个漏掉的标准动作</div>
-      <strong>① 没绑 IP 属地</strong> — 模板规则要求<em>"IP 属地是免费的破冰利器"</em>，应该写"<u>安徽自建房一般留 15-20cm</u>"，本案却只用"这种自建房"泛指。<br>
-      <strong>② 没提价格 / 报价钩子</strong> — 高意向 + 进行中 + specificity=high 的客户，文案里给个"全屋柜体 5 万起 / 报价单"是标准动作。这条只写"拉清单"，没把"价格优势"挂出来。<br>
-      <span style="color: var(--text-muted); font-size: 12px;">这两条漏掉直接降低了客户回复概率 — RC 是公开场，每条都是橱窗。</span>
+      <div class="a-title">视觉细节复述的标准动作</div>
+      <strong>"奶咖配色配现代简约风挺显高级"</strong> 这一段是 product · high specificity 客户的<em>必备开场</em>。客户在视频下问款式适配，DM 第一段必须证明"我看了你看的这个视频"——做法就是<em>反刍视频里的视觉关键词</em>。本案用了三个：奶咖配色、现代简约、ENF 板材。<br><br>
+      <strong>"2.1 米我们做过不少柜体定制案例"</strong> 直答客户的尺寸适配问题，并加了"做过不少"作为佐证——但<em>没有给具体案例链接</em>，只是口头承诺。这是本案文案<em>力度</em>不足的第一个点（下面 ACT 5 详谈）。
     </div>
   </section>
 
   <!-- ============ ACT 5 ============ -->
   <section class="act">
     <div class="act-head">
-      <span class="act-no">ACT 05 · 第二次回应（RC2）· 含 bug</span>
-      <span class="act-time">2026-05-20　17:18:27 CST · 距 RC1 + 43 小时</span>
+      <span class="act-no">ACT 05 · 价格信号偏软</span>
+      <span class="act-time">本案"拉清单" vs 大欣"报价" vs 天涯客"报价清单"</span>
     </div>
-    <h2>RC2 出了两个生成 bug — 地域抖动 + 数字矛盾</h2>
+    <h2>"拉清单" — 一个字之差，案例钩子 vs 报价钩子</h2>
     <p class="act-lede">
-      因为客户对 RC1 没回，2 天后 LLM 又生成了第二条 RC（见 <a href="#msg-2" class="msg-ref">#2</a>）作为第二轮触达。这条 RC <em>没复用 RC1 的关键事实</em>，结果出现两处真实漏洞，让我们这一行的专业感打了对折。
+      本案 DM 的钩子用的是 <em>"具体方案私信给你拉清单？"</em>——同<em>红尘有梦7865</em>案的钩子一模一样。"拉清单"只承诺了一个动作，<strong>不承诺清单里有什么</strong>。这是本案文案的最大短板，对比大欣和天涯客的钩子，差距明显。
     </p>
 
-    <div class="signal">
-      <div class="signal-title">🐞 Bug #1 · 地域写错为「湖南」</div>
-      <strong>原文：</strong><span class="ru-quote">"我们自建房整装做过不少湖南类似户型"</span><br>
-      客户 IP 属地是<strong>安徽</strong>（<code>comments.ip_location = "安徽"</code>）。LLM 在生成 RC2 时没读 RC1 的 context，也没看 ip_location，凭空抛了"湖南"。<br>
-      <span style="color: var(--text-muted); font-size: 12px;">影响：如果客户点开看 RC1 + RC2 会发现一会儿不绑地域、一会儿绑错地域 — 直接破坏"懂你家这边"的人设。</span>
+    <div class="signal" style="margin-top: 0;">
+      <div class="signal-title">⚠️ 三案价格钩子对比</div>
+      <strong>无忧（本案）</strong>：<span class="ru-quote">"具体方案私信给你拉清单"</span><br>
+      • "方案" — 模糊 · "清单" — 动作，没价值 · <em>客户读完不知道加 v 能拿到什么</em><br>
+      <br>
+      <strong>大欣案</strong>：<span class="ru-quote">"加 v 给你出全屋柜体免费设计方案 + 报价"</span><br>
+      • "免费" — 价值锚 · "设计方案" — 内容 · "+ 报价" — 价格承诺 · <em>客户知道能拿到三件东西</em><br>
+      <br>
+      <strong>天涯客案</strong>：<span class="ru-quote">"加 v 发你同户型实景案例和详细报价清单"</span><br>
+      • "同户型实景案例" — 佐证 · "详细报价清单" — 价格明细 · <em>客户知道能拿到佐证 + 报价</em>
     </div>
 
-    <div class="signal" style="margin-top: 12px;">
-      <div class="signal-title">🐞 Bug #2 · 下沉数字与 RC1 矛盾</div>
-      <strong>RC1：</strong><span class="ru-quote">"下沉 15-20 公分给排水管走"</span><br>
-      <strong>RC2：</strong><span class="ru-quote">"建议下沉 25-30 cm 留好排水坡度"</span><br>
-      两条 RC 给的施工数字差了一档（15-20 vs 25-30）。LLM 没有"记住"自己上一条说过什么。<br>
-      <span style="color: var(--text-muted); font-size: 12px;">影响：客户如果对照看两条，会怀疑「这两个回复是不是同一个人 / 同一家公司」— RC2 的可信度直接被 RC1 反着拖下来。</span>
+    <div class="signal" style="margin-top: 12px; background: var(--warning-soft); border-color: rgba(251, 191, 36, 0.25);">
+      <div class="signal-title">🔍 关键差异 · 一个字</div>
+      <strong>"拉清单"（本案）</strong> 和 <strong>"报价清单"（天涯客案）</strong> 只差<em>两个字</em>，但承诺密度完全不同：<br>
+      • "拉" = 动作（我把清单从某处拉出来给你）<br>
+      • "报价" = 价值承诺（清单里有具体价格数字）<br>
+      <br>
+      客户看到"报价清单"会想"我能比价 / 我能决定"；看到"拉清单"会想"什么清单？"。<br>
+      <span style="color: var(--text-muted); font-size: 12px;">高意向 + product + high specificity 的客户已经在做决策——他们要的是<em>能决策的信息</em>（具体数字、案例、对比），不是"私信再聊"这种延后型动作。</span>
     </div>
 
     <div class="annotation" style="margin-top: 16px;">
-      <div class="a-title">RC 二刷规则（应当落入 prompt）</div>
-      ① <strong>地域必须复用 IP 属地</strong>，不许凭空换省 — 应在 system prompt 里硬约束 <code>ip_location</code>。<br>
-      ② <strong>技术数字必须复用第一条</strong>（或显式给出"修正前后"），不允许独立生成。<br>
-      ③ <strong>RC2 应感知 RC1 内容</strong>（按 <code>douyin_user_id</code> + <code>video_id</code> 拉最近一条已发 RC 作为 context）。
+      <div class="a-title">为什么 93 分 + 2.37h + 视觉细节复述对了 — 还是 0 回复</div>
+      可能解释：客户已经在做决策（看款 + 量好尺寸 + 来问适配），<em>她要的是数字</em>。本案 DM 给了她：视觉细节复述 ✓ / 2.1m 适配确认 ✓ / 板材推荐 ✓ / 反问平层复式 ✓ — 但<strong>没给报价、没给案例链接、没给"加 v 能拿到什么"</strong>。<br>
+      她可能读完想"懂了，但你没说价格，我还得问"——而问的成本（加微信 + 备注暗号）远高于直接划走去问下一家。<br>
+      <strong>结论：93 高分 + 闪电响应 + 视觉细节复述 = 必要但不充分。价格信号软化 = 临门一脚的临门一脚。</strong>
     </div>
   </section>
 
   <!-- ============ ACT 6 ============ -->
   <section class="act">
     <div class="act-head">
-      <span class="act-no">ACT 06 · DM 兜底（私信加 v）</span>
-      <span class="act-time">2026-05-21　09:24:43 CST · 距客户评论 + 275 小时</span>
+      <span class="act-no">ACT 06 · status=skipped 的 funnel 异常</span>
+      <span class="act-time">comments.status = skipped · 但 dm-phone-sender 仍发了</span>
     </div>
-    <h2>RC 没等到回复，转走 DM 通道加 v</h2>
+    <h2>funnel 漏洞：旁路通道绕过了 funnel 状态机</h2>
     <p class="act-lede">
-      因为公开 RC ×2 都没收到回复，pipeline 在第 11 天切到 <em>私信 DM</em> 通道，直接抛加 v 锚点（见 <a href="#msg-3" class="msg-ref">#3</a>）。这条 DM 走的是真实 Android 设备 + ADB + uiautomator2 的本地推送路径。
+      本案的 <code>comments.status</code> 写的是 <strong>"skipped"</strong>——意思是 analyze cron 在打完 93 分后，<em>因某条 dedupe 或 cid 解析规则把它从标准 funnel 中排除了</em>。理论上 status=skipped 的评论不应该收到 DM；但本案的 DM 是被 <code>dm-phone-sender</code> 这个旁路工具独立挑出来发的，绕过了 status 检查。
     </p>
 
     <div class="delivery-row">
       <div class="dr-item">
-        <div class="dr-label">发送账号</div>
-        <div class="dr-val">messaging 池</div>
-        <div class="dr-sub">本地真机 OPPO · 运营 Mac USB 直连</div>
+        <div class="dr-label">funnel 状态</div>
+        <div class="dr-val" style="color: var(--warning);">skipped</div>
+        <div class="dr-sub">comments.status 标注为旁路</div>
       </div>
       <div class="dr-item">
-        <div class="dr-label">通道</div>
-        <div class="dr-val">Android · ADB · uiautomator2</div>
-        <div class="dr-sub">绕过 web · 等同真人手机操作</div>
+        <div class="dr-label">实际通道</div>
+        <div class="dr-val">dm-phone-sender</div>
+        <div class="dr-sub">独立挑单工具，不读 status</div>
       </div>
       <div class="dr-item">
-        <div class="dr-label">微信号</div>
-        <div class="dr-val">Homedz3791</div>
-        <div class="dr-sub">设计师「武海艳」备注「抖音」</div>
+        <div class="dr-label">conversation</div>
+        <div class="dr-val" style="color: var(--warning);">未创建</div>
+        <div class="dr-sub">发送成功但 funnel 状态机失联</div>
       </div>
     </div>
 
     <div class="signal" style="margin-top: 14px;">
-      <div class="signal-title">🐞 Bug #3 · DM 开场假设客户曾感谢</div>
-      <strong>原文开头：</strong><span class="ru-quote">"不客气~ 你这一层自建房现在到哪一步了…"</span><br>
-      问题：客户从来没回复过任何消息，更没说过"谢谢"。"不客气~"这个开场暗示了一个不存在的前置交互 — 客户一打开就会觉得"我什么时候道谢了"。<br>
-      <span style="color: var(--text-muted); font-size: 12px;">原因：DM 模板是从"已经收到客户感谢"的对话语境复用过来的，没做<em>"是否有客户回复"</em>的前置判断。修复：开场段必须按 <code>has_customer_reply</code> 分支选模板。</span>
+      <div class="signal-title">🐞 funnel 状态机的双向漏洞</div>
+      <strong>漏洞 ①（上行）</strong>：评论被 funnel 打成 <code>status=skipped</code>，但 <code>dm-phone-sender</code> 不读这个字段就发了——funnel 的<em>"跳过"判定不被旁路工具尊重</em>。<br>
+      <strong>漏洞 ②（下行）</strong>：DM 发出后没回写 <code>conversations / messages</code> 表——funnel 不知道这条线索其实<em>已经触达过客户</em>。<br>
+      <span style="color: var(--text-muted); font-size: 12px;">双向漏洞结合的后果：本案在 funnel 系统看来是<em>"被跳过的、从未触达的线索"</em>；在客户那里却是<em>"已经收到 1 条 DM 的活线索"</em>。这两个状态<strong>同时存在</strong>。修：dm-phone-sender 必须 ① 读取 status 决定是否发；② 发送成功后回写 funnel 状态。</span>
     </div>
   </section>
 
@@ -766,15 +777,15 @@
   <section class="act">
     <div class="act-head">
       <span class="act-no">ACT 07 · 现在</span>
-      <span class="act-time">客户至今 0 条回复 · 仍在 ice_break</span>
+      <span class="act-time">客户 0 回复 · status=skipped · conversation 未创建</span>
     </div>
-    <h2>275 小时后，客户依然没动</h2>
+    <h2>93 高分 + 闪电响应 + 价格软 = 0 inbound</h2>
     <div class="status-card">
       <div class="status-pulse"></div>
       <div class="status-text">
-        <strong>RC1 + RC2 + DM 三连击，客户 0 条 inbound。</strong><br>
-        DB 里这条 comment 甚至没有对应的 <code>conversations</code> 行 — RC / DM 三次发送都没回写 conversation/messages 表。pipeline 上还有 11 天前的悬浮线索，没有正式被 funnel 接管。<br>
-        <span style="color: var(--text-muted); font-size: 12px;">结论：客户在 5-9 当晚的窗口期已经过去。他要么早就在别处问到了答案（下沉式 15cm 还是 25cm 是网上能搜到的常识），要么自建房项目也推进到了下一阶段。<strong>本案的真正复盘点不在文案 — 在 SLA。</strong></span>
+        <strong>DM 发出，客户 0 inbound。</strong><br>
+        本案是 funnel 在<em>"理想画像 + 闪电时效 + 软价格钩子"</em>组合下的一份诚实样本。前两个维度（93 分客户画像 + 2.37h 时效）几乎是 funnel 能做到的上限；唯一的弱点在<em>钩子文案的价格信号</em>——"拉清单"而非"报价清单"。<br>
+        <span style="color: var(--text-muted); font-size: 12px;">从产品视角：本案告诉我们的是<strong>"客户开口的 last mile 是钩子的价值密度，不是时效或评分"</strong>。在所有上游条件都对的情况下，<em>一个字的钩子差异</em>就足以决定客户是回复还是划走。</span>
       </div>
     </div>
   </section>
@@ -784,14 +795,13 @@
     <div class="act-head">
       <span class="act-no">复盘 · 这条线索教会我们的</span>
     </div>
-    <h2>6 个必须修的系统问题</h2>
+    <h2>5 个必须记住的系统结论</h2>
     <div class="lessons">
-      <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>SLA 是一切。</strong>217 小时后的"高意向"回应 ≈ 不存在。当前 funnel 的 P95 时效不应超过 24h，知识型评论应当走<em>专用加速队列</em>，3h 内有效。</div></div>
-      <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>knowledge 型评论 = ROI 最高的一类。</strong>客户在问"做不做下沉 / 多少 cm" — 这是他正在做选择的<em>实时窗口</em>。错过窗口后即使文案完美也救不回，因为他已经问到答案了。</div></div>
-      <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>RC 二刷必须感知第一条。</strong>本案 RC2 把地域写成湖南、把下沉数字从 15-20 改到 25-30 — 这是因为 LLM 没拿到 RC1 作为 context。修：<code>generate_rc2</code> 必须 inject 最近一条已发的 RC 文本。</div></div>
-      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>IP 属地必须硬约束</strong>。RC1 没用「安徽」、RC2 凭空写「湖南」— 都是 LLM 自由发挥导致。修：prompt 里 <code>ip_location</code> 设为<em>必须 verbatim 出现</em>的字段，模型不准换省。</div></div>
-      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>价格钩子要在 RC1 抛出</strong>。本案 RC1 只说"拉清单"，没把"全屋柜体 5 万起 / 自建房整装报价"挂出来。高意向 + 进行中 + 高 specificity 的客户，<em>价格信息是 disclose 钩子，不是营销噪音</em>。</div></div>
-      <div class="lesson"><div class="lesson-num">6</div><div class="lesson-body"><strong>DM 开场必须按是否有客户回复分支</strong>。"不客气~"假设了一个不存在的前置交互。修：<code>compose_dm</code> 先查 <code>messages where role='user'</code>，没有就用"零起点"模板，不许用感谢应答模板。</div></div>
+      <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>2.37h 是 funnel 能做到的时效上限。</strong>本案两段延迟（入库 1.23h + DM 1.13h）证明：当 scraper 跟<em>新视频高优先</em>策略 + 运营在线 + 评论时间不踩雷——funnel 能跑到 2-3h SLA 之内。这是工程层面的"理想样本"，不是物理极限。</div></div>
+      <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>93 高分 ≠ 自动转化。</strong>本案是 funnel 最理想画像（product · high · active · 93 分），时效达标，但因价格信号软依然 0 回复。<em>评分是入门券，钩子的价值密度才是临门一脚</em>。修：把"价格钩子成色"纳入 DM 生成的硬约束，禁用"拉清单 / 私信聊 / 看一下"这种延后型动词。</div></div>
+      <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>"拉清单" vs "报价清单" — 一个字之差。</strong>这是本案最重要的文案教训。"拉" = 动作；"报价" = 价值承诺。高意向客户已经在决策，要的是<em>能决策的信息</em>。修：DM 的钩子文案必须出现<em>具体的价值名词</em>（报价 / 案例 / 方案 / 户型图），不能只出现动词。</div></div>
+      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>视觉细节复述是 product · high specificity 的必备开场。</strong>本案用"奶咖配色 + 现代简约 + ENF 板材"三个视频里的关键词，让客户感觉"看了视频的不是模板群发"。<em>这是 prompt 应该固化的视觉细节抓取规则</em>：从视频 title / cover OCR / hashtag 里抽出 2-3 个视觉关键词喂给 LLM。</div></div>
+      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>status=skipped + DM 已发 = funnel 双向漏洞。</strong>本案的 <code>comments.status="skipped"</code> 但 <code>dm-phone-sender</code> 仍发了 DM——这是<em>旁路通道绕过 funnel 状态机</em>。修：① <code>dm-phone-sender</code> 必须读 status 决定发不发；② 发送成功必须回写 conversation。否则 funnel 系统永远看不到这条已触达的线索。</div></div>
     </div>
   </section>
 
@@ -800,34 +810,34 @@
     <div class="snapshot-title">SYSTEM SNAPSHOT · 这条记录在 Akke 数据库里长什么样</div>
     <div class="snap-grid">
       <dl>
-        <dt>comment_id</dt><dd><code>7e0dc728-8cd6-…-1a2dc1a978c2</code></dd>
-        <dt>conversation</dt><dd><span class="null">未创建</span> · 三次发送均未回写</dd>
-        <dt>comment created_at</dt><dd>2026-05-16 09:27 CST</dd>
-        <dt>comment_time</dt><dd>2026-05-09 21:41 CST</dd>
+        <dt>comment_id</dt><dd><code>41de663e-b4aa-4324-8356-af50805e1dfd</code></dd>
+        <dt>comment.status</dt><dd><strong style="color: var(--warning);">skipped</strong> · funnel 旁路</dd>
+        <dt>comment created_at</dt><dd>2026-05-20 16:00:28 CST</dd>
+        <dt>comment_time</dt><dd>2026-05-20 14:46:38 CST</dd>
       </dl>
       <dl>
-        <dt>抖音昵称</dt><dd>红尘有梦7865</dd>
-        <dt>sec_uid</dt><dd><code>MS4wLjABAAAAlUYYcoXo…JDtRULBU</code></dd>
-        <dt>IP 属地</dt><dd>安徽 · city=<code>NULL</code></dd>
+        <dt>抖音昵称</dt><dd>无忧</dd>
+        <dt>sec_uid</dt><dd><code>MS4wLjABAAAAe20b5sY0YgH2urle_PHNBV_njTuZRaU0--iJwU6ieKg</code></dd>
+        <dt>IP 属地</dt><dd>湖北 · city=<code>NULL</code></dd>
         <dt>头像</dt><dd>已缓存（avatar_url 在 DB）</dd>
       </dl>
       <dl>
-        <dt>intent_score</dt><dd>73 / 100</dd>
+        <dt>intent_score</dt><dd>93 / 100</dd>
         <dt>intent_label</dt><dd>高意向</dd>
-        <dt>comment_type</dt><dd>knowledge · "问卫生间下沉设计→knowledge"</dd>
+        <dt>comment_type</dt><dd>product · "产品型·具体·进行中"</dd>
         <dt>specificity / freshness</dt><dd>high · active</dd>
       </dl>
       <dl>
-        <dt>video</dt><dd><code>topic_status=rejected</code> · <code>source_account_id=null</code></dd>
-        <dt>discovery_source</dt><dd>profile · 兜底捡漏</dd>
-        <dt>发送通道</dt><dd>RC ×2（公开） + DM ×1（Android adb）</dd>
-        <dt>客户回复</dt><dd><strong style="color: var(--warning);">0 条</strong> · 时效 217h 起步</dd>
+        <dt>video</dt><dd><code>topic_status=home</code> · 设计师｜美嘉 · 5-19 19:44 发布（前一晚发）</dd>
+        <dt>号源账号</dt><dd>设计师_美嘉 · designer · city=<code>NULL</code></dd>
+        <dt>发送通道</dt><dd>DM ×1 · dm-phone-sender 旁路 · 未回写 conversation</dd>
+        <dt>客户回复</dt><dd><strong style="color: var(--success);">0 条</strong> · 时效 2.37h ⚡</dd>
       </dl>
     </div>
   </section>
 
   <footer>
-    Akke 用户案例 · 红尘有梦7865 · 数据快照 2026-05-21 · <a href="/akke/cases/">← 返回案例库</a> · <a href="/akke/">Akke 首页</a>
+    Akke 用户案例 · 无忧 · 数据快照 2026-05-21 · <a href="/akke/cases/">← 返回案例库</a> · <a href="/akke/">Akke 首页</a>
   </footer>
 
 </div>
