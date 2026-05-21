@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 用户案例 · 习习和习习 · 一条评论的旅程</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --customer: #fbbf24;
+    --customer-soft: rgba(251, 191, 36, 0.08);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+  header.hero { padding: 24px 0 40px; margin-bottom: 16px; text-align: center; }
+  .hero-avatar { width: 112px; height: 112px; border-radius: 50%; border: 3px solid var(--border-strong); background: var(--bg-elevated); object-fit: cover; box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.06); margin-bottom: 22px; }
+  .hero-eyebrow { font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: 44px; font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em; line-height: 1.15; }
+  .hero-tagline { font-size: 18px; color: var(--text-dim); margin: 0 auto 18px; max-width: 600px; line-height: 1.5; }
+  .hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .chip.purple { background: var(--accent-soft); color: var(--accent); }
+  .chip.blue { background: var(--info-soft); color: var(--info); }
+  .chip.amber { background: var(--customer-soft); color: var(--customer); }
+  .chip.green { background: var(--success-soft); color: var(--success); }
+  .hero-profile { display: inline-block; margin-top: 18px; font-size: 13px; color: var(--info); text-decoration: none; border-bottom: 1px dashed currentColor; padding-bottom: 1px; }
+  .hero-profile:hover { color: var(--accent); }
+  .journey-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 32px 0 24px; padding: 16px 20px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; }
+  .js-step { text-align: center; position: relative; }
+  .js-step .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--bg-deep); color: var(--text-muted); border: 1.5px solid var(--border-strong); font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+  .js-step.done .num { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .js-step.now .num { background: var(--customer-soft); color: var(--customer); border-color: var(--customer); }
+  .js-step .lbl { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+  .js-step.done .lbl, .js-step.now .lbl { color: var(--text-dim); }
+  .js-step::after { content: ""; position: absolute; top: 14px; right: -3px; width: 6px; height: 2px; background: var(--border-strong); }
+  .js-step:last-child::after { display: none; }
+  @media (max-width: 720px) { .journey-strip { grid-template-columns: repeat(4, 1fr); } .js-step .lbl { font-size: 10px; } }
+  .source-pack { margin: 36px 0 12px; display: grid; gap: 14px; }
+  .source-block { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; scroll-margin-top: 80px; }
+  .src-eyebrow { display: flex; align-items: baseline; gap: 10px; font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .src-eyebrow .src-step { color: var(--accent); }
+  .src-eyebrow .src-meta { margin-left: auto; color: var(--text-muted); font-weight: 500; letter-spacing: 0.04em; text-transform: none; font-size: 11px; }
+  .source-video { display: block; color: inherit; text-decoration: none; }
+  .source-video:hover { border-color: var(--info); }
+  .source-video .sv-title { font-size: 17px; font-weight: 700; color: var(--text); margin: 0 0 6px; line-height: 1.4; }
+  .source-video .sv-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin: 6px 0 12px; white-space: pre-line; }
+  .source-video .sv-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .video-tag { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em; }
+  .video-tag.hashtag { background: var(--info-soft); color: var(--info); }
+  .video-tag.craft { background: var(--success-soft); color: var(--success); }
+  .source-video .sv-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 10px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .source-video .sv-meta .sv-url-hint { color: var(--info); }
+  .video-notice { margin-top: 10px; padding: 10px 12px; background: var(--warning-soft); border: 1px dashed rgba(251, 191, 36, 0.35); border-radius: 8px; font-size: 12px; color: #fde68a; line-height: 1.55; }
+  .video-notice strong { color: var(--warning); }
+  .video-notice code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #fde68a; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .source-block .comment-wrap { display: flex; gap: 14px; align-items: flex-start; }
+  .source-block .comment-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; background: var(--bg-deep); object-fit: cover; border: 1px solid var(--border); }
+  .source-block .comment-body { flex: 1; min-width: 0; }
+  .source-block .comment-author { font-size: 13px; color: var(--text-dim); font-weight: 500; margin-bottom: 4px; }
+  .source-block .comment-author .loc { color: var(--text-muted); font-weight: 400; margin-left: 8px; font-size: 12px; }
+  .source-block .comment-text { font-size: 22px; color: var(--text); font-weight: 600; line-height: 1.45; padding: 6px 0 4px; }
+  .source-block .comment-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .msg-id { display: inline-block; min-width: 26px; text-align: center; padding: 1px 6px; border-radius: 4px; margin-right: 8px; background: var(--bg-deep); border: 1px solid var(--border-strong); color: var(--text-dim); text-decoration: none; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; }
+  .msg-id:hover { color: var(--accent); border-color: var(--accent); }
+  .dm[id^="msg-"] { scroll-margin-top: 80px; }
+  .msg-ref { display: inline-block; font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 11.5px; font-weight: 700; padding: 1px 7px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); text-decoration: none; vertical-align: 1px; }
+  .msg-ref:hover { background: var(--accent); color: #fff; }
+  .transcript { display: grid; gap: 14px; }
+  .transcript .dm-row { display: flex; flex-direction: column; }
+  .transcript .dm-row.from-akke { align-items: flex-end; }
+  .transcript .dm-row.from-customer { align-items: flex-start; }
+  .day-sep { text-align: center; font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; padding: 4px 0; margin: 4px 0; border-top: 1px dashed var(--border); position: relative; }
+  .day-sep span { background: var(--bg-elevated); padding: 0 12px; position: relative; top: -10px; }
+  .dm { display: flex; gap: 12px; margin-top: 0; }
+  .dm.from-akke { justify-content: flex-end; }
+  .dm-bubble { max-width: 78%; padding: 14px 18px; border-radius: 16px; font-size: 15.5px; line-height: 1.55; color: var(--text); position: relative; white-space: pre-line; }
+  .dm.from-akke .dm-bubble { background: linear-gradient(135deg, var(--accent), #7c3aed); color: #fff; border-bottom-right-radius: 4px; }
+  .dm.from-customer .dm-bubble { background: var(--bg-deep); border: 1px solid var(--border-strong); border-bottom-left-radius: 4px; }
+  .dm-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; display: flex; gap: 10px; align-items: baseline; }
+  .dm-row.from-akke .dm-meta { justify-content: flex-end; }
+  .act { margin: 64px 0 0; }
+  .act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .act-no { font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
+  .act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .act h2 { font-size: 26px; font-weight: 700; color: var(--text); margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.25; }
+  .act-lede { font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px; border-left: 2px solid var(--border-strong); padding-left: 14px; }
+  .act-lede em { color: var(--text); font-style: normal; font-weight: 500; }
+  .panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin: 0; }
+  .scoring { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: center; }
+  .scoring .score-bar { background: var(--bg-deep); border-radius: 12px; padding: 18px 16px; text-align: center; border: 1px solid var(--border); }
+  .scoring .score-num { font-size: 44px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .scoring .score-num small { font-size: 16px; color: var(--text-muted); font-weight: 400; }
+  .scoring .score-label { font-size: 12px; color: var(--accent); margin-top: 6px; letter-spacing: 0.06em; font-weight: 600; }
+  .scoring .score-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .scoring .score-reasoning { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+  .scoring .score-reasoning strong { color: var(--text); }
+  @media (max-width: 560px) { .scoring { grid-template-columns: 1fr; } }
+  .annotation { margin: 12px 0 0; padding: 12px 16px; background: rgba(139, 92, 246, 0.04); border-left: 2px solid var(--accent); border-radius: 8px; font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .annotation .a-title { color: var(--accent); font-weight: 600; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .annotation strong { color: var(--text); }
+  .breakdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+  .breakdown .bd-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .breakdown .bd-num { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.04em; }
+  .breakdown .bd-title { font-size: 12.5px; color: var(--text); font-weight: 600; margin: 2px 0 4px; }
+  .breakdown .bd-quote { font-size: 12px; color: var(--text-muted); line-height: 1.45; font-style: italic; }
+  @media (max-width: 700px) { .breakdown { grid-template-columns: repeat(2, 1fr); } }
+  .delivery-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .delivery-row .dr-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .delivery-row .dr-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .delivery-row .dr-val { font-size: 14.5px; color: var(--text); font-weight: 600; }
+  .delivery-row .dr-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+  .delivery-row code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .delivery-row { grid-template-columns: 1fr; } }
+  .signal { background: var(--customer-soft); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 12px; padding: 16px 20px; margin-top: 16px; font-size: 14px; color: #fde68a; }
+  .signal-title { color: var(--customer); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .signal strong { color: #fef3c7; }
+  .signal code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 12px; color: #fde68a; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .status-card { background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(96,165,250,0.06)); border: 1px solid rgba(52,211,153,0.25); border-radius: 14px; padding: 22px 26px; display: flex; gap: 18px; align-items: center; }
+  .status-pulse { width: 12px; height: 12px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 6px rgba(52,211,153,0.18); flex-shrink: 0; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 6px rgba(52,211,153,0.18); } 50% { box-shadow: 0 0 0 10px rgba(52,211,153,0.05); } }
+  .status-text strong { color: var(--text); }
+  .status-text { color: var(--text-dim); font-size: 14.5px; line-height: 1.55; }
+  .lessons { display: grid; gap: 12px; }
+  .lesson { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start; }
+  .lesson-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .lesson-body strong { color: var(--text); }
+  .lesson-body { color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+  .snapshot { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); }
+  .snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+  .snap-grid dl { margin: 0; display: grid; grid-template-columns: 100px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .snap-grid dt { color: var(--text-muted); }
+  .snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+  .snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+  #src-video, #src-comment { scroll-margin-top: 80px; }
+  .region-panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; }
+  .region-panel .rp-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .region-panel .rp-head h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text); }
+  .region-panel .rp-head .rp-sub { font-size: 12px; color: var(--text-muted); }
+  .region-layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .region-layer { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .region-layer .rl-label { font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .region-layer .rl-val { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 4px; }
+  .region-layer .rl-val .null { color: var(--text-muted); font-weight: 400; font-size: 14px; font-style: italic; }
+  .region-layer .rl-source { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .region-layer .rl-source code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 10px; font-family: "SF Mono", Menlo, Consolas, monospace; color: #c4b5fd; }
+  @media (max-width: 640px) { .region-layers { grid-template-columns: 1fr; } }
+  .region-usage { display: grid; gap: 10px; }
+  .region-usage .ru-row { display: grid; grid-template-columns: 60px 1fr; gap: 14px; align-items: start; padding: 12px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; }
+  .region-usage .ru-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; padding: 4px 0; text-align: center; border-radius: 6px; line-height: 1.1; }
+  .region-usage .ru-tag.province { background: var(--info-soft); color: var(--info); }
+  .region-usage .ru-tag.muted { background: var(--bg); color: var(--text-muted); }
+  .region-usage .ru-body { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .region-usage .ru-body strong { color: var(--text); }
+  @media (max-width: 600px) { .region-usage .ru-row { grid-template-columns: 1fr; gap: 6px; } .region-usage .ru-tag { text-align: left; padding: 3px 8px; display: inline-block; } }
+  .timing-strip { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin: 0 0 18px; }
+  .timing-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .timing-summary .ts-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .timing-summary .ts-label { font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+  .timing-summary .ts-val { font-size: 15px; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .timing-summary .ts-val .approx { color: var(--text-muted); font-size: 11px; margin-left: 4px; font-weight: 400; }
+  @media (max-width: 600px) { .timing-summary { grid-template-columns: 1fr; } }
+  .timing-bars { display: flex; gap: 2px; height: 36px; align-items: stretch; border-radius: 6px; overflow: hidden; }
+  .timing-bar { position: relative; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; line-height: 1; color: rgba(255,255,255,0.95); cursor: default; min-width: 28px; }
+  .timing-bar.ai-to-user { background: linear-gradient(180deg, var(--customer), #f59e0b); color: #1a1f2b; }
+  .timing-bar.user-to-ai { background: linear-gradient(180deg, var(--accent), #7c3aed); }
+  .timing-legend { display: flex; gap: 14px; margin-top: 8px; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; }
+  .timing-legend .tl-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+  .timing-legend .tl-swatch.customer { background: var(--customer); }
+  .timing-legend .tl-swatch.akke { background: var(--accent); }
+  .timing-list { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); display: grid; gap: 6px; list-style: none; padding-left: 0; }
+  .timing-list .tl-row { display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: center; padding: 8px 12px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 8px; }
+  .timing-list .tl-num { font-size: 12px; font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: center; }
+  .timing-list .tl-path { font-size: 12.5px; color: var(--text-dim); line-height: 1.5; display: flex; gap: 6px; flex-wrap: wrap; align-items: baseline; }
+  .timing-list .tl-time { font-family: "SF Mono", Menlo, Consolas, monospace; color: var(--text-muted); font-size: 11px; background: rgba(255,255,255,0.03); padding: 1px 6px; border-radius: 4px; }
+  .timing-list .tl-actor { color: var(--text); }
+  .timing-list .tl-arrow { color: var(--text-muted); }
+  .timing-list .tl-gap { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .timing-list .tl-gap.ai-to-user { background: var(--customer-soft); color: var(--customer); }
+  @media (max-width: 600px) { .timing-list .tl-row { grid-template-columns: 1fr; gap: 6px; } }
+  .nurture-badge-card { background: linear-gradient(135deg, rgba(52,211,153,0.15), rgba(139,92,246,0.08)); border: 2px solid rgba(52,211,153,0.45); border-radius: 14px; padding: 20px 24px; margin: 14px 0 24px; }
+  .nurture-badge-card h4 { margin: 0 0 8px; font-size: 14px; color: var(--success); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+  .nurture-badge-card p { margin: 0 0 6px; font-size: 13.5px; color: var(--text-dim); line-height: 1.65; }
+  .nurture-badge-card code { background: var(--bg-deep); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #6ee7b7; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .nurture-badge-card strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="breadcrumb"><a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><a href="/akke/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">习习和习习</span></nav>
+
+  <header class="hero">
+    <img class="hero-avatar" src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-avt-0015_dcae6eeeaf82514b14f11cbf7928354f.jpeg?from=2064092626" alt="习习和习习 头像" referrerpolicy="no-referrer" loading="lazy">
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 习习和习习 · 案例库首条进入 nurture 的样本</div>
+    <h1>习习和习习<br>跨夜 8h41m · 一句「好的，谢谢～」<br>把对话推进到 nurture</h1>
+    <p class="hero-tagline">
+      她在贵州。在「孙姐聊门窗」的<em>断桥铝 vs 系统门窗对比视频</em>底下，留了 9 个字 — <em>「可以帮忙看下吗？450」</em><br>
+      Akke 接住"450 预算"用<em>贵州多雨</em>气候话术接业务。<strong>跨夜 8h41m 后她回了「好的，谢谢～」</strong> — stage 自动从 <code>ice_break</code> 升级到 <code>nurture</code>。
+    </p>
+    <div class="hero-chips">
+      <span class="chip green">stage = nurture · 案例库首条</span>
+      <span class="chip blue">询价 450 · product</span>
+      <span class="chip amber">贵州 · 门窗品类</span>
+      <span class="chip purple">WDA 通道 · 风控假阳性</span>
+    </div>
+    <br>
+    <a class="hero-profile" href="https://www.douyin.com/user/MS4wLjABAAAAVvZFa3O6gxuH26Zy4qmrCsGbMU3BdQuu-G2dHm1hrKQ" target="_blank" rel="noopener noreferrer">→ 抖音个人主页</a>
+  </header>
+
+  <div class="nurture-badge-card">
+    <h4>⭐ 案例库首条进入 nurture stage 的样本</h4>
+    <p>截至本案例数据快照（2026-05-20），<strong>案例库其他所有 case 都还停留在 <code>ice_break</code></strong>（习近、空间向量、即将是个辣妹、用户3824342698628、依然为你...）。本案是<em>唯一一条 stage 自动从 ice_break → nurture 升级</em>的样本 — 因为客户在 2026-05-20 06:20 CST <strong>真实回复了「好的，谢谢～」</strong> 并入了 DB（不是截图取证）。</p>
+    <p>"好的，谢谢～"看起来轻飘飘，但在 Akke 的 stage 升级规则里<strong>足够触发 nurture 升级</strong> — 客户主动响应过、对话双向打开过。下一步运营或自动 followup 在 nurture 阶段做<em>价值兑现 + 跟进推动</em>，而不是再来一遍破冰。</p>
+  </div>
+
+  <div class="journey-strip" aria-label="用户旅程进度">
+    <div class="js-step done"><div class="num">1</div><div class="lbl">刷视频</div></div>
+    <div class="js-step done"><div class="num">2</div><div class="lbl">留评论</div></div>
+    <div class="js-step done"><div class="num">3</div><div class="lbl">AI 评分</div></div>
+    <div class="js-step done"><div class="num">4</div><div class="lbl">起草破冰</div></div>
+    <div class="js-step done"><div class="num">5</div><div class="lbl">DM 触达</div></div>
+    <div class="js-step done"><div class="num">6</div><div class="lbl">客户回应 · 入库</div></div>
+    <div class="js-step now"><div class="num">7</div><div class="lbl">nurture 跟进</div></div>
+  </div>
+
+  <div class="source-pack" aria-label="源料 pack">
+    <a id="src-video" class="source-block source-video" href="https://www.douyin.com/video/7637081540019376622" target="_blank" rel="noopener noreferrer">
+      <div class="src-eyebrow"><span class="src-step">▶ 01 · 原视频</span><span class="src-meta">号源 · 孙姐聊门窗 · 工厂号 · 服务市未标</span></div>
+      <h3 class="sv-title">断桥铝和系统门窗 五个不同的区别 到底差在哪？！</h3>
+      <div class="sv-desc">断桥铝和系统门窗 五个不同的区别 到底差在哪？！ #门窗 #系统门窗 #断桥铝门窗 #门窗知识 #门窗选购</div>
+      <div class="sv-tags">
+        <span class="video-tag hashtag">#门窗</span>
+        <span class="video-tag hashtag">#系统门窗</span>
+        <span class="video-tag hashtag">#断桥铝门窗</span>
+        <span class="video-tag hashtag">#门窗知识</span>
+        <span class="video-tag hashtag">#门窗选购</span>
+      </div>
+      <div class="sv-meta">
+        <span>作者 · 孙姐聊门窗</span>
+        <span>抓取于 · 2026-05-20 14:02 CST</span>
+        <span>topic_status · <code style="background:var(--bg-deep);padding:1px 5px;border-radius:3px;font-size:11px;color:#34d399;font-family:'SF Mono',Menlo,Consolas,monospace;">home</code></span>
+        <span class="sv-url-hint">→ 在抖音打开</span>
+      </div>
+      <div class="video-notice">
+        ⚠️ <strong>案例库首条门窗品类视频</strong>：其他案例都是全屋定制柜体 / 沙发 / 装修教程类（柜体相关 craft 词典命中），本案是<em>门窗品类</em>（断桥铝 / 系统门窗）— 跟柜体业务相邻但不重叠。Akke 的 craft_terms 词典对门窗类未收录（craft_terms=[]）但 5 个 hashtag 完整命中"门窗系列"。<strong>这种相邻品类 lead 的接入需要号源策略明确</strong>：要不要继续收门窗号源？接到门窗 lead 后转给柜体业务还是另起一条品类线？
+      </div>
+    </a>
+
+    <section id="src-comment" class="source-block">
+      <div class="src-eyebrow"><span class="src-step">💬 02 · 评论</span><span class="src-meta">2026-05-19 14:04 CST · 评分滞后 7h34m</span></div>
+      <div class="comment-wrap">
+        <img class="comment-avatar" src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-avt-0015_dcae6eeeaf82514b14f11cbf7928354f.jpeg?from=2064092626" alt="习习和习习" referrerpolicy="no-referrer" loading="lazy">
+        <div class="comment-body">
+          <div class="comment-author">习习和习习 <span class="loc">📍 贵州</span></div>
+          <div class="comment-text">可以帮忙看下吗？450</div>
+          <div class="comment-meta">
+            关键词 · <span style="color:var(--text-muted);">无命中</span>
+            · 但含具体数字 <code style="font-size:11px;color:var(--accent);background:var(--bg-deep);padding:1px 5px;border-radius:3px;font-family:'SF Mono',Menlo,Consolas,monospace;">450</code>（预算 / 元 一平米）
+            · status=<code style="font-size:11px;color:var(--success);background:var(--bg-deep);padding:1px 5px;border-radius:3px;font-family:'SF Mono',Menlo,Consolas,monospace;">analyzed</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="source-block">
+      <div class="src-eyebrow"><span class="src-step">✉️ 03 · 破冰招呼</span><span class="src-meta">2026-05-19 21:38 CST · 由账号「小文（野荞）」发出</span></div>
+      <div class="dm from-akke" id="msg-1">
+        <div class="dm-bubble">你好，习习和习习。450预算选系统门窗够用，可以看看源头工厂铝材，活动价入划算，安装档期紧张得早预约。贵州多雨，门窗防水得盯紧。</div>
+      </div>
+      <div class="dm-meta"><a href="#msg-1" class="msg-id">#1</a><span>· status=sent · attempts=0 · WDA 通道 · 风控假阳性已人工核实</span></div>
+    </section>
+
+    <section class="source-block">
+      <div class="src-eyebrow"><span class="src-step">📨 04 · 站内对话</span><span class="src-meta">DB 内入库 · 跨夜 8h41m 后客户回复</span></div>
+      <div class="transcript">
+        <div class="day-sep"><span>2026-05-20 06:20 CST · 跨夜 8h41m 后</span></div>
+
+        <div class="dm-row from-customer">
+          <div class="dm from-customer" id="msg-2">
+            <div class="dm-bubble">好的，谢谢～</div>
+          </div>
+          <div class="dm-meta"><a href="#msg-2" class="msg-id">#2</a><span>· 2026-05-20 06:20 CST · 入 DB · role 字段标 "customer"（不是 "user"）</span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">ACT 01 · 起点</span><span class="act-time">2026-05-19　14:04 CST</span></div>
+    <h2>9 个字 · 含一个具体数字 450</h2>
+    <p class="act-lede">
+      在<em>孙姐聊门窗</em>（工厂号）发的<a href="#src-video" class="msg-ref">断桥铝 vs 系统门窗对比视频</a>底下，她打了 9 个字（<a href="#src-comment" class="msg-ref">原评论</a>） — <em>「可以帮忙看下吗？450」</em>。3 件事同时暴露：①「可以帮忙看下吗？」= <strong>礼貌的咨询型问句</strong>，不是侵略性的"多少钱"；②「450」 = 具体预算数字（450 元/平米是门窗工厂常见入门价位），<em>她已经做过功课、知道这个数字大致区间</em>；③ 贵州 IP / 真头像 = 真用户，没有同行号源过滤风险。
+    </p>
+    <p class="act-lede">
+      <strong>视频品类是门窗 — 案例库首条非柜体类</strong>。Akke 主营全屋定制柜体（衣柜/橱柜/鞋柜），但门窗是装修流程里<em>跟柜体并行的强相关品类</em>。客户在断桥铝视频底下问价，对柜体业务来说是个机会 — 她正在装修中段，预算和决策都活跃，柜体破冰是合理的横向跨品类延伸。
+    </p>
+
+    <div class="region-panel" style="margin-top: 18px;">
+      <div class="rp-head"><h3>📍 地区粒度 · 贵州 IP · 门窗号源未标 city</h3><span class="rp-sub">省级气候话术「贵州多雨」跑通</span></div>
+      <div class="region-layers">
+        <div class="region-layer"><div class="rl-label">省 · IP 属地</div><div class="rl-val">贵州</div><div class="rl-source">来源 <code>comments.ip_location</code></div></div>
+        <div class="region-layer"><div class="rl-label">市 · 自报现居</div><div class="rl-val"><span class="null">未自报</span></div><div class="rl-source">来源 <code>comments.city</code> · NULL</div></div>
+        <div class="region-layer"><div class="rl-label">号源服务市</div><div class="rl-val"><span class="null">未标</span></div><div class="rl-source">来源 <code>source_accounts.city</code> · 门窗工厂号未录入</div></div>
+      </div>
+      <div class="region-usage">
+        <div class="ru-row"><div class="ru-tag province">省级</div><div class="ru-body"><strong>省级气候话术 · 案例库第 3 例</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br><span style="color: var(--text-muted); font-size: 12px;">「贵州多雨，门窗防水得盯紧」 — 跟<a href="/akke/cases/kongjian-xiangliang">空间向量</a>"广东回南天潮气重"、<a href="/akke/cases/daxin">大欣</a>"河北冬天暖气足实木开裂"是同款模式：<strong>省级气候 → 工艺约束</strong>。贵州因为云贵高原地形 + 季风影响，年降雨日数全国前列，门窗防水/排水是真实痛点。客户读到「贵州多雨」立刻能想到自家装修场景。</span></div></div>
+        <div class="ru-row"><div class="ru-tag muted">市级</div><div class="ru-body"><strong>市级缺席</strong> · 双重 NULL<br><span style="color: var(--text-muted); font-size: 12px;">如果未来 nurture 阶段能补到具体市（贵阳/遵义/铜仁），可以做更细的本地施工接业务话术。</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">ACT 02 · 被看见</span><span class="act-time">2026-05-19　21:38 CST · 评分滞后 7h34m</span></div>
+    <h2>78 分 · 即使没关键词命中也能识别为 product 询价</h2>
+    <p class="act-lede">
+      Akke 的分析 cron 把评论喂给 LLM 评分。模型读到「可以帮忙看下吗？450」<em>没匹配到关键词词典</em>（"价位/起订/想要"等都没命中），但<strong>从语境里识别出 product · medium · active</strong>：①含具体预算数字 450 = product 信号；②"可以帮忙看下吗" = 已经知道有讨论空间、不是冷询 = medium specificity；③主动咨询语气 = active freshness。三轴合并 78 分。<strong>这是 V4 评分体系比纯关键词匹配强的典型示例</strong>。
+    </p>
+    <div class="panel">
+      <div class="scoring">
+        <div class="score-bar"><div class="score-num">78<small>/100</small></div><div class="score-label">高意向</div></div>
+        <div>
+          <div class="score-tags">
+            <span class="chip purple">type · product</span>
+            <span class="chip blue">specificity · medium</span>
+            <span class="chip green">freshness · active</span>
+            <span class="chip amber">keyword · 无命中</span>
+          </div>
+          <div class="score-reasoning"><strong>评分理由：</strong>产品型 · 中等 · 进行中。<br><span style="color: var(--text-muted);">"问价→product" — 即使没匹配关键词词典，LLM 从"450"具体数字 + 询问语气推断出询价场景。同<a href="/akke/cases/laoxie">老谢</a>「价位」/ <a href="/akke/cases/user3824342698628">用户3824342698628</a>「隔板要留多少」同分。<em>V4 评分对"含数字 + 询问"组合特别敏感</em>，这是 V1 老评分不会识别的（参考<a href="/akke/cases/jiayi526">家怡526</a>"想订"漏判教训）。</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="signal" style="margin-top:14px;">
+      <div class="signal-title">⏱ 评分滞后 7h34m · 跨工作日晚高峰</div>
+      客户 14:04 评论（中午午休后）→ Akke 21:38 评分推送（晚饭后晚高峰）。<em>7h34m 跨过了下午工作时段</em>，刚好赶上客户晚上刷抖音的时段 — 实际上这个延迟<strong>对加微转化反而是好的</strong>（客户晚上空闲更可能翻 inbox）。但本案她直到次日凌晨 06:20 才回 — 说明晚上 21:38 她没看到，第二天早上才翻到。
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">ACT 03 · 第一句话</span><span class="act-time">2026-05-19　21:38 CST · 「小文（野荞）」</span></div>
+    <h2>三段式破冰 · 没有反问（不寻常）</h2>
+    <p class="act-lede">
+      首条 AI DM 在源料 pack 内（<a href="#msg-1" class="msg-ref">#1</a>）。<strong>这条破冰跟其他四段式破冰不同 — 没有反问结尾</strong>。其他案例（老谢"你最在意板材还是五金？"/ 空间向量"准备先装厨房还是衣柜？"/ 大欣"你家多少平？"）都用反问降低客户回答门槛。本案选了<em>结尾陈述式</em>：「贵州多雨，门窗防水得盯紧」 — 把决策权完全交给客户。
+    </p>
+    <div class="breakdown" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="bd-item"><div class="bd-num">① 接数字 + 卖点</div><div class="bd-title">接住"450"预算锚</div><div class="bd-quote">「450预算选系统门窗够用，可以看看源头工厂铝材」</div></div>
+      <div class="bd-item"><div class="bd-num">② 紧迫感</div><div class="bd-title">活动价 + 排期</div><div class="bd-quote">「活动价入划算，安装档期紧张得早预约」</div></div>
+      <div class="bd-item"><div class="bd-num">③ 省级气候话术</div><div class="bd-title">贵州多雨 → 防水</div><div class="bd-quote">「贵州多雨，门窗防水得盯紧」</div></div>
+    </div>
+    <div class="annotation">
+      <div class="a-title">没反问的破冰 · 是模板变体还是疏漏？</div>
+      <strong>从结构上看</strong>：本案破冰 3 段 vs 标准四段式（招呼+视频复述 / 地域接业务 / 工艺/价格 / 反问）少了"反问"。可能两种解读：①运营手动给 prompt 加了"对门窗品类不强反问"的指令，因为门窗决策周期长、客户多需要慢慢比较；②V3 prompt 在跨品类（柜体 → 门窗）场景下结构稍变形 — 没有专门的门窗 opener 模板。<br><br>
+      <strong>事后看效果不差</strong>：客户回了「好的，谢谢～」 — 礼貌承接，没有抵触。可能没反问反而让她不感觉被推着回答。<em>反问是降回答门槛的工具，但不是必须 — 对礼貌型客户，陈述式结尾给的"思考空间"也是种降阻力</em>。
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">ACT 04 · 触达路径</span><span class="act-time">⚠ WDA 通道 + 风控假阳性事件</span></div>
+    <h2>案例库首次明确 WDA 通道 · 风控假阳性</h2>
+    <p class="act-lede">
+      <strong>本案是案例库第一次明确触达走 WDA 通道</strong>（iOS 真机自动化），而不是其他案例的 ADB。发送账号是<em>小文（野荞）</em>，跟<a href="/akke/cases/kongjian-xiangliang">空间向量</a>是同一个 messaging 账号 — 推断这账号绑定 iOS 真机。
+    </p>
+    <p class="act-lede">
+      关键事件：<strong>DM 推送时 WDA 检测疑似 silent_drop（抖音风控悄悄不送达），但运营人工核实<em>实际是送达了</em></strong>。<code>message_queue.error_message</code> 留下记录：「[人工核实] WDA silent_drop_suspected 假阳性，实际送达」。客户 8h41m 后真实回复进一步印证了送达。
+    </p>
+    <div class="delivery-row">
+      <div class="dr-item"><div class="dr-label">发送账号</div><div class="dr-val">小文（野荞）</div><div class="dr-sub">messaging · active · 第 2 次进案例库</div></div>
+      <div class="dr-item"><div class="dr-label">通道</div><div class="dr-val">iOS · WDA</div><div class="dr-sub">WebDriverAgent 驱动抖音 App · 案例库首次明确 WDA</div></div>
+      <div class="dr-item"><div class="dr-label">风控事件</div><div class="dr-val" style="color:#fde68a;">⚠ 假阳性</div><div class="dr-sub">silent_drop_suspected → 人工核实实际送达 → 客户回复印证</div></div>
+    </div>
+    <div class="signal" style="margin-top:14px;">
+      <div class="signal-title">⚠ WDA silent_drop_suspected 检测策略需要调优</div>
+      <strong>背景</strong>：抖音对陌生人 DM 有时会"伪送达" — 接口返回成功但消息没真的到对方 inbox（status_code 7911 = stranger-DM 限流的 24h 冷却）。WDA 路径加了 <code>blackboxprotobuf</code> 解码 response，检测 silent_drop 信号。<br><br>
+      <strong>本案问题</strong>：检测<em>假阳性</em> — DM 实际送达了客户却被标 silent_drop_suspected。运营人工核实后改了 error_message。<strong>工程建议</strong>：①silent_drop 检测的阈值/条件要更严，避免过度敏感；②在 DM 实际收到回复时<em>自动反推</em>之前的 silent_drop_suspected 标记，回填校正；③加可视化面板让运营 review 这类标记，批量人工核实更快。
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">ACT 05 · 她回应了</span><span class="act-time">2026-05-20 06:20 CST · 跨夜 8h41m</span></div>
+    <h2>「好的，谢谢～」 · 跨夜礼貌承接</h2>
+    <p class="act-lede">
+      她在凌晨/清晨 06:20 回了 5 个字 + 一个波浪号 — <em>「好的，谢谢～」</em>（<a href="#msg-2" class="msg-ref">#2</a>）。<strong>表面客气</strong> — 但在 Akke 的 stage 升级规则里，<em>任何客户的主动回复（非空、非 "?" 单符）都触发 ice_break → nurture 升级</em>。所以这条短回复把 conversation 推进到了 nurture 阶段。
+    </p>
+
+    <div class="timing-strip">
+      <div class="timing-summary">
+        <div class="ts-item"><div class="ts-label">首次响应延迟</div><div class="ts-val">8 小时 41 分</div></div>
+        <div class="ts-item"><div class="ts-label">回复时刻特征</div><div class="ts-val">06:20 凌晨 / 清晨</div></div>
+        <div class="ts-item"><div class="ts-label">stage 升级</div><div class="ts-val">ice_break → nurture</div></div>
+      </div>
+      <div class="timing-bars">
+        <div class="timing-bar ai-to-user" style="flex: 100" title="2026-05-19 21:38 · AI 破冰 → 2026-05-20 06:20 · 她「好的，谢谢～」(约 8 小时 41 分 · 跨夜)">8h41m 跨夜</div>
+      </div>
+      <div class="timing-legend">
+        <span><span class="tl-swatch customer"></span>她在回应我们</span>
+        <span><span class="tl-swatch akke"></span>我们在跟进她（本案 AI 未再跟进）</span>
+        <span style="margin-left: auto;">DB 内 first_response_gap_human = "8 小时 41 分"（真实入库，非估值）</span>
+      </div>
+      <ol class="timing-list">
+        <li class="tl-row"><span class="tl-num">①</span><div class="tl-path"><a href="#msg-1" class="msg-ref">#1</a><span class="tl-time">5-19 21:38</span><span class="tl-actor">AI 破冰</span><span class="tl-arrow">→</span><a href="#msg-2" class="msg-ref">#2</a><span class="tl-time">5-20 06:20</span><span class="tl-actor">她「好的，谢谢～」</span></div><span class="tl-gap ai-to-user">8h41m</span></li>
+      </ol>
+    </div>
+
+    <div class="signal">
+      <div class="signal-title">⚡ 客户响应是 DB 真实入库 · 案例库第一例</div>
+      <strong>其他所有"客户回复"案例都是截图取证</strong>（用户3824342698628 / 空间向量 / 即将是个辣妹 / 大欣 / 刚子道场 / 深漂的吗喽），通过运营人工补到 HTML，DB 内 customer_messages = 0。<strong>本案是第一条客户回复真实入了 messages 表的样本</strong>。这意味着 check-replies cron / inbox 同步链路在本账号（小文（野荞））+ 本案 conversation 上跑通了。<em>说明 Akke 的 inbox 同步在 WDA 通道上是可工作的</em>，之前案例的"客户回复未入库"是同步链路覆盖率问题，不是不可解。
+    </div>
+
+    <div class="annotation" style="margin-top:14px;">
+      <div class="a-title">「好的，谢谢～」语义解读 · 三种可能</div>
+      ①<strong>礼貌结束信号</strong>：客户感觉对面没卖力推销 → 觉得"行了知道了" → 礼貌道谢结束对话。此时 nurture 跟进需要<em>提供新价值</em>（比如"给您发个 vacation 装修案例图"）才能重新打开对话；<br>
+      ②<strong>礼貌确认信号</strong>：客户表示收到了，但实际还在考虑 → 等运营/AI 主动跟进。此时 nurture 跟进<em>3-5 天后软推</em>（"上次说的活动期还有名额，您家窗户准备装哪种"）；<br>
+      ③<strong>礼貌时间锚信号</strong>：客户当时确实在忙（凌晨 06:20 起床准备工作），快速回复了再聊后续。此时<em>等她主动回来</em> 或 <em>白天工作时段做软提醒</em>。<br><br>
+      <strong>判断依据</strong>：客户后续 24-48h 内是否主动回。如果没回 = 倾向 ①；如果回 = 倾向 ②/③。<em>nurture 阶段的策略选择需要这类信号判定</em>。
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">ACT 07 · 现在</span><span class="act-time">stage = nurture · 案例库首条</span></div>
+    <h2>对话已进入 nurture 阶段 · 等下一轮推动</h2>
+    <div class="status-card">
+      <div class="status-pulse"></div>
+      <div class="status-text">
+        <strong>对话技术状态：DB 内 stage = nurture，ai_messages = 1（DB 入库），customer_messages_in_db = 0（因 role 字段标 "customer" 而 build script 查的是 "user"，但 messages 表实际有这条入站），messaging_account_id = 81cc9678（小文（野荞））。</strong><br>
+        <strong>真实业务状态：客户已经礼貌回复，stage 自动升级 nurture，等下一轮跟进推动。</strong> <strong>运营 SOP</strong>：①follow_up_policy=<code style="background:var(--bg-deep);padding:1px 5px;border-radius:3px;font-size:12px;color:var(--accent);font-family:'SF Mono',Menlo,Consolas,monospace;">standard</code> 触发的下一轮跟进文案应该<em>提供新价值</em>（贵州门窗实景案例 / 450 预算具体型号配置）而不是再问户型；②如果 24-48h 内客户主动回来 → 加 V；③如果继续沉默 → 3-5 天后软推一次再观察。<strong>工程层面</strong>：①修 <code>messages.role</code> 字段值不一致问题（user vs customer）；②修 build-case-study.ts 的 userMessages filter 兼容两种 role 值；③补 silent_drop_suspected 假阳性的自动回填校正逻辑。
+      </div>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="act-head"><span class="act-no">复盘 · 这条线索教会我们的</span></div>
+    <h2>5 个 nurture 阶段 + WDA 通道的原则</h2>
+    <div class="lessons">
+      <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>「好的，谢谢～」短回复也是合格 nurture 触发信号。</strong>案例库其他案例的客户回复要么是具体信息（"3 室一厅" / "怎么加"）要么是微信号 — 都比"好的，谢谢～"信息量大。但 Akke 的 stage 升级规则识别得对：<em>客户主动响应过 = 对话已双向打开 = 应该进 nurture</em>。<strong>不要因为回复短就当作冷淡 — 短回复是 nurture 入口而非终点</strong>。</div></div>
+      <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>V4 评分对"含数字 + 询问语气"组合识别准 · 比纯关键词强一档。</strong>本案评论「可以帮忙看下吗？450」没匹配任何关键词词典，但 LLM 从"450"+ 询问语气拿到 78 分 product。<em>这是 V1 老评分（家怡526「想订」漏判到 50 分）的升级</em>。后续 prompt 优化方向：含具体数字（金额/尺寸/平米）+ 询问标点应该<em>自动加权</em>，让评分更稳。</div></div>
+      <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>WDA silent_drop_suspected 检测有假阳性 · 需要自动回填校正。</strong>本案 DM 实际送达了但被标为 suspected silent_drop，运营人工改了 error_message。<em>silent_drop 检测的阈值/条件需要调优</em>，更重要的是<strong>当 DM 收到客户回复时应该自动反推之前的标记为假阳性</strong>，否则会污染监控数据 + 触发不必要的重试。同<a href="/akke/cases/kongjian-xiangliang">空间向量</a> messaging_account_id NULL 是同一类<em>数据完整性自动修复</em>问题。</div></div>
+      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>跨品类 lead 接入需要号源策略明确。</strong>本案视频是门窗（断桥铝/系统门窗），跟 Akke 主营全屋定制柜体相邻但不重叠。客户在门窗下问价被 Akke 用柜体破冰话术接住 — 实际话术里还是讲门窗（"系统门窗"/"铝材"/"防水"），没硬转柜体。<em>跨品类延伸的 opener 设计需要 prompt 显式知道"视频是 X 品类、客户预算/问题是 X 品类，回答时不要硬转"</em>。否则容易出现"客户问门窗你回柜体"的不匹配。</div></div>
+      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>跨夜 8h41m 是合理的"客户睡前看到 + 早晨回复"节奏。</strong>本案评分滞后 7h34m → 21:38 推送 → 客户次日 06:20 回。<em>21:38 推送其实赶上了客户睡前刷手机的时段</em>，但当晚她没看到 inbox，第二天早上起床翻到了顺手回。<strong>这种"晚高峰推送 + 次日清晨回复"是陌生 DM 转化的典型节奏</strong>。对推送时机的优化方向 — <em>不要追求"评论后立即推"，追求"客户下次主动开 inbox 的时间窗口前推"</em>。本案 21:38 推送实际命中了。</div></div>
+    </div>
+  </section>
+
+  <section class="snapshot">
+    <div class="snapshot-title">SYSTEM SNAPSHOT</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>conversation</dt><dd><code>ef4f0edb-7e97-…-7b5a8b314398</code></dd>
+        <dt>stage</dt><dd><strong style="color:var(--success);">nurture · 案例库首条</strong></dd>
+        <dt>created_at</dt><dd>2026-05-19 21:38 CST</dd>
+        <dt>触发评论</dt><dd><code>c5c4b8ac-8267-…-a08f633e8a1c</code></dd>
+      </dl>
+      <dl>
+        <dt>抖音昵称</dt><dd>习习和习习</dd>
+        <dt>sec_uid</dt><dd><code>MS4wLjABAAAAVvZFa3…hrKQ</code></dd>
+        <dt>IP 属地</dt><dd>贵州（自报市未抓）</dd>
+        <dt>头像</dt><dd>已缓存</dd>
+      </dl>
+      <dl>
+        <dt>intent_score</dt><dd>78 / 100</dd>
+        <dt>intent_label</dt><dd>高意向</dd>
+        <dt>comment_type</dt><dd>product · medium · active · 无关键词命中</dd>
+        <dt>video</dt><dd>门窗品类 · topic=home · 5 hashtags</dd>
+      </dl>
+      <dl>
+        <dt>发送账号</dt><dd>小文（野荞） · messaging</dd>
+        <dt>通道</dt><dd><strong style="color:var(--accent);">iOS · WDA · 案例库首次</strong></dd>
+        <dt>DB DM</dt><dd>1 条 status=sent · 风控假阳性已校正</dd>
+        <dt>客户回复</dt><dd><strong style="color:var(--success);">1 条「好的，谢谢～」· DB 真实入库（非截图）</strong></dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>Akke 用户案例 · 习习和习习 · 数据快照 2026-05-20 · <a href="/akke/cases/">← 返回案例库</a> · <a href="/akke/">Akke 首页</a></footer>
+</div>
+</body>
+</html>
