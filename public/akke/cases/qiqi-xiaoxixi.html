@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akke · 用户案例 · 七七笑嘻嘻 · 案例集第一条真实客户回复 · 504h 超期 × 明码报价 × 主动甩号</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-elevated: #141821;
+    --bg-deep: #1a1f2b;
+    --border: #242a38;
+    --border-strong: #2f3646;
+    --text: #e4e7ed;
+    --text-dim: #9ba3b4;
+    --text-muted: #6b7384;
+    --accent: #8b5cf6;
+    --accent-soft: rgba(139, 92, 246, 0.15);
+    --info: #60a5fa;
+    --info-soft: rgba(96, 165, 250, 0.12);
+    --success: #34d399;
+    --success-soft: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-soft: rgba(251, 191, 36, 0.12);
+    --customer: #fbbf24;
+    --customer-soft: rgba(251, 191, 36, 0.08);
+    --akke: #8b5cf6;
+    --akke-soft: rgba(139, 92, 246, 0.10);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 48px 24px 120px; }
+
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb span { margin: 0 8px; color: var(--border-strong); }
+
+  /* HERO ============================================ */
+  header.hero { padding: 24px 0 40px; margin-bottom: 16px; text-align: center; }
+  .hero-avatar {
+    width: 112px; height: 112px; border-radius: 50%;
+    border: 3px solid var(--border-strong); background: var(--bg-elevated); object-fit: cover;
+    box-shadow: 0 0 0 8px rgba(139, 92, 246, 0.06);
+    margin-bottom: 22px;
+  }
+  .hero-eyebrow {
+    font-size: 12px; color: var(--text-muted); letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 44px; font-weight: 700; margin: 0 0 14px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .hero-tagline {
+    font-size: 18px; color: var(--text-dim); margin: 0 auto 18px; max-width: 600px; line-height: 1.5;
+  }
+  .hero-tagline em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-chips { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .chip { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+  .chip.purple { background: var(--accent-soft); color: var(--accent); }
+  .chip.blue { background: var(--info-soft); color: var(--info); }
+  .chip.amber { background: var(--customer-soft); color: var(--customer); }
+  .chip.green { background: var(--success-soft); color: var(--success); }
+  .hero-profile {
+    display: inline-block; margin-top: 18px; font-size: 13px; color: var(--info); text-decoration: none;
+    border-bottom: 1px dashed currentColor; padding-bottom: 1px;
+  }
+  .hero-profile:hover { color: var(--accent); }
+
+  /* JOURNEY MAP STRIP =============================== */
+  .journey-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin: 32px 0 24px;
+    padding: 16px 20px; background: var(--bg-elevated);
+    border: 1px solid var(--border); border-radius: 14px;
+  }
+  .js-step { text-align: center; position: relative; }
+  .js-step .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-deep); color: var(--text-muted);
+    border: 1.5px solid var(--border-strong);
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+  }
+  .js-step.done .num { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .js-step.now .num { background: var(--customer-soft); color: var(--customer); border-color: var(--customer); }
+  .js-step .lbl { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+  .js-step.done .lbl, .js-step.now .lbl { color: var(--text-dim); }
+  .js-step::after {
+    content: ""; position: absolute; top: 14px; right: -3px; width: 6px; height: 2px; background: var(--border-strong);
+  }
+  .js-step:last-child::after { display: none; }
+  @media (max-width: 720px) {
+    .journey-strip { grid-template-columns: repeat(4, 1fr); }
+    .js-step .lbl { font-size: 10px; }
+  }
+
+  /* ACT BLOCKS ====================================== */
+  .act { margin: 64px 0 0; }
+  .act-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .act-no {
+    font-size: 11px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .act-time { font-size: 12px; color: var(--text-muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .act h2 {
+    font-size: 26px; font-weight: 700; color: var(--text);
+    margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.25;
+  }
+  .act-lede {
+    font-size: 15.5px; color: var(--text-dim); margin: 0 0 22px;
+    border-left: 2px solid var(--border-strong); padding-left: 14px;
+  }
+  .act-lede em { color: var(--text); font-style: normal; font-weight: 500; }
+
+  /* GENERIC PANEL =================================== */
+  .panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px; margin: 0;
+  }
+  .panel.tight { padding: 16px 20px; }
+
+  /* COMMENT BUBBLE (Act 1) ========================== */
+  .comment-wrap { display: flex; gap: 14px; align-items: flex-start; }
+  .comment-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; background: var(--bg-deep); object-fit: cover; border: 1px solid var(--border); }
+  .comment-body { flex: 1; min-width: 0; }
+  .comment-author { font-size: 13px; color: var(--text-dim); font-weight: 500; margin-bottom: 4px; }
+  .comment-author .loc { color: var(--text-muted); font-weight: 400; margin-left: 8px; font-size: 12px; }
+  .comment-text {
+    font-size: 22px; color: var(--text); font-weight: 600; line-height: 1.45;
+    padding: 6px 0 4px;
+  }
+  .comment-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .comment-source-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12.5px; color: var(--info); text-decoration: none; padding-top: 12px; border-top: 1px solid var(--border); width: 100%; }
+  .comment-source-link:hover { color: var(--accent); }
+
+  /* AI READS THE COMMENT (Act 2) ===================== */
+  .scoring {
+    display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: center;
+  }
+  .scoring .score-bar {
+    background: var(--bg-deep); border-radius: 12px; padding: 18px 16px; text-align: center; border: 1px solid var(--border);
+  }
+  .scoring .score-num { font-size: 44px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .scoring .score-num small { font-size: 16px; color: var(--text-muted); font-weight: 400; }
+  .scoring .score-label { font-size: 12px; color: var(--accent); margin-top: 6px; letter-spacing: 0.06em; font-weight: 600; }
+  .scoring .score-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .scoring .score-reasoning { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+  .scoring .score-reasoning strong { color: var(--text); }
+  @media (max-width: 560px) { .scoring { grid-template-columns: 1fr; } }
+
+  /* DM bubble (Act 3 & 5) =========================== */
+  .dm {
+    display: flex; gap: 12px; margin-top: 6px;
+  }
+  .dm.from-akke { justify-content: flex-end; }
+  .dm-bubble {
+    max-width: 78%;
+    padding: 14px 18px; border-radius: 16px;
+    font-size: 15.5px; line-height: 1.55; color: var(--text);
+    position: relative;
+  }
+  .dm.from-akke .dm-bubble {
+    background: linear-gradient(135deg, var(--accent), #7c3aed);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .dm.from-customer .dm-bubble {
+    background: var(--bg-deep);
+    border: 1px solid var(--border-strong);
+    border-bottom-left-radius: 4px;
+  }
+  .dm-meta {
+    font-size: 11.5px; color: var(--text-muted); margin-top: 6px;
+    display: flex; gap: 10px;
+  }
+  .dm.from-akke .dm-meta { justify-content: flex-end; }
+
+  /* Timing strip (Act 5 head) =================== */
+  .timing-strip {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; margin: 0 0 18px;
+  }
+  .timing-summary {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px;
+  }
+  .timing-summary .ts-item {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .timing-summary .ts-label {
+    font-size: 10.5px; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;
+  }
+  .timing-summary .ts-val {
+    font-size: 15px; color: var(--text); font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .timing-summary .ts-val .approx { color: var(--text-muted); font-size: 11px; margin-left: 4px; font-weight: 400; }
+  @media (max-width: 600px) { .timing-summary { grid-template-columns: 1fr; } }
+
+  .timing-bars { display: flex; gap: 2px; height: 36px; align-items: stretch; border-radius: 6px; overflow: hidden; }
+  .timing-bar {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 600; line-height: 1;
+    color: rgba(255,255,255,0.95);
+    cursor: default;
+    transition: filter 0.15s;
+    min-width: 28px;
+  }
+  .timing-bar:hover { filter: brightness(1.15); }
+  .timing-bar.ai-to-user {
+    background: linear-gradient(180deg, var(--customer), #f59e0b);
+    color: #1a1f2b;
+  }
+  .timing-bar.user-to-ai {
+    background: linear-gradient(180deg, var(--accent), #7c3aed);
+  }
+  .timing-bar.success {
+    background: linear-gradient(180deg, var(--success), #10b981);
+    color: #052e1a;
+  }
+  .timing-bar[data-approx="true"] {
+    background-image:
+      repeating-linear-gradient(45deg,
+        rgba(255,255,255,0.18) 0 4px,
+        transparent 4px 8px);
+    background-blend-mode: overlay;
+  }
+  .timing-bar[data-approx="true"]::after {
+    content: "≈"; position: absolute; top: 2px; right: 4px;
+    font-size: 10px; opacity: 0.6;
+  }
+  .timing-legend {
+    display: flex; gap: 14px; margin-top: 8px;
+    font-size: 11px; color: var(--text-muted);
+  }
+  .timing-legend .tl-swatch {
+    display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle;
+  }
+  .timing-legend .tl-swatch.customer { background: var(--customer); }
+  .timing-legend .tl-swatch.akke { background: var(--accent); }
+  .timing-legend .tl-swatch.success { background: var(--success); }
+
+  /* Transcript (对话全文) ==================== */
+  .transcript {
+    margin: 36px 0 12px; padding: 24px 26px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .transcript-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 18px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .transcript-head h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  .transcript-head .t-sub { font-size: 12.5px; color: var(--text-muted); }
+  .transcript-head .t-hint { font-size: 12px; color: var(--text-muted); }
+  .transcript-head .t-hint code {
+    background: var(--bg-deep); padding: 1px 6px; border-radius: 4px;
+    font-size: 11px; color: var(--accent);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  .msg-id {
+    display: inline-block; min-width: 24px; text-align: center;
+    padding: 1px 6px; border-radius: 4px; margin-right: 8px;
+    background: var(--bg-deep); border: 1px solid var(--border-strong);
+    color: var(--text-dim); text-decoration: none;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px; font-weight: 700;
+    scroll-margin-top: 20px;
+  }
+  .msg-id:hover { color: var(--accent); border-color: var(--accent); }
+  .dm[id^="msg-"] { scroll-margin-top: 80px; }
+
+  .msg-ref {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700;
+    padding: 1px 6px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+    text-decoration: none;
+    vertical-align: 1px;
+  }
+  .msg-ref:hover { background: var(--accent); color: #fff; }
+
+  /* Region granularity analysis ============== */
+  .region-panel {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 26px;
+  }
+  .region-panel .rp-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .region-panel .rp-head h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text); }
+  .region-panel .rp-head .rp-sub { font-size: 12px; color: var(--text-muted); }
+  .region-layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .region-layer {
+    background: var(--bg-deep); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .region-layer .rl-label { font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .region-layer .rl-val { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 4px; }
+  .region-layer .rl-val .null { color: var(--text-muted); font-weight: 400; font-size: 14px; font-style: italic; }
+  .region-layer .rl-source { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .region-layer .rl-source code { background: var(--bg); padding: 1px 5px; border-radius: 3px; font-size: 10px; font-family: "SF Mono", Menlo, Consolas, monospace; color: #c4b5fd; }
+  @media (max-width: 640px) { .region-layers { grid-template-columns: 1fr; } }
+
+  .region-usage { display: grid; gap: 10px; }
+  .region-usage .ru-row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 14px; align-items: start;
+    padding: 12px 14px; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .region-usage .ru-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 4px 0; text-align: center; border-radius: 6px; line-height: 1.1;
+  }
+  .region-usage .ru-tag.province { background: var(--info-soft); color: var(--info); }
+  .region-usage .ru-tag.city { background: var(--success-soft); color: var(--success); }
+  .region-usage .ru-tag.muted { background: var(--bg); color: var(--text-muted); }
+  .region-usage .ru-body { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .region-usage .ru-body strong { color: var(--text); }
+  .region-usage .ru-body .ru-quote {
+    display: inline-block; background: var(--bg-elevated); padding: 2px 8px; border-radius: 4px;
+    font-size: 12.5px; color: var(--text); border-left: 2px solid var(--accent); margin: 2px 0;
+  }
+  @media (max-width: 600px) {
+    .region-usage .ru-row { grid-template-columns: 1fr; gap: 6px; }
+    .region-usage .ru-tag { text-align: left; padding: 3px 8px; display: inline-block; }
+  }
+
+  /* Annotation under DM */
+  .annotation {
+    margin: 12px 0 0; padding: 12px 16px;
+    background: rgba(139, 92, 246, 0.04);
+    border-left: 2px solid var(--accent);
+    border-radius: 8px;
+    font-size: 13.5px; color: var(--text-dim); line-height: 1.6;
+  }
+  .annotation .a-title { color: var(--accent); font-weight: 600; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .annotation strong { color: var(--text); }
+
+  /* Highlight breakdown (Act 3 specifically) ======= */
+  .breakdown { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 16px; }
+  .breakdown .bd-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .breakdown .bd-num { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.04em; }
+  .breakdown .bd-title { font-size: 12.5px; color: var(--text); font-weight: 600; margin: 2px 0 4px; }
+  .breakdown .bd-quote { font-size: 12px; color: var(--text-muted); line-height: 1.45; font-style: italic; }
+  @media (max-width: 700px) { .breakdown { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Delivery details (Act 4) ======================= */
+  .delivery-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .delivery-row .dr-item { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .delivery-row .dr-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .delivery-row .dr-val { font-size: 14.5px; color: var(--text); font-weight: 600; }
+  .delivery-row .dr-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+  @media (max-width: 600px) { .delivery-row { grid-template-columns: 1fr; } }
+
+  /* Signal callout =================================== */
+  .signal {
+    background: var(--customer-soft); border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 12px; padding: 16px 20px; margin-top: 16px;
+    font-size: 14px; color: #fde68a;
+  }
+  .signal.green {
+    background: var(--success-soft); border-color: rgba(52,211,153,0.25);
+    color: #bbf7d0;
+  }
+  .signal.green .signal-title { color: var(--success); }
+  .signal.green strong { color: #d1fae5; }
+  .signal-title { color: var(--customer); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .signal strong { color: #fef3c7; }
+
+  /* Current status (Act 6) ========================== */
+  .status-card {
+    background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(96,165,250,0.06));
+    border: 1px solid rgba(52,211,153,0.25);
+    border-radius: 14px; padding: 22px 26px;
+    display: flex; gap: 18px; align-items: center;
+  }
+  .status-pulse {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--success);
+    box-shadow: 0 0 0 6px rgba(52,211,153,0.18);
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 6px rgba(52,211,153,0.18); }
+    50% { box-shadow: 0 0 0 10px rgba(52,211,153,0.05); }
+  }
+  .status-text strong { color: var(--text); }
+  .status-text { color: var(--text-dim); font-size: 14.5px; line-height: 1.55; }
+
+  /* Lessons (Act 7) ================================ */
+  .lessons { display: grid; gap: 12px; }
+  .lesson {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: grid; grid-template-columns: 28px 1fr; gap: 14px; align-items: flex-start;
+  }
+  .lesson-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lesson-body strong { color: var(--text); }
+  .lesson-body { color: var(--text-dim); font-size: 14px; line-height: 1.65; }
+
+  /* System snapshot (footer-ish) =================== */
+  .snapshot {
+    margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border);
+  }
+  .snapshot-title { font-size: 11px; color: var(--text-muted); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .snap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 12.5px; }
+  .snap-grid dl { margin: 0; display: grid; grid-template-columns: 100px 1fr; gap: 4px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .snap-grid dt { color: var(--text-muted); }
+  .snap-grid dd { color: var(--text); margin: 0; word-break: break-all; }
+  .snap-grid code { background: var(--bg-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #c4b5fd; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  @media (max-width: 600px) { .snap-grid { grid-template-columns: 1fr; } }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="/">upio.ai</a><span>/</span><a href="/akke/">Akke</a><span>/</span><a href="/akke/cases/">用户案例</a><span>/</span><span style="color: var(--text-dim);">七七笑嘻嘻</span>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <img class="hero-avatar"
+         src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-avt-0015_991216d1bf1f88b075c8ad2d866c2392.jpeg?from=2064092626"
+         alt="七七笑嘻嘻 头像"
+         referrerpolicy="no-referrer"
+         loading="lazy">
+    <div class="hero-eyebrow">USER JOURNEY · 用户旅程 · 案例 · 七七笑嘻嘻 · 案例集第一条真实客户回复</div>
+    <h1>504 小时之后，<br>她还是回了一个 v 号</h1>
+    <p class="hero-tagline">广东一位刷到"主卧卫生间正对床头"的业主，4-27 当晚在评论区直接喊「<em>我需要装修，怎么联系你</em>」。<br>我们一直拖到 <em>5-18 才发出破冰 DM</em>——隔了 <em>21 天 · 504 小时 · 超 3h 标准 168 倍</em>。<br>5-21 中午，客户依然回了一条短消息：<em>"我的 v x 是：xueMjiu"</em><br>这是案例集里<em>第一条真实成功的客户回复</em>——但它告诉的不是"我们做对了什么"，而是<em>客户耐心比我们系统效率大得多</em>。</p>
+    <div class="hero-chips">
+      <span class="chip purple">90 高意向 · score 90</span>
+      <span class="chip green">首条真实回复 ✨</span>
+      <span class="chip amber">广东 · 仅省级</span>
+      <span class="chip blue">504h 超期 · funnel 漏 sync</span>
+    </div>
+    <br>
+    <a class="hero-profile" href="https://www.douyin.com/user/MS4wLjABAAAAqKkNZQV5aPUbvp_wVM0uUDJ6EZMsi0cMA9R2LrueuTrqYaGXjZB9wzlYu0FA-Qaw" target="_blank" rel="noopener noreferrer">
+      → 抖音个人主页
+    </a>
+  </header>
+
+  <!-- ============ JOURNEY MAP STRIP ============ -->
+  <div class="journey-strip" aria-label="用户旅程进度">
+    <div class="js-step done"><div class="num">1</div><div class="lbl">留评论<br>4-27 19:52</div></div>
+    <div class="js-step done"><div class="num">2</div><div class="lbl">评论入库<br>5-04 23:32（+7d）</div></div>
+    <div class="js-step done"><div class="num">3</div><div class="lbl">AI 评分 90<br>5-04</div></div>
+    <div class="js-step done"><div class="num">4</div><div class="lbl">DM 破冰<br>5-18 19:59（+21d）</div></div>
+    <div class="js-step done"><div class="num">5</div><div class="lbl">504h 超期<br>≫ 3h ×168</div></div>
+    <div class="js-step done"><div class="num">6</div><div class="lbl">客户回 v<br>5-21 12:02 ✨</div></div>
+    <div class="js-step now"><div class="num">7</div><div class="lbl">funnel 漏 sync<br>需人工接管</div></div>
+  </div>
+
+  <!-- ============ 完整对话 · 先看全文再看分析 ============ -->
+  <section class="transcript" aria-label="完整对话">
+    <div class="transcript-head">
+      <h2>完整对话 · 1 条 outbound × 1 条 inbound <span style="color: var(--success);">✨ 案例集第一条真实客户回复</span></h2>
+      <span class="t-sub">2026-04-27 → 2026-05-21 · 评论 → 504h 后 DM → 64h 后客户回 v</span>
+    </div>
+    <p class="t-hint">每条消息有编号 <code>#1</code>~<code>#2</code>。下方各 ACT 在拆解时会用 <code>#N</code> 引用回这里。「我们」=Akke messaging 账号；客户回复是通过微信端手动截图取证的（DB 未回写）。</p>
+
+    <div class="dm from-customer" id="msg-0">
+      <div class="dm-bubble">我需要装修，怎么联系你。？！</div>
+    </div>
+    <div class="dm-meta"><a href="#msg-0" class="msg-id">#0</a>📍 广东 · 4-27 19:52:39 CST · 评论在《主卧卫生间正对床头？这样设计不拆不改》视频下 · 评论本身就是<em>明示求联系</em></div>
+
+    <div class="dm from-akke" id="msg-1">
+      <div class="dm-bubble">你好，七七，广东那边潮气重，回南天得多注意柜体防潮。全屋柜体 90-160 平 5 万包设计量尺安装，你家多少平？</div>
+    </div>
+    <div class="dm-meta" style="justify-content: flex-end;"><a href="#msg-1" class="msg-id">#1</a>📱 DM #1 · 5-18 19:59:57 CST · 距客户评论 <strong>+ 21 天 7min ≈ 504h</strong> · ⚠️ 远超 3h 标准 168 倍</div>
+
+    <div class="dm from-customer" id="msg-2">
+      <div class="dm-bubble">我的 v x 是：xueMjiu</div>
+    </div>
+    <div class="dm-meta"><a href="#msg-2" class="msg-id">#2</a>✨ 客户回复 · 5-21 12:02 CST（微信截图状态栏 12:41 取证）· 距 DM #1 <strong>+ 64h 16min</strong> · <em>案例集第一条真实成功的 inbound</em></div>
+  </section>
+
+  <!-- ============ ACT 1 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 01 · 起点</span>
+      <span class="act-time">2026-04-27　19:52:39 CST</span>
+    </div>
+    <h2>「我需要装修，怎么联系你」— 客户已经在自我推销</h2>
+    <p class="act-lede">
+      视频主题是<em>《主卧卫生间正对床头？这样设计不拆不改，难题迎刃而解！》</em>——是一条家装方案演示号的内容。七七笑嘻嘻当晚 19:52 在评论区抛出 12 字：<em>"我需要装修，怎么联系你。？！"</em>——这<em>不是问问题</em>，是<em>明示求联系</em>。客户已经走到了"找人联系"这一步，自己跑到评论区张贴牌子。模型给 <strong>90 分 · 高意向</strong>，但 <code>comment_type</code> / <code>specificity</code> / <code>freshness</code> / <code>intent_reason</code> 在 DB 里全是 NULL——这是 funnel 漏的<em>第一处</em>（入库时漏跑了 comment_type 流程）。
+    </p>
+    <div class="panel">
+      <div class="comment-wrap">
+        <img class="comment-avatar"
+             src="https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/tos-cn-avt-0015_991216d1bf1f88b075c8ad2d866c2392.jpeg?from=2064092626"
+             alt="七七笑嘻嘻"
+             referrerpolicy="no-referrer"
+             loading="lazy">
+        <div class="comment-body">
+          <div class="comment-author">七七笑嘻嘻 <span class="loc">📍 广东</span></div>
+          <div class="comment-text">我需要装修，怎么联系你。？！</div>
+          <div class="comment-meta">2026-04-27 19:52:39 CST · 评论 <code>e8bb2ede…d8e812451128</code> · 关键词命中：<code>装修</code> · <code>联系</code></div>
+        </div>
+      </div>
+      <a class="comment-source-link" href="https://www.douyin.com/video/7633288009420377378" target="_blank" rel="noopener noreferrer">
+        📹 评论所在视频（在抖音打开）· 主卧卫生间正对床头？这样设计不拆不改，难题迎刃而解！#家装装修#装修设计#卧室
+      </a>
+    </div>
+
+    <!-- 地区粒度分析 · ACT 01 子模块 -->
+    <div class="region-panel" style="margin-top: 18px;">
+      <div class="rp-head">
+        <h3>📍 地区粒度 · 仅省级 · city NULL</h3>
+        <span class="rp-sub">profile 没填具体市；只能拿到「广东」省级 IP 属地</span>
+      </div>
+
+      <div class="region-layers">
+        <div class="region-layer">
+          <div class="rl-label">省 · IP 属地</div>
+          <div class="rl-val">广东</div>
+          <div class="rl-source">来源 <code>comments.ip_location</code> · 抖音 IP 反查</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">市 · 自报现居</div>
+          <div class="rl-val"><span class="null">NULL · 未自报</span></div>
+          <div class="rl-source">来源 <code>comments.city</code> · profile 没填</div>
+        </div>
+        <div class="region-layer">
+          <div class="rl-label">号源服务市</div>
+          <div class="rl-val"><span class="null">NULL · 号源未识别</span></div>
+          <div class="rl-source">来源 <code>videos.source_account_id</code> · 视频来自家装方案号 · 未绑定具体市</div>
+        </div>
+      </div>
+
+      <div class="region-usage">
+        <div class="ru-row">
+          <div class="ru-tag province">省级</div>
+          <div class="ru-body">
+            <strong>DM #1 用了「广东 + 回南天 + 柜体防潮」标准回退</strong> · 见 <a href="#msg-1" class="msg-ref">#1</a><br>
+            <span class="ru-quote">"广东那边潮气重，回南天得多注意柜体防潮"</span><br>
+            <span style="color: var(--text-muted); font-size: 12px;">这是教科书级的省级 IP fallback：广东 → 回南天 → 柜体防潮。气候不可证伪，又自然过渡到柜体选型——和天涯客案"福建 + 潮气 + 防潮板材"同结构。</span>
+          </div>
+        </div>
+        <div class="ru-row">
+          <div class="ru-tag muted">市级</div>
+          <div class="ru-body">
+            <strong>不触发 same_city · 没有市级信息可用</strong><br>
+            <span style="color: var(--text-muted); font-size: 12px;">广东省内城市差异巨大（广深 vs 潮汕 vs 粤西），但 <code>comments.city = NULL</code>、号源未识别。文案只能停在省级气候钩，无法收窄到"我们就在 XX 市"。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACT 2 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 02 · 被看见</span>
+      <span class="act-time">2026-05-04　23:32:58 CST · 入库延迟 ~7 天</span>
+    </div>
+    <h2>90 分 — 但 comment_type / specificity 全 NULL</h2>
+    <p class="act-lede">
+      评论本身发生在 4-27 19:52，但 <code>comments.created_at = 2026-05-04 23:32:58 CST</code>——scraper 抓回 + analyze 评分晚了<em>整整 7 天</em>。模型一旦看到，立刻给出 90 分高意向，关键词命中 <code>装修</code> + <code>联系</code>。<strong>但 DB 里 <code>comment_type</code> / <code>specificity</code> / <code>freshness</code> / <code>intent_reason</code> 全是 NULL</strong>——这条评论入库时<em>漏跑了 comment_type 这一步</em>，funnel 在最上游就有一处明确的回写漏洞。
+    </p>
+    <div class="panel">
+      <div class="scoring">
+        <div class="score-bar">
+          <div class="score-num">90<small>/100</small></div>
+          <div class="score-label">高意向</div>
+        </div>
+        <div>
+          <div class="score-tags">
+            <span class="chip purple">type · <span style="color: var(--text-muted); font-style: italic;">NULL</span></span>
+            <span class="chip blue">specificity · <span style="color: var(--text-muted); font-style: italic;">NULL</span></span>
+            <span class="chip green">freshness · <span style="color: var(--text-muted); font-style: italic;">NULL</span></span>
+            <span class="chip amber">keyword · 装修 · 联系</span>
+          </div>
+          <div class="score-reasoning">
+            <strong>评分理由：</strong><span style="color: var(--text-muted); font-style: italic;">NULL · intent_reason 未回写</span><br>
+            <strong>分类依据：</strong>评论里同时出现"装修"+"怎么联系"——按业务规则应当落 <em>product · high · active</em>，但 DB 里这三个字段全空。<br>
+            <span style="color: var(--text-muted);">90 vs 73（红尘案）vs 58（天涯客案）——本案是案例集分数最高的一条，<em>评论自身就是"找你"</em>。但 comment_type 全 NULL 意味着<em>下游所有按类型分支的决策都拿不到信号</em>——比如"是否走价格钩"、"是否走加速队列"。这是 funnel 在评论入库环节<em>明确漏掉了 comment_type 流程</em>。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal" style="margin-top: 14px;">
+      <div class="signal-title">⚠️ funnel 漏洞 #1 · comment_type 字段未回写</div>
+      <strong>事实：</strong>评论已分到 <code>intent_score=90</code>、<code>intent_label=高意向</code>，但 <code>comment_type</code> / <code>specificity</code> / <code>freshness</code> / <code>intent_reason</code> 四个字段全 NULL。<br>
+      <strong>影响：</strong>本案这种"明示求联系"是<em>product · high · active</em> 的标准样本——如果 comment_type 落了，下游的<em>加速队列 / 高 specificity 价格钩选择</em>都会被正确触发。漏字段 = 漏路由。<br>
+      <span style="color: var(--text-muted); font-size: 12px;">修：analyze 流程必须保证 <code>comment_type</code> 和 <code>intent_score</code> 在同一个事务里写入，不允许只回一半。</span>
+    </div>
+  </section>
+
+  <!-- ============ ACT 3 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 03 · 沉默的 21 天</span>
+      <span class="act-time">2026-04-27 19:52 → 2026-05-18 19:59 · 队列里的 504 小时</span>
+    </div>
+    <h2>504 小时 — 超 3h 标准 168 倍</h2>
+    <p class="act-lede">
+      客户在 4-27 19:52 喊了"怎么联系你"。我们的 DM #1 一直到 <strong>5-18 19:59:57 CST</strong> 才发出——距评论 <strong>21 天 7 分钟 · 504 小时</strong>。换算下来是<em>3h SLA 标准的 168 倍</em>。中间两段：评论入库延迟约 <em>7 天</em>（scraper + analyze 慢），队列等待延迟约 <em>14 天</em>（运营 RC/DM 审核队列积压）。
+    </p>
+
+    <div class="timing-strip" aria-label="评论到首次回应的时间跨度">
+      <div class="timing-summary">
+        <div class="ts-item">
+          <div class="ts-label">用户评论 → 评论入库分析</div>
+          <div class="ts-val">≈ 7 天 3.7h</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">入库分析 → DM 投放</div>
+          <div class="ts-val">≈ 13 天 20.5h</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label"><strong>用户评论 → 首次回应（DM #1）</strong></div>
+          <div class="ts-val"><strong style="color: var(--warning);">504h</strong> · 超 3h 标准 168 倍</div>
+        </div>
+      </div>
+      <div class="timing-bars" role="img" aria-label="时效阶段分布">
+        <div class="timing-bar user-to-ai" style="flex: 34" title="评论入库延迟 ≈ 171 小时">入库延迟 171h</div>
+        <div class="timing-bar ai-to-user" style="flex: 66" title="入库到 DM 发出 ≈ 332 小时">队列等待 332h</div>
+      </div>
+      <div class="timing-legend">
+        <span><span class="tl-swatch customer"></span>scraper / analyze cron 延迟</span>
+        <span><span class="tl-swatch akke"></span>DM 审核 + 投放队列延迟</span>
+        <span style="margin-left: auto;">参考标准：≤ 3h</span>
+      </div>
+    </div>
+
+    <div class="annotation">
+      <div class="a-title">504h 不是"我们做对了" — 是"客户耐心"</div>
+      ① <strong>评论本身就是 self-disclose</strong> · 客户说"我需要装修，怎么联系你"——这是<em>她跑到评论区张贴牌子</em>，等于自己在做获客的一半。如果不是这种强 self-disclose 评论，21 天后基本全凉了。<br>
+      ② <strong>对比同集其他案例</strong> · 红尘案 217h（9 天）已经算超长的了，本案 504h（21 天）是它的<em>2.3 倍</em>——也是案例集里时效最差的一条。<br>
+      ③ <strong>结论</strong>：本案最终能拿到客户回复，<em>是因为客户耐心，不是因为我们效率</em>。这种成功不可复制——下次同档客户在 21 天里完全可能找到别家、装修计划过期、或忘掉这条评论。
+    </div>
+  </section>
+
+  <!-- ============ ACT 4 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 04 · 5-18 破冰 DM 的明码报价</span>
+      <span class="act-time">2026-05-18　19:59:57 CST · 五段式结构</span>
+    </div>
+    <h2>招呼 / 地域防潮 / 明码 5 万报价 / 反问</h2>
+    <p class="act-lede">
+      DM #1（见 <a href="#msg-1" class="msg-ref">#1</a>）54 字。结构是<em>四段</em>——但其中第三段「<strong>全屋柜体 90-160 平 5 万包设计量尺安装</strong>」是案例集里<em>第一个真实写出价格数字的钩子</em>。对比红尘案"私信给你拉清单"、天涯客案"详细报价清单+多少平"、无忧案"拉清单"——本案是最具体的一档，可能也是触发客户回复的关键变量。
+    </p>
+
+    <div class="breakdown">
+      <div class="bd-item">
+        <div class="bd-num">① 招呼</div>
+        <div class="bd-title">直呼缩名</div>
+        <div class="bd-quote">「你好，七七，」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">② 地域防潮</div>
+        <div class="bd-title">省级 IP fallback</div>
+        <div class="bd-quote">「广东那边潮气重，回南天得多注意柜体防潮」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">③ 明码报价</div>
+        <div class="bd-title">案例集首条具体价钩</div>
+        <div class="bd-quote">「全屋柜体 90-160 平 5 万包设计量尺安装」</div>
+      </div>
+      <div class="bd-item">
+        <div class="bd-num">④ 反问</div>
+        <div class="bd-title">逼对方给户型</div>
+        <div class="bd-quote">「你家多少平？」</div>
+      </div>
+    </div>
+    <div class="annotation">
+      <div class="a-title">每段为什么有效</div>
+      <strong>① 招呼</strong>把"七七笑嘻嘻"缩成"七七"——只这一步就让客户感到这条 DM 是<em>看过名字</em>的、不是字段填空。<br>
+      <strong>② 地域防潮</strong>是省级 IP fallback 的教科书写法：广东 → 回南天 → 柜体防潮。回南天是<em>广东人公认的痛点</em>，气候不可证伪，又自然过渡到柜体选型。<br>
+      <strong>③ 明码报价</strong>是本案最强的一段——具体到"90-160 平"区间 + "5 万"总价 + "包设计量尺安装"包含项。客户读完<em>不用再问"大概多少钱"</em>，直接知道自己的预算够不够。下面 ACT 5 专门对比其他案例的价格信号成色。<br>
+      <strong>④ 反问</strong>"你家多少平"——和天涯客案完全相同的收尾打法，逼客户给户型条件。本案<em>它真的奏效了</em>：客户回了 v 号（虽然没直接答平米）。
+    </div>
+
+    <div class="signal green" style="margin-top: 14px;">
+      <div class="signal-title">✅ 价格信号成色对比（案例集纵向）</div>
+      <strong>七七笑嘻嘻：</strong>「全屋柜体 90-160 平 <em>5 万</em> 包设计量尺安装」← <em>明码总价 + 区间 + 包含项</em>，最具体<br>
+      <strong>天涯客：</strong>「同户型实景案例 + 详细报价清单 + 多少平？」← <em>报价清单 + 反问</em>，承诺给清单但无具体数字<br>
+      <strong>红尘有梦7865：</strong>「具体方案私信给你拉清单」← 只承诺动作<br>
+      <strong>无忧：</strong>「拉清单」← 同上<br>
+      <span style="color: var(--text-muted); font-size: 12px;">本案是<em>价格透明度最高</em>的一档。3h 内打透的下一个升级方向，应该是<em>"5 万明码 + 反问"</em>固化进 prompt。</span>
+    </div>
+  </section>
+
+  <!-- ============ ACT 5 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 05 · 客户的迟到回复</span>
+      <span class="act-time">2026-05-21　12:02 CST · 距 DM #1 + 64h 16min · 案例集第一条真实 inbound ✨</span>
+    </div>
+    <h2>"我的 v x 是：xueMjiu" — 第一条真实成功的客户回复</h2>
+    <p class="act-lede">
+      DM #1 发出 64h 后，客户在微信端的抖音 DM 里回了一条短消息（见 <a href="#msg-2" class="msg-ref">#2</a>）：<em>"我的 v x 是：xueMjiu"</em>。这是案例集里<em>第一条真实成功的客户回复</em>——之前红尘案 3 条 outbound × 0 inbound、天涯客案 1 条 outbound × 0 inbound、大欣案、无忧案都是 0 inbound。
+    </p>
+
+    <div class="timing-strip" aria-label="DM 到客户回复的时间跨度">
+      <div class="timing-summary">
+        <div class="ts-item">
+          <div class="ts-label">DM #1 → 客户回复</div>
+          <div class="ts-val">2 天 16h 21min</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label">≈ 小时数</div>
+          <div class="ts-val" style="color: var(--success);">64h 16min</div>
+        </div>
+        <div class="ts-item">
+          <div class="ts-label"><strong>评论 → 客户回复 全程</strong></div>
+          <div class="ts-val"><strong>≈ 569 小时 · 23 天 16.5h</strong></div>
+        </div>
+      </div>
+      <div class="timing-bars" role="img" aria-label="时效阶段分布">
+        <div class="timing-bar user-to-ai" style="flex: 30" title="评论入库延迟 ≈ 171 小时">入库 171h</div>
+        <div class="timing-bar ai-to-user" style="flex: 58" title="DM 队列等待 ≈ 332 小时">DM 队列 332h</div>
+        <div class="timing-bar success" style="flex: 12" title="客户回复响应 ≈ 64 小时">回复 64h ✨</div>
+      </div>
+      <div class="timing-legend">
+        <span><span class="tl-swatch customer"></span>scraper / analyze 延迟</span>
+        <span><span class="tl-swatch akke"></span>DM 队列延迟</span>
+        <span><span class="tl-swatch success"></span>客户响应窗口</span>
+      </div>
+    </div>
+
+    <div class="signal green" style="margin-top: 14px;">
+      <div class="signal-title">✨ 这条回复为什么珍贵</div>
+      <strong>① 案例集首条 inbound</strong> · 之前所有案例都是 outbound-only。这是<em>真实可计算 conversion rate 的第一个分子</em>。<br>
+      <strong>② 客户主动给 v</strong> · 不是问问题、不是要资料——直接抛 v 号，省略所有中间步骤。这是<em>"我同意你联系我"</em>的最强信号。<br>
+      <strong>③ 客户耐心反差</strong> · 我们 504h 才回，她依然 64h 内回了。如果这是一个低耐心客户，21 天后早就凉了。本案是<em>"客户耐心远大于系统效率"</em>的诚实样本。<br>
+      <span style="color: var(--text-muted); font-size: 12px;">但下面 ACT 6 会戳破：客户给的 v 号<em>和她 profile 公开的 v 号不一致</em>——主动甩号 ≠ 彻底信任。</span>
+    </div>
+
+    <div class="annotation" style="margin-top: 14px;">
+      <div class="a-title">取证方式 · 全靠手动截图（funnel 漏 sync）</div>
+      这条回复在抖音 DM 里发出，但<em>没有任何自动化路径捕捉到它</em>。DB 里 <code>conversations</code> 表对应行 <code>stage=expired</code>，<code>messages</code> 表只有 1 条 AI 生成的 <code>status=draft</code>（甚至破冰 DM 本身都没回写"sent"状态）。<br>
+      取证完全靠运营手动在微信端打开抖音消息列表 → 看到 unread 红点 → 截图。<strong>这是 funnel 第 2 处明确漏洞 · 详见 ACT 07。</strong>
+    </div>
+  </section>
+
+  <!-- ============ ACT 6 ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 06 · 主动甩号 ≠ 信任建立</span>
+      <span class="act-time">profile 公开 v：qidjiedanz · DM 给我们的 v：xueMjiu</span>
+    </div>
+    <h2>她给了我们一个 v 号 — 但不是 profile 公开的那个</h2>
+    <p class="act-lede">
+      客户的抖音 profile 个人介绍栏公开写着：<em>「我微信号是：qidjiedanz」</em>。但 DM 里她给我们的 v 是 <em>「xueMjiu」</em>——<strong>两个号完全不一样</strong>。这不是笔误，是高警觉客户的<em>反诈 / 隔离习惯</em>：给陌生装修咨询号一个备用小号，不是 profile 公开的主号。
+    </p>
+
+    <div class="delivery-row">
+      <div class="dr-item">
+        <div class="dr-label">profile 公开微信</div>
+        <div class="dr-val"><code>qidjiedanz</code></div>
+        <div class="dr-sub">抖音个人主页"个人介绍"字段</div>
+      </div>
+      <div class="dr-item">
+        <div class="dr-label">DM 给我们的微信</div>
+        <div class="dr-val"><code>xueMjiu</code></div>
+        <div class="dr-sub">DM #2 · 5-21 12:02 CST</div>
+      </div>
+      <div class="dr-item">
+        <div class="dr-label">差异</div>
+        <div class="dr-val" style="color: var(--warning);">完全不同</div>
+        <div class="dr-sub">不是大小写 / 拼写差异 · 是两个号</div>
+      </div>
+    </div>
+
+    <div class="signal" style="margin-top: 14px;">
+      <div class="signal-title">⚠️ 客户的反诈/隔离心智 — 不要误读为"客户彻底信任"</div>
+      <strong>解读 1 · 备用小号：</strong>客户对装修咨询号这一类有专门的"防骚扰隔离"心智——主号留给亲友/工作，备用号留给装修/中介/陌生加好友。我们拿到的是<em>她愿意被打扰的那一个</em>。<br>
+      <strong>解读 2 · v 号真伪：</strong>不能假设 <code>xueMjiu</code> 就是<em>活跃号</em>。可能是<em>已注销的旧号 / 测试号 / 防钓鱼号</em>。需要人工先添加确认对方是<em>真在用</em>。<br>
+      <strong>解读 3 · 信任曲线：</strong>客户主动给 v ≠ 客户准备签单。本案的信任建立<em>刚到第一格</em>——下一步如果发力过猛（直接发详细报价、催加微信、推销），可能立刻被拉黑。<br>
+      <span style="color: var(--text-muted); font-size: 12px;">运营动作：① 用 messaging 同事的微信主动加 <code>xueMjiu</code>，备注「抖音七七笑嘻嘻」② 待对方通过后<em>不要立刻塞详细报价</em>，先发"同户型实景图 2 张"试探对方是否真在筹备 ③ 同时记录 profile 公开 v 号 <code>qidjiedanz</code> 留作 backup 但<em>不要去打扰</em>。</span>
+    </div>
+
+    <div class="annotation" style="margin-top: 14px;">
+      <div class="a-title">profile 取证位置</div>
+      抖音个人主页打开 → 头像下方"个人介绍"/"简介"字段 → 看到「我微信号是：qidjiedanz」自报。<br>
+      <span style="color: var(--text-muted); font-size: 12px;">用户主页链接：<a class="hero-profile" style="font-size: 12px;" href="https://www.douyin.com/user/MS4wLjABAAAAqKkNZQV5aPUbvp_wVM0uUDJ6EZMsi0cMA9R2LrueuTrqYaGXjZB9wzlYu0FA-Qaw" target="_blank" rel="noopener noreferrer">douyin.com/user/MS4wLj…wzlYu0FA-Qaw</a></span>
+    </div>
+  </section>
+
+  <!-- ============ ACT 7 / NOW ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">ACT 07 · 现在</span>
+      <span class="act-time">客户给了 v · funnel 完全失联 · 需立刻人工接管</span>
+    </div>
+    <h2>第一次拿到 inbound — 但自动化路径完全失效</h2>
+    <div class="status-card">
+      <div class="status-pulse"></div>
+      <div class="status-text">
+        <strong>客户回了 v 号 <code>xueMjiu</code>，但 funnel 完全没接住。</strong>本案是案例集里<em>funnel 漏洞最严重的一例</em>。<br>
+        DB 现状：<code>conversations.stage = expired</code>（已被判过期，没人推进）/ <code>messages</code> 表只有 1 条 AI 生成的 <code>status=draft</code> 的破冰文案（连"sent"都没回写，更没有客户回复行）/ <code>message_queue</code> 没记录人工审批 / scrape_jobs 没回放客户的 inbound——所有自动化路径全断了。<br>
+        <span style="color: var(--text-muted); font-size: 12px;">取证全靠运营今天 12:41 手动打开微信端的抖音消息列表截图——这不是<em>可持续</em>的获客 pipeline，是<em>一次性侥幸</em>。下一步必须立刻人工接管：① 用 messaging 同事微信主动加 <code>xueMjiu</code> 并核对真伪 ② 把这条 inbound 手动补录进 conversation/messages 表 ③ 立项修 funnel sync（inbox 轮询 / DM read_status / 客户回复自动写库）。</span>
+      </div>
+    </div>
+
+    <div class="signal" style="margin-top: 14px;">
+      <div class="signal-title">⚠️ funnel 漏洞清单 · P0 必修</div>
+      <strong>① <code>comment_type</code> / specificity / freshness 未回写</strong>（详 ACT 02）· 评论入库时漏跑分类流程。<br>
+      <strong>② 破冰 DM 状态停在 draft</strong> · 实际已发送，但 <code>messages.status</code> 没从 draft → sent。<br>
+      <strong>③ 客户 inbound 完全未捕获</strong> · 客户的回复在抖音 DM 里发出，没有任何 worker/cron 把它写回 <code>messages</code>。<br>
+      <strong>④ <code>conversations.stage = expired</code></strong> · 系统已经判这条线索过期，但客户实际上正在响应。stage 计算逻辑没考虑"inbound 重启"。<br>
+      <strong>⑤ 取证全靠人工截图</strong> · check-replies cron 没触发或没读到这条消息。<br>
+      <span style="color: var(--text-muted); font-size: 12px;">这五条加在一起：<em>就算客户回复，pipeline 也不知道</em>——这是案例集里第一条真实 inbound，也是 funnel 必须立刻修的 P0。</span>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS ============ -->
+  <section class="act">
+    <div class="act-head">
+      <span class="act-no">复盘 · 这条线索教会我们的</span>
+    </div>
+    <h2>6 个值得记住的系统结论</h2>
+    <div class="lessons">
+      <div class="lesson"><div class="lesson-num">1</div><div class="lesson-body"><strong>504h 不是"我们做对了"，是"客户耐心"。</strong>本案能拿到 inbound，不是因为我们时效好——而是因为客户在 21 天里没找到别家、装修计划没推进过期、还记得这条评论。这种成功<em>不可复制</em>。下次同档客户在 21 天里基本会凉。<em>不要把这条 case 当作"504h 也能成"的证据</em>，要把它当作"系统差点错失第一条真实 inbound"的警钟。</div></div>
+      <div class="lesson"><div class="lesson-num">2</div><div class="lesson-body"><strong>明码报价（5 万）比"拉清单"成色高一个等级。</strong>本案 DM 写了「90-160 平 5 万包设计量尺安装」——案例集里<em>第一个真实写出价格数字</em>的钩子。对比红尘"拉清单"、天涯客"详细报价清单+多少平"、无忧"拉清单"——本案具体度最高，<em>可能是触发回复的关键变量</em>。修：把"明码总价 + 区间 + 包含项"固化进 prompt，不再用"拉清单"这种空动作。</div></div>
+      <div class="lesson"><div class="lesson-num">3</div><div class="lesson-body"><strong>「怎么联系你」类评论 = 客户已经在自我推销 = 应该 &lt; 3h 接住。</strong>本案客户主动喊"我需要装修，怎么联系你"——这是<em>她在评论区张贴牌子</em>，等于做了我们一半的获客工作。<em>这一类评论 score 必然 ≥ 85</em>，应当走专用加速队列，3h SLA 是底线，不是奢求。修：analyze 流程命中 <code>怎么联系</code> / <code>需要装修</code> / <code>找你</code> 等强 self-disclose 关键词时，立刻 enqueue 到 high-priority。</div></div>
+      <div class="lesson"><div class="lesson-num">4</div><div class="lesson-body"><strong>客户主动给 v ≠ 彻底信任 · profile v vs DM v 不一致是反诈典型。</strong>本案客户 profile 公开 v 是 <code>qidjiedanz</code>，DM 给我们的是 <code>xueMjiu</code>——<em>两个完全不同的号</em>。这暗示客户对装修咨询号有专门的"防骚扰隔离"心智。修：① 拿到 v 号<em>不要立刻塞详细报价</em>，先发同户型案例图试探 ② 客户 profile 自报 v 号<em>不要主动加</em>，等客户给的那一个 ③ 后续 LLM prompt 加上"客户首次给 v 时表达的潜台词是<em>'我同意你联系我，但保留戒心'</em>"。</div></div>
+      <div class="lesson"><div class="lesson-num">5</div><div class="lesson-body"><strong>funnel sync 是当前 P0 · 这是案例集里漏洞最严重的一例。</strong>本案 5 处漏洞同时发生：① <code>comment_type</code> 未回写 ② DM <code>status=draft</code> 永未转 sent ③ 客户 inbound 完全未捕获 ④ <code>conversations.stage=expired</code> 误判 ⑤ 取证全靠手动截图。这 5 处加起来 = <em>系统不知道自己拿到了第一条真实 inbound</em>。<strong>修这 5 处比再加 100 条线索更重要。</strong></div></div>
+      <div class="lesson"><div class="lesson-num">6</div><div class="lesson-body"><strong>取证靠手动截图不可持续 — inbox 轮询 / read_status / online_status 都漏了。</strong>客户回复发生在抖音 DM 端，但我们没有任何 worker 在主动 poll messaging 池账号的 inbox。check-replies cron 即使存在，也没有把这条消息读到 DB。下一步：worker 必须有 <code>poll_inbox</code> 路由，每 15min 扫一次所有 messaging 账号的 unread 列表，把客户回复直接写到 <code>messages</code> 表。<em>没有这个，案例集第二条、第三条 inbound 也会同样丢掉</em>。</div></div>
+    </div>
+  </section>
+
+  <!-- ============ SYSTEM SNAPSHOT ============ -->
+  <section class="snapshot">
+    <div class="snapshot-title">SYSTEM SNAPSHOT · 这条记录在 Akke 数据库里长什么样</div>
+    <div class="snap-grid">
+      <dl>
+        <dt>comment_id</dt><dd><code>e8bb2ede-93ba-4afc-bfad-d8e812451128</code></dd>
+        <dt>video_id</dt><dd><code>25cf2e22-2ff7-463f-8fdb-1cff98540e8e</code></dd>
+        <dt>aweme_id</dt><dd><code>7633288009420377378</code></dd>
+        <dt>conversation</dt><dd><span style="color: var(--warning); font-style: italic;">stage = expired</span> · 误判过期</dd>
+      </dl>
+      <dl>
+        <dt>抖音昵称</dt><dd>七七笑嘻嘻</dd>
+        <dt>douyin_user_id</dt><dd><code>MS4wLjABAAAAqKkNZQV5aPUbvp_wVM0uUDJ6EZMsi0cMA9R2LrueuTrqYaGXjZB9wzlYu0FA-Qaw</code></dd>
+        <dt>IP 属地</dt><dd>广东 · city=<code>NULL</code></dd>
+        <dt>头像</dt><dd>已缓存（avatar_url 在 DB）</dd>
+      </dl>
+      <dl>
+        <dt>intent_score</dt><dd><strong>90 / 100</strong> · 案例集最高分</dd>
+        <dt>intent_label</dt><dd>高意向</dd>
+        <dt>comment_type</dt><dd><span class="null" style="font-style: italic; color: var(--text-muted);">NULL · 漏跑流程</span></dd>
+        <dt>specificity / freshness</dt><dd><span class="null" style="font-style: italic; color: var(--text-muted);">NULL / NULL</span></dd>
+      </dl>
+      <dl>
+        <dt>keywords</dt><dd><code>["装修", "联系"]</code></dd>
+        <dt>评论原文</dt><dd>「我需要装修，怎么联系你。？！」</dd>
+        <dt>comment_time</dt><dd>2026-04-27 19:52:39 CST</dd>
+        <dt>comment created_at</dt><dd>2026-05-04 23:32:58 CST <span style="color: var(--warning);">(+7d)</span></dd>
+      </dl>
+      <dl>
+        <dt>video 标题</dt><dd>主卧卫生间正对床头？这样设计不拆不改…</dd>
+        <dt>messaging 账号</dt><dd><code>6644a013-c8ec-4207-af8a-535627c9c454</code></dd>
+        <dt>发送通道</dt><dd>DM ×1（Android adb 旁路）· status=<span style="color: var(--warning);">draft</span></dd>
+        <dt>DM 发送时间</dt><dd>2026-05-18 19:59:57 CST <span style="color: var(--warning);">(+504h)</span></dd>
+      </dl>
+      <dl>
+        <dt>客户回复</dt><dd><strong style="color: var(--success);">1 条 ✨ · 案例集首条</strong> · 「我的 v x 是：xueMjiu」</dd>
+        <dt>回复时间</dt><dd>2026-05-21 ≈ 12:02 CST · 距 DM +64h</dd>
+        <dt>回复回写</dt><dd><span style="color: var(--warning); font-style: italic;">未入库</span> · 取证靠手动截图</dd>
+        <dt>profile 公开 v</dt><dd><code>qidjiedanz</code> · ≠ DM 给的 <code>xueMjiu</code></dd>
+      </dl>
+    </div>
+  </section>
+
+  <footer>
+    Akke 用户案例 · 七七笑嘻嘻 · 案例集第一条真实客户回复 · 数据快照 2026-05-21 · <a href="/akke/cases/">← 返回案例库</a> · <a href="/akke/">Akke 首页</a>
+  </footer>
+
+</div>
+</body>
+</html>
